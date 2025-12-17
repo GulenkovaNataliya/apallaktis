@@ -8,7 +8,7 @@ import { messages, type Locale } from "@/lib/messages";
 export default function LandingPage() {
   const params = useParams();
   const locale = (params.locale as Locale) || "el";
-  const translations = messages[locale] || messages.el;
+  const t = messages[locale]?.landing || messages.el.landing;
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -23,7 +23,7 @@ export default function LandingPage() {
             className="text-center text-slogan font-semibold"
             style={{ color: "#ff8f0a", width: "75%" }}
           >
-            {translations.slogan}
+            {t.slogan}
           </h1>
 
           {/* Action buttons */}
@@ -37,7 +37,7 @@ export default function LandingPage() {
                 boxShadow: "0 4px 8px var(--deep-teal)",
               }}
             >
-              {translations.login}
+              {t.login}
             </Link>
             <Link
               href="#"
@@ -48,7 +48,7 @@ export default function LandingPage() {
                 boxShadow: "0 4px 8px var(--deep-teal)",
               }}
             >
-              {translations.register}
+              {t.register}
             </Link>
           </div>
         </div>
