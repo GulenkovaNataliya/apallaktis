@@ -1,0 +1,292 @@
+@import "tailwindcss";
+
+:root {
+  /* Safe area insets for iOS */
+  --safe-area-inset-top: env(safe-area-inset-top);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  --safe-area-inset-left: env(safe-area-inset-left);
+  --safe-area-inset-right: env(safe-area-inset-right);
+
+  /* APALLAKTIS Color Palette */
+  --blue-whale: #033a45;
+  --polar: #daf3f6;
+  --deep-teal: #01312d;
+  --zanah: #e2f1dd;
+  --tuft-bush: #ffd8c3;
+  --serenade: #ffebe1;
+  --skeptic: #c3e2dc;
+  --aqua-squeeze: #e7f4f1;
+  --orange: #ff6a1a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-noto-sans), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #1a1a1a; /* Dark background for desktop */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body[dir="rtl"] {
+  font-family: var(--font-noto-sans-arabic), var(--font-noto-sans), system-ui, -apple-system, sans-serif;
+}
+
+/* Mobile preview wrapper - shows mobile view on desktop */
+.mobile-preview-wrapper {
+  width: 100%;
+  max-width: 420px;
+  height: 100vh;
+  margin: 0 auto;
+  position: relative;
+  background: white;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+/* On mobile devices, take full width */
+@media (max-width: 420px) {
+  .mobile-preview-wrapper {
+    max-width: 100%;
+    box-shadow: none;
+  }
+
+  body {
+    background-color: white;
+  }
+}
+
+/* Mobile-first container */
+.container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding-left: max(16px, var(--safe-area-inset-left));
+  padding-right: max(16px, var(--safe-area-inset-right));
+}
+
+/* Safe area wrapper */
+.safe-area-top {
+  padding-top: var(--safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: var(--safe-area-inset-bottom);
+}
+
+/* Typography classes */
+.text-slogan {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.text-button {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.text-body {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.text-link {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Button components with shadow-color == text-color rule */
+.btn-base {
+  border-radius: 1rem;
+  min-height: 48px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-base:active {
+  transform: scale(0.95);
+}
+
+/* Primary CTA button (height 52px) */
+.btn-primary {
+  border-radius: 1rem;
+  min-height: 52px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+/* Language selection buttons */
+.btn-language {
+  border-radius: 1rem;
+  min-height: 48px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  background-color: var(--polar);
+  color: var(--deep-teal);
+  box-shadow: 0 4px 8px var(--deep-teal);
+}
+
+.btn-language:active {
+  box-shadow: 0 2px 4px var(--deep-teal);
+  transform: scale(0.95);
+}
+
+/* Entry button (after language selection) */
+.btn-entry {
+  border-radius: 1rem;
+  min-height: 52px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  background-color: var(--zanah);
+  color: var(--deep-teal);
+  box-shadow: 0 4px 8px var(--deep-teal);
+}
+
+.btn-entry:active {
+  box-shadow: 0 2px 4px var(--deep-teal);
+  transform: scale(0.95);
+}
+
+/* Payment methods button */
+.btn-payment {
+  border-radius: 1rem;
+  min-height: 52px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  background-color: var(--tuft-bush);
+  color: var(--deep-teal);
+  box-shadow: 0 4px 8px var(--deep-teal);
+}
+
+.btn-payment:active {
+  box-shadow: 0 2px 4px var(--deep-teal);
+  transform: scale(0.95);
+}
+
+/* Global expenses button */
+.btn-expenses {
+  border-radius: 1rem;
+  min-height: 52px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  background-color: var(--serenade);
+  color: var(--deep-teal);
+  box-shadow: 0 4px 8px var(--deep-teal);
+}
+
+.btn-expenses:active {
+  box-shadow: 0 2px 4px var(--deep-teal);
+  transform: scale(0.95);
+}
+
+/* Universal button for internal pages */
+.btn-universal {
+  border-radius: 1rem;
+  min-height: 48px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  background-color: var(--polar);
+  color: var(--deep-teal);
+  box-shadow: 0 4px 8px var(--deep-teal);
+}
+
+.btn-universal:active {
+  box-shadow: 0 2px 4px var(--deep-teal);
+  transform: scale(0.95);
+}
+
+/* Object buttons */
+.btn-object {
+  border-radius: 1rem;
+  min-height: 48px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  color: var(--blue-whale);
+  box-shadow: 0 4px 8px var(--blue-whale);
+}
+
+.btn-object:active {
+  box-shadow: 0 2px 4px var(--blue-whale);
+  transform: scale(0.95);
+}
+
+/* RTL Support for Arabic */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL mirroring for flexbox */
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+/* RTL arrows and icons - flip horizontally */
+[dir="rtl"] .icon-arrow,
+[dir="rtl"] .arrow-left,
+[dir="rtl"] .arrow-right,
+[dir="rtl"] [class*="arrow"] {
+  transform: scaleX(-1);
+}
+
+/* RTL grid for language selector (2x4) */
+[dir="rtl"] .language-grid {
+  direction: ltr; /* Keep grid order LTR even in RTL context */
+}
+
+/* Ensure buttons stay aligned in RTL */
+[dir="rtl"] button,
+[dir="rtl"] .btn-base {
+  text-align: center;
+}

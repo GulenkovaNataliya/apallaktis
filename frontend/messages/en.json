@@ -1,0 +1,43 @@
+{
+  "landing": {
+    "slogan": "End of routine!",
+    "login": "Login",
+    "register": "Create account",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy"
+  },
+  "welcome": {
+    "enter": "Enter"
+  },
+  "register": {
+    "title": "Create account",
+    "withInvoice": "With invoice",
+    "withReceipt": "With receipt",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "companyName": "Company name",
+    "afm": "ΑΦΜ",
+    "doy": "ΔΟΥ",
+    "agreeTerms": "I agree with the Terms of Use and Privacy Policy",
+    "submit": "Register"
+  },
+  "pagePay": {
+    "paymentMethods": "Payment methods",
+    "globalExpenses": "General expenses"
+  },
+  "objects": {
+    "title": "Job",
+    "open": "Open",
+    "closed": "Closed",
+    "finance": "Summary",
+    "expenses": "Expenses"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add": "Add"
+  }
+}
