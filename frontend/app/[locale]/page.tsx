@@ -40,7 +40,7 @@ export default function LandingPage() {
               {t.login}
             </Link>
             <Link
-              href="#"
+              href={`/${locale}/register`}
               className="btn-primary text-button w-full text-center"
               style={{
                 backgroundColor: "var(--polar)",

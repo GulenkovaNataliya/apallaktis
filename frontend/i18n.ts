@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getRequestConfig } from "next-intl/server";
+import { messages } from "./lib/messages";
 
 // Fixed language order as per spec
 export const locales = ["el", "ru", "uk", "sq", "bg", "ro", "en", "ar"] as const;
@@ -31,6 +32,6 @@ export default getRequestConfig(async ({ locale }) => {
   if (!locales.includes(locale as Locale)) notFound();
 
   return {
-    messages: (await import(`./messages/${locale}.json`)).default,
+    messages: messages[locale as Locale],
   };
 });

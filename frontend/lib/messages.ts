@@ -7,6 +7,21 @@ export const messages = {
       terms: "Όροι χρήσης",
       privacy: "Πολιτική Απορρήτου",
     },
+    login: {
+      title: "Είσοδος",
+      comingSoon: "Σύντομα...",
+      backToHome: "← Πίσω στην αρχική",
+    },
+    privacy: {
+      title: "Πολιτική Απορρήτου",
+      content: "Το περιεχόμενο της πολιτικής απορρήτου θα προστεθεί σύντομα...",
+      backToHome: "← Πίσω στην αρχική",
+    },
+    terms: {
+      title: "Όροι χρήσης",
+      content: "Το περιεχόμενο των όρων χρήσης θα προστεθεί σύντομα...",
+      backToHome: "← Πίσω στην αρχική",
+    },
     register: {
       title: "Δημιουργία λογαριασμού",
       withInvoice: "Με τιμολόγιο",
@@ -19,6 +34,12 @@ export const messages = {
       doy: "ΔΟΥ",
       agreeTerms: "Συμφωνώ με τους Όρους Χρήσης και την Πολιτική Απορρήτου",
       submit: "Εγγραφή",
+      mustAgreeTerms: "Πρέπει να αποδεχτείτε τους όρους",
+      invalidEmail: "Εισάγετε σωστό e-mail",
+      invalidPhone: "Εισάγετε σωστό τηλέφωνο",
+      invalidAfm: "Το ΑΦΜ πρέπει να έχει 9 ψηφία",
+      invalidAfmInactive: "Το ΑΦΜ είναι για ιδιώτη. Παρακαλώ επιλέξτε 'Με απόδειξη'",
+      countryCode: "Κωδικός χώρας",
     },
   },
   ru: {
@@ -28,6 +49,21 @@ export const messages = {
       register: "Создать аккаунт",
       terms: "Условия использования",
       privacy: "Политика конфиденциальности",
+    },
+    login: {
+      title: "Вход",
+      comingSoon: "Скоро...",
+      backToHome: "← Назад на главную",
+    },
+    privacy: {
+      title: "Политика конфиденциальности",
+      content: "Содержание политики конфиденциальности будет добавлено в ближайшее время...",
+      backToHome: "← Назад на главную",
+    },
+    terms: {
+      title: "Условия использования",
+      content: "Содержание условий использования будет добавлено в ближайшее время...",
+      backToHome: "← Назад на главную",
     },
     register: {
       title: "Создание аккаунта",
@@ -41,6 +77,12 @@ export const messages = {
       doy: "ΔΟΥ",
       agreeTerms: "Соглашаюсь с Условиями использования и Политикой конфиденциальности",
       submit: "Зарегистрироваться",
+      mustAgreeTerms: "Вы должны принять условия",
+      invalidEmail: "Введите правильный e-mail",
+      invalidPhone: "Введите правильный телефон",
+      invalidAfm: "ΑΦΜ должен содержать 9 цифр",
+      invalidAfmInactive: "ΑΦΜ для частного лица. Пожалуйста, выберите 'С чеком'",
+      countryCode: "Код страны",
     },
   },
   uk: {
@@ -50,6 +92,21 @@ export const messages = {
       register: "Створити акаунт",
       terms: "Умови користування",
       privacy: "Політика конфіденційності",
+    },
+    login: {
+      title: "Вхід",
+      comingSoon: "Скоро...",
+      backToHome: "← Назад на головну",
+    },
+    privacy: {
+      title: "Політика конфіденційності",
+      content: "Вміст політики конфіденційності буде додано найближчим часом...",
+      backToHome: "← Назад на головну",
+    },
+    terms: {
+      title: "Умови користування",
+      content: "Вміст умов користування буде додано найближчим часом...",
+      backToHome: "← Назад на головну",
     },
     register: {
       title: "Створення акаунта",
@@ -63,6 +120,12 @@ export const messages = {
       doy: "ΔΟΥ",
       agreeTerms: "Погоджуюсь з Умовами використання та Політикою конфіденційності",
       submit: "Зареєструватися",
+      mustAgreeTerms: "Ви повинні прийняти умови",
+      invalidEmail: "Введіть правильний e-mail",
+      invalidPhone: "Введіть правильний телефон",
+      invalidAfm: "ΑΦΜ повинен містити 9 цифр",
+      invalidAfmInactive: "ΑΦΜ для приватної особи. Будь ласка, оберіть 'З чеком'",
+      countryCode: "Код країни",
     },
   },
   sq: {
@@ -72,6 +135,21 @@ export const messages = {
       register: "Krijoni llogari",
       terms: "Kushtet",
       privacy: "Privatësia",
+    },
+    login: {
+      title: "Hyrje",
+      comingSoon: "Së shpejti...",
+      backToHome: "← Kthehu te fillimi",
+    },
+    privacy: {
+      title: "Privatësia",
+      content: "Përmbajtja e politikës së privatësisë do të shtohet së shpejti...",
+      backToHome: "← Kthehu te fillimi",
+    },
+    terms: {
+      title: "Kushtet",
+      content: "Përmbajtja e kushteve do të shtohet së shpejti...",
+      backToHome: "← Kthehu te fillimi",
     },
     register: {
       title: "Krijimi i llogarisë",
@@ -85,6 +163,12 @@ export const messages = {
       doy: "ΔΟΥ",
       agreeTerms: "Pajtohem me Kushtet e Përdorimit dhe Politikën e Privatësisë",
       submit: "Regjistrohuni",
+      mustAgreeTerms: "Duhet të pranoni kushtet",
+      invalidEmail: "Vendosni një e-mail të saktë",
+      invalidPhone: "Vendosni një telefon të saktë",
+      invalidAfm: "ΑΦΜ duhet të ketë 9 shifra",
+      invalidAfmInactive: "ΑΦΜ për individ privat. Ju lutemi zgjidhni 'Me kupon'",
+      countryCode: "Kodi i vendit",
     },
   },
   bg: {
@@ -94,6 +178,21 @@ export const messages = {
       register: "Създаване на акаунт",
       terms: "Условия за ползване",
       privacy: "Политика за поверителност",
+    },
+    login: {
+      title: "Вход",
+      comingSoon: "Скоро...",
+      backToHome: "← Назад към начало",
+    },
+    privacy: {
+      title: "Политика за поверителност",
+      content: "Съдържанието на политиката за поверителност ще бъде добавено скоро...",
+      backToHome: "← Назад към начало",
+    },
+    terms: {
+      title: "Условия за ползване",
+      content: "Съдържанието на условията за ползване ще бъде добавено скоро...",
+      backToHome: "← Назад към начало",
     },
     register: {
       title: "Създаване на акаунт",
@@ -107,6 +206,12 @@ export const messages = {
       doy: "ΔΟΥ",
       agreeTerms: "Съгласен съм с Условията за ползване и Политиката за поверителност",
       submit: "Регистрирай се",
+      mustAgreeTerms: "Трябва да приемете условията",
+      invalidEmail: "Въведете правилен e-mail",
+      invalidPhone: "Въведете правилен телефон",
+      invalidAfm: "ΑΦΜ трябва да съдържа 9 цифри",
+      invalidAfmInactive: "ΑΦΜ е за частно лице. Моля изберете 'С касова бележка'",
+      countryCode: "Код на държава",
     },
   },
   ro: {
@@ -116,6 +221,21 @@ export const messages = {
       register: "Creare cont",
       terms: "Termeni de utilizare",
       privacy: "Politica de confidențialitate",
+    },
+    login: {
+      title: "Autentificare",
+      comingSoon: "În curând...",
+      backToHome: "← Înapoi la pagina principală",
+    },
+    privacy: {
+      title: "Politica de confidențialitate",
+      content: "Conținutul politicii de confidențialitate va fi adăugat în curând...",
+      backToHome: "← Înapoi la pagina principală",
+    },
+    terms: {
+      title: "Termeni de utilizare",
+      content: "Conținutul termenilor de utilizare va fi adăugat în curând...",
+      backToHome: "← Înapoi la pagina principală",
     },
     register: {
       title: "Creare cont",
@@ -129,6 +249,12 @@ export const messages = {
       doy: "ΔΟΥ",
       agreeTerms: "Sunt de acord cu Termenii de utilizare și Politica de confidențialitate",
       submit: "Înregistrare",
+      mustAgreeTerms: "Trebuie să acceptați termenii",
+      invalidEmail: "Introduceți un e-mail corect",
+      invalidPhone: "Introduceți un telefon corect",
+      invalidAfm: "ΑΦΜ trebuie să conțină 9 cifre",
+      invalidAfmInactive: "ΑΦΜ pentru persoană fizică. Vă rugăm selectați 'Cu chitanță'",
+      countryCode: "Cod țară",
     },
   },
   en: {
@@ -138,6 +264,21 @@ export const messages = {
       register: "Create account",
       terms: "Terms of use",
       privacy: "Privacy policy",
+    },
+    login: {
+      title: "Login",
+      comingSoon: "Coming soon...",
+      backToHome: "← Back to home",
+    },
+    privacy: {
+      title: "Privacy policy",
+      content: "Privacy policy content coming soon...",
+      backToHome: "← Back to home",
+    },
+    terms: {
+      title: "Terms of use",
+      content: "Terms of service content coming soon...",
+      backToHome: "← Back to home",
     },
     register: {
       title: "Create account",
@@ -151,6 +292,12 @@ export const messages = {
       doy: "ΔΟΥ",
       agreeTerms: "I agree with the Terms of Use and Privacy Policy",
       submit: "Register",
+      mustAgreeTerms: "You must accept the terms",
+      invalidEmail: "Enter a valid e-mail",
+      invalidPhone: "Enter a valid phone",
+      invalidAfm: "ΑΦΜ must contain 9 digits",
+      invalidAfmInactive: "ΑΦΜ is for private individual. Please select 'With receipt'",
+      countryCode: "Country code",
     },
   },
   ar: {
@@ -160,6 +307,21 @@ export const messages = {
       register: "إنشاء حساب",
       terms: "الشروط والأحكام",
       privacy: "سياسة الخصوصية",
+    },
+    login: {
+      title: "تسجيل الدخول",
+      comingSoon: "...قريباً",
+      backToHome: "العودة إلى الصفحة الرئيسية ←",
+    },
+    privacy: {
+      title: "سياسة الخصوصية",
+      content: "...سيتم إضافة محتوى سياسة الخصوصية قريباً",
+      backToHome: "العودة إلى الصفحة الرئيسية ←",
+    },
+    terms: {
+      title: "الشروط والأحكام",
+      content: "...سيتم إضافة محتوى الشروط والأحكام قريباً",
+      backToHome: "العودة إلى الصفحة الرئيسية ←",
     },
     register: {
       title: "إنشاء حساب",
@@ -173,6 +335,12 @@ export const messages = {
       doy: "مصلحة الضرائب (ΔΟΥ)",
       agreeTerms: "أوافق على الشروط والأحكام وسياسة الخصوصية",
       submit: "تسجيل",
+      mustAgreeTerms: "يجب عليك قبول الشروط",
+      invalidEmail: "أدخل بريد إلكتروني صحيح",
+      invalidPhone: "أدخل رقم هاتف صحيح",
+      invalidAfm: "يجب أن يحتوي ΑΦΜ على 9 أرقام",
+      invalidAfmInactive: "ΑΦΜ للفرد الخاص. الرجاء اختيار 'مع إيصال'",
+      countryCode: "رمز البلد",
     },
   },
 };
