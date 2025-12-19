@@ -135,7 +135,7 @@ export default function LoginPage() {
             <Link
               href={`/${locale}`}
               className="text-center text-sm mt-4"
-              style={{ color: "var(--deep-teal)" }}
+              style={{ color: "#daf3f6" }}
             >
               {t.backToHome}
             </Link>
