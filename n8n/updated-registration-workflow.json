@@ -1,0 +1,304 @@
+{
+  "name": "User Registration - Apallaktis",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "register",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook - Registration Form",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "apallaktis-register"
+    },
+    {
+      "parameters": {
+        "functionCode": "const bcrypt = require('bcrypt');\nconst data = $input.item.json.body;\n\n// Validate required fields\nif (!data.name || !data.email || !data.phone || !data.password) {\n  return {\n    json: {\n      success: false,\n      error: 'Missing required fields',\n      missingFields: {\n        name: !data.name,\n        email: !data.email,\n        phone: !data.phone,\n        password: !data.password\n      }\n    }\n  };\n}\n\n// Validate email\nconst emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\nif (!emailRegex.test(data.email)) {\n  return {\n    json: {\n      success: false,\n      error: 'Invalid email address'\n    }\n  };\n}\n\n// Validate password (minimum 6 characters)\nif (data.password.length < 6) {\n  return {\n    json: {\n      success: false,\n      error: 'Password must be at least 6 characters'\n    }\n  };\n}\n\n// Validate AFM (if invoice type)\nif (data.invoiceType === 'invoice') {\n  if (!data.afm || !/^\\d{9}$/.test(data.afm)) {\n    return {\n      json: {\n        success: false,\n        error: 'AFM must be 9 digits'\n      }\n    };\n  }\n  \n  if (!data.companyName) {\n    return {\n      json: {\n        success: false,\n        error: 'Company name is required'\n      }\n    };\n  }\n}\n\n// Hash password\nconst saltRounds = 10;\nconst passwordHash = await bcrypt.hash(data.password, saltRounds);\n\n// Prepare user data\nreturn {\n  json: {\n    success: true,\n    data: {\n      name: data.name,\n      email: data.email.toLowerCase(),\n      passwordHash: passwordHash,\n      phone: data.phone,\n      countryCode: data.countryCode || '+30',\n      isBusiness: data.invoiceType === 'invoice',\n      companyName: data.companyName || null,\n      afm: data.afm || null,\n      registeredAt: new Date().toISOString(),\n      source: 'website'\n    }\n  }\n};"
+      },
+      "id": "validate-and-hash",
+      "name": "Validate & Hash Password",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.success}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-validation",
+      "name": "Check Validation",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "id": "error-validation-failed",
+      "name": "Error: Validation Failed",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [850, 150]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id FROM users WHERE email = $1 LIMIT 1",
+        "additionalFields": {
+          "mode": "values",
+          "values": {
+            "values": [
+              {
+                "name": "email",
+                "value": "={{ $json.data.email }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "check-user-exists",
+      "name": "Check User Exists",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2,
+      "position": [850, 400],
+      "credentials": {
+        "postgres": {
+          "id": "1",
+          "name": "PostgreSQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.length }}",
+              "value2": 0,
+              "operation": "equal"
+            }
+          ]
+        }
+      },
+      "id": "user-already-exists",
+      "name": "User Already Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1050, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"error\": \"Email already registered\" } }}",
+        "options": {
+          "responseCode": 409
+        }
+      },
+      "id": "error-user-exists",
+      "name": "Error: Email Already Registered",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 250]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "public",
+        "table": "users",
+        "columns": "name,email,password_hash,phone,country_code,is_business,company_name,afm",
+        "additionalFields": {
+          "values": "={{ $('Validate & Hash Password').first().json.data.name }},={{ $('Validate & Hash Password').first().json.data.email }},={{ $('Validate & Hash Password').first().json.data.passwordHash }},={{ $('Validate & Hash Password').first().json.data.phone }},={{ $('Validate & Hash Password').first().json.data.countryCode }},={{ $('Validate & Hash Password').first().json.data.isBusiness }},={{ $('Validate & Hash Password').first().json.data.companyName }},={{ $('Validate & Hash Password').first().json.data.afm }}"
+        },
+        "options": {
+          "returnFields": "id,email,demo_expires_at,referral_code"
+        }
+      },
+      "id": "save-to-database",
+      "name": "Create User in PostgreSQL",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2,
+      "position": [1250, 550],
+      "credentials": {
+        "postgres": {
+          "id": "1",
+          "name": "PostgreSQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@apallaktis.gr",
+        "toEmail": "={{ $('Validate & Hash Password').first().json.data.email }}",
+        "subject": "Καλώς ήρθατε στο Apallaktis!",
+        "emailType": "html",
+        "message": "<html>\n<body style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n  <div style=\"background: linear-gradient(135deg, #01312d 0%, #daf3f6 100%); padding: 40px; text-align: center;\">\n    <h1 style=\"color: #ff8f0a; margin: 0;\">Apallaktis</h1>\n    <p style=\"color: #daf3f6; font-size: 18px;\">Τέλος στη ρουτίνα!</p>\n  </div>\n  \n  <div style=\"padding: 40px; background: #f9f9f9;\">\n    <h2 style=\"color: #333;\">Γεια σας {{ $('Validate & Hash Password').first().json.data.name }}!</h2>\n    \n    <p style=\"color: #666; line-height: 1.6;\">\n      Σας ευχαριστούμε που εγγραφήκατε στο Apallaktis. Η εγγραφή σας ολοκληρώθηκε επιτυχώς!\n    </p>\n    \n    <div style=\"background: white; padding: 20px; border-radius: 8px; margin: 20px 0;\">\n      <h3 style=\"color: #01312d; margin-top: 0;\">🎁 DEMO Περίοδος - 48 ώρες</h3>\n      <p>Έχετε δωρεάν πρόσβαση για 48 ώρες με δυνατότητα δημιουργίας έως 3 αντικειμένων!</p>\n      <p><strong>Λήξη DEMO:</strong> {{ $json[0].demo_expires_at }}</p>\n      <p><strong>Referral Code:</strong> <code>{{ $json[0].referral_code }}</code></p>\n      <p style=\"font-size: 12px; color: #999;\">Μοιραστείτε το referral code με φίλους και κερδίστε επιπλέον χρόνο!</p>\n    </div>\n    \n    <div style=\"text-align: center; margin: 30px 0;\">\n      <a href=\"https://apallaktis.gr\" style=\"background: #ff8f0a; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block;\">Ξεκινήστε τώρα</a>\n    </div>\n  </div>\n  \n  <div style=\"background: #333; padding: 20px; text-align: center; color: #999; font-size: 12px;\">\n    <p>© 2025 Apallaktis. Όλα τα δικαιώματα κατοχυρωμένα.</p>\n  </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "id": "send-welcome-email",
+      "name": "Send Welcome Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [1450, 550],
+      "credentials": {
+        "smtp": {
+          "id": "2",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "${TELEGRAM_CHAT_ID}",
+        "text": "🎉 *Νέος Χρήστης!*\n\n*Όνομα:* {{ $('Validate & Hash Password').first().json.data.name }}\n*Email:* {{ $('Validate & Hash Password').first().json.data.email }}\n*Τηλέφωνο:* {{ $('Validate & Hash Password').first().json.data.phone }}\n*Τύπος:* {{ $('Validate & Hash Password').first().json.data.isBusiness ? 'Επιχείρηση 🏢' : 'Ιδιώτης 👤' }}\n{{ #if $('Validate & Hash Password').first().json.data.companyName }}\n*Εταιρεία:* {{ $('Validate & Hash Password').first().json.data.companyName }}\n*ΑΦΜ:* {{ $('Validate & Hash Password').first().json.data.afm }}\n{{ /if }}\n*Referral:* `{{ $('Create User in PostgreSQL').first().json[0].referral_code }}`\n\n_{{ $('Validate & Hash Password').first().json.data.registeredAt }}_",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "notify-telegram",
+      "name": "Notify Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [1450, 700],
+      "credentials": {
+        "telegramApi": {
+          "id": "3",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Registration successful\", \"userId\": $('Create User in PostgreSQL').first().json[0].id, \"demoExpiresAt\": $('Create User in PostgreSQL').first().json[0].demo_expires_at } }}",
+        "options": {
+          "responseCode": 201
+        }
+      },
+      "id": "success-response",
+      "name": "Success Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1650, 550]
+    }
+  ],
+  "connections": {
+    "Webhook - Registration Form": {
+      "main": [
+        [
+          {
+            "node": "Validate & Hash Password",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate & Hash Password": {
+      "main": [
+        [
+          {
+            "node": "Check Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Validation": {
+      "main": [
+        [
+          {
+            "node": "Error: Validation Failed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check User Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check User Exists": {
+      "main": [
+        [
+          {
+            "node": "User Already Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User Already Exists?": {
+      "main": [
+        [
+          {
+            "node": "Error: Email Already Registered",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create User in PostgreSQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create User in PostgreSQL": {
+      "main": [
+        [
+          {
+            "node": "Send Welcome Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Welcome Email": {
+      "main": [
+        [
+          {
+            "node": "Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-18T00:00:00.000Z",
+  "versionId": "2"
+}

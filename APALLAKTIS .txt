@@ -8,6 +8,7 @@
 --skeptic: #c3e2dc;
 --aqua-squeeze: #e7f4f1;
 --orange: #ff6a1a;
+--slogan-color: #ff8f0a;
 
 /* SCSS HEX */
 $blue-whale: #033a45;
@@ -19,6 +20,7 @@ $serenade: #ffebe1;
 $skeptic: #c3e2dc;
 $aqua-squeeze: #e7f4f1;
 $orange: #ff6a1a;
+$slogan-color: #ff8f0a;
 
 /* SCSS RGB */
 $blue-whale: rgba(3,58,69,1);
@@ -30,3 +32,4 @@ $serenade: rgba(255,235,225,1);
 $skeptic: rgba(195,226,220,1);
 $aqua-squeeze: rgba(231,244,241,1);
 $orange: rgba(255,106,26,1);
+$slogan-color: rgba(255,143,10,1);

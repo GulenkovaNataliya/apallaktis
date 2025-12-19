@@ -1,0 +1,539 @@
+Νομικά δεσμευτική έκδοση είναι η ελληνική.
+Όλες οι υπόλοιπες γλωσσικές εκδόσεις αποτελούν ενημερωτικές μεταφράσεις.
+
+---
+
+## 🇬🇷 Ελληνικά — Πολιτική Απορρήτου
+
+### 1. Υπεύθυνος Επεξεργασίας
+Η πλατφόρμα ΑΠΑΛΛΑΚΤΗΣ λειτουργεί ως Υπεύθυνος Επεξεργασίας των προσωπικών δεδομένων που συλλέγονται στο πλαίσιο της παροχής της υπηρεσίας.
+
+### 2. Ποια Δεδομένα Συλλέγουμε
+Συλλέγουμε μόνο δεδομένα απαραίτητα για τη λειτουργία της υπηρεσίας, όπως:
+- στοιχεία εγγραφής (όνομα, email, τηλέφωνο),
+- στοιχεία λογαριασμού χρήστη,
+- οικονομικά δεδομένα που καταχωρεί ο χρήστης (έργα, πληρωμές, έξοδα),
+- τεχνικά δεδομένα (διεύθυνση IP, τύπος συσκευής, πρόγραμμα περιήγησης),
+- αρχεία καταγραφής (logs) για λόγους ασφάλειας.
+
+### 3. Πώς Συλλέγουμε τα Δεδομένα
+Τα δεδομένα συλλέγονται απευθείας από τον χρήστη μέσω φορμών, μέσω της χρήσης της πλατφόρμας και μέσω cookies λειτουργικότητας και ασφάλειας.
+
+### 4. Σκοπός Επεξεργασίας
+Τα δεδομένα χρησιμοποιούνται αποκλειστικά για τη λειτουργία και παροχή της υπηρεσίας, τη διαχείριση του λογαριασμού χρήστη, την τεχνική υποστήριξη και τη βελτίωση της εμπειρίας χρήστη.
+
+### 5. Νομική Βάση Επεξεργασίας (GDPR – Άρθρο 6)
+Η επεξεργασία βασίζεται στη συγκατάθεση του χρήστη, στην εκτέλεση σύμβασης και στο έννομο συμφέρον για την ασφάλεια και λειτουργία της πλατφόρμας.
+
+### 6. Αυτοματοποιημένη Επεξεργασία
+Ορισμένα δεδομένα ενδέχεται να υποβάλλονται σε αυτοματοποιημένη επεξεργασία (υπολογισμοί, στατιστικά, σύνοψη δεδομένων). Η τελική ευθύνη για την ακρίβεια των δεδομένων ανήκει αποκλειστικά στον χρήστη.
+
+### 7. Τρίτοι Πάροχοι
+Τα δεδομένα ενδέχεται να διαβιβαστούν σε τρίτους παρόχους μόνο εφόσον είναι απαραίτητο για τη λειτουργία της υπηρεσίας και σύμφωνα με τον GDPR.
+
+### 8. Cookies
+Η πλατφόρμα χρησιμοποιεί cookies λειτουργικότητας και ασφάλειας. Ο χρήστης μπορεί να τα διαχειριστεί μέσω των ρυθμίσεων του προγράμματος περιήγησής του.
+
+### 9. Δικαιώματα Χρήστη
+Ο χρήστης έχει δικαίωμα πρόσβασης, διόρθωσης, διαγραφής, περιορισμού ή εναντίωσης στην επεξεργασία και ανάκλησης της συγκατάθεσης.
+
+### 10. Διάρκεια Τήρησης
+Τα δεδομένα διατηρούνται όσο ο λογαριασμός παραμένει ενεργός ή όσο απαιτείται από την ισχύουσα νομοθεσία.
+
+### 11. Ασφάλεια Δεδομένων
+Λαμβάνονται κατάλληλα τεχνικά και οργανωτικά μέτρα για την προστασία των δεδομένων.
+
+### 12. Ανηλίκοι
+Η υπηρεσία δεν απευθύνεται σε άτομα κάτω των 16 ετών.
+
+### 13. Επικοινωνία
+Για θέματα απορρήτου, ο χρήστης μπορεί να επικοινωνήσει μέσω των στοιχείων επικοινωνίας της πλατφόρμας.
+
+---
+
+## 🇬🇧 English — Privacy Policy (informational translation)
+
+### 1. Data Controller
+The APALLAKTIS platform acts as the Data Controller of personal data processed in the context of providing the service.
+
+### 2. Data We Collect
+We collect only data necessary for the operation of the service, such as:
+- registration data (name, email, phone),
+- user account data,
+- financial data entered by the user (projects, payments, expenses),
+- technical data (IP address, device type, browser),
+- security logs.
+
+### 3. How We Collect Data
+Data is collected directly from the user through forms, through use of the platform, and via functional and security cookies.
+
+### 4. Purpose of Processing
+Data is used exclusively to provide and operate the service, manage user accounts, provide technical support, and improve user experience.
+
+### 5. Legal Basis (GDPR Article 6)
+Processing is based on user consent, contract performance, and legitimate interest related to security and service operation.
+
+### 6. Automated Processing
+Some data may be processed automatically (calculations, statistics, summaries). Final responsibility for data accuracy remains with the user.
+
+### 7. Third Parties
+Data may be shared with third-party providers only when necessary for service operation and in compliance with GDPR.
+
+### 8. Cookies
+The platform uses functional and security cookies. Users can manage cookies via browser settings.
+
+### 9. User Rights
+Users have the right to access, correct, delete, restrict or object to processing, and withdraw consent.
+
+### 10. Data Retention
+Data is retained while the account is active or as required by law.
+
+### 11. Data Security
+Appropriate technical and organizational measures are taken to protect data.
+
+### 12. Minors
+The service is not intended for persons under the age of 16.
+
+### 13. Contact
+For privacy-related matters, users may contact the platform through its contact details.
+
+---
+
+## 🇷🇺 Русский — Политика конфиденциальности (информационный перевод)
+
+### 1. Оператор данных
+Платформа АПАЛЛАКТИС является оператором персональных данных пользователей.
+
+### 2. Какие данные мы собираем
+Мы собираем только данные, необходимые для работы сервиса: регистрационные данные, данные аккаунта, финансовые данные, вводимые пользователем, технические данные и журналы безопасности.
+
+### 3. Как собираются данные
+Данные собираются через формы, при использовании сервиса и с помощью cookies функциональности и безопасности.
+
+### 4. Цель обработки
+Данные используются исключительно для предоставления сервиса, управления аккаунтом и улучшения пользовательского опыта.
+
+### 5. Правовое основание
+Обработка осуществляется на основании согласия пользователя, исполнения договора и законного интереса.
+
+### 6. Автоматизированная обработка
+Часть данных может обрабатываться автоматически. Ответственность за точность данных несёт пользователь.
+
+### 7. Третьи лица
+Данные могут передаваться третьим лицам только для работы сервиса и в соответствии с GDPR.
+
+### 8. Cookies
+Используются cookies функциональности и безопасности.
+
+### 9. Права пользователя
+Пользователь имеет право на доступ, исправление, удаление и отзыв согласия.
+
+### 10. Срок хранения
+Данные хранятся, пока аккаунт активен или требуется законом.
+
+### 11. Безопасность
+Применяются меры защиты данных.
+
+### 12. Несовершеннолетние
+Сервис не предназначен для лиц младше 16 лет.
+
+### 13. Контакты
+Связь осуществляется через контакты платформы.
+
+---
+
+#🇺🇦 Українська — Політика конфіденційності
+(інформаційний переклад)
+1. Контролер даних
+Платформа APALLAKTIS виступає контролером персональних даних, які обробляються в межах надання сервісу.
+2. Які дані ми збираємо
+Ми збираємо лише ті дані, які є необхідними для функціонування сервісу, зокрема:
+
+
+реєстраційні дані (ім’я, електронна пошта, телефон),
+
+
+дані облікового запису користувача,
+
+
+фінансові дані, які вводить користувач (проєкти, платежі, витрати),
+
+
+технічні дані (IP-адреса, тип пристрою, браузер),
+
+
+журнали безпеки (logs).
+
+
+3. Як ми збираємо дані
+Дані збираються:
+
+
+безпосередньо від користувача через форми,
+
+
+під час використання платформи,
+
+
+за допомогою файлів cookie для функціональності та безпеки.
+
+
+4. Мета обробки
+Дані використовуються виключно для:
+
+
+надання та функціонування сервісу,
+
+
+управління обліковим записом користувача,
+
+
+технічної підтримки та забезпечення безпеки,
+
+
+покращення користувацького досвіду.
+
+
+5. Правова підстава обробки (GDPR, стаття 6)
+Обробка даних здійснюється на підставі:
+
+
+згоди користувача,
+
+
+виконання договору,
+
+
+законного інтересу щодо безпеки та стабільної роботи сервісу.
+
+
+6. Автоматизована обробка
+Деякі дані можуть оброблятися автоматично (обчислення, статистика, зведення даних).
+Остаточна відповідальність за точність даних залишається за користувачем.
+7. Треті сторони
+Дані можуть передаватися третім сторонам лише у випадках, коли це необхідно для роботи сервісу (наприклад, хостинг, платіжні або email-сервіси) та відповідно до вимог GDPR.
+8. Файли cookie
+Платформа використовує файли cookie для функціональності та безпеки.
+Користувач може керувати або вимикати файли cookie через налаштування свого браузера.
+9. Права користувача
+Користувач має право:
+
+
+на доступ до своїх даних,
+
+
+на виправлення або видалення даних,
+
+
+на обмеження або заперечення обробки,
+
+
+на відкликання своєї згоди у будь-який момент.
+
+
+10. Строк зберігання
+Дані зберігаються протягом часу, поки обліковий запис є активним, або відповідно до вимог законодавства.
+11. Безпека даних
+Вживаються відповідні технічні та організаційні заходи для захисту даних від несанкціонованого доступу або втрати.
+12. Неповнолітні
+Сервіс не призначений для осіб віком до 16 років.
+13. Контакт
+З питань конфіденційності користувач може звернутися через контактні дані, зазначені на платформі.
+
+🇦🇱 Shqip — Politika e Privatësisë
+
+(përkthim informativ)
+
+1. Kontrolluesi i të Dhënave
+
+Platforma APALLAKTIS vepron si kontrollues i të dhënave personale që përpunohen në kuadër të ofrimit të shërbimit.
+
+2. Çfarë të dhënash mbledhim
+
+Ne mbledhim vetëm të dhëna të nevojshme për funksionimin e shërbimit, si:
+
+të dhëna regjistrimi (emër, email, telefon),
+
+të dhëna të llogarisë së përdoruesit,
+
+të dhëna financiare të futura nga përdoruesi (projekte, pagesa, shpenzime),
+
+të dhëna teknike (adresa IP, lloji i pajisjes, shfletuesi),
+
+regjistra sigurie (logs).
+
+3. Si i mbledhim të dhënat
+
+Të dhënat mblidhen:
+
+drejtpërdrejt nga përdoruesi përmes formularëve,
+
+gjatë përdorimit të platformës,
+
+përmes cookies funksionale dhe sigurie.
+
+4. Qëllimi i përpunimit
+
+Të dhënat përdoren vetëm për:
+
+ofrimin dhe funksionimin e shërbimit,
+
+menaxhimin e llogarisë së përdoruesit,
+
+mbështetjen teknike dhe sigurinë,
+
+përmirësimin e përvojës së përdoruesit.
+
+5. Baza Ligjore (GDPR – Neni 6)
+
+Përpunimi bazohet në:
+
+pëlqimin e përdoruesit,
+
+ekzekutimin e kontratës,
+
+interesin legjitim për sigurinë dhe funksionimin e shërbimit.
+
+6. Përpunimi i Automatizuar
+
+Disa të dhëna mund të përpunohen automatikisht (llogaritje, statistika, përmbledhje).
+Përgjegjësia për saktësinë e të dhënave mbetet te përdoruesi.
+
+7. Palë të Treta
+
+Të dhënat mund t’u transmetohen palëve të treta vetëm kur është e nevojshme për funksionimin e shërbimit dhe në përputhje me GDPR.
+
+8. Cookies
+
+Platforma përdor cookies funksionale dhe sigurie.
+Përdoruesi mund t’i menaxhojë ato përmes cilësimeve të shfletuesit.
+
+9. Të Drejtat e Përdoruesit
+
+Përdoruesi ka të drejtë:
+
+aksesimi,
+
+korrigjimi ose fshirja e të dhënave,
+
+kufizimi ose kundërshtimi i përpunimit,
+
+tërheqja e pëlqimit në çdo kohë.
+
+10. Kohëzgjatja e Ruajtjes
+
+Të dhënat ruhen për aq kohë sa llogaria është aktive ose sipas kërkesave ligjore.
+
+11. Siguria e të Dhënave
+
+Zbatohen masa teknike dhe organizative për mbrojtjen e të dhënave.
+
+12. Të Miturit
+
+Shërbimi nuk është i destinuar për persona nën moshën 16 vjeç.
+
+13. Kontakt
+
+Për çështje privatësie, përdoruesi mund të kontaktojë përmes të dhënave të kontaktit të platformës.
+
+🇧🇬 Български — Политика за поверителност
+
+(информационен превод)
+
+1. Администратор на данни
+
+Платформата APALLAKTIS действа като администратор на личните данни.
+
+2. Какви данни събираме
+
+Събираме само данни, необходими за работата на услугата, включително:
+
+регистрационни данни (име, email, телефон),
+
+данни за потребителския акаунт,
+
+финансови данни, въведени от потребителя (проекти, плащания, разходи),
+
+технически данни (IP адрес, устройство, браузър),
+
+защитни логове.
+
+3. Как събираме данните
+
+Данните се събират чрез форми, използване на платформата и чрез функционални и защитни cookies.
+
+4. Цел на обработката
+
+Данните се използват само за предоставяне и поддръжка на услугата, управление на акаунта и подобряване на потребителското изживяване.
+
+5. Правно основание
+
+Обработката се основава на съгласие, изпълнение на договор и легитимен интерес.
+
+6. Автоматизирана обработка
+
+Възможна е автоматизирана обработка. Отговорността за точността е на потребителя.
+
+7. Трети страни
+
+Данните се споделят с трети страни само при необходимост и в съответствие с GDPR.
+
+8. Cookies
+
+Използват се cookies за функционалност и сигурност.
+
+9. Права на потребителя
+
+Достъп, корекция, изтриване, ограничаване и оттегляне на съгласие.
+
+10. Срок на съхранение
+
+Докато акаунтът е активен или по закон.
+
+11. Сигурност
+
+Прилагат се защитни мерки.
+
+12. Непълнолетни
+
+Услугата не е предназначена за лица под 16 години.
+
+13. Контакт
+
+Контакт чрез данните на платформата.
+
+🇷🇴 Română — Politica de confidențialitate
+
+(traducere informativă)
+
+1. Operator de date
+
+Platforma APALLAKTIS acționează ca operator de date.
+
+2. Date colectate
+
+Colectăm doar date necesare funcționării serviciului:
+
+date de înregistrare,
+
+date de cont,
+
+date financiare introduse de utilizator,
+
+date tehnice,
+
+jurnale de securitate.
+
+3. Colectare
+
+Prin formulare, utilizarea platformei și cookies.
+
+4. Scop
+
+Furnizarea serviciului, gestionarea contului și îmbunătățirea experienței.
+
+5. Bază legală
+
+Consimțământ, contract, interes legitim.
+
+6. Procesare automată
+
+Datele pot fi procesate automat; responsabilitatea revine utilizatorului.
+
+7. Terți
+
+Doar dacă este necesar și conform GDPR.
+
+8. Cookies
+
+Funcționale și de securitate.
+
+9. Drepturi
+
+Acces, corectare, ștergere, retragere consimțământ.
+
+10. Păstrare
+
+Cât timp contul este activ.
+
+11. Securitate
+
+Măsuri adecvate aplicate.
+
+12. Minori
+
+Nu este destinat minorilor sub 16 ani.
+
+13. Contact
+
+Prin datele platformei.
+
+🇸🇦 العربية — سياسة الخصوصية
+
+(ترجمة إرشادية)
+
+1. مسؤول معالجة البيانات
+
+تعمل منصة APALLAKTIS كمسؤول عن معالجة البيانات الشخصية.
+
+2. البيانات التي نجمعها
+
+نقوم بجمع البيانات الضرورية فقط لتشغيل الخدمة، مثل:
+
+بيانات التسجيل،
+
+بيانات الحساب،
+
+البيانات المالية التي يدخلها المستخدم،
+
+البيانات التقنية،
+
+سجلات الأمان.
+
+3. كيفية جمع البيانات
+
+يتم جمع البيانات عبر النماذج، استخدام المنصة، وملفات تعريف الارتباط.
+
+4. غرض المعالجة
+
+تُستخدم البيانات لتقديم الخدمة وإدارتها وتحسين تجربة المستخدم فقط.
+
+5. الأساس القانوني
+
+الموافقة، تنفيذ العقد، والمصلحة المشروعة.
+
+6. المعالجة الآلية
+
+قد تتم معالجة بعض البيانات تلقائيًا. المسؤولية تقع على المستخدم.
+
+7. أطراف ثالثة
+
+تتم مشاركة البيانات فقط عند الضرورة ووفقًا لـ GDPR.
+
+8. ملفات تعريف الارتباط
+
+نستخدم ملفات تعريف ارتباط وظيفية وأمنية.
+
+9. حقوق المستخدم
+
+الوصول، التصحيح، الحذف، سحب الموافقة.
+
+10. مدة الاحتفاظ
+
+طالما أن الحساب نشط أو حسب القانون.
+
+11. الأمان
+
+يتم تطبيق تدابير أمنية مناسبة.
+
+12. القُصّر
+
+الخدمة غير مخصصة لمن هم دون 16 عامًا.
+
+13. الاتصال
+
+عبر بيانات الاتصال الخاصة بالمنصة.
+
+
+
+

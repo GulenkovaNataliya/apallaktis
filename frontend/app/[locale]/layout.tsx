@@ -1,5 +1,6 @@
 import { Noto_Sans, Noto_Sans_Arabic } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/lib/auth-context";
 
 // Load Noto Sans for all languages
 const notoSans = Noto_Sans({
@@ -43,8 +44,10 @@ export default async function LocaleLayout({
         />
       </head>
       <body className={`${notoSans.variable} ${notoSansArabic.variable}`}>
-        {/* Mobile viewport wrapper for desktop preview */}
-        <div className="mobile-preview-wrapper">{children}</div>
+        <AuthProvider>
+          {/* Mobile viewport wrapper for desktop preview */}
+          <div className="mobile-preview-wrapper">{children}</div>
+        </AuthProvider>
       </body>
     </html>
   );

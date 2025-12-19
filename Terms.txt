@@ -1,0 +1,375 @@
+# TERMS_OF_USE_
+
+Νομικά δεσμευτική έκδοση είναι η ελληνική.
+Όλες οι υπόλοιπες γλωσσικές εκδόσεις αποτελούν ενημερωτικές μεταφράσεις.
+
+---
+
+## 🇬🇷 Ελληνικά — Όροι Χρήσης
+
+### 1. Περιγραφή Υπηρεσίας
+Η πλατφόρμα ΑΠΑΛΛΑΚΤΗΣ παρέχει ψηφιακό εργαλείο οργάνωσης, καταγραφής και παρακολούθησης οικονομικών στοιχείων, έργων, πληρωμών και εξόδων.
+Η υπηρεσία δεν αποτελεί λογιστική, φορολογική ή νομική συμβουλευτική.
+
+### 2. Αποδοχή Όρων
+Η χρήση της πλατφόρμας προϋποθέτει την πλήρη αποδοχή των παρόντων Όρων Χρήσης και της Πολιτικής Απορρήτου.
+
+### 3. Λογαριασμός Χρήστη
+Ο χρήστης είναι αποκλειστικά υπεύθυνος για:
+- την ακρίβεια των δεδομένων που καταχωρεί,
+- την ασφάλεια των στοιχείων σύνδεσης,
+- κάθε ενέργεια που πραγματοποιείται μέσω του λογαριασμού του.
+
+### 4. Δοκιμαστική Περίοδος και Συνδρομή
+Η πλατφόρμα μπορεί να προσφέρει δοκιμαστική πρόσβαση περιορισμένης διάρκειας.
+Μετά τη λήξη της δοκιμαστικής περιόδου, απαιτείται ενεργή συνδρομή για τη συνέχιση της χρήσης.
+
+### 5. Οικονομικά Δεδομένα
+Όλα τα οικονομικά δεδομένα εισάγονται από τον χρήστη.
+Η ΑΠΑΛΛΑΚΤΗΣ δεν εγγυάται την ακρίβεια των αποτελεσμάτων και δεν ευθύνεται για αποφάσεις που λαμβάνονται βάσει αυτών.
+
+### 6. Αποποίηση Ευθύνης
+Η ΑΠΑΛΛΑΚΤΗΣ δεν φέρει ευθύνη για:
+- σφάλματα καταχώρησης δεδομένων,
+- απώλειες ή ζημίες που προκύπτουν από τη χρήση της υπηρεσίας,
+- φορολογικές ή λογιστικές συνέπειες.
+
+### 7. Διαθεσιμότητα Υπηρεσίας
+Η λειτουργία της πλατφόρμας παρέχεται «ως έχει».
+Δεν παρέχεται εγγύηση αδιάλειπτης ή χωρίς σφάλματα λειτουργίας.
+
+### 8. Πνευματική Ιδιοκτησία
+Όλο το περιεχόμενο της πλατφόρμας αποτελεί πνευματική ιδιοκτησία της ΑΠΑΛΛΑΚΤΗΣ.
+
+### 9. Τροποποιήσεις
+Η ΑΠΑΛΛΑΚΤΗΣ διατηρεί το δικαίωμα τροποποίησης των Όρων Χρήσης οποτεδήποτε.
+
+### 10. Εφαρμοστέο Δίκαιο
+Οι παρόντες Όροι διέπονται από το Ελληνικό Δίκαιο.
+Αρμόδια είναι τα δικαστήρια της Ελλάδας.
+
+---
+
+## 🇬🇧 English — Terms of Use (informational translation)
+
+### 1. Service Description
+APALLAKTIS provides a digital tool for organizing and tracking financial data, projects, payments, and expenses.
+The service does not provide accounting, tax, or legal advice.
+
+### 2. Acceptance of Terms
+Use of the platform requires acceptance of these Terms and the Privacy Policy.
+
+### 3. User Account
+The user is fully responsible for data accuracy, account security, and all actions performed.
+
+### 4. Trial and Subscription
+A limited trial period may be offered. Continued use requires an active subscription.
+
+### 5. Financial Data
+All financial data is entered by the user. APALLAKTIS is not responsible for decisions based on such data.
+
+### 6. Disclaimer
+APALLAKTIS is not liable for errors, losses, or consequences arising from use of the service.
+
+### 7. Availability
+The service is provided “as is”, without guarantees of uninterrupted operation.
+
+### 8. Intellectual Property
+All content is the intellectual property of APALLAKTIS.
+
+### 9. Modifications
+Terms may be updated at any time.
+
+### 10. Governing Law
+Greek law applies.
+
+---
+
+## 🇷🇺 Русский — Условия использования (информационный перевод)
+
+### 1. Описание сервиса
+АПАЛЛАКТИС — это инструмент для учёта и организации финансовых данных.
+Сервис не является бухгалтерской или налоговой консультацией.
+
+### 2. Принятие условий
+Использование сервиса означает согласие с условиями и политикой конфиденциальности.
+
+### 3. Ответственность пользователя
+Пользователь несёт ответственность за введённые данные и доступ к аккаунту.
+
+### 4. Пробный период и подписка
+Может предоставляться ограниченный пробный период.
+Для дальнейшего использования требуется подписка.
+
+### 5. Финансовые данные
+Все данные вводятся пользователем. Сервис не отвечает за принятые решения.
+
+### 6. Ограничение ответственности
+Сервис не несёт ответственности за ошибки и последствия использования.
+
+### 7. Доступность
+Сервис предоставляется «как есть».
+
+### 8. Авторские права
+Все материалы принадлежат APALLAKTIS.
+
+### 9. Изменения
+Условия могут изменяться.
+
+### 10. Применимое право
+Применяется право Греции.
+
+---
+🇺🇦 Українська — Умови використання
+
+(інформаційний переклад)
+
+1. Опис сервісу
+
+Платформа APALLAKTIS надає цифровий інструмент для організації, обліку та відстеження фінансових даних, проєктів, платежів і витрат.
+Сервіс не є бухгалтерською, податковою або юридичною консультацією.
+
+2. Прийняття умов
+
+Використання платформи означає повну згоду з цими Умовами використання та Політикою конфіденційності.
+
+3. Обліковий запис користувача
+
+Користувач несе повну відповідальність за:
+
+точність введених даних,
+
+безпеку доступу до облікового запису,
+
+усі дії, виконані через його акаунт.
+
+4. Пробний період та підписка
+
+Платформа може надавати пробний доступ обмеженої тривалості.
+Після завершення пробного періоду для подальшого використання потрібна активна підписка.
+
+5. Фінансові дані
+
+Усі фінансові дані вводяться користувачем.
+APALLAKTIS не гарантує точність результатів і не несе відповідальності за рішення, прийняті на їх основі.
+
+6. Обмеження відповідальності
+
+APALLAKTIS не несе відповідальності за:
+
+помилки введення даних,
+
+фінансові або інші збитки,
+
+податкові чи бухгалтерські наслідки.
+
+7. Доступність сервісу
+
+Сервіс надається «як є» без гарантії безперебійної або безпомилкової роботи.
+
+8. Інтелектуальна власність
+
+Увесь контент платформи є інтелектуальною власністю APALLAKTIS.
+
+9. Зміни
+
+APALLAKTIS залишає за собою право змінювати ці Умови у будь-який час.
+
+10. Застосовне право
+
+Ці Умови регулюються законодавством Греції.
+Компетентними є суди Греції.
+
+🇦🇱 Shqip — Kushtet e Përdorimit
+
+(përkthim informativ)
+
+1. Përshkrimi i Shërbimit
+
+Platforma APALLAKTIS ofron një mjet dixhital për organizimin dhe ndjekjen e të dhënave financiare, projekteve, pagesave dhe shpenzimeve.
+Shërbimi nuk përbën këshillë kontabël, tatimore ose ligjore.
+
+2. Pranimi i Kushteve
+
+Përdorimi i platformës nënkupton pranimin e plotë të këtyre Kushteve dhe Politikës së Privatësisë.
+
+3. Llogaria e Përdoruesit
+
+Përdoruesi është plotësisht përgjegjës për:
+
+saktësinë e të dhënave,
+
+sigurinë e llogarisë,
+
+të gjitha veprimet e kryera.
+
+4. Periudha Provë dhe Abonimi
+
+Mund të ofrohet një periudhë prove me kohë të kufizuar.
+Përdorimi i mëtejshëm kërkon abonim aktiv.
+
+5. Të Dhënat Financiare
+
+Të gjitha të dhënat futen nga përdoruesi.
+APALLAKTIS nuk mban përgjegjësi për vendime të marra mbi bazën e tyre.
+
+6. Mohim Përgjegjësie
+
+Platforma nuk mban përgjegjësi për gabime, humbje apo pasoja fiskale.
+
+7. Disponueshmëria
+
+Shërbimi ofrohet “siç është”, pa garanci.
+
+8. Pronësia Intelektuale
+
+I gjithë përmbajtja i përket APALLAKTIS.
+
+9. Ndryshime
+
+Kushtet mund të ndryshohen në çdo kohë.
+
+10. Ligji i Zbatueshëm
+
+Zbatohet ligji grek.
+
+🇧🇬 Български — Условия за ползване
+
+(информационен превод)
+
+1. Описание на услугата
+
+Платформата APALLAKTIS предоставя дигитален инструмент за управление и проследяване на финансови данни, проекти, плащания и разходи.
+Услугата не представлява счетоводна, данъчна или правна консултация.
+
+2. Приемане на условията
+
+Използването на платформата означава приемане на настоящите условия и политиката за поверителност.
+
+3. Потребителски акаунт
+
+Потребителят носи пълна отговорност за въведените данни и сигурността на акаунта.
+
+4. Пробен период и абонамент
+
+Може да бъде предоставен ограничен пробен период.
+След него се изисква активен абонамент.
+
+5. Финансови данни
+
+Данните се въвеждат от потребителя.
+APALLAKTIS не носи отговорност за взети решения.
+
+6. Ограничаване на отговорността
+
+Платформата не отговаря за грешки, загуби или последици.
+
+7. Наличност
+
+Услугата се предоставя „както е“.
+
+8. Авторски права
+
+Съдържанието принадлежи на APALLAKTIS.
+
+9. Промени
+
+Условията могат да бъдат променяни.
+
+10. Приложимо право
+
+Прилага се гръцкото право.
+
+🇷🇴 Română — Termeni de utilizare
+
+(traducere informativă)
+
+1. Descrierea serviciului
+
+APALLAKTIS oferă un instrument digital pentru organizarea și urmărirea datelor financiare, proiectelor, plăților și cheltuielilor.
+Serviciul nu reprezintă consultanță contabilă, fiscală sau juridică.
+
+2. Acceptarea termenilor
+
+Utilizarea platformei implică acceptarea acestor termeni și a politicii de confidențialitate.
+
+3. Contul utilizatorului
+
+Utilizatorul este responsabil pentru datele introduse și securitatea contului.
+
+4. Perioadă de probă și abonament
+
+Poate fi oferită o perioadă de probă limitată.
+Utilizarea ulterioară necesită abonament activ.
+
+5. Date financiare
+
+Datele sunt introduse de utilizator.
+APALLAKTIS nu răspunde pentru deciziile luate.
+
+6. Limitarea răspunderii
+
+Platforma nu este responsabilă pentru erori sau pierderi.
+
+7. Disponibilitate
+
+Serviciul este oferit „ca atare”.
+
+8. Proprietate intelectuală
+
+Conținutul aparține APALLAKTIS.
+
+9. Modificări
+
+Termenii pot fi modificați.
+
+10. Legea aplicabilă
+
+Se aplică legea Greciei.
+
+🇸🇦 العربية — شروط الاستخدام
+
+(ترجمة إرشادية)
+
+1. وصف الخدمة
+
+توفر منصة APALLAKTIS أداة رقمية لتنظيم وتتبع البيانات المالية والمشاريع والمدفوعات والمصروفات.
+لا تمثل الخدمة استشارة محاسبية أو ضريبية أو قانونية.
+
+2. قبول الشروط
+
+استخدام المنصة يعني الموافقة الكاملة على هذه الشروط وسياسة الخصوصية.
+
+3. حساب المستخدم
+
+يتحمل المستخدم المسؤولية الكاملة عن صحة البيانات وأمان الحساب.
+
+4. الفترة التجريبية والاشتراك
+
+قد يتم توفير فترة تجريبية محدودة.
+يتطلب الاستخدام المستمر اشتراكًا نشطًا.
+
+5. البيانات المالية
+
+يتم إدخال جميع البيانات من قبل المستخدم.
+لا تتحمل APALLAKTIS مسؤولية القرارات المتخذة.
+
+6. إخلاء المسؤولية
+
+لا تتحمل المنصة مسؤولية الأخطاء أو الخسائر أو العواقب.
+
+7. توفر الخدمة
+
+يتم تقديم الخدمة «كما هي».
+
+8. الملكية الفكرية
+
+جميع المحتويات مملوكة لـ APALLAKTIS.
+
+9. التعديلات
+
+يجوز تعديل الشروط في أي وقت.
+
+10. القانون المعمول به
+
+يخضع ذلك لقانون اليونان.

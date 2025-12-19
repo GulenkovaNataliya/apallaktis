@@ -55,7 +55,8 @@ body[dir="rtl"] {
   position: relative;
   background: white;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* On mobile devices, take full width */

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { messages, type Locale } from "@/lib/messages";
 
 // Common country codes for the region
@@ -37,6 +37,7 @@ const isValidAfm = (afm: string): boolean => {
 
 export default function RegisterPage() {
   const params = useParams();
+  const router = useRouter();
   const locale = (params.locale as Locale) || "el";
   const t = messages[locale]?.register || messages.el.register;
   const tLanding = messages[locale]?.landing || messages.el.landing;
@@ -47,6 +48,8 @@ export default function RegisterPage() {
     email: "",
     phone: "",
     countryCode: "+30",
+    password: "",
+    confirmPassword: "",
     companyName: "",
     afm: "",
   });
@@ -54,11 +57,13 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState({
     email: "",
     phone: "",
+    password: "",
+    confirmPassword: "",
     afm: "",
   });
 
   const validateForm = (): boolean => {
-    const newErrors = { email: "", phone: "", afm: "" };
+    const newErrors = { email: "", phone: "", password: "", confirmPassword: "", afm: "" };
     let isValid = true;
 
     // Validate email
@@ -70,6 +75,18 @@ export default function RegisterPage() {
     // Validate phone
     if (!isValidPhone(formData.phone)) {
       newErrors.phone = t.invalidPhone;
+      isValid = false;
+    }
+
+    // Validate password
+    if (formData.password.length < 6) {
+      newErrors.password = t.invalidPassword || "Password must be at least 6 characters";
+      isValid = false;
+    }
+
+    // Validate confirm password
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = t.passwordMismatch || "Passwords do not match";
       isValid = false;
     }
 
@@ -95,6 +112,27 @@ export default function RegisterPage() {
       return;
     }
 
+    // TEMPORARY: Skip n8n for testing UI
+    // TODO: Enable when n8n is ready
+    const USE_N8N = false;
+
+    if (!USE_N8N) {
+      // For testing: just log and redirect
+      console.log('Registration data (n8n disabled):', {
+        invoiceType,
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.countryCode + formData.phone,
+        companyName: formData.companyName || null,
+        afm: formData.afm || null,
+      });
+
+      // Redirect to thank you page
+      router.push(`/${locale}/thank-you`);
+      return;
+    }
+
     try {
       // Отправка данных напрямую в n8n webhook
       const webhookUrl = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL || 'http://localhost:5678/webhook/register';
@@ -108,7 +146,9 @@ export default function RegisterPage() {
           invoiceType,
           name: formData.name,
           email: formData.email,
+          password: formData.password,
           phone: formData.countryCode + formData.phone,
+          countryCode: formData.countryCode,
           companyName: formData.companyName || null,
           afm: formData.afm || null,
           timestamp: new Date().toISOString(),
@@ -118,17 +158,8 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        alert(data.message || 'Η εγγραφή σας ολοκληρώθηκε επιτυχώς!');
-        // Очистка формы после успешной регистрации
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          countryCode: "+30",
-          companyName: "",
-          afm: "",
-        });
-        setAgreeTerms(false);
+        // Redirect to thank you page
+        router.push(`/${locale}/thank-you`);
       } else {
         alert(data.error || 'Σφάλμα κατά την εγγραφή. Παρακαλώ δοκιμάστε ξανά.');
       }
@@ -211,6 +242,48 @@ export default function RegisterPage() {
               {errors.email && (
                 <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
                   {errors.email}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <input
+                type="password"
+                placeholder={t.password}
+                value={formData.password}
+                onChange={(e) => {
+                  setFormData({ ...formData, password: e.target.value });
+                  setErrors({ ...errors, password: "" });
+                }}
+                required
+                className={`text-body rounded-xl px-6 py-4 border w-full focus:outline-none ${
+                  errors.password ? "border-red-500" : "border-gray-300 focus:border-blue-500"
+                }`}
+              />
+              {errors.password && (
+                <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
+                  {errors.password}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <input
+                type="password"
+                placeholder={t.confirmPassword}
+                value={formData.confirmPassword}
+                onChange={(e) => {
+                  setFormData({ ...formData, confirmPassword: e.target.value });
+                  setErrors({ ...errors, confirmPassword: "" });
+                }}
+                required
+                className={`text-body rounded-xl px-6 py-4 border w-full focus:outline-none ${
+                  errors.confirmPassword ? "border-red-500" : "border-gray-300 focus:border-blue-500"
+                }`}
+              />
+              {errors.confirmPassword && (
+                <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
+                  {errors.confirmPassword}
                 </p>
               )}
             </div>
