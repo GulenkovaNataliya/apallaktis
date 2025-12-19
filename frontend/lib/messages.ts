@@ -52,6 +52,8 @@ export const messages = {
     thankYou: {
       title: "Ευχαριστούμε για την εγγραφή!",
       slogan2: "Πάρε τον έλεγχο στα χέρια σου!",
+      redirectMessage: "Μεταφορά στη σελίδα σύνδεσης σε {seconds} δευτερόλεπτα...",
+      loginButton: "Είσοδος τώρα",
     },
   },
   ru: {
@@ -107,6 +109,8 @@ export const messages = {
     thankYou: {
       title: "Спасибо за регистрацию!",
       slogan2: "Возьми контроль в свои руки!",
+      redirectMessage: "Переход на страницу входа через {seconds} секунд...",
+      loginButton: "Войти сейчас",
     },
   },
   uk: {
@@ -162,6 +166,8 @@ export const messages = {
     thankYou: {
       title: "Дякуємо за реєстрацію!",
       slogan2: "Візьми контроль у свої руки!",
+      redirectMessage: "Перехід на сторінку входу через {seconds} секунд...",
+      loginButton: "Увійти зараз",
     },
   },
   sq: {
@@ -217,6 +223,8 @@ export const messages = {
     thankYou: {
       title: "Faleminderit për regjistrimin!",
       slogan2: "Merr kontrollin në duart σου!",
+      redirectMessage: "Ridrejtim te faqja e hyrjes në {seconds} sekonda...",
+      loginButton: "Hyni tani",
     },
   },
   bg: {
@@ -272,6 +280,8 @@ export const messages = {
     thankYou: {
       title: "Благодарим за регистрацията!",
       slogan2: "Вземи контрола в свои ръце!",
+      redirectMessage: "Пренасочване към страницата за вход след {seconds} секунди...",
+      loginButton: "Влез сега",
     },
   },
   ro: {
@@ -327,6 +337,8 @@ export const messages = {
     thankYou: {
       title: "Vă mulțumim pentru înregistrare!",
       slogan2: "Preia controlul în mâinile tale!",
+      redirectMessage: "Redirecționare către pagina de autentificare în {seconds} secunde...",
+      loginButton: "Conectare acum",
     },
   },
   en: {
@@ -382,6 +394,8 @@ export const messages = {
     thankYou: {
       title: "Thank you for registering!",
       slogan2: "Take control in your hands!",
+      redirectMessage: "Redirecting to login page in {seconds} seconds...",
+      loginButton: "Login now",
     },
   },
   ar: {
@@ -437,6 +451,8 @@ export const messages = {
     thankYou: {
       title: "!شكراً لتسجيلك",
       slogan2: "!خذ زمام الأمور بيدك",
+      redirectMessage: "...{seconds} إعادة التوجيه إلى صفحة تسجيل الدخول خلال",
+      loginButton: "تسجيل الدخول الآن",
     },
   },
 };

@@ -1,0 +1,257 @@
+{
+  "name": "Simple Login - Apallaktis",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "login",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-login",
+      "name": "Webhook Login",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "login-webhook"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, email, password_hash, name, phone, country_code, is_business, company_name, afm, subscription_status, demo_expires_at, subscription_expires_at, referral_code FROM users WHERE email = $1 LIMIT 1",
+        "options": {
+          "queryReplacement": "={{$json.body.email}}"
+        }
+      },
+      "id": "find-user",
+      "name": "Find User",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [450, 300],
+      "credentials": {
+        "postgres": {
+          "id": "apallaktis_postgres",
+          "name": "Apallaktis PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.length}}",
+              "value2": 0,
+              "operation": "equal"
+            }
+          ]
+        }
+      },
+      "id": "check-user-exists",
+      "name": "User Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"error\": \"Invalid email or password\" } }}",
+        "options": {
+          "responseCode": 401
+        }
+      },
+      "id": "error-invalid-credentials",
+      "name": "Error: Invalid Credentials",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [850, 150]
+    },
+    {
+      "parameters": {
+        "functionCode": "const bcrypt = require('bcrypt');\n\nconst user = $input.first().json[0];\nconst password = $node['Webhook Login'].json.body.password;\n\n// Compare password with hash\nconst isValid = await bcrypt.compare(password, user.password_hash);\n\nreturn [{ json: { isValid, user } }];"
+      },
+      "id": "verify-password",
+      "name": "Verify Password",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [850, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.isValid}}",
+              "value2": true,
+              "operation": "equal"
+            }
+          ]
+        }
+      },
+      "id": "check-password-valid",
+      "name": "Password Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1050, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"error\": \"Invalid email or password\" } }}",
+        "options": {
+          "responseCode": 401
+        }
+      },
+      "id": "error-wrong-password",
+      "name": "Error: Wrong Password",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 250]
+    },
+    {
+      "parameters": {
+        "functionCode": "const jwt = require('jsonwebtoken');\n\nconst user = $json.user;\nconst SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production-minimum-32-characters';\n\n// Generate JWT token (expires in 30 days)\nconst token = jwt.sign(\n  {\n    id: user.id,\n    email: user.email,\n    subscriptionStatus: user.subscription_status\n  },\n  SECRET,\n  { expiresIn: '30d' }\n);\n\n// Prepare user data (without password_hash)\nconst userData = {\n  id: user.id,\n  email: user.email,\n  name: user.name,\n  phone: user.phone,\n  countryCode: user.country_code,\n  isBusiness: user.is_business,\n  companyName: user.company_name,\n  afm: user.afm,\n  subscriptionStatus: user.subscription_status,\n  demoExpiresAt: user.demo_expires_at,\n  subscriptionExpiresAt: user.subscription_expires_at,\n  referralCode: user.referral_code\n};\n\nreturn [{ json: { token, user: userData } }];"
+      },
+      "id": "generate-jwt",
+      "name": "Generate JWT",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1250, 500]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE users SET last_login_at = CURRENT_TIMESTAMP WHERE id = $1",
+        "options": {
+          "queryReplacement": "={{$json.user.id}}"
+        }
+      },
+      "id": "update-last-login",
+      "name": "Update Last Login",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1450, 500],
+      "credentials": {
+        "postgres": {
+          "id": "apallaktis_postgres",
+          "name": "Apallaktis PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"token\": $node['Generate JWT'].json.token, \"user\": $node['Generate JWT'].json.user } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "success-response",
+      "name": "Success Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1650, 500]
+    }
+  ],
+  "connections": {
+    "Webhook Login": {
+      "main": [
+        [
+          {
+            "node": "Find User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find User": {
+      "main": [
+        [
+          {
+            "node": "User Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User Exists?": {
+      "main": [
+        [
+          {
+            "node": "Error: Invalid Credentials",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Verify Password",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Password": {
+      "main": [
+        [
+          {
+            "node": "Password Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Password Valid?": {
+      "main": [
+        [
+          {
+            "node": "Error: Wrong Password",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate JWT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate JWT": {
+      "main": [
+        [
+          {
+            "node": "Update Last Login",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Last Login": {
+      "main": [
+        [
+          {
+            "node": "Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-19T00:00:00.000Z",
+  "versionId": "1",
+  "active": false
+}

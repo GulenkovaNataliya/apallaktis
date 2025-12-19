@@ -1,0 +1,235 @@
+{
+  "name": "Simple Registration - Apallaktis",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "register",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook - Registration Form",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "apallaktis-register"
+    },
+    {
+      "parameters": {
+        "functionCode": "const bcrypt = require('bcrypt');\nconst data = $input.item.json.body;\n\n// Validate required fields\nif (!data.name || !data.email || !data.phone || !data.password) {\n  return {\n    json: {\n      success: false,\n      error: 'Missing required fields'\n    }\n  };\n}\n\n// Validate email\nconst emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\nif (!emailRegex.test(data.email)) {\n  return {\n    json: {\n      success: false,\n      error: 'Invalid email address'\n    }\n  };\n}\n\n// Validate password\nif (data.password.length < 6) {\n  return {\n    json: {\n      success: false,\n      error: 'Password must be at least 6 characters'\n    }\n  };\n}\n\n// Hash password\nconst saltRounds = 10;\nconst passwordHash = await bcrypt.hash(data.password, saltRounds);\n\n// Prepare user data\nreturn {\n  json: {\n    success: true,\n    data: {\n      name: data.name,\n      email: data.email.toLowerCase(),\n      passwordHash: passwordHash,\n      phone: data.phone,\n      countryCode: data.countryCode || '+30',\n      isBusiness: data.invoiceType === 'invoice',\n      companyName: data.companyName || null,\n      afm: data.afm || null\n    }\n  }\n};"
+      },
+      "id": "validate-and-hash",
+      "name": "Validate & Hash Password",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.success}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-validation",
+      "name": "Check Validation",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "id": "error-validation-failed",
+      "name": "Error: Validation Failed",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [850, 150]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id FROM users WHERE email = $1 LIMIT 1",
+        "options": {
+          "queryReplacement": "={{$json.data.email}}"
+        }
+      },
+      "id": "check-user-exists",
+      "name": "Check User Exists",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [850, 400],
+      "credentials": {
+        "postgres": {
+          "id": "apallaktis_postgres",
+          "name": "Apallaktis PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.length}}",
+              "value2": 0,
+              "operation": "equal"
+            }
+          ]
+        }
+      },
+      "id": "user-already-exists",
+      "name": "User Already Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1050, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"error\": \"Email already registered\" } }}",
+        "options": {
+          "responseCode": 409
+        }
+      },
+      "id": "error-user-exists",
+      "name": "Error: Email Already Registered",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 250]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO users (name, email, password_hash, phone, country_code, is_business, company_name, afm) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, email, demo_expires_at, referral_code",
+        "options": {
+          "queryReplacement": "={{$node['Validate & Hash Password'].json.data.name}},={{$node['Validate & Hash Password'].json.data.email}},={{$node['Validate & Hash Password'].json.data.passwordHash}},={{$node['Validate & Hash Password'].json.data.phone}},={{$node['Validate & Hash Password'].json.data.countryCode}},={{$node['Validate & Hash Password'].json.data.isBusiness}},={{$node['Validate & Hash Password'].json.data.companyName}},={{$node['Validate & Hash Password'].json.data.afm}}"
+        }
+      },
+      "id": "save-to-database",
+      "name": "Create User in PostgreSQL",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1250, 550],
+      "credentials": {
+        "postgres": {
+          "id": "apallaktis_postgres",
+          "name": "Apallaktis PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Registration successful\", \"userId\": $json[0].id, \"demoExpiresAt\": $json[0].demo_expires_at } }}",
+        "options": {
+          "responseCode": 201
+        }
+      },
+      "id": "success-response",
+      "name": "Success Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1450, 550]
+    }
+  ],
+  "connections": {
+    "Webhook - Registration Form": {
+      "main": [
+        [
+          {
+            "node": "Validate & Hash Password",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate & Hash Password": {
+      "main": [
+        [
+          {
+            "node": "Check Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Validation": {
+      "main": [
+        [
+          {
+            "node": "Error: Validation Failed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check User Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check User Exists": {
+      "main": [
+        [
+          {
+            "node": "User Already Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User Already Exists?": {
+      "main": [
+        [
+          {
+            "node": "Error: Email Already Registered",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create User in PostgreSQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create User in PostgreSQL": {
+      "main": [
+        [
+          {
+            "node": "Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-19T00:00:00.000Z",
+  "versionId": "1",
+  "active": false
+}
