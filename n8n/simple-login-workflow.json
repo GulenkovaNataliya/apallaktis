@@ -20,7 +20,7 @@
         "operation": "executeQuery",
         "query": "SELECT id, email, password_hash, name, phone, country_code, is_business, company_name, afm, subscription_status, demo_expires_at, subscription_expires_at, referral_code FROM users WHERE email = $1 LIMIT 1",
         "options": {
-          "queryReplacement": "={{$json.body.email}}"
+          "queryParameters": ["={{ $node[\"Webhook Login\"].json.body.email }}"]
         }
       },
       "id": "find-user",
@@ -30,7 +30,7 @@
       "position": [450, 300],
       "credentials": {
         "postgres": {
-          "id": "apallaktis_postgres",
+          "id": "jn86N5SyhGqCiTb7",
           "name": "Apallaktis PostgreSQL"
         }
       }
@@ -40,7 +40,7 @@
         "conditions": {
           "number": [
             {
-              "value1": "={{$json.length}}",
+              "value1": "={{ $input.all().length }}",
               "value2": 0,
               "operation": "equal"
             }
@@ -69,7 +69,7 @@
     },
     {
       "parameters": {
-        "functionCode": "const bcrypt = require('bcrypt');\n\nconst user = $input.first().json[0];\nconst password = $node['Webhook Login'].json.body.password;\n\n// Compare password with hash\nconst isValid = await bcrypt.compare(password, user.password_hash);\n\nreturn [{ json: { isValid, user } }];"
+        "jsCode": "const user = $input.first().json;\nconst password = $node['Webhook Login'].json.body.password;\n\n// ВРЕМЕННО: Сравниваем пароли напрямую (без bcrypt)\n// TODO: Добавить bcrypt когда разрешат модуль\nconst isValid = (password === user.password_hash);\n\nreturn [{ json: { isValid, user } }];"
       },
       "id": "verify-password",
       "name": "Verify Password",
@@ -111,7 +111,7 @@
     },
     {
       "parameters": {
-        "functionCode": "const jwt = require('jsonwebtoken');\n\nconst user = $json.user;\nconst SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production-minimum-32-characters';\n\n// Generate JWT token (expires in 30 days)\nconst token = jwt.sign(\n  {\n    id: user.id,\n    email: user.email,\n    subscriptionStatus: user.subscription_status\n  },\n  SECRET,\n  { expiresIn: '30d' }\n);\n\n// Prepare user data (without password_hash)\nconst userData = {\n  id: user.id,\n  email: user.email,\n  name: user.name,\n  phone: user.phone,\n  countryCode: user.country_code,\n  isBusiness: user.is_business,\n  companyName: user.company_name,\n  afm: user.afm,\n  subscriptionStatus: user.subscription_status,\n  demoExpiresAt: user.demo_expires_at,\n  subscriptionExpiresAt: user.subscription_expires_at,\n  referralCode: user.referral_code\n};\n\nreturn [{ json: { token, user: userData } }];"
+        "jsCode": "const jwt = require('jsonwebtoken');\n\nconst user = $json.user;\nconst SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production-minimum-32-characters';\n\n// Generate JWT token (expires in 30 days)\nconst token = jwt.sign(\n  {\n    id: user.id,\n    email: user.email,\n    subscriptionStatus: user.subscription_status\n  },\n  SECRET,\n  { expiresIn: '30d' }\n);\n\n// Prepare user data (without password_hash)\nconst userData = {\n  id: user.id,\n  email: user.email,\n  name: user.name,\n  phone: user.phone,\n  countryCode: user.country_code,\n  isBusiness: user.is_business,\n  companyName: user.company_name,\n  afm: user.afm,\n  subscriptionStatus: user.subscription_status,\n  demoExpiresAt: user.demo_expires_at,\n  subscriptionExpiresAt: user.subscription_expires_at,\n  referralCode: user.referral_code\n};\n\nreturn [{ json: { token, user: userData } }];"
       },
       "id": "generate-jwt",
       "name": "Generate JWT",
@@ -124,7 +124,7 @@
         "operation": "executeQuery",
         "query": "UPDATE users SET last_login_at = CURRENT_TIMESTAMP WHERE id = $1",
         "options": {
-          "queryReplacement": "={{$json.user.id}}"
+          "queryParameters": ["={{ $json.user.id }}"]
         }
       },
       "id": "update-last-login",
@@ -134,7 +134,7 @@
       "position": [1450, 500],
       "credentials": {
         "postgres": {
-          "id": "apallaktis_postgres",
+          "id": "jn86N5SyhGqCiTb7",
           "name": "Apallaktis PostgreSQL"
         }
       }
@@ -251,7 +251,7 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-12-19T00:00:00.000Z",
-  "versionId": "1",
-  "active": false
+  "updatedAt": "2025-12-20T23:30:00.000Z",
+  "versionId": "2",
+  "active": true
 }

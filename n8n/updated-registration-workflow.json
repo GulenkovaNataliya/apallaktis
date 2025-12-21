@@ -79,8 +79,8 @@
       "position": [850, 400],
       "credentials": {
         "postgres": {
-          "id": "1",
-          "name": "PostgreSQL account"
+          "id": "jn86N5SyhGqCiTb7",
+          "name": "Apallaktis PostgreSQL"
         }
       }
     },
@@ -136,8 +136,8 @@
       "position": [1250, 550],
       "credentials": {
         "postgres": {
-          "id": "1",
-          "name": "PostgreSQL account"
+          "id": "jn86N5SyhGqCiTb7",
+          "name": "Apallaktis PostgreSQL"
         }
       }
     },

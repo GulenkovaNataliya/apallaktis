@@ -114,7 +114,7 @@ export default function RegisterPage() {
 
     // TEMPORARY: Skip n8n for testing UI
     // TODO: Enable when n8n is ready
-    const USE_N8N = false;
+    const USE_N8N = true;
 
     if (!USE_N8N) {
       // For testing: just log and redirect
