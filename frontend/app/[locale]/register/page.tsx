@@ -297,7 +297,7 @@ export default function RegisterPage() {
                   style={{ minWidth: "110px" }}
                 >
                   {countryCodes.map((item) => (
-                    <option key={item.code} value={item.code}>
+                    <option key={item.code} value={item.code} style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>
                       {item.code} {item.country}
                     </option>
                   ))}

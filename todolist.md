@@ -152,7 +152,7 @@ frontend/
 - [x] Высота кнопок 52px
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 2)
+
 - `APALLAKTIS .txt`
 - `public/video/video.mp4`
 - `src/app/language-select/page.tsx`
@@ -195,7 +195,7 @@ frontend/
 - [x] Кнопки центрированы вертикально
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 3)
+
 - `APALLAKTIS .txt`
 - `public/video/video1.mp4`
 - `src/app/[locale]/page.tsx`
@@ -223,7 +223,7 @@ frontend/
 - [ ] Переход работает
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 7.2)
+
 - `public/video/video.mp4`
 - `src/app/[lang]/welcome/page.tsx`
 
@@ -261,7 +261,7 @@ frontend/
 - [ ] Юридические кнопки имеют высоту 52px и правильные цвета
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 10 юридика, раздел регистрация)
+
 - `src/app/[lang]/register/page.tsx`
 - `src/components/RegisterForm.tsx`
 - `src/lib/validation.ts`
@@ -340,7 +340,7 @@ frontend/
 - [x] Протестировано на реальном телефоне
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 10 юридика)
+
 - `src/app/[lang]/terms/page.tsx`
 - `src/app/[lang]/privacy/page.tsx`
 - `public/locales/*/legal.json`
@@ -404,7 +404,7 @@ frontend/
 - [ ] Показывается предупреждение за 6 часов до окончания
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 11 подписки)
+
 - `src/lib/subscription.ts`
 - `src/types/user.ts`
 - `src/components/DemoTimer.tsx`
@@ -582,7 +582,7 @@ interface PaymentMethod {
 - [ ] Smooth transitions
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 7.4)
+
 - `src/app/[lang]/dashboard/objects/page.tsx`
 - `src/components/ObjectCarousel.tsx`
 - `src/lib/objectColors.ts`
@@ -626,8 +626,8 @@ function getObjectColor(index: number, total: number): string {
 - `src/types/object.ts`
 
 ---
-
 ### Задача 5.3: Финансы объекта — расчёты с клиентом
+
 **Оценка**: 4 ч
 
 **Описание**:
@@ -645,7 +645,7 @@ function getObjectColor(index: number, total: number): string {
 - [ ] Статус баланса: долг/закрыто/переплата
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 8.4.1)
+- 
 - `src/app/[lang]/dashboard/objects/[id]/finance/page.tsx`
 - `src/components/FinanceList.tsx`
 - `src/types/finance.ts`
@@ -681,7 +681,7 @@ interface ObjectFinance {
 - [ ] Список расходов фильтруется по объекту
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 8.4.2)
+
 - `src/app/[lang]/dashboard/objects/[id]/expenses/page.tsx`
 - `src/components/ExpenseForm.tsx`
 - `src/components/DatePicker.tsx`
@@ -706,7 +706,7 @@ interface ObjectFinance {
 - [ ] Redirects работают
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 11)
+
 - `src/app/[lang]/subscription/page.tsx`
 - `src/lib/stripe.ts` (или другой провайдер)
 - `src/types/subscription.ts`
@@ -728,7 +728,7 @@ interface ObjectFinance {
 - [ ] VIP перекрывает всё
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 11)
+
 - `src/lib/subscription.ts`
 - `src/middleware.ts`
 - `src/types/user.ts`
@@ -750,7 +750,7 @@ interface ObjectFinance {
 - [ ] Причина сохраняется (опционально)
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 12)
+
 - `src/app/[lang]/admin/vip/page.tsx`
 - `src/lib/admin.ts`
 
@@ -773,7 +773,7 @@ interface ObjectFinance {
 - [ ] История рефералов видна
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 13)
+
 - `src/app/[lang]/dashboard/referral/page.tsx`
 - `src/lib/referral.ts`
 - `src/types/referral.ts`
@@ -814,7 +814,7 @@ interface ReferralBonus {
 - [ ] Кнопки "Скачать PDF" и "Скачать Excel"
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 9)
+
 - `src/app/[lang]/dashboard/export/page.tsx`
 - `src/components/ExportForm.tsx`
 
@@ -836,7 +836,7 @@ interface ReferralBonus {
 - [ ] Файл скачивается
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 9)
+
 - `src/lib/export/pdf.ts`
 - `src/types/export.ts`
 
@@ -857,7 +857,7 @@ interface ReferralBonus {
 - [ ] Файл скачивается
 
 **Файлы в контексте**:
-- `TODO.txt` (раздел 9)
+
 - `src/lib/export/excel.ts`
 - `src/types/export.ts`
 
@@ -905,12 +905,10 @@ interface ReferralBonus {
 - [ ] Правило теней соблюдено везде
 - [ ] RTL работает для арабского
 
-**Файлы в контексте**:
-- `TODO.txt` (все разделы)
+**Файлы в контексте*
 - Все ключевые компоненты
 
 ---
-
 ### Задача 8.2: Оптимизация — Core Web Vitals
 **Оценка**: 3 ч
 

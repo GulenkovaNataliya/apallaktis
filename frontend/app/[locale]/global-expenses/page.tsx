@@ -5,6 +5,7 @@ import BackgroundPage from '@/components/BackgroundPage';
 import { useParams, useRouter } from 'next/navigation';
 import { messages, type Locale } from '@/lib/messages';
 import type { GlobalExpense, ExpenseCategory } from '@/types/globalExpense';
+import { formatEuro } from '@/lib/formatters';
 
 type ViewType = 'expenses' | 'categories' | 'add-expense' | 'edit-expense' | 'add-category' | 'edit-category';
 
@@ -112,7 +113,7 @@ export default function GlobalExpensesPage() {
                         </p>
                         <p className="text-link" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
                           {category?.name || 'Uncategorized'}
-                          {expense.amount && ` • ${expense.amount}€`}
+                          {expense.amount && ` • ${formatEuro(parseFloat(expense.amount))}`}
                         </p>
                       </div>
                     </div>
@@ -473,7 +474,7 @@ function ExpenseForm({
           style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px' }}
         >
           {categories.map(cat => (
-            <option key={cat.id} value={cat.id}>{cat.name}</option>
+            <option key={cat.id} value={cat.id} style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>{cat.name}</option>
           ))}
         </select>
       </div>
@@ -501,11 +502,11 @@ function ExpenseForm({
         </label>
         <input
           type="text"
-          value={formData.amount}
+          value={formData.amount || ''}
           onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
           className="w-full p-3 rounded-lg text-body"
           style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
-          placeholder="0.00"
+          placeholder="€"
         />
       </div>
 

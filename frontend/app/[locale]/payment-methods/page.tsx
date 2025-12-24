@@ -232,10 +232,10 @@ function PaymentMethodForm({
           className="w-full rounded-lg text-body"
           style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px' }}
         >
-          <option value="cash">{t.types.cash}</option>
-          <option value="credit_card">{t.types.credit_card}</option>
-          <option value="debit_card">{t.types.debit_card}</option>
-          <option value="bank_account">{t.types.bank_account}</option>
+          <option value="cash" style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>{t.types.cash}</option>
+          <option value="credit_card" style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>{t.types.credit_card}</option>
+          <option value="debit_card" style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>{t.types.debit_card}</option>
+          <option value="bank_account" style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>{t.types.bank_account}</option>
         </select>
       </div>
 

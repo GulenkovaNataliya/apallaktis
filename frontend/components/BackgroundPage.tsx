@@ -30,16 +30,18 @@ export default function BackgroundPage({
     : getBackgroundPage(pageIndex);
 
   return (
-    <div
-      className={`relative min-h-screen w-full ${className}`}
-      style={{
-        backgroundImage: `url(${backgroundSrc})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-      }}
-    >
+    <div className={`relative min-h-screen w-full overflow-hidden ${className}`}>
+      {/* Background Image */}
+      <div
+        className="fixed inset-0 z-0"
+        style={{
+          backgroundImage: `url(${backgroundSrc})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
+
       {/* Content */}
       <div className="relative z-10 min-h-screen w-full">
         {children}
