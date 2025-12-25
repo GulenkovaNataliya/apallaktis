@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { messages, type Locale } from "@/lib/messages";
+import { createClient } from "@/lib/supabase/client";
 
 // Common country codes for the region
 const countryCodes = [
@@ -112,60 +113,44 @@ export default function RegisterPage() {
       return;
     }
 
-    // TEMPORARY: Skip n8n for testing UI
-    // TODO: Enable when n8n is ready
-    const USE_N8N = true;
+    try {
+      const supabase = createClient();
 
-    if (!USE_N8N) {
-      // For testing: just log and redirect
-      console.log('Registration data (n8n disabled):', {
-        invoiceType,
-        name: formData.name,
+      // Register user with Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
-        phone: formData.countryCode + formData.phone,
-        companyName: formData.companyName || null,
-        afm: formData.afm || null,
+        options: {
+          emailRedirectTo: `${window.location.origin}/${locale}/login`,
+          data: {
+            name: formData.name,
+            phone: formData.countryCode + formData.phone,
+            country_code: formData.countryCode,
+            invoice_type: invoiceType,
+            company_name: invoiceType === 'invoice' ? formData.companyName : null,
+            afm: invoiceType === 'invoice' ? formData.afm : null,
+          },
+        },
       });
+
+      if (authError) {
+        if (authError.message.includes('already registered')) {
+          alert('Αυτό το email είναι ήδη εγγεγραμμένο. Παρακαλώ συνδεθείτε.');
+        } else {
+          alert(authError.message);
+        }
+        return;
+      }
+
+      // Success! User created
+      console.log('User registered:', authData.user?.id);
 
       // Redirect to thank you page
       router.push(`/${locale}/thank-you`);
-      return;
-    }
 
-    try {
-      // Отправка данных напрямую в n8n webhook
-      const webhookUrl = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL || 'http://localhost:5678/webhook/register';
-
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          invoiceType,
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          phone: formData.countryCode + formData.phone,
-          countryCode: formData.countryCode,
-          companyName: formData.companyName || null,
-          afm: formData.afm || null,
-          timestamp: new Date().toISOString(),
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        // Redirect to thank you page
-        router.push(`/${locale}/thank-you`);
-      } else {
-        alert(data.error || 'Σφάλμα κατά την εγγραφή. Παρακαλώ δοκιμάστε ξανά.');
-      }
     } catch (error) {
       console.error('Registration error:', error);
-      alert('Σφάλμα σύνδεσης. Παρακαλώ ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.');
+      alert('Σφάλμα κατά την εγγραφή. Παρακαλώ δοκιμάστε ξανά.');
     }
   };
 

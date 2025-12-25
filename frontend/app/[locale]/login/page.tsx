@@ -4,14 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { messages, type Locale } from "@/lib/messages";
-import { useAuth } from "@/lib/auth-context";
+import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const params = useParams();
   const router = useRouter();
   const locale = (params.locale as Locale) || "el";
   const t = messages[locale]?.login || messages.el.login;
-  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -26,30 +25,28 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const webhookUrl = process.env.NEXT_PUBLIC_N8N_LOGIN_URL || 'http://localhost:5678/webhook/login';
+      const supabase = createClient();
 
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
       });
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        // Use auth context to save token and user
-        login(data.token, data.user);
-
-        // Redirect to dashboard
-        router.push(`/${locale}/dashboard`);
-      } else {
-        setError(data.error || t.invalidCredentials);
+      if (signInError) {
+        setError(t.invalidCredentials);
+        setIsLoading(false);
+        return;
       }
+
+      // Check if email is confirmed
+      if (data.user && !data.user.email_confirmed_at) {
+        setError('Παρακαλώ επιβεβαιώστε το email σας πρώτα. Ελέγξτε τα εισερχόμενά σας.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Success! Redirect to page-pay (main dashboard entry point)
+      router.push(`/${locale}/page-pay`);
     } catch (err) {
       console.error('Login error:', err);
       setError(t.error);
