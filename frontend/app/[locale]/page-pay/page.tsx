@@ -12,7 +12,7 @@ export default function PagePay() {
 
   return (
     <BackgroundPage pageIndex={2}>
-      <div className="flex min-h-screen flex-col items-center justify-center gap-12 pb-20 pt-20" style={{ paddingLeft: '38px', paddingRight: '38px' }}>
+      <div className="flex min-h-screen flex-col items-center gap-12 pb-20" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px' }}>
 
         {/* Payment Methods Button */}
         <Link
@@ -30,6 +30,15 @@ export default function PagePay() {
           style={{ minHeight: '52px' }}
         >
           {t.globalExpenses}
+        </Link>
+
+        {/* Objects Button */}
+        <Link
+          href={`/${locale}/objects`}
+          className="btn-universal w-full text-button flex items-center justify-center text-center"
+          style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
+        >
+          {messages[locale]?.objects?.title || 'ΕΡΓΑ'}
         </Link>
 
       </div>

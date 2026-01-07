@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { messages, type Locale } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/client";
 
@@ -39,9 +39,13 @@ const isValidAfm = (afm: string): boolean => {
 export default function RegisterPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const locale = (params.locale as Locale) || "el";
   const t = messages[locale]?.register || messages.el.register;
   const tLanding = messages[locale]?.landing || messages.el.landing;
+
+  // Get referral code from URL (?ref=ABC123)
+  const referralCode = searchParams.get('ref');
 
   const [invoiceType, setInvoiceType] = useState<"invoice" | "receipt">("receipt");
   const [formData, setFormData] = useState({
@@ -129,6 +133,7 @@ export default function RegisterPage() {
             invoice_type: invoiceType,
             company_name: invoiceType === 'invoice' ? formData.companyName : null,
             afm: invoiceType === 'invoice' ? formData.afm : null,
+            referred_by: referralCode || null, // Save referral code if present
           },
         },
       });
@@ -173,7 +178,7 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setInvoiceType("invoice")}
-                className="text-button rounded-xl font-medium transition-all"
+                className="text-button rounded-2xl font-medium transition-all"
                 style={{
                   backgroundColor: invoiceType === "invoice" ? "var(--polar)" : "#f0f0f0",
                   color: "var(--deep-teal)",
@@ -187,7 +192,7 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setInvoiceType("receipt")}
-                className="text-button rounded-xl font-medium transition-all"
+                className="text-button rounded-2xl font-medium transition-all"
                 style={{
                   backgroundColor: invoiceType === "receipt" ? "var(--polar)" : "#f0f0f0",
                   color: "var(--deep-teal)",
@@ -207,7 +212,8 @@ export default function RegisterPage() {
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              className="text-body rounded-xl px-6 py-4 border border-gray-300 focus:outline-none focus:border-blue-500"
+              className="text-body w-full rounded-2xl px-6 border border-gray-300 focus:outline-none focus:border-blue-500"
+              style={{ minHeight: '52px' }}
             />
 
             <div>
@@ -220,9 +226,10 @@ export default function RegisterPage() {
                   setErrors({ ...errors, email: "" });
                 }}
                 required
-                className={`text-body rounded-xl px-6 py-4 border w-full focus:outline-none ${
+                className={`text-body w-full rounded-2xl px-6 border focus:outline-none ${
                   errors.email ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                 }`}
+                style={{ minHeight: '52px' }}
               />
               {errors.email && (
                 <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
@@ -241,9 +248,10 @@ export default function RegisterPage() {
                   setErrors({ ...errors, password: "" });
                 }}
                 required
-                className={`text-body rounded-xl px-6 py-4 border w-full focus:outline-none ${
+                className={`text-body w-full rounded-2xl px-6 border focus:outline-none ${
                   errors.password ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                 }`}
+                style={{ minHeight: '52px' }}
               />
               {errors.password && (
                 <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
@@ -262,9 +270,10 @@ export default function RegisterPage() {
                   setErrors({ ...errors, confirmPassword: "" });
                 }}
                 required
-                className={`text-body rounded-xl px-6 py-4 border w-full focus:outline-none ${
+                className={`text-body w-full rounded-2xl px-6 border focus:outline-none ${
                   errors.confirmPassword ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                 }`}
+                style={{ minHeight: '52px' }}
               />
               {errors.confirmPassword && (
                 <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
@@ -278,8 +287,8 @@ export default function RegisterPage() {
                 <select
                   value={formData.countryCode}
                   onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
-                  className="text-body rounded-xl px-3 py-4 border border-gray-300 focus:outline-none focus:border-blue-500"
-                  style={{ minWidth: "110px" }}
+                  className="text-body rounded-2xl px-3 border border-gray-300 focus:outline-none focus:border-blue-500"
+                  style={{ minWidth: "110px", minHeight: '52px' }}
                 >
                   {countryCodes.map((item) => (
                     <option key={item.code} value={item.code} style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>
@@ -296,9 +305,10 @@ export default function RegisterPage() {
                     setErrors({ ...errors, phone: "" });
                   }}
                   required
-                  className={`text-body rounded-xl px-6 py-4 border flex-1 focus:outline-none ${
+                  className={`text-body rounded-2xl px-6 border flex-1 focus:outline-none ${
                     errors.phone ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                   }`}
+                  style={{ minHeight: '52px' }}
                 />
               </div>
               {errors.phone && (
@@ -317,7 +327,8 @@ export default function RegisterPage() {
                   value={formData.companyName}
                   onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                   required
-                  className="text-body rounded-xl px-6 py-4 border border-gray-300 focus:outline-none focus:border-blue-500"
+                  className="text-body w-full rounded-2xl px-6 border border-gray-300 focus:outline-none focus:border-blue-500"
+                  style={{ minHeight: '52px' }}
                 />
 
                 <div>
@@ -330,9 +341,10 @@ export default function RegisterPage() {
                       setErrors({ ...errors, afm: "" });
                     }}
                     required
-                    className={`text-body rounded-xl px-6 py-4 border w-full focus:outline-none ${
+                    className={`text-body w-full rounded-2xl px-6 border focus:outline-none ${
                       errors.afm ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                     }`}
+                    style={{ minHeight: '52px' }}
                   />
                   {errors.afm && (
                     <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>

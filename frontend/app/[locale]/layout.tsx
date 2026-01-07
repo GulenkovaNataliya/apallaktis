@@ -33,22 +33,14 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const dir = isRTL(locale) ? "rtl" : "ltr";
 
   return (
-    <html lang={locale} dir={isRTL(locale) ? "rtl" : "ltr"}>
-      <head>
-        <title>ΑΠΑΛΛΑΚΤΗΣ - Τέλος στη ρουτίνα!</title>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
-        />
-      </head>
-      <body className={`${notoSans.variable} ${notoSansArabic.variable}`}>
-        <AuthProvider>
-          {/* Mobile viewport wrapper for desktop preview */}
-          <div className="mobile-preview-wrapper">{children}</div>
-        </AuthProvider>
-      </body>
-    </html>
+    <div lang={locale} dir={dir} className={`${notoSans.variable} ${notoSansArabic.variable}`}>
+      <AuthProvider>
+        {/* Mobile viewport wrapper for desktop preview */}
+        <div className="mobile-preview-wrapper">{children}</div>
+      </AuthProvider>
+    </div>
   );
 }

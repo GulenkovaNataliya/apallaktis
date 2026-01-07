@@ -16,9 +16,15 @@ export interface GlobalExpense {
   userId: string;
   categoryId: string;
   categoryName?: string; // Для отображения
+  paymentMethodId: string; // Способ оплаты
+  paymentMethodName?: string; // Для отображения
   name: string;
-  amount?: string;
+  amount: number; // Changed from string to number
   description?: string;
+  date: Date; // Дата расхода
+  receiptPhotoUrl?: string; // URL фото чека
+  receiptPhotoPath?: string; // Путь к файлу в Storage
+  inputMethod?: 'manual' | 'voice' | 'photo'; // Способ ввода
   createdAt: Date;
   updatedAt: Date;
 }
@@ -29,9 +35,14 @@ export interface CreateExpenseCategoryInput {
 
 export interface CreateGlobalExpenseInput {
   categoryId: string;
+  paymentMethodId: string;
   name: string;
-  amount?: string;
+  amount: number;
   description?: string;
+  date: Date;
+  receiptPhotoUrl?: string;
+  receiptPhotoPath?: string;
+  inputMethod?: 'manual' | 'voice' | 'photo';
 }
 
 export interface UpdateGlobalExpenseInput {

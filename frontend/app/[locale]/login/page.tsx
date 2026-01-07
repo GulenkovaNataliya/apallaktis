@@ -33,14 +33,21 @@ export default function LoginPage() {
       });
 
       if (signInError) {
-        setError(t.invalidCredentials);
+        // Check if error is due to unconfirmed email
+        if (signInError.message.includes('Email not confirmed') ||
+            signInError.message.includes('email_not_confirmed') ||
+            signInError.message.includes('not confirmed')) {
+          setError(t.emailNotConfirmed);
+        } else {
+          setError(t.invalidCredentials);
+        }
         setIsLoading(false);
         return;
       }
 
-      // Check if email is confirmed
+      // Check if email is confirmed (backup check)
       if (data.user && !data.user.email_confirmed_at) {
-        setError('Παρακαλώ επιβεβαιώστε το email σας πρώτα. Ελέγξτε τα εισερχόμενά σας.');
+        setError(t.emailNotConfirmed);
         setIsLoading(false);
         return;
       }
@@ -89,7 +96,8 @@ export default function LoginPage() {
                 setError("");
               }}
               required
-              className="text-body rounded-xl px-6 py-4 border border-gray-300 focus:outline-none focus:border-blue-500"
+              className="text-body w-full rounded-2xl px-6 border border-gray-300 focus:outline-none focus:border-blue-500"
+              style={{ minHeight: '52px' }}
             />
 
             {/* Password */}
@@ -102,8 +110,18 @@ export default function LoginPage() {
                 setError("");
               }}
               required
-              className="text-body rounded-xl px-6 py-4 border border-gray-300 focus:outline-none focus:border-blue-500"
+              className="text-body w-full rounded-2xl px-6 border border-gray-300 focus:outline-none focus:border-blue-500"
+              style={{ minHeight: '52px' }}
             />
+
+            {/* Forgot Password Link */}
+            <Link
+              href={`/${locale}/reset-password`}
+              className="text-sm text-right block"
+              style={{ color: "var(--polar)", opacity: 0.8 }}
+            >
+              Ξέχασες τον κωδικό;
+            </Link>
 
             {/* Error Message */}
             {error && (

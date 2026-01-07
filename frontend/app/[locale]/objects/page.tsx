@@ -7,6 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { messages, type Locale } from '@/lib/messages';
 import type { PropertyObject, ObjectStatus } from '@/types/object';
 import { formatEuro } from '@/lib/formatters';
+import { createClient } from '@/lib/supabase/client';
 
 type ViewType = 'list' | 'add-object' | 'edit-object';
 
@@ -15,6 +16,7 @@ export default function ObjectsPage() {
   const router = useRouter();
   const locale = (params.locale as Locale) || 'el';
   const t = messages[locale]?.objects || messages.el.objects;
+  const tDemo = messages[locale]?.demoExpired || messages.el.demoExpired;
 
   // Objects state
   const [objects, setObjects] = useState<PropertyObject[]>([]);
@@ -24,6 +26,10 @@ export default function ObjectsPage() {
   const [filter, setFilter] = useState<'all' | ObjectStatus>('all');
   const [editingObject, setEditingObject] = useState<PropertyObject | null>(null);
 
+  // User subscription state
+  const [isDemo, setIsDemo] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   // Load objects from localStorage after mount
   useEffect(() => {
     setMounted(true);
@@ -32,6 +38,60 @@ export default function ObjectsPage() {
       setObjects(JSON.parse(stored));
     }
   }, []);
+
+  // Check user subscription status
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('subscription_status, account_purchased')
+            .eq('id', user.id)
+            .single();
+
+          if (profile) {
+            setIsDemo(profile.subscription_status === 'demo' && !profile.account_purchased);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking subscription:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkSubscription();
+  }, []);
+
+  const handleAddObjectClick = () => {
+    // Check DEMO limit (3 objects max)
+    if (isDemo && objects.length >= 3) {
+      const demoLimitMessage = locale === 'el'
+        ? 'Στο DEMO μπορείτε να δημιουργήσετε μέχρι 3 αντικείμενα. Αγοράστε πλήρη λογαριασμό για απεριόριστα αντικείμενα.'
+        : locale === 'ru'
+        ? 'В DEMO можно создать до 3 объектов. Купите полный аккаунт для неограниченного количества объектов.'
+        : locale === 'uk'
+        ? 'У DEMO можна створити до 3 об\'єктів. Придбайте повний акаунт для необмеженої кількості об\'єктів.'
+        : locale === 'sq'
+        ? 'Në DEMO mund të krijoni deri në 3 objekte. Blini llogari të plotë për objekte të pakufizuara.'
+        : locale === 'bg'
+        ? 'В DEMO можете да създадете до 3 обекта. Купете пълен акаунт за неограничен брой обекти.'
+        : locale === 'ro'
+        ? 'În DEMO puteți crea până la 3 obiecte. Cumpărați cont complet pentru obiecte nelimitate.'
+        : locale === 'ar'
+        ? 'في DEMO يمكنك إنشاء ما يصل إلى 3 كائنات. اشترِ حسابًا كاملاً للكائنات غير المحدودة.'
+        : 'In DEMO you can create up to 3 objects. Purchase full account for unlimited objects.';
+
+      alert(demoLimitMessage);
+      return;
+    }
+
+    setView('add-object');
+  };
 
   const handleDeleteObject = (id: string) => {
     if (confirm(t.confirmDelete)) {
@@ -50,13 +110,14 @@ export default function ObjectsPage() {
   if (view === 'list') {
     return (
       <BackgroundPage specialPage="objekt">
-        <div className="min-h-screen flex flex-col" style={{ paddingLeft: '38px', paddingRight: '38px', paddingTop: '40px', paddingBottom: '120px' }}>
+        <div className="min-h-screen flex flex-col" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '40px', paddingBottom: '120px' }}>
 
           {/* Header */}
           <div className="flex items-center justify-between mb-6" style={{ marginTop: '120px' }}>
             <button
               onClick={() => router.push(`/${locale}/page-pay`)}
-              style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
+              className="text-subheading"
+              style={{ color: 'var(--polar)' }}
             >
               {t.backToDashboard}
             </button>
@@ -67,16 +128,14 @@ export default function ObjectsPage() {
           </h1>
 
           {/* Filter Toggle */}
-          <div className="flex gap-2" style={{ marginTop: '50px', marginBottom: '52px' }}>
+          <div className="flex gap-2" style={{ marginTop: '48px', marginBottom: '48px' }}>
             <button
               onClick={() => setFilter('all')}
-              className="flex-1 rounded-lg"
+              className="flex-1 rounded-lg text-subheading"
               style={{
                 minHeight: '52px',
                 backgroundColor: filter === 'all' ? 'var(--zanah)' : 'var(--polar)',
                 color: 'var(--deep-teal)',
-                fontSize: '18px',
-                fontWeight: 600,
                 opacity: filter === 'all' ? 1 : 0.6,
               }}
             >
@@ -84,13 +143,11 @@ export default function ObjectsPage() {
             </button>
             <button
               onClick={() => setFilter('open')}
-              className="flex-1 rounded-lg"
+              className="flex-1 rounded-lg text-subheading"
               style={{
                 minHeight: '52px',
                 backgroundColor: filter === 'open' ? 'var(--zanah)' : 'var(--polar)',
                 color: 'var(--deep-teal)',
-                fontSize: '18px',
-                fontWeight: 600,
                 opacity: filter === 'open' ? 1 : 0.6,
               }}
             >
@@ -98,13 +155,11 @@ export default function ObjectsPage() {
             </button>
             <button
               onClick={() => setFilter('closed')}
-              className="flex-1 rounded-lg"
+              className="flex-1 rounded-lg text-subheading"
               style={{
                 minHeight: '52px',
                 backgroundColor: filter === 'closed' ? 'var(--zanah)' : 'var(--polar)',
                 color: 'var(--deep-teal)',
-                fontSize: '18px',
-                fontWeight: 600,
                 opacity: filter === 'closed' ? 1 : 0.6,
               }}
             >
@@ -114,11 +169,16 @@ export default function ObjectsPage() {
 
           {/* Add Object Button */}
           <button
-            onClick={() => setView('add-object')}
-            className="btn-universal w-full"
-            style={{ minHeight: '52px', marginBottom: '52px', fontSize: '18px', fontWeight: 600 }}
+            onClick={handleAddObjectClick}
+            className="btn-universal w-full text-subheading"
+            style={{ minHeight: '52px', marginBottom: '52px' }}
           >
             {t.addNew}
+            {isDemo && objects.length >= 2 && (
+              <span className="text-small" style={{ marginLeft: '8px', opacity: 0.8 }}>
+                ({objects.length}/3)
+              </span>
+            )}
           </button>
 
           {/* Objects Carousel */}
@@ -156,7 +216,7 @@ export default function ObjectsPage() {
   if (view === 'add-object' || view === 'edit-object') {
     return (
       <BackgroundPage specialPage="objekt">
-        <div className="min-h-screen" style={{ paddingLeft: '38px', paddingRight: '38px', paddingTop: '40px', paddingBottom: '120px' }}>
+        <div className="min-h-screen" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '40px', paddingBottom: '120px' }}>
 
           {/* Back Button */}
           <div style={{ marginTop: '120px', marginBottom: '24px' }}>
@@ -165,8 +225,8 @@ export default function ObjectsPage() {
                 setView('list');
                 setEditingObject(null);
               }}
-              className="text-button"
-              style={{ color: 'var(--polar)', fontSize: '18px' }}
+              className="text-subheading"
+              style={{ color: 'var(--polar)' }}
             >
               {t.backToDashboard}
             </button>

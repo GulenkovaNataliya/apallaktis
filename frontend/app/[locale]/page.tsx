@@ -13,7 +13,7 @@ export default function LandingPage() {
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* Fullscreen video background */}
-      <VideoBackground videoSrc="/video/video1.mp4" />
+      <VideoBackground videoSrc="/video/video1.mp4" posterSrc="/pages/page-01.webp" />
 
       {/* Content overlay */}
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 safe-area-top safe-area-bottom">
@@ -29,7 +29,7 @@ export default function LandingPage() {
           {/* Action buttons */}
           <div className="flex w-full flex-col gap-4">
             <Link
-              href="#"
+              href={`/${locale}/login`}
               className="btn-primary text-button w-full text-center"
               style={{
                 backgroundColor: "var(--polar)",
