@@ -34,9 +34,8 @@ export default function DemoExpiredPage() {
   );
   const viberUrl = `viber://chat?number=306983208844&text=${viberMessage}`;
 
-  // Check if purchase is available (after 7.1.2026)
-  const purchaseAvailableDate = new Date('2026-01-07');
-  const isPurchaseAvailable = new Date() >= purchaseAvailableDate;
+  // Purchase is always available
+  const isPurchaseAvailable = true;
 
   return (
     <BackgroundPage pageIndex={1}>

@@ -42,9 +42,8 @@ export default function PurchaseAccountPage() {
     fetchAccountNumber();
   }, []);
 
-  // Check if purchase is available (after 7.1.2026)
-  const purchaseAvailableDate = new Date('2026-01-07');
-  const isPurchaseAvailable = new Date() >= purchaseAvailableDate;
+  // Purchase is always available
+  const isPurchaseAvailable = true;
 
   // WhatsApp message for cash payment
   const cashWhatsappMessage = encodeURIComponent(
@@ -58,23 +57,10 @@ export default function PurchaseAccountPage() {
   );
   const cashViberUrl = `viber://chat?number=306983208844&text=${cashViberMessage}`;
 
-  // WhatsApp message for IRIS transfer
-  const irisWhatsappMessage = encodeURIComponent(
-    `${t.irisMessage} ${accountNumber ? `#${accountNumber}` : ''}`
-  );
-  const irisWhatsappUrl = `https://wa.me/306983208844?text=${irisWhatsappMessage}`;
-
-  // Viber message for IRIS transfer
-  const irisViberMessage = encodeURIComponent(
-    `${t.irisMessage} ${accountNumber ? `#${accountNumber}` : ''}`
-  );
-  const irisViberUrl = `viber://chat?number=306983208844&text=${irisViberMessage}`;
+  // IRIS transfer info
+  const irisInfo = 'IRIS: +306983208844 Gulenkova Nataliya';
 
   const handleStripePayment = async () => {
-    if (!isPurchaseAvailable) {
-      return;
-    }
-
     try {
       setIsLoading(true);
 
@@ -142,36 +128,26 @@ export default function PurchaseAccountPage() {
         {/* 1. Stripe Online Payment */}
         <div className="w-full max-w-md mb-6">
           <button
-            disabled={!isPurchaseAvailable}
             onClick={handleStripePayment}
             className="w-full rounded-2xl flex flex-col items-center justify-center text-button relative"
             style={{
               minHeight: '64px',
-              backgroundColor: isPurchaseAvailable ? 'var(--zanah)' : '#cccccc',
-              color: isPurchaseAvailable ? 'var(--deep-teal)' : '#666666',
-              cursor: isPurchaseAvailable ? 'pointer' : 'not-allowed',
-              opacity: isPurchaseAvailable ? 1 : 0.6,
+              backgroundColor: 'var(--zanah)',
+              color: 'var(--deep-teal)',
+              cursor: 'pointer',
               padding: '16px',
             }}
           >
             {/* Special Price Tag */}
-            {isPurchaseAvailable && (
-              <span
-                className="absolute -top-3 right-4 px-3 py-1 rounded-full text-xs font-bold"
-                style={{ backgroundColor: '#ff6a1a', color: 'white' }}
-              >
-                {t.specialPrice}
-              </span>
-            )}
+            <span
+              className="absolute -top-3 right-4 px-3 py-1 rounded-full text-xs font-bold"
+              style={{ backgroundColor: '#ff6a1a', color: 'white' }}
+            >
+              {t.specialPrice}
+            </span>
 
             <span className="text-lg font-semibold">{t.onlinePayment}</span>
             <span className="text-sm mt-1 font-bold">{t.price}</span>
-
-            {!isPurchaseAvailable && (
-              <span className="text-xs mt-2" style={{ opacity: 0.8 }}>
-                {t.availableAfter}
-              </span>
-            )}
           </button>
         </div>
 
@@ -241,53 +217,26 @@ export default function PurchaseAccountPage() {
         <div className="w-full max-w-md mb-6">
           <p className="text-sm text-center mb-3" style={{ color: 'var(--polar)', opacity: 0.9 }}>
             {t.contactForIris}
-            {!isPurchaseAvailable && (
-              <span className="block text-xs mt-1" style={{ color: '#ff8f0a' }}>
-                ({t.availableAfter})
-              </span>
-            )}
           </p>
-          <div className="flex gap-3">
-            {/* WhatsApp */}
-            <a
-              href={irisWhatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 rounded-2xl flex flex-col items-center justify-center text-button"
-              style={{
-                minHeight: '52px',
-                backgroundColor: isPurchaseAvailable ? '#25D366' : '#cccccc',
-                color: isPurchaseAvailable ? 'white' : '#666666',
-                textDecoration: 'none',
-                opacity: isPurchaseAvailable ? 1 : 0.6,
-                pointerEvents: isPurchaseAvailable ? 'auto' : 'none',
-              }}
-            >
-              <span className="text-xl mb-1">📱</span>
-              <span className="text-sm">WhatsApp</span>
-              <span className="text-xs mt-1">{t.price}</span>
-            </a>
-
-            {/* Viber */}
-            <a
-              href={irisViberUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 rounded-2xl flex flex-col items-center justify-center text-button"
-              style={{
-                minHeight: '52px',
-                backgroundColor: isPurchaseAvailable ? '#7360F2' : '#cccccc',
-                color: isPurchaseAvailable ? 'white' : '#666666',
-                textDecoration: 'none',
-                opacity: isPurchaseAvailable ? 1 : 0.6,
-                pointerEvents: isPurchaseAvailable ? 'auto' : 'none',
-              }}
-            >
-              <span className="text-xl mb-1">📞</span>
-              <span className="text-sm">Viber</span>
-              <span className="text-xs mt-1">{t.price}</span>
-            </a>
-          </div>
+          <button
+            className="w-full rounded-2xl flex flex-col items-center justify-center text-button"
+            style={{
+              minHeight: '64px',
+              backgroundColor: 'var(--polar)',
+              color: 'var(--deep-teal)',
+              padding: '16px',
+            }}
+            onClick={() => {
+              // Копируем данные в буфер обмена
+              navigator.clipboard.writeText(`${t.irisPhone} ${t.irisName}`);
+              alert(t.irisCopied);
+            }}
+          >
+            <span className="text-lg font-semibold">💳 {t.irisTransfer}</span>
+            <span className="text-sm mt-1">{t.irisPhone}</span>
+            <span className="text-xs mt-1" style={{ opacity: 0.8 }}>{t.irisName}</span>
+            <span className="text-xs mt-2 font-bold">{t.irisPriceWithTax}</span>
+          </button>
         </div>
 
         {/* Account Number */}

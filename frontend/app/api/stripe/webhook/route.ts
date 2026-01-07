@@ -6,6 +6,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@/lib/supabase/server';
+import { sendAccountPurchaseEmail } from '@/lib/email/send';
+import { sendReceiptEmail } from '@/lib/email/send-receipt';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2025-12-15.clover',
@@ -116,6 +118,18 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   }
 
   try {
+    // Получаем профиль пользователя (до обновления, чтобы иметь все данные)
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (profileError || !profile) {
+      console.error('❌ WEBHOOK: Профиль не найден:', profileError);
+      throw profileError || new Error('Profile not found');
+    }
+
     // Активируем аккаунт пользователя
     const now = new Date().toISOString();
     const firstMonthFreeExpiresAt = new Date();
@@ -138,11 +152,18 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
 
     console.log(`✅ WEBHOOK: Аккаунт #${accountNumber} активирован для пользователя ${userId}`);
 
-    // TODO: Отправить email с благодарностью
-    await sendThankYouEmail(userId, accountNumber, invoiceType);
+    // Получаем email пользователя
+    const { data: { user } } = await supabase.auth.admin.getUserById(userId);
+    const userEmail = user?.email;
+    const userLocale = session.metadata?.locale || 'el';
 
-    // TODO: Сгенерировать и отправить чек/инвойс
-    await generateAndSendReceipt(userId, session, invoiceType);
+    if (userEmail) {
+      // Отправить email с благодарностью
+      await sendAccountPurchaseEmail(userEmail, parseInt(accountNumber || '0'), userLocale);
+
+      // Сгенерировать и отправить чек/инвойс
+      await generateAndSendReceipt(userEmail, session, profile, userLocale);
+    }
 
   } catch (error) {
     console.error('❌ WEBHOOK: Ошибка при обработке оплаты:', error);
@@ -150,65 +171,58 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   }
 }
 
-/**
- * Отправка email с благодарностью
- * TODO: Реализовать отправку через email сервис
- */
-async function sendThankYouEmail(
-  userId: string,
-  accountNumber: string | undefined,
-  invoiceType: string | undefined
-) {
-  console.log('📧 WEBHOOK: Отправка email благодарности...');
-  console.log(`   Пользователь: ${userId}`);
-  console.log(`   Аккаунт: #${accountNumber}`);
-  console.log(`   Тип: ${invoiceType}`);
-
-  // TODO: Интеграция с email сервисом (Resend, SendGrid, AWS SES)
-  // Пример:
-  // await resend.emails.send({
-  //   from: 'noreply@apallaktis.com',
-  //   to: userEmail,
-  //   subject: 'Спасибо за покупку ΑΠΑΛΛΑΚΤΗΣ!',
-  //   html: thankYouTemplate({ accountNumber, invoiceType })
-  // });
-
-  console.log('✅ WEBHOOK: Email благодарности (заглушка)');
-}
 
 /**
  * Генерация и отправка чека/инвойса
- * TODO: Реализовать генерацию PDF и отправку
  */
 async function generateAndSendReceipt(
-  userId: string,
+  userEmail: string,
   session: Stripe.Checkout.Session,
-  invoiceType: string | undefined
+  profile: any,
+  locale: string
 ) {
   console.log('📄 WEBHOOK: Генерация чека/инвойса...');
+
+  const invoiceType = profile.invoice_type || 'receipt';
   console.log(`   Тип документа: ${invoiceType === 'invoice' ? 'ИНВОЙС (τιμολόγιο)' : 'ЧЕК (απόδειξη)'}`);
-  console.log(`   Сумма: ${session.amount_total ? session.amount_total / 100 : 0}€`);
 
-  // TODO: Генерация PDF чека/инвойса
-  // TODO: Сохранение в Supabase Storage
-  // TODO: Отправка на email
+  // Рассчитываем суммы (Stripe возвращает в копейках)
+  const totalAmount = (session.amount_total || 0) / 100;
+  const taxAmount = totalAmount * 0.24 / 1.24; // ΦΠΑ 24%
+  const baseAmount = totalAmount - taxAmount;
 
-  // Пример структуры:
-  // if (invoiceType === 'invoice') {
-  //   // Генерируем ИНВОЙС с данными компании (AFM, название, ΔΟΥ)
-  //   const pdf = await generateInvoicePDF({ ... });
-  // } else {
-  //   // Генерируем простой ЧЕК
-  //   const pdf = await generateReceiptPDF({ ... });
-  // }
-  //
-  // // Сохраняем в Storage
-  // await supabase.storage.from('receipts').upload(`${userId}/${filename}`, pdf);
-  //
-  // // Отправляем на email
-  // await sendReceiptEmail(userEmail, pdf);
+  console.log(`   Базовая сумма: ${baseAmount.toFixed(2)}€`);
+  console.log(`   ΦΠΑ 24%: ${taxAmount.toFixed(2)}€`);
+  console.log(`   Итого: ${totalAmount.toFixed(2)}€`);
 
-  console.log('✅ WEBHOOK: Чек/инвойс (заглушка)');
+  try {
+    // Отправляем чек/инвойс на email
+    await sendReceiptEmail(
+      userEmail,
+      {
+        accountNumber: profile.account_number,
+        amount: baseAmount,
+        tax: taxAmount,
+        total: totalAmount,
+        date: new Date(),
+        invoiceType: invoiceType as 'receipt' | 'invoice',
+        companyName: profile.company_name,
+        afm: profile.afm,
+        doy: profile.doy,
+      },
+      locale
+    );
+
+    console.log('✅ WEBHOOK: Чек/инвойс отправлен на email');
+
+    // TODO: Сохранение PDF в Supabase Storage (опционально)
+    // const pdf = await generatePDF(receiptHTML);
+    // await supabase.storage.from('receipts').upload(`${userId}/receipt_${accountNumber}.pdf`, pdf);
+
+  } catch (error) {
+    console.error('❌ WEBHOOK: Ошибка отправки чека/инвойса:', error);
+    throw error;
+  }
 }
 
 /**

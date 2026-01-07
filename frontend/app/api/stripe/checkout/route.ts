@@ -90,6 +90,7 @@ export async function POST(request: NextRequest) {
         invoice_type: profile.invoice_type || 'receipt',
         company_name: profile.company_name || '',
         afm: profile.afm || '',
+        locale: locale,
       },
       // Автоматическое начисление НДС (ΦΠΑ) для Греции
       automatic_tax: {
@@ -97,7 +98,10 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ sessionId: session.id });
+    return NextResponse.json({
+      sessionId: session.id,
+      url: session.url
+    });
 
   } catch (error: any) {
     console.error('Stripe checkout error:', error);

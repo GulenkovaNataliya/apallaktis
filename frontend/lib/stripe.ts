@@ -14,7 +14,7 @@ let stripePromise: Promise<Stripe | null>;
  * 1. Установи пакет: npm install @stripe/stripe-js
  * 2. Добавь в .env.local:
  *    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_YOUR_KEY_HERE
- * 3. После 7.1.2026 замени на live ключ (pk_live_...)
+ * 3. Для production замени на live ключ (pk_live_...)
  */
 export const getStripe = () => {
   if (!stripePromise) {

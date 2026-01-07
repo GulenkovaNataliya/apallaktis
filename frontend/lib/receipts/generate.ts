@@ -1,0 +1,382 @@
+// Receipt/Invoice Generation
+// ===========================
+// Генерация чеков (απόδειξη) и инвойсов (τιμολόγιο)
+
+export interface ReceiptData {
+  accountNumber: number;
+  amount: number;
+  tax: number;
+  total: number;
+  date: Date;
+  invoiceType: 'receipt' | 'invoice';
+  companyName?: string;
+  afm?: string;
+  doy?: string;
+}
+
+/**
+ * Генерация HTML чека (απόδειξη)
+ */
+export function generateReceiptHTML(data: ReceiptData): string {
+  const formattedDate = data.date.toLocaleDateString('el-GR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+
+  return `
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ΑΠΟΔΕΙΞΗ #${data.accountNumber}</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background-color: #f5f5f5;
+    }
+    .receipt {
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #01312d;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      color: #01312d;
+      margin: 0 0 10px 0;
+      font-size: 28px;
+    }
+    .header p {
+      color: #666;
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    .receipt-number {
+      background-color: #daf3f6;
+      color: #01312d;
+      padding: 10px 20px;
+      border-radius: 4px;
+      display: inline-block;
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .info-row:last-child {
+      border-bottom: none;
+    }
+    .info-label {
+      color: #666;
+      font-weight: bold;
+    }
+    .info-value {
+      color: #01312d;
+      font-weight: bold;
+    }
+    .items-table {
+      width: 100%;
+      margin: 30px 0;
+      border-collapse: collapse;
+    }
+    .items-table th {
+      background-color: #01312d;
+      color: white;
+      padding: 15px;
+      text-align: left;
+    }
+    .items-table td {
+      padding: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .total-row {
+      background-color: #f9f9f9;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .total-row td {
+      color: #01312d;
+      padding: 20px 15px;
+    }
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #999;
+      font-size: 12px;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="receipt">
+    <!-- Header -->
+    <div class="header">
+      <h1>ΑΠΑΛΛΑΚΤΗΣ</h1>
+      <p>Διαχείριση Ακινήτων & Εξόδων</p>
+      <p>ΑΦΜ: 123456789 | ΔΟΥ: Α' Αθηνών</p>
+      <p>Τηλ: +30 698 320 8844</p>
+    </div>
+
+    <!-- Receipt Number -->
+    <div style="text-align: center;">
+      <div class="receipt-number">
+        ΑΠΟΔΕΙΞΗ #${data.accountNumber}
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div style="margin: 30px 0;">
+      <div class="info-row">
+        <span class="info-label">Ημερομηνία:</span>
+        <span class="info-value">${formattedDate}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Λογαριασμός:</span>
+        <span class="info-value">#${data.accountNumber}</span>
+      </div>
+    </div>
+
+    <!-- Items Table -->
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>Περιγραφή</th>
+          <th style="text-align: right;">Ποσό</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Αγορά Λογαριασμού ΑΠΑΛΛΑΚΤΗΣ</td>
+          <td style="text-align: right;">${data.amount.toFixed(2)} €</td>
+        </tr>
+        <tr>
+          <td>ΦΠΑ 24%</td>
+          <td style="text-align: right;">${data.tax.toFixed(2)} €</td>
+        </tr>
+        <tr class="total-row">
+          <td>ΣΥΝΟΛΟ</td>
+          <td style="text-align: right;">${data.total.toFixed(2)} €</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Ευχαριστούμε για την προτίμησή σας!</p>
+      <p>Για οποιαδήποτε απορία, επικοινωνήστε μαζί μας:</p>
+      <p>Email: support@apallaktis.com | WhatsApp/Viber: +30 698 320 8844</p>
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
+}
+
+/**
+ * Генерация HTML инвойса (τιμολόγιο) с данными компании
+ */
+export function generateInvoiceHTML(data: ReceiptData): string {
+  const formattedDate = data.date.toLocaleDateString('el-GR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+
+  return `
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ΤΙΜΟΛΟΓΙΟ #${data.accountNumber}</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background-color: #f5f5f5;
+    }
+    .invoice {
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2px solid #01312d;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .company-info h1 {
+      color: #01312d;
+      margin: 0 0 10px 0;
+      font-size: 28px;
+    }
+    .company-info p {
+      color: #666;
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    .invoice-details {
+      text-align: right;
+    }
+    .invoice-number {
+      background-color: #daf3f6;
+      color: #01312d;
+      padding: 10px 20px;
+      border-radius: 4px;
+      display: inline-block;
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .customer-info {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 4px;
+      margin: 30px 0;
+    }
+    .customer-info h3 {
+      color: #01312d;
+      margin: 0 0 15px 0;
+    }
+    .customer-info p {
+      margin: 5px 0;
+      color: #333;
+    }
+    .items-table {
+      width: 100%;
+      margin: 30px 0;
+      border-collapse: collapse;
+    }
+    .items-table th {
+      background-color: #01312d;
+      color: white;
+      padding: 15px;
+      text-align: left;
+    }
+    .items-table td {
+      padding: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .total-row {
+      background-color: #f9f9f9;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .total-row td {
+      color: #01312d;
+      padding: 20px 15px;
+    }
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #999;
+      font-size: 12px;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice">
+    <!-- Header -->
+    <div class="header">
+      <div class="company-info">
+        <h1>ΑΠΑΛΛΑΚΤΗΣ</h1>
+        <p>Διαχείριση Ακινήτων & Εξόδων</p>
+        <p><strong>ΑΦΜ:</strong> 123456789</p>
+        <p><strong>ΔΟΥ:</strong> Α' Αθηνών</p>
+        <p><strong>Τηλ:</strong> +30 698 320 8844</p>
+      </div>
+      <div class="invoice-details">
+        <div class="invoice-number">
+          ΤΙΜΟΛΟΓΙΟ #${data.accountNumber}
+        </div>
+        <p style="margin: 10px 0; color: #666;"><strong>Ημερομηνία:</strong> ${formattedDate}</p>
+      </div>
+    </div>
+
+    <!-- Customer Info -->
+    <div class="customer-info">
+      <h3>Στοιχεία Πελάτη</h3>
+      <p><strong>Επωνυμία:</strong> ${data.companyName || 'N/A'}</p>
+      <p><strong>ΑΦΜ:</strong> ${data.afm || 'N/A'}</p>
+      <p><strong>ΔΟΥ:</strong> ${data.doy || 'N/A'}</p>
+      <p><strong>Λογαριασμός:</strong> #${data.accountNumber}</p>
+    </div>
+
+    <!-- Items Table -->
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>Α/Α</th>
+          <th>Περιγραφή</th>
+          <th style="text-align: center;">Ποσότητα</th>
+          <th style="text-align: right;">Τιμή</th>
+          <th style="text-align: right;">Σύνολο</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Αγορά Λογαριασμού ΑΠΑΛΛΑΚΤΗΣ<br><small>30 ημέρες δωρεάν χρήση</small></td>
+          <td style="text-align: center;">1</td>
+          <td style="text-align: right;">${data.amount.toFixed(2)} €</td>
+          <td style="text-align: right;">${data.amount.toFixed(2)} €</td>
+        </tr>
+        <tr>
+          <td colspan="4" style="text-align: right;"><strong>Μερικό Σύνολο:</strong></td>
+          <td style="text-align: right;">${data.amount.toFixed(2)} €</td>
+        </tr>
+        <tr>
+          <td colspan="4" style="text-align: right;"><strong>ΦΠΑ 24%:</strong></td>
+          <td style="text-align: right;">${data.tax.toFixed(2)} €</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="4" style="text-align: right;">ΓΕΝΙΚΟ ΣΥΝΟΛΟ:</td>
+          <td style="text-align: right;">${data.total.toFixed(2)} €</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Ευχαριστούμε για την προτίμησή σας!</p>
+      <p>Για οποιαδήποτε απορία, επικοινωνήστε μαζί μας:</p>
+      <p>Email: support@apallaktis.com | WhatsApp/Viber: +30 698 320 8844</p>
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
+}
+
+/**
+ * Генерация чека или инвойса в зависимости от типа регистрации
+ */
+export function generateReceiptOrInvoice(data: ReceiptData): string {
+  if (data.invoiceType === 'invoice') {
+    return generateInvoiceHTML(data);
+  } else {
+    return generateReceiptHTML(data);
+  }
+}

@@ -1,6 +1,6 @@
 export type SubscriptionStatus = 'demo' | 'active' | 'expired' | 'vip' | 'read-only';
 
-export type SubscriptionPlan = 'basic' | 'standard' | 'premium' | 'vip' | null;
+export type SubscriptionPlan = 'demo' | 'basic' | 'standard' | 'premium' | 'vip' | null;
 
 export interface User {
   id: string;
