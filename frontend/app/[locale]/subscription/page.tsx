@@ -118,17 +118,24 @@ export default function SubscriptionPage() {
       return;
     }
 
+    // Находим выбранный план
+    const selectedPlan = plans.find(p => p.id === planId);
+    if (!selectedPlan || !selectedPlan.stripePriceId) {
+      alert('Price ID not configured for this plan');
+      return;
+    }
+
     try {
       setIsLoading(true);
 
-      // Call API to create Stripe Checkout Session
-      const response = await fetch('/api/stripe/checkout-subscription', {
+      // Call API to create Stripe Subscription Checkout Session
+      const response = await fetch('/api/stripe/subscription-checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          planId,
+          priceId: selectedPlan.stripePriceId,
           locale,
         }),
       });
@@ -140,7 +147,6 @@ export default function SubscriptionPage() {
       }
 
       // Redirect to Stripe Checkout URL
-      // API should return URL for redirect
       if (data.url) {
         window.location.href = data.url;
       } else {

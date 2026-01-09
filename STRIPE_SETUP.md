@@ -62,8 +62,8 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 Создай продукт в Stripe Dashboard:
 1. Products → Add product
-2. Название: "ΑΠΑΛΛΑΚΤΗΣ Account Purchase"
-3. Цена: 97€ (или с ΦΠΑ)
+2. Название: "Apallaktis Account Purchase"
+3. Цена: 97€ (+ ΦΠΑ)
 4. Скопируй **Price ID** (начинается с `price_...`)
 5. Добавь в `.env.local`:
 

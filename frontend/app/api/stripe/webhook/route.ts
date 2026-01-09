@@ -233,25 +233,27 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
 
   const supabase = await createClient();
   const userId = subscription.metadata?.user_id;
-  const planId = subscription.metadata?.plan_id;
-  const referralCode = subscription.metadata?.referral_code;
+  const plan = subscription.metadata?.plan; // 'basic', 'standard', 'premium'
 
-  if (!userId || !planId) {
-    console.error('❌ WEBHOOK: user_id или plan_id не найдены в metadata');
+  if (!userId) {
+    console.error('❌ WEBHOOK: user_id не найден в metadata');
     return;
   }
 
   try {
     const now = new Date().toISOString();
 
+    // Рассчитываем дату окончания подписки (через 1 месяц)
+    const subscriptionExpiresAt = new Date((subscription as any).current_period_end * 1000).toISOString();
+
     const { error: updateError } = await supabase
       .from('profiles')
       .update({
-        subscription_plan: planId,
+        subscription_plan: plan || null,
         subscription_status: 'active',
         stripe_subscription_id: subscription.id,
         stripe_customer_id: subscription.customer as string,
-        subscription_started_at: now,
+        subscription_expires_at: subscriptionExpiresAt,
       })
       .eq('id', userId);
 
@@ -260,12 +262,8 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
       throw updateError;
     }
 
-    console.log(`✅ WEBHOOK: Подписка ${planId} активирована для пользователя ${userId}`);
-
-    // Если пользователь был приглашен по реферальной ссылке, начисляем bonus month рефереру
-    if (referralCode) {
-      await rewardReferrer(userId, referralCode);
-    }
+    console.log(`✅ WEBHOOK: Подписка ${plan} активирована для пользователя ${userId}`);
+    console.log(`   Действует до: ${subscriptionExpiresAt}`);
 
   } catch (error) {
     console.error('❌ WEBHOOK: Ошибка при создании подписки:', error);
@@ -408,14 +406,29 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     // Получаем информацию о подписке
     const subscription = await stripe.subscriptions.retrieve(subscriptionId);
     const userId = subscription.metadata?.user_id;
-    const bonusMonths = parseInt(subscription.metadata?.bonus_months || '0');
+    const plan = subscription.metadata?.plan;
 
     if (!userId) {
       console.error('❌ WEBHOOK: user_id не найден в подписке');
       return;
     }
 
-    // Если есть bonus months, уменьшаем на 1
+    // Получаем профиль пользователя
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (profileError || !profile) {
+      console.error('❌ WEBHOOK: Профиль не найден');
+      return;
+    }
+
+    // Проверяем есть ли bonus months
+    const bonusMonths = profile.bonus_months || 0;
+
+    // Если есть bonus months, уменьшаем на 1 и НЕ списываем деньги
     if (bonusMonths > 0) {
       const { error: updateError } = await supabase
         .from('profiles')
@@ -427,19 +440,59 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
       if (updateError) {
         console.error('❌ WEBHOOK: Ошибка обновления bonus_months:', updateError);
       } else {
-        console.log(`✅ WEBHOOK: Bonus months уменьшен: ${bonusMonths} → ${bonusMonths - 1}`);
+        console.log(`✅ WEBHOOK: Использован bonus month: ${bonusMonths} → ${bonusMonths - 1}`);
       }
-
-      // Обновляем metadata подписки
-      await stripe.subscriptions.update(subscriptionId, {
-        metadata: {
-          ...subscription.metadata,
-          bonus_months: (bonusMonths - 1).toString(),
-        },
-      });
     }
 
-    console.log(`✅ WEBHOOK: Invoice оплачен для пользователя ${userId}`);
+    // Продлеваем подписку на +1 месяц
+    const subscriptionExpiresAt = new Date((subscription as any).current_period_end * 1000).toISOString();
+
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({
+        subscription_expires_at: subscriptionExpiresAt,
+        subscription_status: 'active',
+      })
+      .eq('id', userId);
+
+    if (updateError) {
+      console.error('❌ WEBHOOK: Ошибка продления подписки:', updateError);
+      throw updateError;
+    }
+
+    console.log(`✅ WEBHOOK: Подписка продлена до ${subscriptionExpiresAt}`);
+
+    // Отправляем чек/инвойс на email (только если были списаны деньги)
+    if (bonusMonths === 0) {
+      const { data: { user } } = await supabase.auth.admin.getUserById(userId);
+      const userEmail = user?.email;
+      const userLocale = subscription.metadata?.locale || 'el';
+
+      if (userEmail && invoice.amount_paid > 0) {
+        const totalAmount = (invoice.amount_paid || 0) / 100;
+        const taxAmount = totalAmount * 0.24 / 1.24;
+        const baseAmount = totalAmount - taxAmount;
+
+        await sendReceiptEmail(
+          userEmail,
+          {
+            accountNumber: profile.account_number,
+            amount: baseAmount,
+            tax: taxAmount,
+            total: totalAmount,
+            date: new Date(),
+            invoiceType: profile.invoice_type as 'receipt' | 'invoice',
+            companyName: profile.company_name,
+            afm: profile.afm,
+            doy: profile.doy,
+          },
+          userLocale
+        );
+
+        console.log('✅ WEBHOOK: Чек/инвойс за подписку отправлен');
+      }
+    }
+
   } catch (error) {
     console.error('❌ WEBHOOK: Ошибка при обработке оплаты invoice:', error);
     throw error;
