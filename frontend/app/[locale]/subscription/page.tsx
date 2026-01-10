@@ -182,7 +182,7 @@ export default function SubscriptionPage() {
               borderRadius: '1rem',
               backgroundColor: 'var(--deep-teal)',
               color: '#ff8f0a',
-              boxShadow: '0 4px 8px var(--polar)',
+              boxShadow: '0 4px 8px #ff8f0a',
             }}
           >
             {t.title}

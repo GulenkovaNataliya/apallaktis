@@ -344,8 +344,8 @@ export default function ObjectFinancePage() {
                     </div>
                     <button
                       onClick={() => handleDeleteWork(work.id)}
-                      className="text-sm px-3 py-1 rounded-lg"
-                      style={{ backgroundColor: '#ff6a1a', color: 'white' }}
+                      className="text-button px-4 py-2 rounded-lg font-semibold"
+                      style={{ backgroundColor: '#ff6a1a', color: 'white', minHeight: '52px', boxShadow: '0 4px 8px rgba(255, 255, 255, 0.3)' }}
                     >
                       {t.delete}
                     </button>
@@ -544,8 +544,8 @@ export default function ObjectFinancePage() {
                                     </div>
                                     <button
                                       onClick={() => handleDeleteExpense(expense.id)}
-                                      className="text-xs px-2 py-1 rounded-lg ml-2"
-                                      style={{ backgroundColor: '#ff6a1a', color: 'white' }}
+                                      className="text-button px-4 py-2 rounded-lg ml-2 font-semibold"
+                                      style={{ backgroundColor: '#ff6a1a', color: 'white', minHeight: '52px', boxShadow: '0 4px 8px rgba(255, 255, 255, 0.3)' }}
                                     >
                                       {t.delete}
                                     </button>
@@ -1333,10 +1333,12 @@ function AddExpenseForm({
             type="button"
             onClick={handleVoiceInput}
             disabled={isRecording}
-            className="px-3 py-1 rounded-lg text-sm flex items-center gap-2"
+            className="px-4 py-2 rounded-lg text-button font-semibold flex items-center gap-2"
             style={{
               backgroundColor: isRecording ? '#ff6a1a' : 'var(--zanah)',
               color: isRecording ? 'white' : 'var(--deep-teal)',
+              minHeight: '52px',
+              boxShadow: isRecording ? '0 4px 8px rgba(255, 255, 255, 0.3)' : '0 4px 8px var(--deep-teal)',
             }}
           >
             🎤 {isRecording ? '...' : 'Voice'}
@@ -1382,8 +1384,8 @@ function AddExpenseForm({
             <button
               type="button"
               onClick={handleRemovePhoto}
-              className="absolute top-2 right-2 px-3 py-1 rounded-lg text-sm"
-              style={{ backgroundColor: '#ff6a1a', color: 'white' }}
+              className="absolute top-2 right-2 px-4 py-2 rounded-lg text-button font-semibold"
+              style={{ backgroundColor: '#ff6a1a', color: 'white', minHeight: '52px', boxShadow: '0 4px 8px rgba(255, 255, 255, 0.3)' }}
             >
               {t.removePhoto}
             </button>

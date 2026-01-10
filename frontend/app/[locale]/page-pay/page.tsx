@@ -41,6 +41,15 @@ export default function PagePay() {
           {messages[locale]?.objects?.title || 'ΕΡΓΑ'}
         </Link>
 
+        {/* User Profile / Dashboard Button */}
+        <Link
+          href={`/${locale}/dashboard`}
+          className="btn-universal w-full text-button flex items-center justify-center text-center"
+          style={{ minHeight: '52px', backgroundColor: '#01312d', color: '#ff8f0a' }}
+        >
+          👤 {locale === 'el' ? 'Προφίλ' : locale === 'ru' ? 'Личный Кабинет' : 'User Profile'}
+        </Link>
+
       </div>
     </BackgroundPage>
   );

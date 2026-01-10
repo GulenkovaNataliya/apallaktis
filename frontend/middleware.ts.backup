@@ -1,0 +1,74 @@
+import createMiddleware from "next-intl/middleware";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
+import { locales, defaultLocale } from "./i18n";
+
+const intlMiddleware = createMiddleware({
+  locales,
+  defaultLocale,
+  localePrefix: "always",
+});
+
+export async function middleware(request: NextRequest) {
+  // First, handle internationalization
+  const response = intlMiddleware(request);
+
+  // Check if accessing admin routes
+  if (request.nextUrl.pathname.includes('/admin')) {
+    // Create Supabase client
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return request.cookies.get(name)?.value;
+          },
+          set(name: string, value: string, options: any) {
+            // Not used in middleware
+          },
+          remove(name: string, options: any) {
+            // Not used in middleware
+          },
+        },
+      }
+    );
+
+    // Get user
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      // Not authenticated - redirect to login
+      const locale = request.nextUrl.pathname.split('/')[1];
+      console.warn(`❌ Unauthorized admin access attempt (not authenticated)`);
+      return NextResponse.redirect(new URL(`/${locale}`, request.url));
+    }
+
+    // Check if user has admin role
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    if (profileError || profile?.role !== 'admin') {
+      // Not admin - redirect to dashboard
+      const locale = request.nextUrl.pathname.split('/')[1];
+      console.warn(`❌ Unauthorized admin access attempt: ${user.email} (role: ${profile?.role || 'unknown'})`);
+      return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url));
+    }
+
+    // User is admin - allow access
+    console.log(`✅ Admin access granted: ${user.email}`);
+  }
+
+  return response;
+}
+
+export const config = {
+  // Match all pathnames except for
+  // - … if they start with `/api`, `/_next` or `/_vercel`
+  // - … the ones containing a dot (e.g. `favicon.ico`)
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
+};

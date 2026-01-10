@@ -11,33 +11,35 @@ export interface User {
   isBusiness: boolean;
   companyName?: string | null;
   afm?: string | null;
+  doy?: string | null;
+  address?: string | null;
 
   // Account info
   accountNumber: number; // Порядковый номер #1010, #1011...
-  createdAt: string; // Дата регистрации
+  createdAt?: string; // Дата регистрации
 
   // DEMO период (48 часов)
   subscriptionStatus: SubscriptionStatus;
   demoExpiresAt: string | null; // Когда заканчивается DEMO
 
   // Покупка аккаунта (97€+ΦΠΑ)
-  accountPurchased: boolean; // Куплен ли аккаунт
-  accountPurchasedAt: string | null; // Дата покупки (для расчета ежемесячной оплаты)
-  firstMonthFreeExpiresAt: string | null; // Конец первого бесплатного месяца
+  accountPurchased?: boolean; // Куплен ли аккаунт
+  accountPurchasedAt?: string | null; // Дата покупки (для расчета ежемесячной оплаты)
+  firstMonthFreeExpiresAt?: string | null; // Конец первого бесплатного месяца
 
   // Подписка
-  subscriptionPlan: SubscriptionPlan; // Выбранный тариф
-  subscriptionExpiresAt: string | null; // Дата окончания текущего периода
+  subscriptionPlan?: SubscriptionPlan; // Выбранный тариф
+  subscriptionExpiresAt?: string | null; // Дата окончания текущего периода
 
   // VIP (активируется админом)
-  vipExpiresAt: string | null; // null = бессрочно
-  vipGrantedBy: string | null; // ID админа
-  vipReason: string | null; // Причина
+  vipExpiresAt?: string | null; // null = бессрочно
+  vipGrantedBy?: string | null; // ID админа
+  vipReason?: string | null; // Причина
 
   // Реферальная программа
-  referralCode: string;
-  referredBy: string | null; // Код того, кто привел
-  bonusMonths: number; // Накопленные бонусные месяцы
+  referralCode?: string;
+  referredBy?: string | null; // Код того, кто привел
+  bonusMonths?: number; // Накопленные бонусные месяцы
 }
 
 export interface AuthState {

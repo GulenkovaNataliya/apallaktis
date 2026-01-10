@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { User } from '@/types/user';
 import { Locale } from '@/lib/messages';
 
@@ -350,12 +351,16 @@ const translations = {
 export default function RewardsSection({ user, locale }: RewardsSectionProps) {
   const t = translations[locale] || translations.el;
 
+  // States for toggling sections
+  const [showVIP, setShowVIP] = useState(false);
+  const [showReferral, setShowReferral] = useState(false);
+
   // Check if user has VIP status
-  const hasVIP = user.subscriptionStatus === 'vip' || user.vipExpiresAt !== null;
+  const hasVIP = user.subscriptionStatus === 'vip' || (user.vipExpiresAt !== null && user.vipExpiresAt !== undefined);
 
   // Format referral link
   const referralLink = typeof window !== 'undefined'
-    ? `${window.location.origin}/${locale}/register?ref=${user.referralCode}`
+    ? `${window.location.origin}/${locale}/register?ref=${user.referralCode || ''}`
     : '';
 
   const copyToClipboard = () => {
@@ -380,156 +385,166 @@ export default function RewardsSection({ user, locale }: RewardsSectionProps) {
     if (hasVIP) return t.support.vip;
     if (user.subscriptionPlan === 'premium') return t.support.premium;
     if (user.subscriptionPlan === 'standard') return t.support.standard;
-    return t.support.basic;
+    return t.support.basic || 'Basic: up to 48 hours';
   };
 
   return (
-    <div className="w-full space-y-6">
-      {/* Section Title */}
-      <h2
-        className="text-heading font-bold text-center"
-        style={{ color: 'var(--deep-teal)' }}
-      >
-        {t.title}
-      </h2>
-
-      {/* VIP Status (only if active) */}
-      {hasVIP && (
-        <div
-          className="w-full p-6 rounded-2xl"
+    <div className="w-full space-y-4">
+      {/* VIP Button */}
+      <div className="w-full">
+        <button
+          onClick={() => setShowVIP(!showVIP)}
+          className="w-full btn-primary text-button text-center"
           style={{
-            backgroundColor: 'rgba(255, 215, 0, 0.1)',
-            border: '3px solid #FFD700',
+            backgroundColor: '#FFD700',
+            color: '#000000',
+            boxShadow: '0 4px 8px rgba(255, 215, 0, 0.3)',
+            paddingLeft: '30px',
+            paddingRight: '30px',
           }}
         >
-          <h3 className="text-subheading font-bold mb-4" style={{ color: '#FFD700' }}>
-            {t.vipStatus.title}
-          </h3>
-          <ul className="space-y-2 text-body mb-4" style={{ color: 'var(--deep-teal)' }}>
-            <li>• {t.vipStatus.unlimitedProjects}</li>
-            <li>• {t.vipStatus.unlimitedTeam}</li>
-            <li>• {t.vipStatus.allFeatures}</li>
-          </ul>
-          <p className="text-sm font-bold" style={{ color: 'var(--deep-teal)' }}>
-            {t.vipStatus.activeUntil} {user.vipExpiresAt ? new Date(user.vipExpiresAt).toLocaleDateString() : t.vipStatus.forever}
-          </p>
-        </div>
-      )}
+          👑 VIP
+        </button>
 
-      {/* Referral Program */}
-      <div
-        className="w-full p-6 rounded-2xl"
-        style={{
-          backgroundColor: 'rgba(176, 255, 209, 0.2)',
-          border: '3px solid var(--zanah)',
-        }}
-      >
-        <h3 className="text-subheading font-bold mb-3" style={{ color: 'var(--deep-teal)' }}>
-          {t.referral.title}
-        </h3>
-        <p className="text-small mb-4" style={{ color: 'var(--deep-teal)' }}>
-          {t.referral.description}
-        </p>
-
-        {/* Referral Link */}
-        <div className="mb-4">
-          <p className="text-small font-bold mb-2" style={{ color: 'var(--deep-teal)' }}>
-            {t.referral.yourLink}
-          </p>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={referralLink}
-              readOnly
-              className="flex-1 text-small rounded-2xl px-4 py-2 border-2"
-              style={{ borderColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
-            />
-            <button
-              onClick={copyToClipboard}
-              className="btn-base text-small"
-              style={{
-                backgroundColor: 'var(--zanah)',
-                color: 'var(--deep-teal)',
-                minHeight: '40px',
-                paddingLeft: '1rem',
-                paddingRight: '1rem',
-              }}
-            >
-              {t.referral.copy}
-            </button>
-            <button
-              onClick={shareLink}
-              className="btn-base text-small"
-              style={{
-                backgroundColor: 'var(--deep-teal)',
-                color: 'var(--polar)',
-                minHeight: '40px',
-                paddingLeft: '1rem',
-                paddingRight: '1rem',
-              }}
-            >
-              {t.referral.share}
-            </button>
+        {/* VIP Content (shown when button is clicked) */}
+        {showVIP && (
+          <div
+            className="w-full mt-4 p-6 rounded-2xl"
+            style={{
+              backgroundColor: 'rgba(255, 215, 0, 0.15)',
+              border: '2px solid #FFD700',
+            }}
+          >
+            <h3 className="text-subheading font-bold mb-4" style={{ color: '#FFD700' }}>
+              👑 VIP STATUS ACTIVATED
+            </h3>
+            <ul className="space-y-2 text-body mb-4" style={{ color: '#ffffff' }}>
+              <li>• Unlimited projects</li>
+              <li>• Unlimited team</li>
+              <li>• All features</li>
+            </ul>
+            <p className="text-sm font-bold" style={{ color: '#ffffff' }}>
+              Active until: {(user.vipExpiresAt && user.vipExpiresAt !== null) ? new Date(user.vipExpiresAt).toLocaleDateString() : 'Forever'}
+            </p>
           </div>
-        </div>
-
-        {/* Stats */}
-        <div className="mb-4">
-          <p className="text-small font-bold mb-2" style={{ color: 'var(--deep-teal)' }}>
-            {t.referral.stats}
-          </p>
-          <div className="space-y-1 text-small" style={{ color: 'var(--deep-teal)' }}>
-            <p>• {t.referral.friendsInvited} 0</p>
-            <p>• {t.referral.activeSubscriptions} 0</p>
-            <p>• {t.referral.bonusMonths} {user.bonusMonths}</p>
-          </div>
-        </div>
-
-        {/* How it works */}
-        <div>
-          <p className="text-small font-bold mb-2" style={{ color: 'var(--deep-teal)' }}>
-            {t.referral.howItWorks}
-          </p>
-          <div className="space-y-1 text-small" style={{ color: 'var(--deep-teal)' }}>
-            <p>• {t.referral.step1}</p>
-            <p>• {t.referral.step2}</p>
-            <p>• {t.referral.step3}</p>
-            <p>• {t.referral.step4}</p>
-          </div>
-        </div>
+        )}
       </div>
 
-      {/* Bonus Months (only if user has bonuses) */}
-      {user.bonusMonths > 0 && (
-        <div
-          className="w-full p-6 rounded-2xl"
+      {/* Referral Program Button */}
+      <div className="w-full">
+        <button
+          onClick={() => setShowReferral(!showReferral)}
+          className="w-full btn-primary text-button text-center"
           style={{
-            backgroundColor: 'rgba(255, 143, 10, 0.1)',
-            border: '3px solid #ff8f0a',
+            backgroundColor: '#ff8f0a',
+            color: '#ffffff',
+            boxShadow: '0 4px 8px rgba(255, 143, 10, 0.3)',
+            paddingLeft: '30px',
+            paddingRight: '30px',
           }}
         >
-          <h3 className="text-subheading font-bold mb-3" style={{ color: '#ff8f0a' }}>
-            {t.bonuses.title} {user.bonusMonths}
-          </h3>
-          <p className="text-small mb-3" style={{ color: 'var(--deep-teal)' }}>
-            {t.bonuses.description.replace('{count}', user.bonusMonths.toString())}
-          </p>
-          <p className="text-small" style={{ color: 'var(--deep-teal)', opacity: 0.8 }}>
-            {t.bonuses.autoUse}
-          </p>
-        </div>
-      )}
+          🎁 REFERRAL PROGRAM
+        </button>
+
+        {/* Referral Content (shown when button is clicked) */}
+        {showReferral && (
+          <div
+            className="w-full mt-4 p-6 rounded-2xl"
+            style={{
+              backgroundColor: 'rgba(176, 255, 209, 0.15)',
+              border: '2px solid var(--zanah)',
+            }}
+          >
+            <h3 className="text-subheading font-bold mb-3" style={{ color: '#ffffff' }}>
+              🎁 REFERRAL PROGRAM
+            </h3>
+            <p className="text-small mb-4" style={{ color: '#ffffff' }}>
+              Invite friends and earn bonuses!
+            </p>
+
+            {/* Referral Link */}
+            <div className="mb-6">
+              <p className="text-small font-bold mb-2" style={{ color: '#ffffff' }}>
+                Your link:
+              </p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={referralLink}
+                  readOnly
+                  className="flex-1 text-small rounded-2xl px-4 py-2 border-2"
+                  style={{
+                    borderColor: 'var(--zanah)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    color: '#ffffff'
+                  }}
+                />
+                <button
+                  onClick={copyToClipboard}
+                  className="btn-base text-small"
+                  style={{
+                    backgroundColor: 'var(--zanah)',
+                    color: 'var(--deep-teal)',
+                    minHeight: '40px',
+                    paddingLeft: '1rem',
+                    paddingRight: '1rem',
+                  }}
+                >
+                  Copy
+                </button>
+                <button
+                  onClick={shareLink}
+                  className="btn-base text-small"
+                  style={{
+                    backgroundColor: 'var(--deep-teal)',
+                    color: 'var(--polar)',
+                    minHeight: '40px',
+                    paddingLeft: '1rem',
+                    paddingRight: '1rem',
+                  }}
+                >
+                  Share
+                </button>
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="mb-6">
+              <p className="text-small font-bold mb-2" style={{ color: '#ffffff' }}>
+                📊 Stats:
+              </p>
+              <div className="space-y-1 text-small" style={{ color: '#ffffff' }}>
+                <p>• Friends invited: 0</p>
+                <p>• Active subscriptions: 0</p>
+                <p>• Bonus months: {user.bonusMonths ?? 0}</p>
+              </div>
+            </div>
+
+            {/* How it works */}
+            <div>
+              <p className="text-small font-bold mb-2" style={{ color: '#ffffff' }}>
+                💰 How it works:
+              </p>
+              <div className="space-y-1 text-small" style={{ color: '#ffffff' }}>
+                <p>• Friend registers via your link</p>
+                <p>• Friend purchases subscription</p>
+                <p>• YOU get +1 free month</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Support Section */}
       <div
         className="w-full p-6 rounded-2xl"
         style={{
-          backgroundColor: 'rgba(1, 49, 45, 0.05)',
+          backgroundColor: 'rgba(1, 49, 45, 0.15)',
           border: '2px solid var(--deep-teal)',
         }}
       >
-        <h3 className="text-subheading font-bold mb-4" style={{ color: 'var(--deep-teal)' }}>
-          {t.support.title}
+        <h3 className="text-subheading font-bold mb-4 text-center" style={{ color: '#ff8f0a' }}>
+          📞 NEED HELP?
         </h3>
         <div className="flex gap-3 mb-4">
           <a
@@ -555,8 +570,8 @@ export default function RewardsSection({ user, locale }: RewardsSectionProps) {
             📱 WhatsApp
           </a>
         </div>
-        <p className="text-small text-center" style={{ color: 'var(--deep-teal)', opacity: 0.8 }}>
-          {t.support.responseTime} <strong>{getResponseTime()}</strong>
+        <p className="text-small text-center" style={{ color: '#ffffff', opacity: 0.9 }}>
+          Response time: <strong>{getResponseTime()}</strong>
         </p>
       </div>
     </div>

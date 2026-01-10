@@ -43,7 +43,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: options.from || 'ΑΠΑΛΛΑΚΤΗΣ <noreply@apallaktis.com>',
+        from: options.from || 'ΑΠΑΛΛΑΚΤΗΣ <onboarding@resend.dev>',
         to: options.to,
         subject: options.subject,
         html: options.html,

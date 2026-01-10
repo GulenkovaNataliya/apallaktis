@@ -8,6 +8,7 @@ import Stripe from 'stripe';
 import { createClient } from '@/lib/supabase/server';
 import { sendAccountPurchaseEmail } from '@/lib/email/send';
 import { sendReceiptEmail } from '@/lib/email/send-receipt';
+import { sendReferralPurchaseEmail } from '@/lib/email/notifications';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2025-12-15.clover',
@@ -152,6 +153,15 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
 
     console.log(`✅ WEBHOOK: Аккаунт #${accountNumber} активирован для пользователя ${userId}`);
 
+    // 🎁 РЕФЕРАЛЬНАЯ ПРОГРАММА: Начисление bonus month
+    // Если пользователь пришел по реферальной ссылке - начислить +1 месяц рефереру
+    if (profile.referred_by) {
+      console.log(`🎁 WEBHOOK: Пользователь пришел по реферальной ссылке: ${profile.referred_by}`);
+      await rewardReferrer(userId, profile.referred_by, profile.email);
+    } else {
+      console.log('ℹ️ WEBHOOK: Пользователь не использовал реферальную ссылку');
+    }
+
     // Получаем email пользователя
     const { data: { user } } = await supabase.auth.admin.getUserById(userId);
     const userEmail = user?.email;
@@ -274,7 +284,7 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
 /**
  * Начисление bonus month рефереру
  */
-async function rewardReferrer(newUserId: string, referralCode: string) {
+async function rewardReferrer(newUserId: string, referralCode: string, newUserEmail: string) {
   console.log('🎁 WEBHOOK: Начисление bonus month рефереру...', referralCode);
 
   const supabase = await createClient();
@@ -283,7 +293,7 @@ async function rewardReferrer(newUserId: string, referralCode: string) {
     // Находим реферера по его referral_code
     const { data: referrer, error: referrerError } = await supabase
       .from('profiles')
-      .select('id, bonus_months, referrals_count')
+      .select('id, bonus_months, referrals_count, email, name, preferred_language')
       .eq('referral_code', referralCode)
       .single();
 
@@ -293,10 +303,12 @@ async function rewardReferrer(newUserId: string, referralCode: string) {
     }
 
     // Начисляем +1 bonus month рефереру
+    const newBonusMonths = (referrer.bonus_months || 0) + 1;
+
     const { error: updateError } = await supabase
       .from('profiles')
       .update({
-        bonus_months: (referrer.bonus_months || 0) + 1,
+        bonus_months: newBonusMonths,
         referrals_count: (referrer.referrals_count || 0) + 1,
       })
       .eq('id', referrer.id);
@@ -307,7 +319,22 @@ async function rewardReferrer(newUserId: string, referralCode: string) {
     }
 
     console.log(`✅ WEBHOOK: +1 bonus month начислен рефереру ${referrer.id}`);
-    console.log(`   Новый баланс: ${(referrer.bonus_months || 0) + 1} bonus months`);
+    console.log(`   Новый баланс: ${newBonusMonths} bonus months`);
+
+    // 📧 Отправляем email рефереру о получении bonus month
+    if (referrer.email) {
+      const { data: { user: newUser } } = await supabase.auth.admin.getUserById(newUserId);
+      const newUserName = newUser?.user_metadata?.name || newUserEmail.split('@')[0];
+
+      await sendReferralPurchaseEmail(
+        referrer.email,
+        newUserName,
+        newBonusMonths,
+        referrer.preferred_language || 'el'
+      );
+
+      console.log(`✅ WEBHOOK: Email о bonus month отправлен рефереру ${referrer.email}`);
+    }
 
   } catch (error) {
     console.error('❌ WEBHOOK: Ошибка при начислении bonus month:', error);
