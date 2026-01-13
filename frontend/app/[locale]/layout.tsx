@@ -36,7 +36,7 @@ export default async function LocaleLayout({
   const dir = isRTL(locale) ? "rtl" : "ltr";
 
   return (
-    <div lang={locale} dir={dir} className={`${notoSans.variable} ${notoSansArabic.variable}`}>
+    <div lang={locale} dir={dir} className={`${notoSans.variable} ${notoSansArabic.variable}`} style={{ width: '100%' }}>
       <AuthProvider>
         {/* Mobile viewport wrapper for desktop preview */}
         <div className="mobile-preview-wrapper">{children}</div>
