@@ -22,7 +22,16 @@ export default function LanguageSelectLayout({
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
         />
       </head>
-      <body className={notoSans.variable}>
+      <body
+        className={notoSans.variable}
+        style={{
+          backgroundColor: '#1a1a1a',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh'
+        }}
+      >
         <div className="mobile-preview-wrapper">{children}</div>
       </body>
     </html>

@@ -56,7 +56,7 @@ body[dir="rtl"] {
 /* Mobile preview wrapper - shows mobile view on desktop */
 .mobile-preview-wrapper {
   width: 100%;
-  max-width: 800px;
+  max-width: 500px;
   height: 100vh;
   height: 100dvh;
   margin: 0 auto;
@@ -67,10 +67,10 @@ body[dir="rtl"] {
   isolation: isolate;
 }
 
-/* Phone frame on desktop */
-@media (min-width: 900px) {
+/* Frame on desktop */
+@media (min-width: 600px) {
   .mobile-preview-wrapper {
-    max-width: 800px;
+    max-width: 500px;
     height: 90vh;
     margin-top: 5vh;
     border-radius: 40px;
@@ -81,8 +81,8 @@ body[dir="rtl"] {
   }
 }
 
-/* On mobile/tablet devices, take full width */
-@media (max-width: 899px) {
+/* On mobile devices, take full width */
+@media (max-width: 599px) {
   .mobile-preview-wrapper {
     max-width: 100%;
     height: 100vh;
