@@ -58,12 +58,14 @@ body[dir="rtl"] {
   width: 100%;
   max-width: 420px;
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile browsers */
   margin: 0 auto;
   position: relative;
   background: white;
   box-shadow: var(--shadow-lg);
   overflow-y: auto;
   overflow-x: hidden;
+  isolation: isolate; /* Creates new stacking context */
 }
 
 /* On mobile devices, take full width */
