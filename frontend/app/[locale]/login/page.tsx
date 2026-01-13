@@ -79,7 +79,7 @@ export default function LoginPage() {
 
       {/* Content */}
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 safe-area-top safe-area-bottom py-8">
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-lg">
           <h1
             className="text-center text-slogan font-semibold"
             style={{ color: "#ff8f0a", marginBottom: "80px" }}
