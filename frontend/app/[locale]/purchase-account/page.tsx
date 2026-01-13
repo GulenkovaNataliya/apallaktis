@@ -99,7 +99,7 @@ export default function PurchaseAccountPage() {
       <div className="min-h-screen flex flex-col items-center justify-center py-20" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
 
         {/* Back Button */}
-        <div className="w-full max-w-md mb-6">
+        <div className="w-full max-w-sm mb-6">
           <button
             onClick={() => router.back()}
             style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
@@ -114,19 +114,19 @@ export default function PurchaseAccountPage() {
         </h1>
 
         {/* Subtitle */}
-        <p className="text-lg text-center mb-8 max-w-md" style={{ color: 'var(--polar)', opacity: 0.9 }}>
+        <p className="text-lg text-center mb-8 max-w-sm" style={{ color: 'var(--polar)', opacity: 0.9 }}>
           {t.subtitle}
         </p>
 
         {/* Free Month Notice */}
-        <p className="text-md text-center mb-12 max-w-md font-semibold" style={{ color: '#ff8f0a' }}>
+        <p className="text-md text-center mb-12 max-w-sm font-semibold" style={{ color: '#ff8f0a' }}>
           {t.firstMonthFree}
         </p>
 
         {/* Payment Methods */}
 
         {/* 1. Stripe Online Payment */}
-        <div className="w-full max-w-md mb-6">
+        <div className="w-full max-w-sm mb-6">
           <button
             onClick={handleStripePayment}
             className="w-full rounded-2xl flex flex-col items-center justify-center text-button relative"
@@ -152,7 +152,7 @@ export default function PurchaseAccountPage() {
         </div>
 
         {/* OR Divider */}
-        <div className="flex items-center w-full max-w-md mb-6">
+        <div className="flex items-center w-full max-w-sm mb-6">
           <div className="flex-1 h-px" style={{ backgroundColor: 'var(--polar)', opacity: 0.3 }} />
           <span className="px-4 text-sm" style={{ color: 'var(--polar)', opacity: 0.7 }}>
             {messages[locale]?.demoExpired?.or || 'Ή'}
@@ -161,7 +161,7 @@ export default function PurchaseAccountPage() {
         </div>
 
         {/* 2. Cash Payment */}
-        <div className="w-full max-w-md mb-6">
+        <div className="w-full max-w-sm mb-6">
           <p className="text-sm text-center mb-3" style={{ color: 'var(--polar)', opacity: 0.9 }}>
             {t.contactForCash}
           </p>
@@ -205,7 +205,7 @@ export default function PurchaseAccountPage() {
         </div>
 
         {/* OR Divider */}
-        <div className="flex items-center w-full max-w-md mb-6">
+        <div className="flex items-center w-full max-w-sm mb-6">
           <div className="flex-1 h-px" style={{ backgroundColor: 'var(--polar)', opacity: 0.3 }} />
           <span className="px-4 text-sm" style={{ color: 'var(--polar)', opacity: 0.7 }}>
             {messages[locale]?.demoExpired?.or || 'Ή'}
@@ -214,7 +214,7 @@ export default function PurchaseAccountPage() {
         </div>
 
         {/* 3. IRIS Transfer */}
-        <div className="w-full max-w-md mb-6">
+        <div className="w-full max-w-sm mb-6">
           <p className="text-sm text-center mb-3" style={{ color: 'var(--polar)', opacity: 0.9 }}>
             {t.contactForIris}
           </p>

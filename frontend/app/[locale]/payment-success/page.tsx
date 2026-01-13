@@ -75,12 +75,12 @@ export default function PaymentSuccessPage() {
         </h1>
 
         {/* Subtitle */}
-        <p className="text-lg text-center mb-8 max-w-md" style={{ color: 'var(--polar)', opacity: 0.9 }}>
+        <p className="text-lg text-center mb-8 max-w-sm" style={{ color: 'var(--polar)', opacity: 0.9 }}>
           {t.subtitle}
         </p>
 
         {/* Success Messages */}
-        <div className="w-full max-w-md mb-8 space-y-4">
+        <div className="w-full max-w-sm mb-8 space-y-4">
           <div
             className="p-4 rounded-lg text-center"
             style={{ backgroundColor: 'rgba(37, 211, 102, 0.1)', border: '2px solid #25D366' }}
@@ -119,7 +119,7 @@ export default function PaymentSuccessPage() {
         {/* Go to Dashboard Button */}
         <button
           onClick={() => router.push(`/${locale}/page-pay`)}
-          className="w-full max-w-md rounded-lg flex items-center justify-center text-button"
+          className="w-full max-w-sm rounded-lg flex items-center justify-center text-button"
           style={{
             minHeight: '52px',
             backgroundColor: 'var(--zanah)',

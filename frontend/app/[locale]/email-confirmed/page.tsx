@@ -70,7 +70,7 @@ export default function EmailConfirmedPage() {
         className="flex min-h-screen flex-col items-center justify-center gap-8 px-4"
         style={{ direction: isRTL ? "rtl" : "ltr" }}
       >
-        <div className="w-full max-w-md space-y-6 text-center">
+        <div className="w-full max-w-sm space-y-6 text-center">
           {/* Success Icon */}
           <div
             className="mx-auto flex h-24 w-24 items-center justify-center rounded-full"

@@ -28,7 +28,7 @@ export default function SubscriptionSuccessPage() {
     return (
       <BackgroundPage pageIndex={2}>
         <div className="flex min-h-screen items-center justify-center px-4">
-          <div className="w-full max-w-md text-center">
+          <div className="w-full max-w-sm text-center">
             <div className="mb-6 text-6xl">⏳</div>
             <p className="text-heading" style={{ color: "var(--polar)" }}>
               {t?.verifying || "Verifying payment..."}
@@ -42,7 +42,7 @@ export default function SubscriptionSuccessPage() {
   return (
     <BackgroundPage pageIndex={2}>
       <div className="flex min-h-screen flex-col items-center gap-12 pb-20" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px' }}>
-        <div className="w-full max-w-md space-y-6">
+        <div className="w-full max-w-sm space-y-6">
           {/* Success Icon */}
           <div className="text-center text-8xl mb-8">✅</div>
 

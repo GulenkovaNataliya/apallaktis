@@ -47,12 +47,12 @@ export default function DemoExpiredPage() {
         </h1>
 
         {/* Subtitle */}
-        <p className="text-lg text-center mb-8 max-w-md" style={{ color: 'var(--polar)' }}>
+        <p className="text-lg text-center mb-8 max-w-sm" style={{ color: 'var(--polar)' }}>
           {t.subtitle}
         </p>
 
         {/* Free Month Notice */}
-        <p className="text-md text-center mb-12 max-w-md font-semibold" style={{ color: '#ff8f0a' }}>
+        <p className="text-md text-center mb-12 max-w-sm font-semibold" style={{ color: '#ff8f0a' }}>
           {t.freeMonth}
         </p>
 
@@ -61,7 +61,7 @@ export default function DemoExpiredPage() {
           onClick={() => {
             router.push(`/${locale}/purchase-account`);
           }}
-          className="w-full max-w-md mb-6 rounded-lg flex items-center justify-center text-button"
+          className="w-full max-w-sm mb-6 rounded-lg flex items-center justify-center text-button"
           style={{
             minHeight: '52px',
             backgroundColor: 'var(--zanah)',
@@ -73,7 +73,7 @@ export default function DemoExpiredPage() {
         </button>
 
         {/* OR Divider */}
-        <div className="flex items-center w-full max-w-md mb-6">
+        <div className="flex items-center w-full max-w-sm mb-6">
           <div className="flex-1 h-px" style={{ backgroundColor: 'var(--polar)', opacity: 0.3 }} />
           <span className="px-4 text-sm" style={{ color: 'var(--polar)', opacity: 0.7 }}>
             {t.or}
@@ -82,7 +82,7 @@ export default function DemoExpiredPage() {
         </div>
 
         {/* Contact Admin Text */}
-        <p className="text-sm text-center mb-4 max-w-md" style={{ color: 'var(--polar)', opacity: 0.9 }}>
+        <p className="text-sm text-center mb-4 max-w-sm" style={{ color: 'var(--polar)', opacity: 0.9 }}>
           {t.contactAdmin}
         </p>
 
@@ -91,7 +91,7 @@ export default function DemoExpiredPage() {
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full max-w-md mb-4 rounded-lg flex items-center justify-center text-button"
+          className="w-full max-w-sm mb-4 rounded-lg flex items-center justify-center text-button"
           style={{
             minHeight: '52px',
             backgroundColor: '#25D366',
@@ -108,7 +108,7 @@ export default function DemoExpiredPage() {
           href={viberUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full max-w-md rounded-lg flex items-center justify-center text-button"
+          className="w-full max-w-sm rounded-lg flex items-center justify-center text-button"
           style={{
             minHeight: '52px',
             backgroundColor: '#7360F2',
