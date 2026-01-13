@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { type Locale } from "@/lib/messages";
 import BackgroundPage from "@/components/BackgroundPage";
+import AdminNavigation from "@/components/admin/AdminNavigation";
 
 interface AdminStats {
   totalUsers: number;
@@ -131,7 +132,8 @@ export default function AdminDashboard() {
 
   return (
     <BackgroundPage pageIndex={1}>
-      <div className="flex min-h-screen flex-col items-center gap-8 pb-20" style={{ paddingLeft: '30px', paddingRight: '30px', paddingTop: '180px' }}>
+      <AdminNavigation />
+      <div className="flex min-h-screen flex-col items-center gap-8 pb-20" style={{ paddingLeft: '30px', paddingRight: '30px', paddingTop: '120px' }}>
         <div className="w-full max-w-6xl space-y-6">
           {/* Header */}
           <h1

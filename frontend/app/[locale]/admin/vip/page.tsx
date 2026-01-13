@@ -5,6 +5,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { type Locale } from "@/lib/messages";
 import BackgroundPage from "@/components/BackgroundPage";
+import AdminNavigation from "@/components/admin/AdminNavigation";
 
 interface VIPUser {
   id: string;
@@ -208,7 +209,8 @@ export default function AdminVIP() {
 
   return (
     <BackgroundPage pageIndex={1}>
-      <div className="flex min-h-screen flex-col gap-8 pb-20" style={{ paddingLeft: '30px', paddingRight: '30px', paddingTop: '180px' }}>
+      <AdminNavigation />
+      <div className="flex min-h-screen flex-col gap-8 pb-20" style={{ paddingLeft: '30px', paddingRight: '30px', paddingTop: '120px' }}>
         <div className="w-full space-y-6" style={{ maxWidth: '1400px' }}>
           {/* Header */}
           <div className="flex items-center justify-between">
