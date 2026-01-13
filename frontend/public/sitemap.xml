@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Greek (default) -->
+  <url>
+    <loc>https://apallaktis.gr/el</loc>
+    <xhtml:link rel="alternate" hreflang="el" href="https://apallaktis.gr/el"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://apallaktis.gr/en"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://apallaktis.gr/ru"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://apallaktis.gr/uk"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://apallaktis.gr/sq"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://apallaktis.gr/bg"/>
+    <xhtml:link rel="alternate" hreflang="ro" href="https://apallaktis.gr/ro"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://apallaktis.gr/ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://apallaktis.gr/el"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- English -->
+  <url>
+    <loc>https://apallaktis.gr/en</loc>
+    <xhtml:link rel="alternate" hreflang="el" href="https://apallaktis.gr/el"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://apallaktis.gr/en"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://apallaktis.gr/ru"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://apallaktis.gr/uk"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://apallaktis.gr/sq"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://apallaktis.gr/bg"/>
+    <xhtml:link rel="alternate" hreflang="ro" href="https://apallaktis.gr/ro"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://apallaktis.gr/ar"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Russian -->
+  <url>
+    <loc>https://apallaktis.gr/ru</loc>
+    <xhtml:link rel="alternate" hreflang="el" href="https://apallaktis.gr/el"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://apallaktis.gr/en"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://apallaktis.gr/ru"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://apallaktis.gr/uk"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://apallaktis.gr/sq"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://apallaktis.gr/bg"/>
+    <xhtml:link rel="alternate" hreflang="ro" href="https://apallaktis.gr/ro"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://apallaktis.gr/ar"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Ukrainian -->
+  <url>
+    <loc>https://apallaktis.gr/uk</loc>
+    <xhtml:link rel="alternate" hreflang="el" href="https://apallaktis.gr/el"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://apallaktis.gr/en"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://apallaktis.gr/ru"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://apallaktis.gr/uk"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://apallaktis.gr/sq"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://apallaktis.gr/bg"/>
+    <xhtml:link rel="alternate" hreflang="ro" href="https://apallaktis.gr/ro"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://apallaktis.gr/ar"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Albanian -->
+  <url>
+    <loc>https://apallaktis.gr/sq</loc>
+    <xhtml:link rel="alternate" hreflang="el" href="https://apallaktis.gr/el"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://apallaktis.gr/en"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://apallaktis.gr/ru"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://apallaktis.gr/uk"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://apallaktis.gr/sq"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://apallaktis.gr/bg"/>
+    <xhtml:link rel="alternate" hreflang="ro" href="https://apallaktis.gr/ro"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://apallaktis.gr/ar"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Bulgarian -->
+  <url>
+    <loc>https://apallaktis.gr/bg</loc>
+    <xhtml:link rel="alternate" hreflang="el" href="https://apallaktis.gr/el"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://apallaktis.gr/en"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://apallaktis.gr/ru"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://apallaktis.gr/uk"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://apallaktis.gr/sq"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://apallaktis.gr/bg"/>
+    <xhtml:link rel="alternate" hreflang="ro" href="https://apallaktis.gr/ro"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://apallaktis.gr/ar"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Romanian -->
+  <url>
+    <loc>https://apallaktis.gr/ro</loc>
+    <xhtml:link rel="alternate" hreflang="el" href="https://apallaktis.gr/el"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://apallaktis.gr/en"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://apallaktis.gr/ru"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://apallaktis.gr/uk"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://apallaktis.gr/sq"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://apallaktis.gr/bg"/>
+    <xhtml:link rel="alternate" hreflang="ro" href="https://apallaktis.gr/ro"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://apallaktis.gr/ar"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Arabic -->
+  <url>
+    <loc>https://apallaktis.gr/ar</loc>
+    <xhtml:link rel="alternate" hreflang="el" href="https://apallaktis.gr/el"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://apallaktis.gr/en"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://apallaktis.gr/ru"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://apallaktis.gr/uk"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://apallaktis.gr/sq"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://apallaktis.gr/bg"/>
+    <xhtml:link rel="alternate" hreflang="ro" href="https://apallaktis.gr/ro"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://apallaktis.gr/ar"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Terms & Privacy pages -->
+  <url>
+    <loc>https://apallaktis.gr/el/terms</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://apallaktis.gr/el/privacy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Subscription page -->
+  <url>
+    <loc>https://apallaktis.gr/el/subscription</loc>
+    <xhtml:link rel="alternate" hreflang="el" href="https://apallaktis.gr/el/subscription"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://apallaktis.gr/en/subscription"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://apallaktis.gr/ru/subscription"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>

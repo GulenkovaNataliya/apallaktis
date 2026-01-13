@@ -1,0 +1,21 @@
+# Robots.txt for ΑΠΑΛΛΑΚΤΗΣ
+# https://apallaktis.gr
+
+User-agent: *
+Allow: /
+
+# Disallow admin and API routes
+Disallow: /api/
+Disallow: /*/admin/
+Disallow: /*/dashboard/
+Disallow: /*/login
+Disallow: /*/register
+Disallow: /*/reset-password
+Disallow: /*/update-password
+
+# Allow static assets
+Allow: /icon-*.png
+Allow: /manifest.json
+
+# Sitemap location
+Sitemap: https://apallaktis.gr/sitemap.xml
