@@ -2,12 +2,17 @@
 // ===================================================
 
 import * as XLSX from 'xlsx';
-import type { PropertyObject } from '@/types/object';
 import type { ObjectExpense } from '@/types/objectExpense';
 import type { Locale } from '@/lib/messages';
 
+// Simple property type for export (only id and name needed)
+interface ExportProperty {
+  id: string;
+  name: string;
+}
+
 interface ExportData {
-  properties: PropertyObject[];
+  properties: ExportProperty[];
   expenses: Map<string, ObjectExpense[]>; // propertyId -> expenses[]
   dateFrom: string;
   dateTo: string;

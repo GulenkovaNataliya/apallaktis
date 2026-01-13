@@ -1071,7 +1071,7 @@ function AddExpenseForm({
 
   const handleVoiceInput = () => {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      alert('Voice input is not supported in your browser. Please use Chrome, Edge, or Safari.');
+      alert(t.voiceInputNotSupported);
       return;
     }
 
@@ -1103,7 +1103,7 @@ function AddExpenseForm({
     recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error);
       setIsRecording(false);
-      alert('Voice input failed. Please try again.');
+      alert(t.voiceInputFailed);
     };
 
     recognition.onend = () => {
@@ -1341,7 +1341,7 @@ function AddExpenseForm({
               boxShadow: isRecording ? '0 4px 8px rgba(255, 255, 255, 0.3)' : '0 4px 8px var(--deep-teal)',
             }}
           >
-            🎤 {isRecording ? '...' : 'Voice'}
+            🎤 {isRecording ? '...' : t.voiceButton}
           </button>
         </div>
         <textarea

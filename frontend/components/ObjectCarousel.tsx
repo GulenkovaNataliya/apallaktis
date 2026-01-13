@@ -224,7 +224,7 @@ function ObjectCard({
     >
       <div className="flex-1 flex flex-col justify-center">
         <div className="space-y-4">
-          <h3 className="text-xl font-bold text-center" style={{ color: 'var(--deep-teal)' }}>
+          <h3 className="text-3xl font-bold text-center" style={{ color: 'var(--deep-teal)' }}>
             {object.name}
           </h3>
 
@@ -232,10 +232,10 @@ function ObjectCard({
             {/* Client Name - show only if filled */}
             {object.clientName && (
               <div className="text-center">
-                <p className="text-xs opacity-70" style={{ color: 'var(--deep-teal)' }}>
+                <p className="text-sm opacity-70" style={{ color: 'var(--deep-teal)' }}>
                   {clientLabel}
                 </p>
-                <p className="text-sm font-semibold" style={{ color: 'var(--deep-teal)' }}>
+                <p className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
                   {object.clientName}
                 </p>
               </div>
@@ -244,10 +244,10 @@ function ObjectCard({
             {/* Address - show only if filled */}
             {object.address && (
               <div className="text-center">
-                <p className="text-xs opacity-70" style={{ color: 'var(--deep-teal)' }}>
+                <p className="text-sm opacity-70" style={{ color: 'var(--deep-teal)' }}>
                   {addressLabel}
                 </p>
-                <p className="text-sm" style={{ color: 'var(--deep-teal)' }}>
+                <p className="text-lg" style={{ color: 'var(--deep-teal)' }}>
                   {object.address}
                 </p>
               </div>
@@ -256,10 +256,10 @@ function ObjectCard({
             {/* Contract Price - show only if > 0 */}
             {object.contractPrice > 0 && (
               <div className="text-center">
-                <p className="text-xs opacity-70" style={{ color: 'var(--deep-teal)' }}>
+                <p className="text-sm opacity-70" style={{ color: 'var(--deep-teal)' }}>
                   {priceLabel}
                 </p>
-                <p className="text-lg font-bold" style={{ color: 'var(--deep-teal)' }}>
+                <p className="text-2xl font-bold" style={{ color: 'var(--deep-teal)' }}>
                   {formatEuro(object.contractPrice)}
                 </p>
               </div>
@@ -275,7 +275,7 @@ function ObjectCard({
               e.stopPropagation();
               onEdit();
             }}
-            className="flex-1 px-4 py-2 rounded-lg text-sm font-semibold"
+            className="flex-1 px-4 py-2 rounded-lg text-lg font-semibold"
             style={{ backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
           >
             {editLabel}
@@ -285,7 +285,7 @@ function ObjectCard({
               e.stopPropagation();
               onDelete();
             }}
-            className="flex-1 px-4 py-2 rounded-lg text-sm font-semibold"
+            className="flex-1 px-4 py-2 rounded-lg text-lg font-semibold"
             style={{ backgroundColor: 'var(--orange)', color: 'white' }}
           >
             {deleteLabel}

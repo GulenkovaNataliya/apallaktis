@@ -88,8 +88,8 @@ export default function ResetPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full rounded-2xl px-6 text-body border border-gray-300 focus:outline-none focus:border-blue-500"
-                  style={{ minHeight: "52px" }}
+                  className="w-full rounded-2xl text-body border border-gray-300 focus:outline-none focus:border-blue-500"
+                  style={{ minHeight: "52px", paddingLeft: '40px', paddingRight: '40px' }}
                 />
               </div>
 

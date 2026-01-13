@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Ищем код верификации
     const { data: verificationRecord, error: findError } = await supabase

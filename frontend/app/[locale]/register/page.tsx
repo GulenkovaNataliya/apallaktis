@@ -212,8 +212,8 @@ export default function RegisterPage() {
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              className="text-body w-full rounded-2xl px-6 border border-gray-300 focus:outline-none focus:border-blue-500"
-              style={{ minHeight: '52px' }}
+              className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+              style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px' }}
             />
 
             <div>
@@ -226,10 +226,10 @@ export default function RegisterPage() {
                   setErrors({ ...errors, email: "" });
                 }}
                 required
-                className={`text-body w-full rounded-2xl px-6 border focus:outline-none ${
+                className={`text-body w-full rounded-2xl border focus:outline-none ${
                   errors.email ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                 }`}
-                style={{ minHeight: '52px' }}
+                style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px' }}
               />
               {errors.email && (
                 <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
@@ -248,10 +248,10 @@ export default function RegisterPage() {
                   setErrors({ ...errors, password: "" });
                 }}
                 required
-                className={`text-body w-full rounded-2xl px-6 border focus:outline-none ${
+                className={`text-body w-full rounded-2xl border focus:outline-none ${
                   errors.password ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                 }`}
-                style={{ minHeight: '52px' }}
+                style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px' }}
               />
               {errors.password && (
                 <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
@@ -270,10 +270,10 @@ export default function RegisterPage() {
                   setErrors({ ...errors, confirmPassword: "" });
                 }}
                 required
-                className={`text-body w-full rounded-2xl px-6 border focus:outline-none ${
+                className={`text-body w-full rounded-2xl border focus:outline-none ${
                   errors.confirmPassword ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                 }`}
-                style={{ minHeight: '52px' }}
+                style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px' }}
               />
               {errors.confirmPassword && (
                 <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
@@ -305,10 +305,10 @@ export default function RegisterPage() {
                     setErrors({ ...errors, phone: "" });
                   }}
                   required
-                  className={`text-body rounded-2xl px-6 border flex-1 focus:outline-none ${
+                  className={`text-body rounded-2xl border flex-1 focus:outline-none ${
                     errors.phone ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                   }`}
-                  style={{ minHeight: '52px' }}
+                  style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px' }}
                 />
               </div>
               {errors.phone && (
@@ -327,8 +327,8 @@ export default function RegisterPage() {
                   value={formData.companyName}
                   onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                   required
-                  className="text-body w-full rounded-2xl px-6 border border-gray-300 focus:outline-none focus:border-blue-500"
-                  style={{ minHeight: '52px' }}
+                  className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+                  style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px' }}
                 />
 
                 <div>
@@ -341,10 +341,10 @@ export default function RegisterPage() {
                       setErrors({ ...errors, afm: "" });
                     }}
                     required
-                    className={`text-body w-full rounded-2xl px-6 border focus:outline-none ${
+                    className={`text-body w-full rounded-2xl border focus:outline-none ${
                       errors.afm ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                     }`}
-                    style={{ minHeight: '52px' }}
+                    style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px' }}
                   />
                   {errors.afm && (
                     <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>

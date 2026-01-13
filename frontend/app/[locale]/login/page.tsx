@@ -72,6 +72,8 @@ export default function LoginPage() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
+          width: '100%',
+          height: '100%',
         }}
       />
 
@@ -79,8 +81,8 @@ export default function LoginPage() {
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 safe-area-top safe-area-bottom py-8">
         <div className="w-full max-w-sm">
           <h1
-            className="text-center text-slogan font-semibold mb-12"
-            style={{ color: "#ff8f0a" }}
+            className="text-center text-slogan font-semibold"
+            style={{ color: "#ff8f0a", marginBottom: "80px" }}
           >
             {t.title}
           </h1>
@@ -96,8 +98,8 @@ export default function LoginPage() {
                 setError("");
               }}
               required
-              className="text-body w-full rounded-2xl px-6 border border-gray-300 focus:outline-none focus:border-blue-500"
-              style={{ minHeight: '52px' }}
+              className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+              style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px', color: 'var(--deep-teal)' }}
             />
 
             {/* Password */}
@@ -110,8 +112,8 @@ export default function LoginPage() {
                 setError("");
               }}
               required
-              className="text-body w-full rounded-2xl px-6 border border-gray-300 focus:outline-none focus:border-blue-500"
-              style={{ minHeight: '52px' }}
+              className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+              style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px', color: 'var(--deep-teal)' }}
             />
 
             {/* Forgot Password Link */}

@@ -416,15 +416,15 @@ export default function RewardsSection({ user, locale }: RewardsSectionProps) {
             }}
           >
             <h3 className="text-subheading font-bold mb-4" style={{ color: '#FFD700' }}>
-              👑 VIP STATUS ACTIVATED
+              {t.vipStatus.title}
             </h3>
             <ul className="space-y-2 text-body mb-4" style={{ color: '#ffffff' }}>
-              <li>• Unlimited projects</li>
-              <li>• Unlimited team</li>
-              <li>• All features</li>
+              <li>• {t.vipStatus.unlimitedProjects}</li>
+              <li>• {t.vipStatus.unlimitedTeam}</li>
+              <li>• {t.vipStatus.allFeatures}</li>
             </ul>
             <p className="text-sm font-bold" style={{ color: '#ffffff' }}>
-              Active until: {(user.vipExpiresAt && user.vipExpiresAt !== null) ? new Date(user.vipExpiresAt).toLocaleDateString() : 'Forever'}
+              {t.vipStatus.activeUntil} {(user.vipExpiresAt && user.vipExpiresAt !== null) ? new Date(user.vipExpiresAt).toLocaleDateString() : t.vipStatus.forever}
             </p>
           </div>
         )}
@@ -456,16 +456,16 @@ export default function RewardsSection({ user, locale }: RewardsSectionProps) {
             }}
           >
             <h3 className="text-subheading font-bold mb-3" style={{ color: '#ffffff' }}>
-              🎁 REFERRAL PROGRAM
+              {t.referral.title}
             </h3>
             <p className="text-small mb-4" style={{ color: '#ffffff' }}>
-              Invite friends and earn bonuses!
+              {t.referral.description}
             </p>
 
             {/* Referral Link */}
             <div className="mb-6">
               <p className="text-small font-bold mb-2" style={{ color: '#ffffff' }}>
-                Your link:
+                {t.referral.yourLink}
               </p>
               <div className="flex gap-2">
                 <input
@@ -490,7 +490,7 @@ export default function RewardsSection({ user, locale }: RewardsSectionProps) {
                     paddingRight: '1rem',
                   }}
                 >
-                  Copy
+                  {t.referral.copy}
                 </button>
                 <button
                   onClick={shareLink}
@@ -503,7 +503,7 @@ export default function RewardsSection({ user, locale }: RewardsSectionProps) {
                     paddingRight: '1rem',
                   }}
                 >
-                  Share
+                  {t.referral.share}
                 </button>
               </div>
             </div>
@@ -511,24 +511,24 @@ export default function RewardsSection({ user, locale }: RewardsSectionProps) {
             {/* Stats */}
             <div className="mb-6">
               <p className="text-small font-bold mb-2" style={{ color: '#ffffff' }}>
-                📊 Stats:
+                {t.referral.stats}
               </p>
               <div className="space-y-1 text-small" style={{ color: '#ffffff' }}>
-                <p>• Friends invited: 0</p>
-                <p>• Active subscriptions: 0</p>
-                <p>• Bonus months: {user.bonusMonths ?? 0}</p>
+                <p>• {t.referral.friendsInvited} 0</p>
+                <p>• {t.referral.activeSubscriptions} 0</p>
+                <p>• {t.referral.bonusMonths} {user.bonusMonths ?? 0}</p>
               </div>
             </div>
 
             {/* How it works */}
             <div>
               <p className="text-small font-bold mb-2" style={{ color: '#ffffff' }}>
-                💰 How it works:
+                {t.referral.howItWorks}
               </p>
               <div className="space-y-1 text-small" style={{ color: '#ffffff' }}>
-                <p>• Friend registers via your link</p>
-                <p>• Friend purchases subscription</p>
-                <p>• YOU get +1 free month</p>
+                <p>• {t.referral.step1}</p>
+                <p>• {t.referral.step2}</p>
+                <p>• {t.referral.step3}</p>
               </div>
             </div>
           </div>
@@ -544,13 +544,14 @@ export default function RewardsSection({ user, locale }: RewardsSectionProps) {
         }}
       >
         <h3 className="text-subheading font-bold mb-4 text-center" style={{ color: '#ff8f0a' }}>
-          📞 NEED HELP?
+          {t.support.title}
         </h3>
         <div className="flex gap-3 mb-4">
           <a
-            href="viber://chat?number=%2B306912345678"
+            href="viber://chat?number=%2B306983208844"
             className="flex-1 btn-base text-button flex items-center justify-center"
             style={{
+              minHeight: '52px',
               backgroundColor: '#7360f2',
               color: 'white',
             }}
@@ -558,11 +559,12 @@ export default function RewardsSection({ user, locale }: RewardsSectionProps) {
             💬 Viber
           </a>
           <a
-            href="https://wa.me/306912345678"
+            href="https://wa.me/306983208844"
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 btn-base text-button flex items-center justify-center"
             style={{
+              minHeight: '52px',
               backgroundColor: '#25D366',
               color: 'white',
             }}
@@ -570,9 +572,14 @@ export default function RewardsSection({ user, locale }: RewardsSectionProps) {
             📱 WhatsApp
           </a>
         </div>
-        <p className="text-small text-center" style={{ color: '#ffffff', opacity: 0.9 }}>
-          Response time: <strong>{getResponseTime()}</strong>
-        </p>
+        <div className="text-body text-center">
+          <p style={{ color: '#ff8f0a', fontWeight: 600 }}>
+            {t.support.responseTime}
+          </p>
+          <p style={{ color: '#ff8f0a', fontWeight: 600 }}>
+            {getResponseTime()}
+          </p>
+        </div>
       </div>
     </div>
   );

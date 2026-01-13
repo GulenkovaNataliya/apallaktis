@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Проверяем, существует ли пользователь
     const { data: user, error: userError } = await supabase

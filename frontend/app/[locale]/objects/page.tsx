@@ -128,10 +128,10 @@ export default function ObjectsPage() {
           </h1>
 
           {/* Filter Toggle */}
-          <div className="flex gap-2" style={{ marginTop: '48px', marginBottom: '48px' }}>
+          <div className="flex gap-6" style={{ marginTop: '48px', marginBottom: '48px' }}>
             <button
               onClick={() => setFilter('all')}
-              className="flex-1 rounded-lg text-subheading"
+              className="flex-1 rounded-lg text-button px-6 py-3"
               style={{
                 minHeight: '52px',
                 backgroundColor: filter === 'all' ? 'var(--zanah)' : 'var(--polar)',
@@ -143,7 +143,7 @@ export default function ObjectsPage() {
             </button>
             <button
               onClick={() => setFilter('open')}
-              className="flex-1 rounded-lg text-subheading"
+              className="flex-1 rounded-lg text-button px-6 py-3"
               style={{
                 minHeight: '52px',
                 backgroundColor: filter === 'open' ? 'var(--zanah)' : 'var(--polar)',
@@ -155,7 +155,7 @@ export default function ObjectsPage() {
             </button>
             <button
               onClick={() => setFilter('closed')}
-              className="flex-1 rounded-lg text-subheading"
+              className="flex-1 rounded-lg text-button px-6 py-3"
               style={{
                 minHeight: '52px',
                 backgroundColor: filter === 'closed' ? 'var(--zanah)' : 'var(--polar)',
@@ -170,8 +170,8 @@ export default function ObjectsPage() {
           {/* Add Object Button */}
           <button
             onClick={handleAddObjectClick}
-            className="btn-universal w-full text-subheading"
-            style={{ minHeight: '52px', marginBottom: '52px' }}
+            className="btn-universal w-full text-button"
+            style={{ minHeight: '52px', marginBottom: '48px' }}
           >
             {t.addNew}
             {isDemo && objects.length >= 2 && (
@@ -407,15 +407,15 @@ function ObjectForm({
         <button
           type="button"
           onClick={onCancel}
-          className="btn-universal flex-1"
-          style={{ minHeight: '52px', backgroundColor: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
+          className="btn-universal flex-1 text-button"
+          style={{ minHeight: '52px', backgroundColor: 'var(--polar)' }}
         >
           {t.cancel || 'Ακύρωση'}
         </button>
         <button
           type="submit"
-          className="btn-universal flex-1"
-          style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', fontSize: '18px', fontWeight: 600 }}
+          className="btn-universal flex-1 text-button"
+          style={{ minHeight: '52px', backgroundColor: 'var(--zanah)' }}
         >
           {t.save || 'Αποθήκευση'}
         </button>

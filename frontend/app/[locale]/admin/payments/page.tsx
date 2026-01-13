@@ -31,11 +31,6 @@ export default function AdminPayments() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [filterType, setFilterType] = useState<string>("all");
 
-  useEffect(() => {
-    checkAuth();
-    loadPayments();
-  }, [filterMethod, filterStatus, filterType]);
-
   async function checkAuth() {
     const supabase = createClient();
     const { data: { session } } = await supabase.auth.getSession();
@@ -68,7 +63,7 @@ export default function AdminPayments() {
 
     try {
       // Get all users with their payment info
-      let query = supabase
+      const query = supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
@@ -100,6 +95,12 @@ export default function AdminPayments() {
       console.error('Error loading payments:', error);
     }
   }
+
+  useEffect(() => {
+    checkAuth();
+    loadPayments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterMethod, filterStatus, filterType]);
 
   const filteredPayments = payments.filter(payment => {
     if (filterMethod !== 'all' && payment.payment_method !== filterMethod) return false;

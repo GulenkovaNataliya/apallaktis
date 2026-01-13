@@ -58,7 +58,7 @@ const CACHE_DURATION_HOURS = 24;
 export async function POST(request: NextRequest) {
   try {
     // Get Supabase client
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Check authentication
     const {
@@ -325,7 +325,7 @@ async function saveLookupResult(
     }
 
     // 2. Log lookup in audit table
-    const headersList = headers();
+    const headersList = await headers();
     const ipAddress = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown';
     const userAgent = headersList.get('user-agent') || 'unknown';
 

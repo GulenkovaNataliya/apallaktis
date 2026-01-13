@@ -30,6 +30,18 @@ interface DailyRegistration {
   count: number;
 }
 
+interface UserProfile {
+  id: string;
+  email: string | null;
+  name: string;
+  account_number: number;
+  referral_code: string | null;
+  referred_by: string | null;
+  subscription_status: string;
+  bonus_months: number | null;
+  created_at: string;
+}
+
 export default function AdminReferrals() {
   const params = useParams();
   const router = useRouter();
@@ -38,11 +50,6 @@ export default function AdminReferrals() {
   const [stats, setStats] = useState<ReferralStats | null>(null);
   const [topReferrers, setTopReferrers] = useState<TopReferrer[]>([]);
   const [dailyRegistrations, setDailyRegistrations] = useState<DailyRegistration[]>([]);
-
-  useEffect(() => {
-    checkAuth();
-    loadReferralStats();
-  }, []);
 
   async function checkAuth() {
     const supabase = createClient();
@@ -72,11 +79,12 @@ export default function AdminReferrals() {
 
     try {
       // Get all users
-      const { data: users } = await supabase
+      const { data } = await supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
 
+      const users = data as UserProfile[] | null;
       if (!users) return;
 
       // Calculate overall stats
@@ -96,7 +104,7 @@ export default function AdminReferrals() {
 
       // Calculate top referrers
       const referrerMap = new Map<string, {
-        user: any;
+        user: UserProfile;
         registrations: number;
         conversions: number;
       }>();
@@ -163,6 +171,12 @@ export default function AdminReferrals() {
       console.error('Error loading referral stats:', error);
     }
   }
+
+  useEffect(() => {
+    checkAuth();
+    loadReferralStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function exportToExcel() {
     // Simple CSV export

@@ -96,7 +96,7 @@ export default function PurchaseAccountPage() {
 
   return (
     <BackgroundPage pageIndex={1}>
-      <div className="min-h-screen flex flex-col items-center justify-center px-10 py-20">
+      <div className="min-h-screen flex flex-col items-center justify-center py-20" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
 
         {/* Back Button */}
         <div className="w-full max-w-md mb-6">

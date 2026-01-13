@@ -5,10 +5,24 @@ import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { type Locale } from "@/lib/messages";
 import BackgroundPage from "@/components/BackgroundPage";
+import type { ObjectExpense } from "@/types/objectExpense";
 
 interface Property {
   id: string;
   name: string;
+}
+
+interface ExportTexts {
+  title: string;
+  selectProperties: string;
+  selectAll: string;
+  deselectAll: string;
+  period: string;
+  from: string;
+  to: string;
+  downloadPDF: string;
+  downloadExcel: string;
+  loading: string;
 }
 
 export default function ExportPage() {
@@ -104,7 +118,7 @@ export default function ExportPage() {
           const parsedExpenses = JSON.parse(storedExpenses);
 
           // Filter by date range
-          const filteredExpenses = parsedExpenses.filter((expense: any) => {
+          const filteredExpenses = parsedExpenses.filter((expense: ObjectExpense) => {
             const expenseDate = new Date(expense.date);
             return expenseDate >= dateFromObj && expenseDate <= dateToObj;
           });
@@ -177,7 +191,7 @@ export default function ExportPage() {
             const parsedExpenses = JSON.parse(storedExpenses);
 
             // Filter by date range
-            const filteredExpenses = parsedExpenses.filter((expense: any) => {
+            const filteredExpenses = parsedExpenses.filter((expense: ObjectExpense) => {
               const expenseDate = new Date(expense.date);
               return expenseDate >= dateFromObj && expenseDate <= dateToObj;
             });
@@ -205,7 +219,7 @@ export default function ExportPage() {
   }
 
   // Тексты
-  const texts: Record<string, any> = {
+  const texts: Record<string, ExportTexts> = {
     el: {
       title: "Εξαγωγή Εξόδων",
       selectProperties: "Επιλέξτε Ακίνητα",

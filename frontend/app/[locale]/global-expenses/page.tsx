@@ -38,7 +38,7 @@ export default function GlobalExpensesPage() {
     if (storedExpenses) {
       const parsedExpenses = JSON.parse(storedExpenses);
       // Convert date strings back to Date objects
-      const expensesWithDates = parsedExpenses.map((expense: any) => ({
+      const expensesWithDates = parsedExpenses.map((expense: GlobalExpense) => ({
         ...expense,
         date: expense.date ? new Date(expense.date) : undefined,
         createdAt: new Date(expense.createdAt),
@@ -101,22 +101,22 @@ export default function GlobalExpensesPage() {
             {t.title}
           </h1>
 
-          {/* Add Expense Button */}
-          <button
-            onClick={() => setView('add-expense')}
-            className="btn-universal w-full"
-            style={{ minHeight: '104px', marginTop: '50px', marginBottom: '52px', fontSize: '18px', fontWeight: 600 }}
-          >
-            {t.addNew}
-          </button>
-
           {/* Manage Categories Button */}
           <button
             onClick={() => setView('categories')}
-            className="btn-universal w-full mb-8"
-            style={{ minHeight: '104px', fontSize: '18px', fontWeight: 600 }}
+            className="btn-universal w-full text-button"
+            style={{ minHeight: '52px', marginBottom: '48px' }}
           >
             {t.manageCategories}
+          </button>
+
+          {/* Add Expense Button */}
+          <button
+            onClick={() => setView('add-expense')}
+            className="btn-universal w-full text-button"
+            style={{ minHeight: '52px', marginBottom: '48px' }}
+          >
+            {t.addNew}
           </button>
 
           {/* Expenses List */}
@@ -237,8 +237,8 @@ export default function GlobalExpensesPage() {
           {/* Add Category Button */}
           <button
             onClick={() => setView('add-category')}
-            className="btn-universal w-full mb-8"
-            style={{ minHeight: '104px', marginTop: '50px', fontSize: '18px', fontWeight: 600 }}
+            className="btn-universal w-full text-button"
+            style={{ minHeight: '52px', marginBottom: '48px' }}
           >
             {t.addCategory}
           </button>
@@ -542,13 +542,13 @@ function ExpenseForm({
       setInputMethod('voice');
     };
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: Event & { results: SpeechRecognitionResultList }) => {
       const transcript = event.results[0][0].transcript;
       setFormData({ ...formData, description: transcript });
       setIsRecording(false);
     };
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event: Event & { error: string }) => {
       console.error('Speech recognition error:', event.error);
       setIsRecording(false);
       alert('Voice input failed. Please try again.');
@@ -666,7 +666,7 @@ function ExpenseForm({
       {/* Payment Method Selection */}
       <div>
         <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
-          Payment Method
+          {t.paymentMethod}
         </label>
         {paymentMethods.length === 0 ? (
           <Link
@@ -695,7 +695,7 @@ function ExpenseForm({
       {/* Date */}
       <div>
         <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
-          Date
+          {t.date}
         </label>
         <input
           type="date"
@@ -756,7 +756,7 @@ function ExpenseForm({
               color: isRecording ? 'white' : 'var(--deep-teal)',
             }}
           >
-            🎤 {isRecording ? '...' : 'Voice'}
+            🎤 {isRecording ? '...' : t.voiceButton}
           </button>
         </div>
         <textarea
@@ -775,12 +775,12 @@ function ExpenseForm({
       {/* Receipt Photo */}
       <div>
         <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
-          Receipt Photo
+          {t.receiptPhoto}
         </label>
         {!photoPreview ? (
           <label className="block w-full p-4 rounded-lg text-center cursor-pointer"
             style={{ border: '2px dashed var(--polar)', color: 'var(--polar)' }}>
-            <span className="text-button">Upload Photo</span>
+            <span className="text-button">{t.uploadPhoto}</span>
             <input
               type="file"
               accept="image/*"
@@ -802,7 +802,7 @@ function ExpenseForm({
               className="absolute top-2 right-2 px-3 py-1 rounded-lg text-sm"
               style={{ backgroundColor: '#ff6a1a', color: 'white' }}
             >
-              Remove
+              {t.removePhoto}
             </button>
           </div>
         )}

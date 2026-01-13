@@ -28,11 +28,6 @@ export default function AdminVIP() {
   const [reason, setReason] = useState("");
   const [vipUsers, setVIPUsers] = useState<VIPUser[]>([]);
 
-  useEffect(() => {
-    checkAuth();
-    loadVIPUsers();
-  }, []);
-
   async function checkAuth() {
     const supabase = createClient();
     const { data: { session } } = await supabase.auth.getSession();
@@ -66,6 +61,12 @@ export default function AdminVIP() {
 
     setVIPUsers(data || []);
   }
+
+  useEffect(() => {
+    checkAuth();
+    loadVIPUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function activateVIP() {
     if (!email.trim()) {

@@ -123,8 +123,8 @@ export default function PaymentMethodsPage() {
         {/* Add Button */}
         <button
           onClick={handleAdd}
-          className="btn-universal w-full mb-8"
-          style={{ minHeight: '104px', marginTop: '50px', fontSize: '18px', fontWeight: 600 }}
+          className="btn-universal w-full text-button"
+          style={{ minHeight: '52px', marginBottom: '48px' }}
         >
           {t.addNew}
         </button>

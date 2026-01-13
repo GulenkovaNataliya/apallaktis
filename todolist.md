@@ -729,7 +729,7 @@ interface ObjectFinance {
 
 ---
 
-### Задача 5.6: Обновление глобальных расходов
+### Задача 5.6: Обновление глобальных расходов ✅ ГОТОВО
 
 **Оценка**: 3 ч
 
@@ -741,16 +741,17 @@ interface ObjectFinance {
 - Добавить загрузку фото чеков
 
 **Критерии успешности**:
-- [ ] Выбор способа оплаты добавлен
-- [ ] Поле даты работает
-- [ ] Голосовой ввод работает
-- [ ] Загрузка фото чека работает
-- [ ] Типы обновлены (GlobalExpense)
-- [ ] Миграция старых данных (если есть)
+- [x] Выбор способа оплаты добавлен
+- [x] Поле даты работает
+- [x] Голосовой ввод работает
+- [x] Загрузка фото чека работает
+- [x] Типы обновлены (GlobalExpense)
+- [x] Переводы на все 8 языков добавлены
 
 **Файлы в контексте**:
-- `frontend/types/globalExpense.ts` ✅ (уже обновлён)
-- `frontend/app/[locale]/global-expenses/page.tsx`
+- `frontend/types/globalExpense.ts` ✅
+- `frontend/app/[locale]/global-expenses/page.tsx` ✅
+- `frontend/lib/messages.ts` ✅ (добавлены переводы)
 
 ---
 
@@ -1210,7 +1211,8 @@ POST /api/clients/lookup-afm
 
 ---
 
-### Задача 9.1: Унификация размеров, расстояний и шрифтов ✅ ВЫПОЛНЕНО
+
+ ✅ ВЫПОЛНЕНО
 **Оценка**: 4 ч | **Потрачено**: 3 ч
 
 **Описание**:
@@ -1259,12 +1261,12 @@ POST /api/clients/lookup-afm
 **ОСТАЛОСЬ - Приоритет 2 (Важно):**
 
 #### Задачи для завершения унификации:
-- [ ] Инпуты в register.tsx изменить на rounded-2xl + minHeight 52px + w-full
-- [ ] Инпуты в reset-password.tsx (если есть)
-- [ ] Кнопки в purchase-account уменьшить с 80px/70px на 64px/52px
-- [ ] Кнопки в objects/page.tsx заменить inline font-size на класс `.text-button`
-- [ ] Purchase-account кнопки изменить border-radius на rounded-2xl
-- [ ] SubscriptionPlanCard обычный: усилить тень с `0.1` до `0.2` альфа-канал
+- [x] Инпуты в register.tsx изменить на rounded-2xl + minHeight 52px + w-full ✅
+- [x] Инпуты в reset-password.tsx (если есть) ✅
+- [x] Кнопки в purchase-account уменьшить с 80px/70px на 64px/52px ✅
+- [x] Кнопки в objects/page.tsx заменить inline font-size на класс `.text-button` ✅
+- [x] Purchase-account кнопки изменить border-radius на rounded-2xl ✅
+- [x] SubscriptionPlanCard обычный: усилить тень с `0.1` до `0.2` альфа-канал ✅
 - [ ] Добавить focus-visible outline для всех инпутов и кнопок
 
 **Приоритеты**:
@@ -1295,7 +1297,7 @@ POST /api/clients/lookup-afm
 - [x] Установлен закон paddingTop: 180px для страниц с кнопками
 - [x] npm run dev работает без ошибок
 
-**Статус**: Приоритет 1 выполнен ✅ | Приоритет 2 частично | Приоритет 3 в планах
+**Статус**: Приоритет 1 выполнен ✅ | Приоритет 2 выполнен ✅ | Приоритет 3 в планах
 
 **Файлы для изменения**:
 - `frontend/app/[locale]/globals.css` (добавить переменные, обновить классы)

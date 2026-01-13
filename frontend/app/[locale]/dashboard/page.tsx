@@ -8,6 +8,146 @@ import RewardsSection from "@/components/RewardsSection";
 import BackgroundPage from "@/components/BackgroundPage";
 import { type User } from "@/types/user";
 
+// Translations for quick actions
+const translations = {
+  el: {
+    quickActions: "Γρήγορες Ενέργειες",
+    profile: "Προφίλ",
+    profileDesc: "Επεξεργασία προσωπικών στοιχείων",
+    subscription: "Συνδρομή",
+    subscriptionDesc: "Διαχείριση πλάνου",
+    settings: "Ρυθμίσεις",
+    settingsDesc: "Ειδοποιήσεις & γλώσσα",
+    security: "Ασφάλεια",
+    securityDesc: "Κωδικός & συνεδρίες",
+    referral: "Παραπομπές",
+    referralDesc: "Κερδίστε δωρεάν μήνες",
+    export: "Εξαγωγή",
+    exportDesc: "Λήψη δεδομένων",
+    goToDashboard: "Μετάβαση στον Πίνακα",
+    logout: "Αποσύνδεση",
+  },
+  ru: {
+    quickActions: "Быстрые Действия",
+    profile: "Профиль",
+    profileDesc: "Редактировать личные данные",
+    subscription: "Подписка",
+    subscriptionDesc: "Управление планом",
+    settings: "Настройки",
+    settingsDesc: "Уведомления и язык",
+    security: "Безопасность",
+    securityDesc: "Пароль и сессии",
+    referral: "Рефералы",
+    referralDesc: "Заработайте бесплатные месяцы",
+    export: "Экспорт",
+    exportDesc: "Скачать данные",
+    goToDashboard: "Перейти к Панели",
+    logout: "Выход",
+  },
+  en: {
+    quickActions: "Quick Actions",
+    profile: "Profile",
+    profileDesc: "Edit personal information",
+    subscription: "Subscription",
+    subscriptionDesc: "Manage your plan",
+    settings: "Settings",
+    settingsDesc: "Notifications & language",
+    security: "Security",
+    securityDesc: "Password & sessions",
+    referral: "Referrals",
+    referralDesc: "Earn free months",
+    export: "Export",
+    exportDesc: "Download your data",
+    goToDashboard: "Go to Dashboard",
+    logout: "Logout",
+  },
+  uk: {
+    quickActions: "Швидкі Дії",
+    profile: "Профіль",
+    profileDesc: "Редагувати особисті дані",
+    subscription: "Підписка",
+    subscriptionDesc: "Керування планом",
+    settings: "Налаштування",
+    settingsDesc: "Сповіщення та мова",
+    security: "Безпека",
+    securityDesc: "Пароль та сесії",
+    referral: "Реферали",
+    referralDesc: "Заробіть безкоштовні місяці",
+    export: "Експорт",
+    exportDesc: "Завантажити дані",
+    goToDashboard: "Перейти до Панелі",
+    logout: "Вихід",
+  },
+  sq: {
+    quickActions: "Veprime të Shpejta",
+    profile: "Profili",
+    profileDesc: "Modifiko të dhënat personale",
+    subscription: "Abonamenti",
+    subscriptionDesc: "Menaxho planin",
+    settings: "Cilësimet",
+    settingsDesc: "Njoftimet dhe gjuha",
+    security: "Siguria",
+    securityDesc: "Fjalëkalimi dhe sesionet",
+    referral: "Referime",
+    referralDesc: "Fitoni muaj falas",
+    export: "Eksporto",
+    exportDesc: "Shkarko të dhënat",
+    goToDashboard: "Shko te Paneli",
+    logout: "Dilni",
+  },
+  bg: {
+    quickActions: "Бързи Действия",
+    profile: "Профил",
+    profileDesc: "Редактиране на лични данни",
+    subscription: "Абонамент",
+    subscriptionDesc: "Управление на план",
+    settings: "Настройки",
+    settingsDesc: "Известия и език",
+    security: "Сигурност",
+    securityDesc: "Парола и сесии",
+    referral: "Препоръки",
+    referralDesc: "Спечелете безплатни месеци",
+    export: "Експорт",
+    exportDesc: "Изтегляне на данни",
+    goToDashboard: "Към Таблото",
+    logout: "Изход",
+  },
+  ro: {
+    quickActions: "Acțiuni Rapide",
+    profile: "Profil",
+    profileDesc: "Editează informațiile personale",
+    subscription: "Abonament",
+    subscriptionDesc: "Gestionează planul",
+    settings: "Setări",
+    settingsDesc: "Notificări și limbă",
+    security: "Securitate",
+    securityDesc: "Parolă și sesiuni",
+    referral: "Recomandări",
+    referralDesc: "Câștigă luni gratuite",
+    export: "Export",
+    exportDesc: "Descarcă datele",
+    goToDashboard: "Mergi la Panou",
+    logout: "Deconectare",
+  },
+  ar: {
+    quickActions: "إجراءات سريعة",
+    profile: "الملف الشخصي",
+    profileDesc: "تعديل البيانات الشخصية",
+    subscription: "الاشتراك",
+    subscriptionDesc: "إدارة الخطة",
+    settings: "الإعدادات",
+    settingsDesc: "الإشعارات واللغة",
+    security: "الأمان",
+    securityDesc: "كلمة المرور والجلسات",
+    referral: "الإحالات",
+    referralDesc: "اكسب أشهراً مجانية",
+    export: "تصدير",
+    exportDesc: "تحميل البيانات",
+    goToDashboard: "الذهاب إلى لوحة التحكم",
+    logout: "تسجيل الخروج",
+  },
+};
+
 export default function DashboardPage() {
   const params = useParams();
   const router = useRouter();
@@ -140,7 +280,7 @@ export default function DashboardPage() {
               </p>
               {user.phone && (
                 <p>
-                  <strong>Phone:</strong> {user.countryCode}{user.phone}
+                  <strong>Phone:</strong> {user.phone}
                 </p>
               )}
               <p>
@@ -254,34 +394,155 @@ export default function DashboardPage() {
           {/* Rewards Section */}
           <RewardsSection user={user} locale={locale} />
 
+          {/* Quick Actions Section */}
+          <div
+            className="w-full p-6 rounded-2xl"
+            style={{ backgroundColor: 'var(--polar)' }}
+          >
+            <h2 className="text-heading font-semibold mb-4" style={{ color: 'var(--deep-teal)' }}>
+              {(translations[locale] || translations.el).quickActions}
+            </h2>
+
+            <div
+              className="grid grid-cols-2 gap-3"
+              style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}
+            >
+              {/* Profile */}
+              <button
+                onClick={() => router.push(`/${locale}/dashboard/profile`)}
+                className="p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
+                style={{
+                  backgroundColor: 'rgba(1, 49, 45, 0.05)',
+                  textAlign: locale === 'ar' ? 'right' : 'left',
+                }}
+              >
+                <span className="text-2xl block mb-1">👤</span>
+                <span className="font-semibold block" style={{ color: 'var(--deep-teal)' }}>
+                  {(translations[locale] || translations.el).profile}
+                </span>
+                <span className="text-small block" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
+                  {(translations[locale] || translations.el).profileDesc}
+                </span>
+              </button>
+
+              {/* Subscription */}
+              <button
+                onClick={() => router.push(`/${locale}/dashboard/subscription`)}
+                className="p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
+                style={{
+                  backgroundColor: 'rgba(1, 49, 45, 0.05)',
+                  textAlign: locale === 'ar' ? 'right' : 'left',
+                }}
+              >
+                <span className="text-2xl block mb-1">💳</span>
+                <span className="font-semibold block" style={{ color: 'var(--deep-teal)' }}>
+                  {(translations[locale] || translations.el).subscription}
+                </span>
+                <span className="text-small block" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
+                  {(translations[locale] || translations.el).subscriptionDesc}
+                </span>
+              </button>
+
+              {/* Settings */}
+              <button
+                onClick={() => router.push(`/${locale}/dashboard/settings`)}
+                className="p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
+                style={{
+                  backgroundColor: 'rgba(1, 49, 45, 0.05)',
+                  textAlign: locale === 'ar' ? 'right' : 'left',
+                }}
+              >
+                <span className="text-2xl block mb-1">⚙️</span>
+                <span className="font-semibold block" style={{ color: 'var(--deep-teal)' }}>
+                  {(translations[locale] || translations.el).settings}
+                </span>
+                <span className="text-small block" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
+                  {(translations[locale] || translations.el).settingsDesc}
+                </span>
+              </button>
+
+              {/* Security */}
+              <button
+                onClick={() => router.push(`/${locale}/dashboard/security`)}
+                className="p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
+                style={{
+                  backgroundColor: 'rgba(1, 49, 45, 0.05)',
+                  textAlign: locale === 'ar' ? 'right' : 'left',
+                }}
+              >
+                <span className="text-2xl block mb-1">🔒</span>
+                <span className="font-semibold block" style={{ color: 'var(--deep-teal)' }}>
+                  {(translations[locale] || translations.el).security}
+                </span>
+                <span className="text-small block" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
+                  {(translations[locale] || translations.el).securityDesc}
+                </span>
+              </button>
+
+              {/* Referral */}
+              <button
+                onClick={() => router.push(`/${locale}/dashboard/referral`)}
+                className="p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
+                style={{
+                  backgroundColor: 'rgba(255, 143, 10, 0.1)',
+                  textAlign: locale === 'ar' ? 'right' : 'left',
+                }}
+              >
+                <span className="text-2xl block mb-1">🎁</span>
+                <span className="font-semibold block" style={{ color: '#ff8f0a' }}>
+                  {(translations[locale] || translations.el).referral}
+                </span>
+                <span className="text-small block" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
+                  {(translations[locale] || translations.el).referralDesc}
+                </span>
+              </button>
+
+              {/* Export */}
+              <button
+                onClick={() => router.push(`/${locale}/dashboard/export`)}
+                className="p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
+                style={{
+                  backgroundColor: 'rgba(1, 49, 45, 0.05)',
+                  textAlign: locale === 'ar' ? 'right' : 'left',
+                }}
+              >
+                <span className="text-2xl block mb-1">📥</span>
+                <span className="font-semibold block" style={{ color: 'var(--deep-teal)' }}>
+                  {(translations[locale] || translations.el).export}
+                </span>
+                <span className="text-small block" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
+                  {(translations[locale] || translations.el).exportDesc}
+                </span>
+              </button>
+            </div>
+          </div>
+
           {/* Navigation Buttons */}
           <div className="flex flex-col gap-4 w-full">
             <button
               onClick={() => router.push(`/${locale}/page-pay`)}
               className="btn-primary text-button w-full text-center"
               style={{
+                minHeight: '52px',
                 backgroundColor: 'var(--zanah)',
                 color: 'var(--deep-teal)',
                 boxShadow: '0 4px 8px var(--deep-teal)',
-                paddingLeft: '30px',
-                paddingRight: '30px',
               }}
             >
-              📊 Go to Dashboard
+              📊 {(translations[locale] || translations.el).goToDashboard}
             </button>
 
             <button
               onClick={handleLogout}
               className="btn-primary text-button w-full text-center"
               style={{
+                minHeight: '52px',
                 backgroundColor: '#ff6a1a',
                 color: '#ffffff',
                 boxShadow: '0 4px 8px rgba(255, 255, 255, 0.3)',
-                paddingLeft: '30px',
-                paddingRight: '30px',
               }}
             >
-              🚪 Logout
+              🚪 {(translations[locale] || translations.el).logout}
             </button>
           </div>
         </div>

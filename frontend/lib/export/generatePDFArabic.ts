@@ -2,10 +2,15 @@
 // ================================================
 
 import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import type { TDocumentDefinitions, Content, TableCell } from 'pdfmake/interfaces';
-import type { PropertyObject } from '@/types/object';
 import type { ObjectExpense } from '@/types/objectExpense';
+
+// Simple property type for export (only id and name needed)
+interface ExportProperty {
+  id: string;
+  name: string;
+}
 
 // Try to import Arabic font (optional, will fallback to Roboto if not available)
 let NotoSansArabicRegularBase64: string | undefined;
@@ -17,15 +22,16 @@ try {
   console.warn('⚠️ Arabic font not found, using fallback font. See: ADD_ARABIC_FONT_STEPS.md');
 }
 
-// Register fonts
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+// Register fonts - handle both default and named exports
+const vfs = (pdfFonts as any).pdfMake?.vfs || (pdfFonts as any).default?.pdfMake?.vfs || {};
+pdfMake.vfs = vfs;
 
 // Register custom Arabic font if available
 if (NotoSansArabicRegularBase64) {
   pdfMake.fonts = {
     Roboto: {
-      normal: pdfFonts.pdfMake.vfs['Roboto-Regular.ttf'],
-      bold: pdfFonts.pdfMake.vfs['Roboto-Medium.ttf'],
+      normal: vfs['Roboto-Regular.ttf'] || 'Roboto-Regular.ttf',
+      bold: vfs['Roboto-Medium.ttf'] || 'Roboto-Medium.ttf',
     },
     NotoSansArabic: {
       normal: NotoSansArabicRegularBase64,
@@ -35,7 +41,7 @@ if (NotoSansArabicRegularBase64) {
 }
 
 interface ExportData {
-  properties: PropertyObject[];
+  properties: ExportProperty[];
   expenses: Map<string, ObjectExpense[]>;
   dateFrom: string;
   dateTo: string;
@@ -89,7 +95,7 @@ export function generatePDFArabic(data: ExportData): void {
   allExpenses.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   // Prepare expense table data (RTL order - columns reversed)
-  const expenseTableBody: TableCell[][] = [
+  const expenseTableBody = [
     // Header row
     [
       { text: t.paymentMethod, style: 'tableHeader', alignment: 'right' },
@@ -117,10 +123,10 @@ export function generatePDFArabic(data: ExportData): void {
       { text: t.total, style: 'tableFooter', alignment: 'right' },
       { text: '', border: [false, true, false, false] },
     ],
-  ];
+  ] as TableCell[][];
 
   // Prepare payment methods table (RTL order)
-  const paymentTableBody: TableCell[][] = [
+  const paymentTableBody = [
     // Header
     [
       { text: t.percent, style: 'tableHeader', alignment: 'right' },
@@ -139,7 +145,7 @@ export function generatePDFArabic(data: ExportData): void {
       { text: `€${totalAmount.toFixed(2)}`, style: 'tableFooter', alignment: 'right' },
       { text: t.total, style: 'tableFooter', alignment: 'right' },
     ],
-  ];
+  ] as TableCell[][];
 
   // Document definition with RTL support
   const docDefinition: TDocumentDefinitions = {
