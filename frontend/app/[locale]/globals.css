@@ -56,7 +56,7 @@ body[dir="rtl"] {
 /* Mobile preview wrapper - shows mobile view on desktop */
 .mobile-preview-wrapper {
   width: 100%;
-  max-width: 420px;
+  max-width: 500px;
   height: 100vh;
   height: 100dvh; /* Dynamic viewport height for mobile browsers */
   margin: 0 auto;
@@ -69,7 +69,7 @@ body[dir="rtl"] {
 }
 
 /* On mobile devices, take full width */
-@media (max-width: 420px) {
+@media (max-width: 500px) {
   .mobile-preview-wrapper {
     max-width: 100%;
     box-shadow: none;
@@ -82,7 +82,7 @@ body[dir="rtl"] {
 
 /* Mobile-first container */
 .container {
-  max-width: 420px;
+  max-width: 500px;
   margin: 0 auto;
   padding-left: max(16px, var(--safe-area-inset-left));
   padding-right: max(16px, var(--safe-area-inset-right));
