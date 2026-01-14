@@ -85,7 +85,8 @@ export default function GlobalExpensesPage() {
   if (view === 'expenses') {
     return (
       <BackgroundPage pageIndex={4}>
-        <div className="min-h-screen flex flex-col" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '40px', paddingBottom: '120px' }}>
+        <div className="min-h-screen flex flex-col items-center px-4" style={{ paddingTop: '40px', paddingBottom: '120px' }}>
+          <div className="w-full max-w-sm flex flex-col flex-1">
 
           {/* Header */}
           <div className="flex items-center justify-between mb-6" style={{ marginTop: '120px' }}>
@@ -209,6 +210,7 @@ export default function GlobalExpensesPage() {
               })
             )}
           </div>
+          </div>
         </div>
       </BackgroundPage>
     );
@@ -218,7 +220,8 @@ export default function GlobalExpensesPage() {
   if (view === 'categories') {
     return (
       <BackgroundPage pageIndex={4}>
-        <div className="min-h-screen flex flex-col" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '40px', paddingBottom: '120px' }}>
+        <div className="min-h-screen flex flex-col items-center px-4" style={{ paddingTop: '40px', paddingBottom: '120px' }}>
+          <div className="w-full max-w-sm flex flex-col flex-1">
 
           {/* Header */}
           <div className="flex items-center justify-between mb-6" style={{ marginTop: '120px' }}>
@@ -286,6 +289,7 @@ export default function GlobalExpensesPage() {
               ))
             )}
           </div>
+          </div>
         </div>
       </BackgroundPage>
     );
@@ -295,7 +299,8 @@ export default function GlobalExpensesPage() {
   if (view === 'add-category' || view === 'edit-category') {
     return (
       <BackgroundPage pageIndex={4}>
-        <div className="min-h-screen" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '40px', paddingBottom: '120px' }}>
+        <div className="min-h-screen flex flex-col items-center px-4" style={{ paddingTop: '40px', paddingBottom: '120px' }}>
+          <div className="w-full max-w-sm">
 
           {/* Back Button */}
           <div style={{ marginTop: '120px', marginBottom: '24px' }}>
@@ -335,6 +340,7 @@ export default function GlobalExpensesPage() {
             }}
             locale={locale}
           />
+          </div>
         </div>
       </BackgroundPage>
     );
@@ -344,7 +350,8 @@ export default function GlobalExpensesPage() {
   if (view === 'add-expense' || view === 'edit-expense') {
     return (
       <BackgroundPage pageIndex={4}>
-        <div className="min-h-screen" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '40px', paddingBottom: '120px' }}>
+        <div className="min-h-screen flex flex-col items-center px-4" style={{ paddingTop: '40px', paddingBottom: '120px' }}>
+          <div className="w-full max-w-sm">
 
           {/* Back Button */}
           <div style={{ marginTop: '120px', marginBottom: '24px' }}>
@@ -386,6 +393,7 @@ export default function GlobalExpensesPage() {
             }}
             locale={locale}
           />
+          </div>
         </div>
       </BackgroundPage>
     );
