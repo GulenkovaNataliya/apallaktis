@@ -108,6 +108,8 @@ export default function UpdatePasswordPage() {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -181,25 +183,45 @@ export default function UpdatePasswordPage() {
 
           {!isSuccess ? (
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-              <input
-                type="password"
-                placeholder={translations.newPassword}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
-                style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px', color: 'white' }}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder={translations.newPassword}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+                  style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '50px', color: 'white' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2"
+                  style={{ color: 'var(--polar)', fontSize: '20px' }}
+                >
+                  {showPassword ? '\u{1F441}' : '\u{1F441}\u200D\u{1F5E8}'}
+                </button>
+              </div>
 
-              <input
-                type="password"
-                placeholder={translations.confirmPassword}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
-                style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px', color: 'white' }}
-              />
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder={translations.confirmPassword}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+                  style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '50px', color: 'white' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2"
+                  style={{ color: 'var(--polar)', fontSize: '20px' }}
+                >
+                  {showConfirmPassword ? '\u{1F441}' : '\u{1F441}\u200D\u{1F5E8}'}
+                </button>
+              </div>
 
               {message && (
                 <p
