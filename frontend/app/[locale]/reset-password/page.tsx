@@ -51,48 +51,45 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        poster="/video/poster.jpg"
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      >
-        <source src="/video/page-01.webm" type="video/webm" />
-      </video>
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: 'url(/pages/page-01.webp)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          width: '100%',
+          height: '100%',
+        }}
+      />
 
       {/* Content */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 safe-area-top safe-area-bottom">
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 safe-area-top safe-area-bottom py-8">
         <div className="w-full max-w-sm">
           <h1
-            className="text-center text-slogan font-semibold mb-8"
-            style={{ color: "var(--polar)" }}
+            className="text-center text-slogan font-semibold"
+            style={{ color: "#ff8f0a", marginBottom: "80px" }}
           >
             {t.title}
           </h1>
 
           {!isSuccess ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <input
-                  type="email"
-                  placeholder={t.email}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full rounded-2xl text-body border border-gray-300 focus:outline-none focus:border-blue-500"
-                  style={{ minHeight: "52px", paddingLeft: '40px', paddingRight: '40px', color: 'white' }}
-                />
-              </div>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+              <input
+                type="email"
+                placeholder={t.email}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+                style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px', color: 'white' }}
+              />
 
               {message && (
                 <p
-                  className="text-center text-sm"
-                  style={{
-                    color: isSuccess ? "var(--zanah)" : "#ff6a1a",
-                  }}
+                  className="text-center text-sm px-2"
+                  style={{ color: "#ff6a1a" }}
                 >
                   {message}
                 </p>
@@ -101,17 +98,25 @@ export default function ResetPasswordPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full rounded-2xl text-button font-semibold"
+                className="btn-primary text-button w-full text-center mt-4"
                 style={{
                   backgroundColor: "var(--polar)",
                   color: "var(--deep-teal)",
                   boxShadow: "0 4px 8px var(--deep-teal)",
-                  minHeight: "52px",
-                  opacity: isLoading ? 0.7 : 1,
+                  opacity: isLoading ? 0.6 : 1,
+                  cursor: isLoading ? "not-allowed" : "pointer",
                 }}
               >
                 {isLoading ? "..." : t.sendLink}
               </button>
+
+              <Link
+                href={`/${locale}/login`}
+                className="text-center text-sm mt-4"
+                style={{ color: "#daf3f6" }}
+              >
+                {t.backToLogin}
+              </Link>
             </form>
           ) : (
             <div
@@ -121,18 +126,15 @@ export default function ResetPasswordPage() {
               <p className="text-body" style={{ color: "var(--deep-teal)" }}>
                 {message}
               </p>
+              <Link
+                href={`/${locale}/login`}
+                className="text-center text-sm mt-4 block"
+                style={{ color: "var(--deep-teal)", opacity: 0.8 }}
+              >
+                {t.backToLogin}
+              </Link>
             </div>
           )}
-
-          <div className="mt-6 text-center">
-            <Link
-              href={`/${locale}/login`}
-              className="text-button"
-              style={{ color: "var(--polar)" }}
-            >
-              {t.backToLogin}
-            </Link>
-          </div>
         </div>
       </div>
     </div>

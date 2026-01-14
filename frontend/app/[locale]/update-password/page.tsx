@@ -160,54 +160,51 @@ export default function UpdatePasswordPage() {
       <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: "url('/video/poster.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundImage: 'url(/pages/page-01.webp)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          width: '100%',
+          height: '100%',
         }}
       />
 
       {/* Content */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 safe-area-top safe-area-bottom">
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 safe-area-top safe-area-bottom py-8">
         <div className="w-full max-w-sm">
           <h1
-            className="text-center text-slogan font-semibold mb-8"
-            style={{ color: "var(--slogan-color)" }}
+            className="text-center text-slogan font-semibold"
+            style={{ color: "#ff8f0a", marginBottom: "80px" }}
           >
             {translations.title}
           </h1>
 
           {!isSuccess ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <input
-                  type="password"
-                  placeholder={translations.newPassword}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="w-full rounded-2xl px-6 text-body border border-gray-300 focus:outline-none focus:border-blue-500"
-                  style={{ minHeight: "52px" }}
-                />
-              </div>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+              <input
+                type="password"
+                placeholder={translations.newPassword}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+                style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px', color: 'white' }}
+              />
 
-              <div>
-                <input
-                  type="password"
-                  placeholder={translations.confirmPassword}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                  className="w-full rounded-2xl px-6 text-body border border-gray-300 focus:outline-none focus:border-blue-500"
-                  style={{ minHeight: "52px" }}
-                />
-              </div>
+              <input
+                type="password"
+                placeholder={translations.confirmPassword}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+                style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px', color: 'white' }}
+              />
 
               {message && (
                 <p
-                  className="text-center text-sm"
-                  style={{
-                    color: isSuccess ? "var(--zanah)" : "#ff6a1a",
-                  }}
+                  className="text-center text-sm px-2"
+                  style={{ color: "#ff6a1a" }}
                 >
                   {message}
                 </p>
@@ -216,13 +213,13 @@ export default function UpdatePasswordPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full rounded-2xl text-button font-semibold"
+                className="btn-primary text-button w-full text-center mt-4"
                 style={{
                   backgroundColor: "var(--polar)",
                   color: "var(--deep-teal)",
                   boxShadow: "0 4px 8px var(--deep-teal)",
-                  minHeight: "52px",
-                  opacity: isLoading ? 0.7 : 1,
+                  opacity: isLoading ? 0.6 : 1,
+                  cursor: isLoading ? "not-allowed" : "pointer",
                 }}
               >
                 {isLoading ? "..." : translations.updateButton}
