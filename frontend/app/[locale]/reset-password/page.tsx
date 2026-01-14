@@ -9,15 +9,7 @@ import { createClient } from "@/lib/supabase/client";
 export default function ResetPasswordPage() {
   const params = useParams();
   const locale = (params.locale as Locale) || "el";
-  const t = {
-    title: "Επαναφορά Κωδικού",
-    email: "Email",
-    sendLink: "Αποστολή Συνδέσμου",
-    backToLogin: "← Πίσω στη Σύνδεση",
-    success: "Ελέγξτε το email σας για τον σύνδεσμο επαναφοράς!",
-    error: "Σφάλμα. Παρακαλώ δοκιμάστε ξανά.",
-    invalidEmail: "Εισάγετε έγκυρο email",
-  };
+  const t = messages[locale]?.resetPassword || messages.el.resetPassword;
 
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -59,22 +51,24 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: "url('/video/poster.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster="/video/poster.jpg"
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src="/video/page-01.webm" type="video/webm" />
+      </video>
 
       {/* Content */}
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 safe-area-top safe-area-bottom">
         <div className="w-full max-w-sm">
           <h1
             className="text-center text-slogan font-semibold mb-8"
-            style={{ color: "var(--slogan-color)" }}
+            style={{ color: "var(--polar)" }}
           >
             {t.title}
           </h1>
@@ -89,7 +83,7 @@ export default function ResetPasswordPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="w-full rounded-2xl text-body border border-gray-300 focus:outline-none focus:border-blue-500"
-                  style={{ minHeight: "52px", paddingLeft: '40px', paddingRight: '40px' }}
+                  style={{ minHeight: "52px", paddingLeft: '40px', paddingRight: '40px', color: 'white' }}
                 />
               </div>
 

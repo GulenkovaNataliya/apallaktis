@@ -99,7 +99,7 @@ export default function LoginPage() {
               }}
               required
               className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
-              style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px', color: 'var(--deep-teal)' }}
+              style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px', color: 'white' }}
             />
 
             {/* Password */}
@@ -113,7 +113,7 @@ export default function LoginPage() {
               }}
               required
               className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
-              style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px', color: 'var(--deep-teal)' }}
+              style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px', color: 'white' }}
             />
 
             {/* Forgot Password Link */}
@@ -122,7 +122,7 @@ export default function LoginPage() {
               className="text-sm text-right block"
               style={{ color: "var(--polar)", opacity: 0.8 }}
             >
-              Ξέχασες τον κωδικό;
+              {t.forgotPassword}
             </Link>
 
             {/* Error Message */}

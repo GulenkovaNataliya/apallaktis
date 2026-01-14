@@ -66,6 +66,8 @@ export default function RegisterPage() {
     confirmPassword: "",
     afm: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const validateForm = (): boolean => {
     const newErrors = { email: "", phone: "", password: "", confirmPassword: "", afm: "" };
@@ -239,20 +241,30 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <input
-                type="password"
-                placeholder={t.password}
-                value={formData.password}
-                onChange={(e) => {
-                  setFormData({ ...formData, password: e.target.value });
-                  setErrors({ ...errors, password: "" });
-                }}
-                required
-                className={`text-body w-full rounded-2xl border focus:outline-none ${
-                  errors.password ? "border-red-500" : "border-gray-300 focus:border-blue-500"
-                }`}
-                style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px' }}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder={t.password}
+                  value={formData.password}
+                  onChange={(e) => {
+                    setFormData({ ...formData, password: e.target.value });
+                    setErrors({ ...errors, password: "" });
+                  }}
+                  required
+                  className={`text-body w-full rounded-2xl border focus:outline-none ${
+                    errors.password ? "border-red-500" : "border-gray-300 focus:border-blue-500"
+                  }`}
+                  style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '50px' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2"
+                  style={{ color: 'var(--deep-teal)', fontSize: '20px' }}
+                >
+                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
                   {errors.password}
@@ -261,20 +273,30 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <input
-                type="password"
-                placeholder={t.confirmPassword}
-                value={formData.confirmPassword}
-                onChange={(e) => {
-                  setFormData({ ...formData, confirmPassword: e.target.value });
-                  setErrors({ ...errors, confirmPassword: "" });
-                }}
-                required
-                className={`text-body w-full rounded-2xl border focus:outline-none ${
-                  errors.confirmPassword ? "border-red-500" : "border-gray-300 focus:border-blue-500"
-                }`}
-                style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px' }}
-              />
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder={t.confirmPassword}
+                  value={formData.confirmPassword}
+                  onChange={(e) => {
+                    setFormData({ ...formData, confirmPassword: e.target.value });
+                    setErrors({ ...errors, confirmPassword: "" });
+                  }}
+                  required
+                  className={`text-body w-full rounded-2xl border focus:outline-none ${
+                    errors.confirmPassword ? "border-red-500" : "border-gray-300 focus:border-blue-500"
+                  }`}
+                  style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '50px' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2"
+                  style={{ color: 'var(--deep-teal)', fontSize: '20px' }}
+                >
+                  {showConfirmPassword ? '👁️' : '👁️‍🗨️'}
+                </button>
+              </div>
               {errors.confirmPassword && (
                 <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
                   {errors.confirmPassword}
