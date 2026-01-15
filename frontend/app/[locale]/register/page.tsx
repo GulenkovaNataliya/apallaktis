@@ -342,18 +342,6 @@ export default function RegisterPage() {
         password: formData.password,
         options: {
           emailRedirectTo: `${window.location.origin}/${locale}/login`,
-          data: {
-            name: formData.name,
-            phone: formData.countryCode + formData.phone,
-            country_code: formData.countryCode,
-            invoice_type: invoiceType,
-            company_name: invoiceType === 'invoice' ? (afmResult?.companyName || formData.companyName) : null,
-            afm: invoiceType === 'invoice' ? formData.afm : null,
-            address: invoiceType === 'invoice' ? afmResult?.address : null,
-            activity: invoiceType === 'invoice' ? afmResult?.activity : null,
-            doy: invoiceType === 'invoice' ? afmResult?.doy : null,
-            referred_by: referralCode || null,
-          },
         },
       });
 
