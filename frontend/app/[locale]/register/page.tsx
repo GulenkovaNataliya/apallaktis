@@ -318,7 +318,7 @@ export default function RegisterPage() {
     return isValid;
   };
 
-  // Step 1: Validate form and send SMS
+  // Step 1: Validate form and send SMS (or skip if SMS not available)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -331,10 +331,66 @@ export default function RegisterPage() {
       return;
     }
 
-    // Send SMS code
+    // Try to send SMS code
     const sent = await sendSmsCode();
     if (sent) {
+      // SMS sent successfully - go to verification step
       setRegistrationStep("verify");
+    } else {
+      // SMS failed - check if it's because service is not configured
+      // If so, proceed directly to registration without phone verification
+      const skipSmsVerification = smsError.includes('not configured') || smsError.includes('SMS service');
+      if (skipSmsVerification) {
+        // Proceed to registration without phone verification
+        await registerWithoutSmsVerification();
+      }
+      // Otherwise, error is displayed and user can retry
+    }
+  };
+
+  // Register without SMS verification (fallback when Twilio not configured)
+  const registerWithoutSmsVerification = async () => {
+    setIsSubmitting(true);
+    setSmsError("");
+
+    try {
+      const supabase = createClient();
+
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/${locale}/login`,
+          data: {
+            name: formData.name,
+            phone: formData.countryCode + formData.phone,
+            phone_verified: false, // Phone NOT verified
+            country_code: formData.countryCode,
+            invoice_type: invoiceType,
+            company_name: invoiceType === 'invoice' ? formData.companyName : null,
+            afm: invoiceType === 'invoice' ? formData.afm : null,
+            activity: invoiceType === 'invoice' ? afmResult?.activity : null,
+            doy: invoiceType === 'invoice' ? afmResult?.doy : null,
+            referred_by: referralCode || null,
+          },
+        },
+      });
+
+      if (authError) {
+        if (authError.message.includes('already registered')) {
+          alert('Αυτό το email είναι ήδη εγγεγραμμένο. Παρακαλώ συνδεθείτε.');
+        } else {
+          alert(authError.message);
+        }
+        setIsSubmitting(false);
+        return;
+      }
+
+      router.push(`/${locale}/thank-you`);
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Σφάλμα κατά την εγγραφή. Παρακαλώ δοκιμάστε ξανά.');
+      setIsSubmitting(false);
     }
   };
 
@@ -371,6 +427,8 @@ export default function RegisterPage() {
             invoice_type: invoiceType,
             company_name: invoiceType === 'invoice' ? formData.companyName : null,
             afm: invoiceType === 'invoice' ? formData.afm : null,
+            activity: invoiceType === 'invoice' ? afmResult?.activity : null,
+            doy: invoiceType === 'invoice' ? afmResult?.doy : null,
             referred_by: referralCode || null,
           },
         },
@@ -631,10 +689,10 @@ export default function RegisterPage() {
                   )}
                 </div>
 
-                {/* Auto-filled fields from TaxisNet (read-only) */}
+                {/* Auto-filled fields from TaxisNet */}
                 {afmResult && (
                   <div className="flex flex-col gap-3">
-                    {/* Επωνυμία (Company Name) */}
+                    {/* Επωνυμία (Company Name) - read-only from VIES */}
                     <input
                       type="text"
                       value={afmResult.companyName || ''}
@@ -643,7 +701,7 @@ export default function RegisterPage() {
                       className="text-body w-full rounded-2xl border border-gray-300 bg-gray-100"
                       style={{ minHeight: '52px', paddingLeft: '20px', paddingRight: '20px', color: 'var(--deep-teal)' }}
                     />
-                    {/* Διεύθυνση (Address) */}
+                    {/* Διεύθυνση (Address) - read-only from VIES */}
                     <input
                       type="text"
                       value={afmResult.address || ''}
@@ -652,22 +710,22 @@ export default function RegisterPage() {
                       className="text-body w-full rounded-2xl border border-gray-300 bg-gray-100"
                       style={{ minHeight: '52px', paddingLeft: '20px', paddingRight: '20px', color: 'var(--deep-teal)' }}
                     />
-                    {/* Δραστηριότητα (Activity) */}
+                    {/* Δραστηριότητα (Activity) - EDITABLE by user */}
                     <input
                       type="text"
                       value={afmResult.activity || ''}
-                      readOnly
-                      placeholder="Δραστηριότητα"
-                      className="text-body w-full rounded-2xl border border-gray-300 bg-gray-100"
+                      onChange={(e) => setAfmResult({ ...afmResult, activity: e.target.value })}
+                      placeholder="Δραστηριότητα (συμπληρώστε)"
+                      className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
                       style={{ minHeight: '52px', paddingLeft: '20px', paddingRight: '20px', color: 'var(--deep-teal)' }}
                     />
-                    {/* ΔΟΥ */}
+                    {/* ΔΟΥ - EDITABLE by user */}
                     <input
                       type="text"
                       value={afmResult.doy || ''}
-                      readOnly
-                      placeholder="ΔΟΥ"
-                      className="text-body w-full rounded-2xl border border-gray-300 bg-gray-100"
+                      onChange={(e) => setAfmResult({ ...afmResult, doy: e.target.value })}
+                      placeholder="ΔΟΥ (συμπληρώστε)"
+                      className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
                       style={{ minHeight: '52px', paddingLeft: '20px', paddingRight: '20px', color: 'var(--deep-teal)' }}
                     />
                   </div>
@@ -690,6 +748,13 @@ export default function RegisterPage() {
                 {t.agreeTerms}
               </span>
             </label>
+
+            {/* SMS Error Display */}
+            {smsError && (
+              <p className="text-sm text-center" style={{ color: "#ff6a1a" }}>
+                {smsError}
+              </p>
+            )}
 
             {/* Submit Button */}
             <div className="btn-single-wrapper">
