@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS client_lookups (
   requested_by_user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
 
   -- Lookup Result
-  sources_json JSONB DEFAULT '{}'::jsonb, -- Which sources were used: VIES, GEMI
+  sources_json JSONB DEFAULT '{}'::jsonb, -- Which sources were used: VIES
   result_hash TEXT, -- Hash of the result for detecting changes
 
   -- Metadata
@@ -132,5 +132,5 @@ COMMENT ON COLUMN clients.verification_status IS 'Result of AFM lookup: verified
 COMMENT ON COLUMN clients.address_json IS 'Address stored as JSON: { street, city, postalCode, region }';
 
 COMMENT ON TABLE client_lookups IS 'Audit log of all AFM lookup requests for GDPR compliance and rate limiting';
-COMMENT ON COLUMN client_lookups.sources_json IS 'Which sources were queried: { vies: { status, checkedAt }, gemi: { status, checkedAt } }';
+COMMENT ON COLUMN client_lookups.sources_json IS 'Which sources were queried: { vies: { status, checkedAt } }';
 COMMENT ON COLUMN client_lookups.result_hash IS 'Hash of the lookup result for detecting changes over time';

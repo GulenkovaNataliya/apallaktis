@@ -236,9 +236,6 @@ async function performAFMLookup(afm: string): Promise<LookupResponse> {
     };
   }
 
-  // 2. TODO: Check GEMI (Greek Business Registry)
-  // This would require a paid API or web scraping
-  // For now, we only use VIES
 
   // Determine final verification status
   if (result.verificationStatus === 'not_found') {
