@@ -318,7 +318,7 @@ export default function RegisterPage() {
     return isValid;
   };
 
-  // Step 1: Validate form and register (SMS verification temporarily disabled)
+  // Step 1: Validate form and send SMS
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -331,8 +331,11 @@ export default function RegisterPage() {
       return;
     }
 
-    // SMS verification temporarily disabled - register directly
-    await registerWithoutSmsVerification();
+    // Send SMS code
+    const sent = await sendSmsCode();
+    if (sent) {
+      setRegistrationStep("verify");
+    }
   };
 
   // Register without SMS verification (fallback when Twilio not configured)
