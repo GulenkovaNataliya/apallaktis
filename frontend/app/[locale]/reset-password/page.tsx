@@ -95,20 +95,22 @@ export default function ResetPasswordPage() {
                 </p>
               )}
 
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="btn-primary text-button w-full text-center mt-4"
-                style={{
-                  backgroundColor: "var(--polar)",
-                  color: "var(--deep-teal)",
-                  boxShadow: "0 4px 8px var(--deep-teal)",
-                  opacity: isLoading ? 0.6 : 1,
-                  cursor: isLoading ? "not-allowed" : "pointer",
-                }}
-              >
-                {isLoading ? "..." : t.sendLink}
-              </button>
+              <div className="btn-single-wrapper mt-4">
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="btn-primary text-button btn-single text-center"
+                  style={{
+                    backgroundColor: "var(--polar)",
+                    color: "var(--deep-teal)",
+                    boxShadow: "0 4px 8px var(--deep-teal)",
+                    opacity: isLoading ? 0.6 : 1,
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {isLoading ? "..." : t.sendLink}
+                </button>
+              </div>
 
               <Link
                 href={`/${locale}/login`}

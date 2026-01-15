@@ -335,3 +335,19 @@ body[dir="rtl"] {
 [dir="rtl"] .btn-base {
   text-align: center;
 }
+
+/* Single action button wrapper - 70% width, centered */
+.btn-single-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.btn-single {
+  width: 70%;
+}
+
+/* AFM button - 60% width */
+.btn-afm {
+  width: 60%;
+}

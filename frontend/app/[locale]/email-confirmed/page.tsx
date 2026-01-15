@@ -116,18 +116,20 @@ export default function EmailConfirmedPage() {
           </p>
 
           {/* Login Button */}
-          <button
-            onClick={() => router.push(`/${locale}/login`)}
-            className="btn-primary text-button w-full"
-            style={{
-              minHeight: "52px",
-              backgroundColor: "var(--zanah)",
-              color: "var(--deep-teal)",
-              boxShadow: "0 4px 8px var(--deep-teal)",
-            }}
-          >
-            {t.login}
-          </button>
+          <div className="btn-single-wrapper">
+            <button
+              onClick={() => router.push(`/${locale}/login`)}
+              className="btn-primary text-button btn-single"
+              style={{
+                minHeight: "52px",
+                backgroundColor: "var(--zanah)",
+                color: "var(--deep-teal)",
+                boxShadow: "0 4px 8px var(--deep-teal)",
+              }}
+            >
+              {t.login}
+            </button>
+          </div>
         </div>
       </div>
     </BackgroundPage>

@@ -55,17 +55,19 @@ export default function ThankYouPage() {
           </div>
 
           {/* Login now button */}
-          <Link
-            href={`/${locale}/login`}
-            className="btn-primary text-button w-full max-w-xs text-center"
-            style={{
-              backgroundColor: "var(--polar)",
-              color: "var(--deep-teal)",
-              boxShadow: "0 4px 8px var(--deep-teal)",
-            }}
-          >
-            {t.loginButton}
-          </Link>
+          <div className="btn-single-wrapper">
+            <Link
+              href={`/${locale}/login`}
+              className="btn-primary text-button btn-single text-center"
+              style={{
+                backgroundColor: "var(--polar)",
+                color: "var(--deep-teal)",
+                boxShadow: "0 4px 8px var(--deep-teal)",
+              }}
+            >
+              {t.loginButton}
+            </Link>
+          </div>
         </div>
       </div>
     </div>

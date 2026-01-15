@@ -27,29 +27,33 @@ export default function LandingPage() {
           </h1>
 
           {/* Action buttons */}
-          <div className="flex w-full flex-col gap-4">
-            <Link
-              href={`/${locale}/login`}
-              className="btn-primary text-button w-full text-center"
-              style={{
-                backgroundColor: "var(--polar)",
-                color: "var(--deep-teal)",
-                boxShadow: "0 4px 8px var(--deep-teal)",
-              }}
-            >
-              {t.login}
-            </Link>
-            <Link
-              href={`/${locale}/register`}
-              className="btn-primary text-button w-full text-center"
-              style={{
-                backgroundColor: "var(--polar)",
-                color: "var(--deep-teal)",
-                boxShadow: "0 4px 8px var(--deep-teal)",
-              }}
-            >
-              {t.register}
-            </Link>
+          <div className="flex w-full flex-col gap-4 items-center">
+            <div className="btn-single-wrapper">
+              <Link
+                href={`/${locale}/login`}
+                className="btn-primary text-button btn-single text-center"
+                style={{
+                  backgroundColor: "var(--polar)",
+                  color: "var(--deep-teal)",
+                  boxShadow: "0 4px 8px var(--deep-teal)",
+                }}
+              >
+                {t.login}
+              </Link>
+            </div>
+            <div className="btn-single-wrapper">
+              <Link
+                href={`/${locale}/register`}
+                className="btn-primary text-button btn-single text-center"
+                style={{
+                  backgroundColor: "var(--polar)",
+                  color: "var(--deep-teal)",
+                  boxShadow: "0 4px 8px var(--deep-teal)",
+                }}
+              >
+                {t.register}
+              </Link>
+            </div>
           </div>
         </div>
       </div>

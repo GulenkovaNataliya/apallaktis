@@ -74,30 +74,34 @@ export default function SubscriptionSuccessPage() {
           )}
 
           {/* Actions */}
-          <div className="flex flex-col gap-4 w-full mt-8">
-            <button
-              onClick={() => router.push(`/${locale}/dashboard`)}
-              className="btn-primary text-button w-full text-center"
-              style={{
-                backgroundColor: "var(--zanah)",
-                color: "var(--deep-teal)",
-                boxShadow: "0 4px 8px var(--deep-teal)",
-              }}
-            >
-              {t?.goToDashboard || "Go to Dashboard"}
-            </button>
+          <div className="flex flex-col gap-4 w-full mt-8 items-center">
+            <div className="btn-single-wrapper">
+              <button
+                onClick={() => router.push(`/${locale}/dashboard`)}
+                className="btn-primary text-button btn-single text-center"
+                style={{
+                  backgroundColor: "var(--zanah)",
+                  color: "var(--deep-teal)",
+                  boxShadow: "0 4px 8px var(--deep-teal)",
+                }}
+              >
+                {t?.goToDashboard || "Go to Dashboard"}
+              </button>
+            </div>
 
-            <button
-              onClick={() => router.push(`/${locale}/page-pay`)}
-              className="btn-primary text-button w-full text-center"
-              style={{
-                backgroundColor: "var(--polar)",
-                color: "var(--deep-teal)",
-                boxShadow: "0 4px 8px var(--deep-teal)",
-              }}
-            >
-              {t?.goToMenu || "Go to Main Menu"}
-            </button>
+            <div className="btn-single-wrapper">
+              <button
+                onClick={() => router.push(`/${locale}/page-pay`)}
+                className="btn-primary text-button btn-single text-center"
+                style={{
+                  backgroundColor: "var(--polar)",
+                  color: "var(--deep-teal)",
+                  boxShadow: "0 4px 8px var(--deep-teal)",
+                }}
+              >
+                {t?.goToMenu || "Go to Main Menu"}
+              </button>
+            </div>
           </div>
         </div>
       </div>

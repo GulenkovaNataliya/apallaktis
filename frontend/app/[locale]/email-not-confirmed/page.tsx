@@ -237,33 +237,37 @@ export default function EmailNotConfirmedPage() {
           )}
 
           {/* Buttons */}
-          <div className="flex flex-col gap-3">
-            <button
-              onClick={handleResend}
-              disabled={isResending}
-              className="btn-primary text-button w-full"
-              style={{
-                minHeight: "52px",
-                backgroundColor: "var(--zanah)",
-                color: "var(--deep-teal)",
-                boxShadow: "0 4px 8px var(--deep-teal)",
-                opacity: isResending ? 0.7 : 1,
-              }}
-            >
-              {isResending ? t.resending : t.resend}
-            </button>
+          <div className="flex flex-col gap-3 items-center">
+            <div className="btn-single-wrapper">
+              <button
+                onClick={handleResend}
+                disabled={isResending}
+                className="btn-primary text-button btn-single"
+                style={{
+                  minHeight: "52px",
+                  backgroundColor: "var(--zanah)",
+                  color: "var(--deep-teal)",
+                  boxShadow: "0 4px 8px var(--deep-teal)",
+                  opacity: isResending ? 0.7 : 1,
+                }}
+              >
+                {isResending ? t.resending : t.resend}
+              </button>
+            </div>
 
-            <button
-              onClick={handleLogout}
-              className="btn-primary text-button w-full"
-              style={{
-                minHeight: "52px",
-                backgroundColor: "rgba(1, 49, 45, 0.1)",
-                color: "var(--deep-teal)",
-              }}
-            >
-              {t.logout}
-            </button>
+            <div className="btn-single-wrapper">
+              <button
+                onClick={handleLogout}
+                className="btn-primary text-button btn-single"
+                style={{
+                  minHeight: "52px",
+                  backgroundColor: "rgba(1, 49, 45, 0.1)",
+                  color: "var(--deep-teal)",
+                }}
+              >
+                {t.logout}
+              </button>
+            </div>
           </div>
         </div>
       </div>

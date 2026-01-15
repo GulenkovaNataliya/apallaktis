@@ -68,6 +68,206 @@ export default function RegisterPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isAfmLoading, setIsAfmLoading] = useState(false);
+  const [afmResult, setAfmResult] = useState<{ companyName?: string; doy?: string } | null>(null);
+
+  // Phone verification states
+  const [registrationStep, setRegistrationStep] = useState<"form" | "verify">("form");
+  const [smsCode, setSmsCode] = useState("");
+  const [isSendingCode, setIsSendingCode] = useState(false);
+  const [isVerifyingCode, setIsVerifyingCode] = useState(false);
+  const [smsError, setSmsError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Phone verification translations
+  const phoneVerifyTexts: Record<string, any> = {
+    el: {
+      verifyTitle: "Επαλήθευση Τηλεφώνου",
+      codeSent: "Ο κωδικός στάλθηκε στο",
+      enterCode: "Εισάγετε τον 6-ψήφιο κωδικό",
+      verify: "Επαλήθευση",
+      resend: "Αποστολή ξανά",
+      back: "Πίσω",
+      codeExpires: "Ο κωδικός λήγει σε 10 λεπτά",
+      invalidCode: "Λάθος κωδικός",
+      sendError: "Σφάλμα αποστολής SMS",
+    },
+    ru: {
+      verifyTitle: "Подтверждение телефона",
+      codeSent: "Код отправлен на",
+      enterCode: "Введите 6-значный код",
+      verify: "Подтвердить",
+      resend: "Отправить снова",
+      back: "Назад",
+      codeExpires: "Код действителен 10 минут",
+      invalidCode: "Неверный код",
+      sendError: "Ошибка отправки SMS",
+    },
+    en: {
+      verifyTitle: "Phone Verification",
+      codeSent: "Code sent to",
+      enterCode: "Enter 6-digit code",
+      verify: "Verify",
+      resend: "Resend",
+      back: "Back",
+      codeExpires: "Code expires in 10 minutes",
+      invalidCode: "Invalid code",
+      sendError: "SMS sending error",
+    },
+    uk: {
+      verifyTitle: "Підтвердження телефону",
+      codeSent: "Код надіслано на",
+      enterCode: "Введіть 6-значний код",
+      verify: "Підтвердити",
+      resend: "Надіслати знову",
+      back: "Назад",
+      codeExpires: "Код дійсний 10 хвилин",
+      invalidCode: "Невірний код",
+      sendError: "Помилка відправки SMS",
+    },
+    sq: {
+      verifyTitle: "Verifikimi i Telefonit",
+      codeSent: "Kodi u dërgua në",
+      enterCode: "Vendosni kodin 6-shifror",
+      verify: "Verifiko",
+      resend: "Ridërgo",
+      back: "Kthehu",
+      codeExpires: "Kodi skadon në 10 minuta",
+      invalidCode: "Kod i pavlefshëm",
+      sendError: "Gabim në dërgimin e SMS",
+    },
+    bg: {
+      verifyTitle: "Потвърждение на телефон",
+      codeSent: "Кодът е изпратен на",
+      enterCode: "Въведете 6-цифрен код",
+      verify: "Потвърди",
+      resend: "Изпрати отново",
+      back: "Назад",
+      codeExpires: "Кодът е валиден 10 минути",
+      invalidCode: "Невалиден код",
+      sendError: "Грешка при изпращане на SMS",
+    },
+    ro: {
+      verifyTitle: "Verificare Telefon",
+      codeSent: "Codul a fost trimis la",
+      enterCode: "Introduceți codul din 6 cifre",
+      verify: "Verifică",
+      resend: "Retrimite",
+      back: "Înapoi",
+      codeExpires: "Codul expiră în 10 minute",
+      invalidCode: "Cod invalid",
+      sendError: "Eroare la trimiterea SMS",
+    },
+    ar: {
+      verifyTitle: "التحقق من الهاتف",
+      codeSent: "تم إرسال الرمز إلى",
+      enterCode: "أدخل الرمز المكون من 6 أرقام",
+      verify: "تحقق",
+      resend: "إعادة الإرسال",
+      back: "رجوع",
+      codeExpires: "الرمز صالح لمدة 10 دقائق",
+      invalidCode: "رمز غير صالح",
+      sendError: "خطأ في إرسال الرسالة",
+    },
+  };
+  const tPhone = phoneVerifyTexts[locale] || phoneVerifyTexts.en;
+
+  // AFM lookup function
+  const handleAfmLookup = async () => {
+    if (!isValidAfm(formData.afm)) {
+      setErrors({ ...errors, afm: t.invalidAfm });
+      return;
+    }
+
+    setIsAfmLoading(true);
+    setAfmResult(null);
+
+    try {
+      const response = await fetch('/api/clients/lookup-afm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ afm: formData.afm }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.data?.legalName) {
+          setAfmResult({
+            companyName: data.data.legalName,
+            doy: data.data.doy,
+          });
+          // Auto-fill company name if found
+          if (data.data.legalName && !formData.companyName) {
+            setFormData({ ...formData, companyName: data.data.legalName });
+          }
+        }
+      }
+    } catch (error) {
+      console.error('AFM lookup error:', error);
+    } finally {
+      setIsAfmLoading(false);
+    }
+  };
+
+  // Send SMS code for registration
+  const sendSmsCode = async () => {
+    setIsSendingCode(true);
+    setSmsError("");
+
+    try {
+      const fullPhone = formData.countryCode + formData.phone;
+      const response = await fetch('/api/sms/send-registration-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: fullPhone }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setSmsError(data.error || tPhone.sendError);
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('SMS send error:', error);
+      setSmsError(tPhone.sendError);
+      return false;
+    } finally {
+      setIsSendingCode(false);
+    }
+  };
+
+  // Verify SMS code
+  const verifySmsCode = async (): Promise<boolean> => {
+    setIsVerifyingCode(true);
+    setSmsError("");
+
+    try {
+      const fullPhone = formData.countryCode + formData.phone;
+      const response = await fetch('/api/sms/verify-registration-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: fullPhone, code: smsCode }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setSmsError(data.error || tPhone.invalidCode);
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('SMS verify error:', error);
+      setSmsError(tPhone.invalidCode);
+      return false;
+    } finally {
+      setIsVerifyingCode(false);
+    }
+  };
 
   const validateForm = (): boolean => {
     const newErrors = { email: "", phone: "", password: "", confirmPassword: "", afm: "" };
@@ -107,6 +307,7 @@ export default function RegisterPage() {
     return isValid;
   };
 
+  // Step 1: Validate form and send SMS
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -118,6 +319,29 @@ export default function RegisterPage() {
     if (!validateForm()) {
       return;
     }
+
+    // Send SMS code
+    const sent = await sendSmsCode();
+    if (sent) {
+      setRegistrationStep("verify");
+    }
+  };
+
+  // Step 2: Verify SMS and create account
+  const handleVerifyAndRegister = async () => {
+    if (smsCode.length !== 6) {
+      setSmsError(tPhone.invalidCode);
+      return;
+    }
+
+    // Verify SMS code
+    const verified = await verifySmsCode();
+    if (!verified) {
+      return;
+    }
+
+    // Now create the account
+    setIsSubmitting(true);
 
     try {
       const supabase = createClient();
@@ -131,11 +355,12 @@ export default function RegisterPage() {
           data: {
             name: formData.name,
             phone: formData.countryCode + formData.phone,
+            phone_verified: true, // Phone is verified
             country_code: formData.countryCode,
             invoice_type: invoiceType,
             company_name: invoiceType === 'invoice' ? formData.companyName : null,
             afm: invoiceType === 'invoice' ? formData.afm : null,
-            referred_by: referralCode || null, // Save referral code if present
+            referred_by: referralCode || null,
           },
         },
       });
@@ -146,6 +371,7 @@ export default function RegisterPage() {
         } else {
           alert(authError.message);
         }
+        setIsSubmitting(false);
         return;
       }
 
@@ -158,23 +384,32 @@ export default function RegisterPage() {
     } catch (error) {
       console.error('Registration error:', error);
       alert('Σφάλμα κατά την εγγραφή. Παρακαλώ δοκιμάστε ξανά.');
+      setIsSubmitting(false);
     }
+  };
+
+  // Resend SMS code
+  const handleResendCode = async () => {
+    setSmsCode("");
+    await sendSmsCode();
   };
 
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* Content */}
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-between px-4 safe-area-top safe-area-bottom py-8">
-        {/* Main form */}
+        {/* Main content */}
         <div className="w-full max-w-sm flex flex-col flex-1">
-          <h1
-            className="text-center text-slogan font-semibold"
-            style={{ color: "#ff8f0a", marginBottom: "50px" }}
-          >
-            {t.title}
-          </h1>
+          {registrationStep === "form" ? (
+            <>
+              <h1
+                className="text-center text-slogan font-semibold"
+                style={{ color: "#ff8f0a", marginBottom: "50px" }}
+              >
+                {t.title}
+              </h1>
 
-          <form onSubmit={handleSubmit} className="flex flex-col flex-1 gap-6">
+              <form onSubmit={handleSubmit} className="flex flex-col flex-1 gap-6">
             {/* Invoice Type Toggle */}
             <div className="grid grid-cols-2 gap-3">
               <button
@@ -361,6 +596,7 @@ export default function RegisterPage() {
                     onChange={(e) => {
                       setFormData({ ...formData, afm: e.target.value });
                       setErrors({ ...errors, afm: "" });
+                      setAfmResult(null);
                     }}
                     required
                     className={`text-body w-full rounded-2xl border focus:outline-none ${
@@ -372,6 +608,50 @@ export default function RegisterPage() {
                     <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
                       {errors.afm}
                     </p>
+                  )}
+
+                  {/* AFM and TaxisNet buttons */}
+                  <div className="flex gap-2 mt-3">
+                    <button
+                      type="button"
+                      onClick={handleAfmLookup}
+                      disabled={isAfmLoading || !formData.afm}
+                      className="btn-primary text-button text-center btn-afm"
+                      style={{
+                        backgroundColor: "var(--polar)",
+                        color: "var(--deep-teal)",
+                        boxShadow: "0 4px 8px var(--deep-teal)",
+                        opacity: isAfmLoading || !formData.afm ? 0.6 : 1,
+                        cursor: isAfmLoading || !formData.afm ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      {isAfmLoading ? "..." : "ΑΦΜ"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleAfmLookup}
+                      disabled={isAfmLoading || !formData.afm}
+                      className="btn-primary text-button text-center flex-1"
+                      style={{
+                        backgroundColor: "var(--polar)",
+                        color: "var(--deep-teal)",
+                        boxShadow: "0 4px 8px var(--deep-teal)",
+                        opacity: isAfmLoading || !formData.afm ? 0.6 : 1,
+                        cursor: isAfmLoading || !formData.afm ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      {isAfmLoading ? "..." : "TaxisNet"}
+                    </button>
+                  </div>
+
+                  {/* AFM lookup result */}
+                  {afmResult && (
+                    <div className="mt-2 p-3 rounded-xl" style={{ backgroundColor: "var(--zanah)" }}>
+                      <p className="text-sm" style={{ color: "var(--deep-teal)" }}>
+                        ✓ {afmResult.companyName}
+                        {afmResult.doy && <span className="block text-xs mt-1">ΔΟΥ: {afmResult.doy}</span>}
+                      </p>
+                    </div>
                   )}
                 </div>
               </>
@@ -394,18 +674,103 @@ export default function RegisterPage() {
             </label>
 
             {/* Submit Button */}
-            <button
-              type="submit"
-              className="btn-primary text-button w-full text-center"
-              style={{
-                backgroundColor: "var(--polar)",
-                color: "var(--deep-teal)",
-                boxShadow: "0 4px 8px var(--deep-teal)",
-              }}
-            >
-              {t.submit}
-            </button>
+            <div className="btn-single-wrapper">
+              <button
+                type="submit"
+                disabled={isSendingCode}
+                className="btn-primary text-button btn-single text-center"
+                style={{
+                  backgroundColor: "var(--polar)",
+                  color: "var(--deep-teal)",
+                  boxShadow: "0 4px 8px var(--deep-teal)",
+                  opacity: isSendingCode ? 0.6 : 1,
+                }}
+              >
+                {isSendingCode ? "..." : t.submit}
+              </button>
+            </div>
           </form>
+            </>
+          ) : (
+            /* Phone Verification Step */
+            <div className="flex flex-col items-center justify-center flex-1 gap-6">
+              <h1
+                className="text-center text-slogan font-semibold"
+                style={{ color: "#ff8f0a" }}
+              >
+                {tPhone.verifyTitle}
+              </h1>
+
+              <p className="text-body text-center" style={{ color: "var(--deep-teal)" }}>
+                {tPhone.codeSent} <strong>{formData.countryCode}{formData.phone}</strong>
+              </p>
+
+              {/* Code Input */}
+              <input
+                type="text"
+                value={smsCode}
+                onChange={(e) => setSmsCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                placeholder={tPhone.enterCode}
+                maxLength={6}
+                className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500 text-center text-2xl tracking-widest"
+                style={{ minHeight: '60px', paddingLeft: '20px', paddingRight: '20px' }}
+              />
+
+              <p className="text-sm" style={{ color: "var(--deep-teal)", opacity: 0.7 }}>
+                {tPhone.codeExpires}
+              </p>
+
+              {/* Error */}
+              {smsError && (
+                <p className="text-sm text-center" style={{ color: "#ff6a1a" }}>
+                  {smsError}
+                </p>
+              )}
+
+              {/* Verify Button */}
+              <div className="btn-single-wrapper">
+                <button
+                  type="button"
+                  onClick={handleVerifyAndRegister}
+                  disabled={isVerifyingCode || isSubmitting || smsCode.length !== 6}
+                  className="btn-primary text-button btn-single text-center"
+                  style={{
+                    backgroundColor: "#10b981",
+                    color: "#ffffff",
+                    boxShadow: "0 4px 8px #10b981",
+                    opacity: isVerifyingCode || isSubmitting || smsCode.length !== 6 ? 0.6 : 1,
+                  }}
+                >
+                  {isVerifyingCode || isSubmitting ? "..." : tPhone.verify}
+                </button>
+              </div>
+
+              {/* Resend & Back Buttons */}
+              <div className="flex gap-4">
+                <button
+                  type="button"
+                  onClick={handleResendCode}
+                  disabled={isSendingCode}
+                  className="text-button"
+                  style={{ color: "var(--deep-teal)", textDecoration: "underline" }}
+                >
+                  {isSendingCode ? "..." : tPhone.resend}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRegistrationStep("form");
+                    setSmsCode("");
+                    setSmsError("");
+                  }}
+                  className="text-button"
+                  style={{ color: "var(--deep-teal)", opacity: 0.7 }}
+                >
+                  {tPhone.back}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Legal Section at Bottom */}
