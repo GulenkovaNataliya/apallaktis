@@ -318,7 +318,7 @@ export default function RegisterPage() {
     return isValid;
   };
 
-  // Step 1: Validate form and send SMS (or skip if SMS not available)
+  // Step 1: Validate form and register (SMS verification temporarily disabled)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -331,21 +331,8 @@ export default function RegisterPage() {
       return;
     }
 
-    // Try to send SMS code
-    const sent = await sendSmsCode();
-    if (sent) {
-      // SMS sent successfully - go to verification step
-      setRegistrationStep("verify");
-    } else {
-      // SMS failed - check if it's because service is not configured
-      // If so, proceed directly to registration without phone verification
-      const skipSmsVerification = smsError.includes('not configured') || smsError.includes('SMS service');
-      if (skipSmsVerification) {
-        // Proceed to registration without phone verification
-        await registerWithoutSmsVerification();
-      }
-      // Otherwise, error is displayed and user can retry
-    }
+    // SMS verification temporarily disabled - register directly
+    await registerWithoutSmsVerification();
   };
 
   // Register without SMS verification (fallback when Twilio not configured)
