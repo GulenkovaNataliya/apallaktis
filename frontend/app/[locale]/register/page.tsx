@@ -69,7 +69,12 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isAfmLoading, setIsAfmLoading] = useState(false);
-  const [afmResult, setAfmResult] = useState<{ companyName?: string; doy?: string } | null>(null);
+  const [afmResult, setAfmResult] = useState<{
+    companyName?: string;
+    address?: string;
+    activity?: string;
+    doy?: string;
+  } | null>(null);
 
   // Phone verification states
   const [registrationStep, setRegistrationStep] = useState<"form" | "verify">("form");
@@ -172,7 +177,7 @@ export default function RegisterPage() {
   };
   const tPhone = phoneVerifyTexts[locale] || phoneVerifyTexts.en;
 
-  // AFM lookup function
+  // AFM lookup function (TaxisNet)
   const handleAfmLookup = async () => {
     if (!isValidAfm(formData.afm)) {
       setErrors({ ...errors, afm: t.invalidAfm });
@@ -192,18 +197,28 @@ export default function RegisterPage() {
       if (response.ok) {
         const data = await response.json();
         if (data.data?.legalName) {
+          const address = data.data.address
+            ? `${data.data.address.street || ''} ${data.data.address.city || ''} ${data.data.address.postalCode || ''}`.trim()
+            : '';
+
           setAfmResult({
             companyName: data.data.legalName,
-            doy: data.data.doy,
+            address: address,
+            activity: data.data.legalForm || '',
+            doy: data.data.doy || '',
           });
-          // Auto-fill company name if found
-          if (data.data.legalName && !formData.companyName) {
-            setFormData({ ...formData, companyName: data.data.legalName });
-          }
+          // Auto-fill company name
+          setFormData({ ...formData, companyName: data.data.legalName });
+        } else {
+          // No data found
+          setErrors({ ...errors, afm: 'ΑΦΜ δεν βρέθηκε' });
         }
+      } else {
+        setErrors({ ...errors, afm: 'Σφάλμα αναζήτησης' });
       }
     } catch (error) {
       console.error('AFM lookup error:', error);
+      setErrors({ ...errors, afm: 'Σφάλμα σύνδεσης' });
     } finally {
       setIsAfmLoading(false);
     }
@@ -578,82 +593,89 @@ export default function RegisterPage() {
             {/* Invoice-only Fields */}
             {invoiceType === "invoice" && (
               <>
-                <input
-                  type="text"
-                  placeholder={t.companyName}
-                  value={formData.companyName}
-                  onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                  required
-                  className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
-                  style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px' }}
-                />
-
+                {/* ΑΦΜ input (60%) + TaxisNet button (40%) */}
                 <div>
-                  <input
-                    type="text"
-                    placeholder={t.afm}
-                    value={formData.afm}
-                    onChange={(e) => {
-                      setFormData({ ...formData, afm: e.target.value });
-                      setErrors({ ...errors, afm: "" });
-                      setAfmResult(null);
-                    }}
-                    required
-                    className={`text-body w-full rounded-2xl border focus:outline-none ${
-                      errors.afm ? "border-red-500" : "border-gray-300 focus:border-blue-500"
-                    }`}
-                    style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px' }}
-                  />
-                  {errors.afm && (
-                    <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
-                      {errors.afm}
-                    </p>
-                  )}
-
-                  {/* AFM and TaxisNet buttons */}
-                  <div className="flex gap-2 mt-3">
-                    <button
-                      type="button"
-                      onClick={handleAfmLookup}
-                      disabled={isAfmLoading || !formData.afm}
-                      className="btn-primary text-button text-center btn-afm"
-                      style={{
-                        backgroundColor: "var(--polar)",
-                        color: "var(--deep-teal)",
-                        boxShadow: "0 4px 8px var(--deep-teal)",
-                        opacity: isAfmLoading || !formData.afm ? 0.6 : 1,
-                        cursor: isAfmLoading || !formData.afm ? "not-allowed" : "pointer",
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="ΑΦΜ"
+                      value={formData.afm}
+                      onChange={(e) => {
+                        setFormData({ ...formData, afm: e.target.value.replace(/\D/g, '').slice(0, 9) });
+                        setErrors({ ...errors, afm: "" });
+                        setAfmResult(null);
                       }}
-                    >
-                      {isAfmLoading ? "..." : "ΑΦΜ"}
-                    </button>
+                      required
+                      className={`text-body rounded-2xl border focus:outline-none ${
+                        errors.afm ? "border-red-500" : "border-gray-300 focus:border-blue-500"
+                      }`}
+                      style={{ minHeight: '52px', paddingLeft: '20px', paddingRight: '20px', width: '60%' }}
+                    />
                     <button
                       type="button"
                       onClick={handleAfmLookup}
-                      disabled={isAfmLoading || !formData.afm}
-                      className="btn-primary text-button text-center flex-1"
+                      disabled={isAfmLoading || formData.afm.length !== 9}
+                      className="btn-primary text-button text-center"
                       style={{
                         backgroundColor: "var(--polar)",
                         color: "var(--deep-teal)",
                         boxShadow: "0 4px 8px var(--deep-teal)",
-                        opacity: isAfmLoading || !formData.afm ? 0.6 : 1,
-                        cursor: isAfmLoading || !formData.afm ? "not-allowed" : "pointer",
+                        opacity: isAfmLoading || formData.afm.length !== 9 ? 0.6 : 1,
+                        cursor: isAfmLoading || formData.afm.length !== 9 ? "not-allowed" : "pointer",
+                        width: '40%',
                       }}
                     >
                       {isAfmLoading ? "..." : "TaxisNet"}
                     </button>
                   </div>
-
-                  {/* AFM lookup result */}
-                  {afmResult && (
-                    <div className="mt-2 p-3 rounded-xl" style={{ backgroundColor: "var(--zanah)" }}>
-                      <p className="text-sm" style={{ color: "var(--deep-teal)" }}>
-                        ✓ {afmResult.companyName}
-                        {afmResult.doy && <span className="block text-xs mt-1">ΔΟΥ: {afmResult.doy}</span>}
-                      </p>
-                    </div>
+                  {errors.afm && (
+                    <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
+                      {errors.afm}
+                    </p>
                   )}
                 </div>
+
+                {/* Auto-filled fields from TaxisNet (read-only) */}
+                {afmResult && (
+                  <div className="flex flex-col gap-3">
+                    {/* Επωνυμία (Company Name) */}
+                    <input
+                      type="text"
+                      value={afmResult.companyName || ''}
+                      readOnly
+                      placeholder="Επωνυμία"
+                      className="text-body w-full rounded-2xl border border-gray-300 bg-gray-100"
+                      style={{ minHeight: '52px', paddingLeft: '20px', paddingRight: '20px', color: 'var(--deep-teal)' }}
+                    />
+                    {/* Διεύθυνση (Address) */}
+                    <input
+                      type="text"
+                      value={afmResult.address || ''}
+                      readOnly
+                      placeholder="Διεύθυνση"
+                      className="text-body w-full rounded-2xl border border-gray-300 bg-gray-100"
+                      style={{ minHeight: '52px', paddingLeft: '20px', paddingRight: '20px', color: 'var(--deep-teal)' }}
+                    />
+                    {/* Δραστηριότητα (Activity) */}
+                    <input
+                      type="text"
+                      value={afmResult.activity || ''}
+                      readOnly
+                      placeholder="Δραστηριότητα"
+                      className="text-body w-full rounded-2xl border border-gray-300 bg-gray-100"
+                      style={{ minHeight: '52px', paddingLeft: '20px', paddingRight: '20px', color: 'var(--deep-teal)' }}
+                    />
+                    {/* ΔΟΥ */}
+                    <input
+                      type="text"
+                      value={afmResult.doy || ''}
+                      readOnly
+                      placeholder="ΔΟΥ"
+                      className="text-body w-full rounded-2xl border border-gray-300 bg-gray-100"
+                      style={{ minHeight: '52px', paddingLeft: '20px', paddingRight: '20px', color: 'var(--deep-teal)' }}
+                    />
+                  </div>
+                )}
               </>
             )}
 
