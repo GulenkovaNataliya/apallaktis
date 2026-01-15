@@ -58,10 +58,10 @@ export default function TermsPage() {
           ))}
         </div>
 
-        {/* Back to Home Button */}
+        {/* Back to Registration Button */}
         <div className="mt-12 mb-8 text-center">
           <Link
-            href={`/${locale}`}
+            href={`/${locale}/register`}
             className="btn-primary text-button inline-block"
             style={{
               backgroundColor: "var(--polar)",
