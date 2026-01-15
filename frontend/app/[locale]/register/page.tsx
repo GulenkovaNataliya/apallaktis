@@ -318,7 +318,7 @@ export default function RegisterPage() {
     return isValid;
   };
 
-  // Step 1: Validate form and send SMS
+  // Validate form and register directly (SMS verification removed)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -331,10 +331,49 @@ export default function RegisterPage() {
       return;
     }
 
-    // Send SMS code
-    const sent = await sendSmsCode();
-    if (sent) {
-      setRegistrationStep("verify");
+    // Register directly without SMS verification
+    setIsSubmitting(true);
+
+    try {
+      const supabase = createClient();
+
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/${locale}/login`,
+          data: {
+            name: formData.name,
+            phone: formData.countryCode + formData.phone,
+            country_code: formData.countryCode,
+            invoice_type: invoiceType,
+            company_name: invoiceType === 'invoice' ? (afmResult?.companyName || formData.companyName) : null,
+            afm: invoiceType === 'invoice' ? formData.afm : null,
+            address: invoiceType === 'invoice' ? afmResult?.address : null,
+            activity: invoiceType === 'invoice' ? afmResult?.activity : null,
+            doy: invoiceType === 'invoice' ? afmResult?.doy : null,
+            referred_by: referralCode || null,
+          },
+        },
+      });
+
+      if (authError) {
+        console.error('Registration error:', authError);
+        if (authError.message.includes('already registered')) {
+          alert('Αυτό το email είναι ήδη εγγεγραμμένο. Παρακαλώ συνδεθείτε.');
+        } else {
+          alert(authError.message);
+        }
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Success - redirect to email confirmation page
+      router.push(`/${locale}/email-not-confirmed`);
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Σφάλμα κατά την εγγραφή. Παρακαλώ δοκιμάστε ξανά.');
+      setIsSubmitting(false);
     }
   };
 
@@ -459,9 +498,7 @@ export default function RegisterPage() {
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-between px-4 safe-area-top safe-area-bottom py-8">
         {/* Main content */}
         <div className="w-full max-w-sm flex flex-col flex-1">
-          {registrationStep === "form" ? (
-            <>
-              <h1
+          <h1
                 className="text-center text-slogan font-semibold"
                 style={{ color: "#ff8f0a", marginBottom: "50px" }}
               >
@@ -739,111 +776,23 @@ export default function RegisterPage() {
               </span>
             </label>
 
-            {/* SMS Error Display */}
-            {smsError && (
-              <p className="text-sm text-center" style={{ color: "#ff6a1a" }}>
-                {smsError}
-              </p>
-            )}
-
             {/* Submit Button */}
             <div className="btn-single-wrapper">
               <button
                 type="submit"
-                disabled={isSendingCode}
+                disabled={isSubmitting}
                 className="btn-primary text-button btn-single text-center"
                 style={{
                   backgroundColor: "var(--polar)",
                   color: "var(--deep-teal)",
                   boxShadow: "0 4px 8px var(--deep-teal)",
-                  opacity: isSendingCode ? 0.6 : 1,
+                  opacity: isSubmitting ? 0.6 : 1,
                 }}
               >
-                {isSendingCode ? "..." : t.submit}
+                {isSubmitting ? "..." : t.submit}
               </button>
             </div>
           </form>
-            </>
-          ) : (
-            /* Phone Verification Step */
-            <div className="flex flex-col items-center justify-center flex-1 gap-6">
-              <h1
-                className="text-center text-slogan font-semibold"
-                style={{ color: "#ff8f0a" }}
-              >
-                {tPhone.verifyTitle}
-              </h1>
-
-              <p className="text-body text-center" style={{ color: "var(--deep-teal)" }}>
-                {tPhone.codeSent} <strong>{formData.countryCode}{formData.phone}</strong>
-              </p>
-
-              {/* Code Input */}
-              <input
-                type="text"
-                value={smsCode}
-                onChange={(e) => setSmsCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                placeholder={tPhone.enterCode}
-                maxLength={6}
-                className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500 text-center text-2xl tracking-widest"
-                style={{ minHeight: '60px', paddingLeft: '20px', paddingRight: '20px' }}
-              />
-
-              <p className="text-sm" style={{ color: "var(--deep-teal)", opacity: 0.7 }}>
-                {tPhone.codeExpires}
-              </p>
-
-              {/* Error */}
-              {smsError && (
-                <p className="text-sm text-center" style={{ color: "#ff6a1a" }}>
-                  {smsError}
-                </p>
-              )}
-
-              {/* Verify Button */}
-              <div className="btn-single-wrapper">
-                <button
-                  type="button"
-                  onClick={handleVerifyAndRegister}
-                  disabled={isVerifyingCode || isSubmitting || smsCode.length !== 6}
-                  className="btn-primary text-button btn-single text-center"
-                  style={{
-                    backgroundColor: "#10b981",
-                    color: "#ffffff",
-                    boxShadow: "0 4px 8px #10b981",
-                    opacity: isVerifyingCode || isSubmitting || smsCode.length !== 6 ? 0.6 : 1,
-                  }}
-                >
-                  {isVerifyingCode || isSubmitting ? "..." : tPhone.verify}
-                </button>
-              </div>
-
-              {/* Resend & Back Buttons */}
-              <div className="flex gap-4">
-                <button
-                  type="button"
-                  onClick={handleResendCode}
-                  disabled={isSendingCode}
-                  className="text-button"
-                  style={{ color: "var(--deep-teal)", textDecoration: "underline" }}
-                >
-                  {isSendingCode ? "..." : tPhone.resend}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setRegistrationStep("form");
-                    setSmsCode("");
-                    setSmsError("");
-                  }}
-                  className="text-button"
-                  style={{ color: "var(--deep-teal)", opacity: 0.7 }}
-                >
-                  {tPhone.back}
-                </button>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Legal Section at Bottom */}
