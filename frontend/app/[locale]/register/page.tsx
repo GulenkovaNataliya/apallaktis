@@ -177,7 +177,7 @@ export default function RegisterPage() {
   };
   const tPhone = phoneVerifyTexts[locale] || phoneVerifyTexts.en;
 
-  // AFM lookup function (TaxisNet)
+  // AFM lookup function (TaxisNet/VIES)
   const handleAfmLookup = async () => {
     if (!isValidAfm(formData.afm)) {
       setErrors({ ...errors, afm: t.invalidAfm });
@@ -188,33 +188,29 @@ export default function RegisterPage() {
     setAfmResult(null);
 
     try {
-      const response = await fetch('/api/clients/lookup-afm', {
+      // Use public API (no auth required)
+      const response = await fetch('/api/afm/lookup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ afm: formData.afm }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.data?.legalName) {
-          const address = data.data.address
-            ? `${data.data.address.street || ''} ${data.data.address.city || ''} ${data.data.address.postalCode || ''}`.trim()
-            : '';
+      const data = await response.json();
 
-          setAfmResult({
-            companyName: data.data.legalName,
-            address: address,
-            activity: data.data.legalForm || '',
-            doy: data.data.doy || '',
-          });
-          // Auto-fill company name
+      if (data.success && data.data) {
+        setAfmResult({
+          companyName: data.data.legalName || '',
+          address: data.data.address || '',
+          activity: data.data.activity || '',
+          doy: data.data.doy || '',
+        });
+        // Auto-fill company name
+        if (data.data.legalName) {
           setFormData({ ...formData, companyName: data.data.legalName });
-        } else {
-          // No data found
-          setErrors({ ...errors, afm: 'ΑΦΜ δεν βρέθηκε' });
         }
       } else {
-        setErrors({ ...errors, afm: 'Σφάλμα αναζήτησης' });
+        // No data found or error
+        setErrors({ ...errors, afm: data.error || 'ΑΦΜ δεν βρέθηκε' });
       }
     } catch (error) {
       console.error('AFM lookup error:', error);
