@@ -58,13 +58,6 @@ RESEND_API_KEY=re_...
 EMAIL_FROM=noreply@apallaktis.gr
 ```
 
-### SMS (Optional - Twilio)
-```
-TWILIO_ACCOUNT_SID=AC...
-TWILIO_AUTH_TOKEN=...
-TWILIO_PHONE_NUMBER=+1234567890
-```
-
 ---
 
 ## Step 3: Domain Configuration
@@ -133,7 +126,7 @@ Execute all SQL migrations in order:
 The following cron job runs automatically:
 - **Check expiring subscriptions**: Daily at 9:00 AM UTC
   - Path: `/api/cron/check-expiring-subscriptions`
-  - Sends email/SMS notifications for:
+  - Sends email notifications for:
     - DEMO expiring in 24 hours
     - Subscriptions expiring in 2 days
 

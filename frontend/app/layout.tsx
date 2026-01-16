@@ -14,7 +14,6 @@ export const metadata: Metadata = {
     telephone: false,
   },
   manifest: "/manifest.json",
-  themeColor: "#01312d",
 };
 
 export const viewport: Viewport = {
@@ -40,7 +39,6 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Apallaktis" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#01312d" />
 
         {/* Service Worker Registration */}
         <Script

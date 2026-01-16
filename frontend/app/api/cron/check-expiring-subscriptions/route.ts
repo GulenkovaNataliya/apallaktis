@@ -14,13 +14,6 @@ import {
   sendSubscriptionExpiringEmail,
   sendSubscriptionExpiredEmail,
 } from '@/lib/email/notifications';
-import {
-  sendDemoExpiringNotification,
-  sendDemoExpiredNotification,
-  sendSubscriptionExpiringNotification,
-  sendSubscriptionExpiredNotification,
-  isTwilioConfigured,
-} from '@/lib/sms/twilio';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
@@ -53,7 +46,7 @@ export async function GET(request: Request) {
     // ========================================
     const { data: expiringDemos, error: expiringDemosError } = await supabase
       .from('profiles')
-      .select('id, email, name, phone, phone_verified, account_number, demo_expires_at, preferred_language')
+      .select('id, email, account_number, demo_expires_at, preferred_language')
       .eq('subscription_status', 'demo')
       .gte('demo_expires_at', now.toISOString())
       .lte('demo_expires_at', oneDayFromNow.toISOString())
@@ -71,12 +64,6 @@ export async function GET(request: Request) {
           new Date(profile.demo_expires_at!),
           profile.preferred_language || 'el'
         );
-
-        // Отправляем SMS, если телефон верифицирован и Twilio настроен
-        if (isTwilioConfigured() && profile.phone && profile.phone_verified) {
-          await sendDemoExpiringNotification(profile.phone, profile.name);
-          console.log(`📱 SMS отправлен: ${profile.phone} (#${profile.account_number})`);
-        }
 
         if (emailSuccess) {
           // Пометить что email отправлен
@@ -98,7 +85,7 @@ export async function GET(request: Request) {
 
     const { data: expiredDemos, error: expiredDemosError } = await supabase
       .from('profiles')
-      .select('id, email, name, phone, phone_verified, account_number, demo_expires_at, preferred_language')
+      .select('id, email, account_number, demo_expires_at, preferred_language')
       .eq('subscription_status', 'read-only')
       .gte('demo_expires_at', yesterday.toISOString())
       .lte('demo_expires_at', now.toISOString())
@@ -116,12 +103,6 @@ export async function GET(request: Request) {
           profile.preferred_language || 'el'
         );
 
-        // Отправляем SMS, если телефон верифицирован и Twilio настроен
-        if (isTwilioConfigured() && profile.phone && profile.phone_verified) {
-          await sendDemoExpiredNotification(profile.phone, profile.name);
-          console.log(`📱 SMS отправлен: ${profile.phone} (#${profile.account_number})`);
-        }
-
         if (emailSuccess) {
           await supabase
             .from('profiles')
@@ -138,7 +119,7 @@ export async function GET(request: Request) {
     // ========================================
     const { data: expiringSubscriptions, error: expiringSubsError } = await supabase
       .from('profiles')
-      .select('id, email, name, phone, phone_verified, account_number, subscription_plan, subscription_expires_at, preferred_language')
+      .select('id, email, account_number, subscription_plan, subscription_expires_at, preferred_language')
       .in('subscription_status', ['active', 'vip'])
       .not('subscription_expires_at', 'is', null)
       .gte('subscription_expires_at', now.toISOString())
@@ -159,16 +140,6 @@ export async function GET(request: Request) {
           profile.preferred_language || 'el'
         );
 
-        // Отправляем SMS, если телефон верифицирован и Twilio настроен
-        if (isTwilioConfigured() && profile.phone && profile.phone_verified) {
-          await sendSubscriptionExpiringNotification(
-            profile.phone,
-            profile.name,
-            profile.subscription_expires_at!
-          );
-          console.log(`📱 SMS отправлен: ${profile.phone} (#${profile.account_number})`);
-        }
-
         if (emailSuccess) {
           await supabase
             .from('profiles')
@@ -185,7 +156,7 @@ export async function GET(request: Request) {
     // ========================================
     const { data: expiredSubscriptions, error: expiredSubsError } = await supabase
       .from('profiles')
-      .select('id, email, name, phone, phone_verified, account_number, subscription_expires_at, preferred_language')
+      .select('id, email, account_number, subscription_expires_at, preferred_language')
       .eq('subscription_status', 'expired')
       .gte('subscription_expires_at', yesterday.toISOString())
       .lte('subscription_expires_at', now.toISOString())
@@ -202,12 +173,6 @@ export async function GET(request: Request) {
           profile.account_number,
           profile.preferred_language || 'el'
         );
-
-        // Отправляем SMS, если телефон верифицирован и Twilio настроен
-        if (isTwilioConfigured() && profile.phone && profile.phone_verified) {
-          await sendSubscriptionExpiredNotification(profile.phone, profile.name);
-          console.log(`📱 SMS отправлен: ${profile.phone} (#${profile.account_number})`);
-        }
 
         if (emailSuccess) {
           await supabase

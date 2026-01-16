@@ -76,106 +76,7 @@ export default function RegisterPage() {
     doy?: string;
   } | null>(null);
 
-  // Phone verification states
-  const [registrationStep, setRegistrationStep] = useState<"form" | "verify">("form");
-  const [smsCode, setSmsCode] = useState("");
-  const [isSendingCode, setIsSendingCode] = useState(false);
-  const [isVerifyingCode, setIsVerifyingCode] = useState(false);
-  const [smsError, setSmsError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Phone verification translations
-  const phoneVerifyTexts: Record<string, any> = {
-    el: {
-      verifyTitle: "Επαλήθευση Τηλεφώνου",
-      codeSent: "Ο κωδικός στάλθηκε στο",
-      enterCode: "Εισάγετε τον 6-ψήφιο κωδικό",
-      verify: "Επαλήθευση",
-      resend: "Αποστολή ξανά",
-      back: "Πίσω",
-      codeExpires: "Ο κωδικός λήγει σε 10 λεπτά",
-      invalidCode: "Λάθος κωδικός",
-      sendError: "Σφάλμα αποστολής SMS",
-    },
-    ru: {
-      verifyTitle: "Подтверждение телефона",
-      codeSent: "Код отправлен на",
-      enterCode: "Введите 6-значный код",
-      verify: "Подтвердить",
-      resend: "Отправить снова",
-      back: "Назад",
-      codeExpires: "Код действителен 10 минут",
-      invalidCode: "Неверный код",
-      sendError: "Ошибка отправки SMS",
-    },
-    en: {
-      verifyTitle: "Phone Verification",
-      codeSent: "Code sent to",
-      enterCode: "Enter 6-digit code",
-      verify: "Verify",
-      resend: "Resend",
-      back: "Back",
-      codeExpires: "Code expires in 10 minutes",
-      invalidCode: "Invalid code",
-      sendError: "SMS sending error",
-    },
-    uk: {
-      verifyTitle: "Підтвердження телефону",
-      codeSent: "Код надіслано на",
-      enterCode: "Введіть 6-значний код",
-      verify: "Підтвердити",
-      resend: "Надіслати знову",
-      back: "Назад",
-      codeExpires: "Код дійсний 10 хвилин",
-      invalidCode: "Невірний код",
-      sendError: "Помилка відправки SMS",
-    },
-    sq: {
-      verifyTitle: "Verifikimi i Telefonit",
-      codeSent: "Kodi u dërgua në",
-      enterCode: "Vendosni kodin 6-shifror",
-      verify: "Verifiko",
-      resend: "Ridërgo",
-      back: "Kthehu",
-      codeExpires: "Kodi skadon në 10 minuta",
-      invalidCode: "Kod i pavlefshëm",
-      sendError: "Gabim në dërgimin e SMS",
-    },
-    bg: {
-      verifyTitle: "Потвърждение на телефон",
-      codeSent: "Кодът е изпратен на",
-      enterCode: "Въведете 6-цифрен код",
-      verify: "Потвърди",
-      resend: "Изпрати отново",
-      back: "Назад",
-      codeExpires: "Кодът е валиден 10 минути",
-      invalidCode: "Невалиден код",
-      sendError: "Грешка при изпращане на SMS",
-    },
-    ro: {
-      verifyTitle: "Verificare Telefon",
-      codeSent: "Codul a fost trimis la",
-      enterCode: "Introduceți codul din 6 cifre",
-      verify: "Verifică",
-      resend: "Retrimite",
-      back: "Înapoi",
-      codeExpires: "Codul expiră în 10 minute",
-      invalidCode: "Cod invalid",
-      sendError: "Eroare la trimiterea SMS",
-    },
-    ar: {
-      verifyTitle: "التحقق من الهاتف",
-      codeSent: "تم إرسال الرمز إلى",
-      enterCode: "أدخل الرمز المكون من 6 أرقام",
-      verify: "تحقق",
-      resend: "إعادة الإرسال",
-      back: "رجوع",
-      codeExpires: "الرمز صالح لمدة 10 دقائق",
-      invalidCode: "رمز غير صالح",
-      sendError: "خطأ في إرسال الرسالة",
-    },
-  };
-  const tPhone = phoneVerifyTexts[locale] || phoneVerifyTexts.en;
 
   // AFM lookup function (TaxisNet/VIES)
   const handleAfmLookup = async () => {
@@ -220,66 +121,6 @@ export default function RegisterPage() {
     }
   };
 
-  // Send SMS code for registration
-  const sendSmsCode = async () => {
-    setIsSendingCode(true);
-    setSmsError("");
-
-    try {
-      const fullPhone = formData.countryCode + formData.phone;
-      const response = await fetch('/api/sms/send-registration-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: fullPhone }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setSmsError(data.error || tPhone.sendError);
-        return false;
-      }
-
-      return true;
-    } catch (error) {
-      console.error('SMS send error:', error);
-      setSmsError(tPhone.sendError);
-      return false;
-    } finally {
-      setIsSendingCode(false);
-    }
-  };
-
-  // Verify SMS code
-  const verifySmsCode = async (): Promise<boolean> => {
-    setIsVerifyingCode(true);
-    setSmsError("");
-
-    try {
-      const fullPhone = formData.countryCode + formData.phone;
-      const response = await fetch('/api/sms/verify-registration-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: fullPhone, code: smsCode }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setSmsError(data.error || tPhone.invalidCode);
-        return false;
-      }
-
-      return true;
-    } catch (error) {
-      console.error('SMS verify error:', error);
-      setSmsError(tPhone.invalidCode);
-      return false;
-    } finally {
-      setIsVerifyingCode(false);
-    }
-  };
-
   const validateForm = (): boolean => {
     const newErrors = { email: "", phone: "", password: "", confirmPassword: "", afm: "" };
     let isValid = true;
@@ -318,7 +159,6 @@ export default function RegisterPage() {
     return isValid;
   };
 
-  // Validate form and register directly (SMS verification removed)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -331,7 +171,6 @@ export default function RegisterPage() {
       return;
     }
 
-    // Register directly without SMS verification
     setIsSubmitting(true);
 
     try {
@@ -363,121 +202,6 @@ export default function RegisterPage() {
       alert('Σφάλμα κατά την εγγραφή. Παρακαλώ δοκιμάστε ξανά.');
       setIsSubmitting(false);
     }
-  };
-
-  // Register without SMS verification (fallback when Twilio not configured)
-  const registerWithoutSmsVerification = async () => {
-    setIsSubmitting(true);
-    setSmsError("");
-
-    try {
-      const supabase = createClient();
-
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/${locale}/login`,
-          data: {
-            name: formData.name,
-            phone: formData.countryCode + formData.phone,
-            phone_verified: false, // Phone NOT verified
-            country_code: formData.countryCode,
-            invoice_type: invoiceType,
-            company_name: invoiceType === 'invoice' ? formData.companyName : null,
-            afm: invoiceType === 'invoice' ? formData.afm : null,
-            activity: invoiceType === 'invoice' ? afmResult?.activity : null,
-            doy: invoiceType === 'invoice' ? afmResult?.doy : null,
-            referred_by: referralCode || null,
-          },
-        },
-      });
-
-      if (authError) {
-        if (authError.message.includes('already registered')) {
-          alert('Αυτό το email είναι ήδη εγγεγραμμένο. Παρακαλώ συνδεθείτε.');
-        } else {
-          alert(authError.message);
-        }
-        setIsSubmitting(false);
-        return;
-      }
-
-      router.push(`/${locale}/thank-you`);
-    } catch (error) {
-      console.error('Registration error:', error);
-      alert('Σφάλμα κατά την εγγραφή. Παρακαλώ δοκιμάστε ξανά.');
-      setIsSubmitting(false);
-    }
-  };
-
-  // Step 2: Verify SMS and create account
-  const handleVerifyAndRegister = async () => {
-    if (smsCode.length !== 6) {
-      setSmsError(tPhone.invalidCode);
-      return;
-    }
-
-    // Verify SMS code
-    const verified = await verifySmsCode();
-    if (!verified) {
-      return;
-    }
-
-    // Now create the account
-    setIsSubmitting(true);
-
-    try {
-      const supabase = createClient();
-
-      // Register user with Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/${locale}/login`,
-          data: {
-            name: formData.name,
-            phone: formData.countryCode + formData.phone,
-            phone_verified: true, // Phone is verified
-            country_code: formData.countryCode,
-            invoice_type: invoiceType,
-            company_name: invoiceType === 'invoice' ? formData.companyName : null,
-            afm: invoiceType === 'invoice' ? formData.afm : null,
-            activity: invoiceType === 'invoice' ? afmResult?.activity : null,
-            doy: invoiceType === 'invoice' ? afmResult?.doy : null,
-            referred_by: referralCode || null,
-          },
-        },
-      });
-
-      if (authError) {
-        if (authError.message.includes('already registered')) {
-          alert('Αυτό το email είναι ήδη εγγεγραμμένο. Παρακαλώ συνδεθείτε.');
-        } else {
-          alert(authError.message);
-        }
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Success! User created
-      console.log('User registered:', authData.user?.id);
-
-      // Redirect to thank you page
-      router.push(`/${locale}/thank-you`);
-
-    } catch (error) {
-      console.error('Registration error:', error);
-      alert('Σφάλμα κατά την εγγραφή. Παρακαλώ δοκιμάστε ξανά.');
-      setIsSubmitting(false);
-    }
-  };
-
-  // Resend SMS code
-  const handleResendCode = async () => {
-    setSmsCode("");
-    await sendSmsCode();
   };
 
   return (

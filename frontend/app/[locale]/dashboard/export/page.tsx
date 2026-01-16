@@ -127,33 +127,17 @@ export default function ExportPage() {
         }
       });
 
-      // Choose PDF generator based on locale
-      // For Arabic (RTL) - use pdfmake, for others - use jsPDF
-      if (locale === 'ar') {
-        // Import RTL-enabled generator for Arabic
-        import('@/lib/export/generatePDFArabic').then(({ generatePDFArabic }) => {
-          generatePDFArabic({
-            properties: selectedProps,
-            expenses: expensesMap,
-            dateFrom,
-            dateTo,
-            locale: 'ar',
-          });
-          setIsLoading(false);
+      // Generate PDF (not available for Arabic)
+      import('@/lib/export/generatePDF').then(({ generatePDF }) => {
+        generatePDF({
+          properties: selectedProps,
+          expenses: expensesMap,
+          dateFrom,
+          dateTo,
+          locale,
         });
-      } else {
-        // Import standard generator for LTR languages
-        import('@/lib/export/generatePDF').then(({ generatePDF }) => {
-          generatePDF({
-            properties: selectedProps,
-            expenses: expensesMap,
-            dateFrom,
-            dateTo,
-            locale,
-          });
-          setIsLoading(false);
-        });
-      }
+        setIsLoading(false);
+      });
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert(locale === 'el' ? 'Σφάλμα δημιουργίας PDF' : locale === 'ru' ? 'Ошибка генерации PDF' : 'Error generating PDF');
@@ -383,20 +367,23 @@ export default function ExportPage() {
           </div>
 
           {/* Download Buttons */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button
-              onClick={downloadPDF}
-              disabled={isLoading || selectedProperties.length === 0}
-              className="btn-primary text-button"
-              style={{
-                backgroundColor: '#ef4444',
-                color: '#ffffff',
-                opacity: isLoading || selectedProperties.length === 0 ? 0.5 : 1,
-                boxShadow: '0 4px 8px rgba(255, 255, 255, 0.3)',
-              }}
-            >
-              {isLoading ? t.loading : `📄 ${t.downloadPDF}`}
-            </button>
+          <div className={`grid grid-cols-1 ${locale !== 'ar' ? 'md:grid-cols-2' : ''} gap-4`}>
+            {/* PDF button - not available for Arabic */}
+            {locale !== 'ar' && (
+              <button
+                onClick={downloadPDF}
+                disabled={isLoading || selectedProperties.length === 0}
+                className="btn-primary text-button"
+                style={{
+                  backgroundColor: '#ef4444',
+                  color: '#ffffff',
+                  opacity: isLoading || selectedProperties.length === 0 ? 0.5 : 1,
+                  boxShadow: '0 4px 8px rgba(255, 255, 255, 0.3)',
+                }}
+              >
+                {isLoading ? t.loading : `📄 ${t.downloadPDF}`}
+              </button>
+            )}
 
             <button
               onClick={downloadExcel}

@@ -14,11 +14,6 @@ interface NotificationSettings {
     news: boolean;
     referrals: boolean;
   };
-  sms: {
-    demo_expiring: boolean;
-    subscription_expiring: boolean;
-    payment_failed: boolean;
-  };
 }
 
 const defaultSettings: NotificationSettings = {
@@ -29,23 +24,15 @@ const defaultSettings: NotificationSettings = {
     news: false,
     referrals: true,
   },
-  sms: {
-    demo_expiring: false,
-    subscription_expiring: false,
-    payment_failed: false,
-  },
 };
 
 const translations = {
   el: {
     title: "Ρυθμίσεις",
     emailNotifications: "Ειδοποιήσεις Email",
-    smsNotifications: "Ειδοποιήσεις SMS",
-    smsNote: "(προαιρετική υπηρεσία)",
     demoExpiring: "DEMO λήγει (2 ημέρες πριν)",
     subscriptionExpiring: "Η συνδρομή λήγει (2 ημέρες πριν)",
     paymentReceived: "Πληρωμή ελήφθη",
-    paymentFailed: "Η πληρωμή απέτυχε",
     news: "Νέα και ενημερώσεις",
     referrals: "Νέες παραπομπές",
     language: "Γλώσσα διεπαφής",
@@ -59,12 +46,9 @@ const translations = {
   ru: {
     title: "Настройки",
     emailNotifications: "Email уведомления",
-    smsNotifications: "SMS уведомления",
-    smsNote: "(дополнительная услуга)",
     demoExpiring: "DEMO истекает (за 2 дня)",
     subscriptionExpiring: "Подписка истекает (за 2 дня)",
     paymentReceived: "Платёж получен",
-    paymentFailed: "Платёж не прошёл",
     news: "Новости и обновления",
     referrals: "Новые рефералы",
     language: "Язык интерфейса",
@@ -78,12 +62,9 @@ const translations = {
   en: {
     title: "Settings",
     emailNotifications: "Email Notifications",
-    smsNotifications: "SMS Notifications",
-    smsNote: "(optional service)",
     demoExpiring: "DEMO expiring (2 days before)",
     subscriptionExpiring: "Subscription expiring (2 days before)",
     paymentReceived: "Payment received",
-    paymentFailed: "Payment failed",
     news: "News and updates",
     referrals: "New referrals",
     language: "Interface language",
@@ -97,12 +78,9 @@ const translations = {
   uk: {
     title: "Налаштування",
     emailNotifications: "Email сповіщення",
-    smsNotifications: "SMS сповіщення",
-    smsNote: "(додаткова послуга)",
     demoExpiring: "DEMO закінчується (за 2 дні)",
     subscriptionExpiring: "Підписка закінчується (за 2 дні)",
     paymentReceived: "Платіж отримано",
-    paymentFailed: "Платіж не пройшов",
     news: "Новини та оновлення",
     referrals: "Нові реферали",
     language: "Мова інтерфейсу",
@@ -116,12 +94,9 @@ const translations = {
   sq: {
     title: "Cilësimet",
     emailNotifications: "Njoftimet me Email",
-    smsNotifications: "Njoftimet me SMS",
-    smsNote: "(shërbim opsional)",
     demoExpiring: "DEMO skadon (2 ditë para)",
     subscriptionExpiring: "Abonimi skadon (2 ditë para)",
     paymentReceived: "Pagesa u mor",
-    paymentFailed: "Pagesa dështoi",
     news: "Lajme dhe përditësime",
     referrals: "Referime të reja",
     language: "Gjuha e ndërfaqes",
@@ -135,12 +110,9 @@ const translations = {
   bg: {
     title: "Настройки",
     emailNotifications: "Email известия",
-    smsNotifications: "SMS известия",
-    smsNote: "(допълнителна услуга)",
     demoExpiring: "DEMO изтича (2 дни преди)",
     subscriptionExpiring: "Абонаментът изтича (2 дни преди)",
     paymentReceived: "Плащането е получено",
-    paymentFailed: "Плащането е неуспешно",
     news: "Новини и актуализации",
     referrals: "Нови препоръки",
     language: "Език на интерфейса",
@@ -154,12 +126,9 @@ const translations = {
   ro: {
     title: "Setări",
     emailNotifications: "Notificări Email",
-    smsNotifications: "Notificări SMS",
-    smsNote: "(serviciu opțional)",
     demoExpiring: "DEMO expiră (cu 2 zile înainte)",
     subscriptionExpiring: "Abonamentul expiră (cu 2 zile înainte)",
     paymentReceived: "Plată primită",
-    paymentFailed: "Plată eșuată",
     news: "Știri și actualizări",
     referrals: "Noi recomandări",
     language: "Limba interfeței",
@@ -173,12 +142,9 @@ const translations = {
   ar: {
     title: "الإعدادات",
     emailNotifications: "إشعارات البريد الإلكتروني",
-    smsNotifications: "إشعارات الرسائل النصية",
-    smsNote: "(خدمة اختيارية)",
     demoExpiring: "انتهاء DEMO (قبل يومين)",
     subscriptionExpiring: "انتهاء الاشتراك (قبل يومين)",
     paymentReceived: "تم استلام الدفع",
-    paymentFailed: "فشل الدفع",
     news: "أخبار وتحديثات",
     referrals: "إحالات جديدة",
     language: "لغة الواجهة",
@@ -421,69 +387,6 @@ export default function SettingsPage() {
                     setSettings({
                       ...settings,
                       email: { ...settings.email, referrals: value },
-                    })
-                  }
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* SMS Notifications */}
-          <div
-            className="w-full p-6 rounded-2xl"
-            style={{ backgroundColor: 'var(--polar)' }}
-          >
-            <h2 className="text-heading font-semibold mb-1" style={{ color: 'var(--deep-teal)' }}>
-              📱 {t.smsNotifications}
-            </h2>
-            <p className="text-sm opacity-50 mb-4" style={{ color: 'var(--deep-teal)' }}>
-              {t.smsNote}
-            </p>
-
-            <div className="space-y-4">
-              {/* Demo expiring SMS */}
-              <div className="flex items-center justify-between">
-                <p className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
-                  {t.demoExpiring}
-                </p>
-                <Toggle
-                  checked={settings.sms.demo_expiring}
-                  onChange={(value) =>
-                    setSettings({
-                      ...settings,
-                      sms: { ...settings.sms, demo_expiring: value },
-                    })
-                  }
-                />
-              </div>
-
-              {/* Subscription expiring SMS */}
-              <div className="flex items-center justify-between">
-                <p className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
-                  {t.subscriptionExpiring}
-                </p>
-                <Toggle
-                  checked={settings.sms.subscription_expiring}
-                  onChange={(value) =>
-                    setSettings({
-                      ...settings,
-                      sms: { ...settings.sms, subscription_expiring: value },
-                    })
-                  }
-                />
-              </div>
-
-              {/* Payment failed SMS */}
-              <div className="flex items-center justify-between">
-                <p className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
-                  {t.paymentFailed}
-                </p>
-                <Toggle
-                  checked={settings.sms.payment_failed}
-                  onChange={(value) =>
-                    setSettings({
-                      ...settings,
-                      sms: { ...settings.sms, payment_failed: value },
                     })
                   }
                 />
