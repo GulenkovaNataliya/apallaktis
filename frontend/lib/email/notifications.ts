@@ -179,6 +179,34 @@ export async function sendVIPActivatedEmail(
 }
 
 /**
+ * 6.5. Уведомление: VIP отозван
+ */
+export async function sendVIPCancelledEmail(
+  userEmail: string,
+  userName: string,
+  locale: string = 'el'
+): Promise<boolean> {
+  const subjects = {
+    el: 'Η VIP συνδρομή σας ακυρώθηκε - ΑΠΑΛΛΑΚΤΗΣ',
+    ru: 'Ваша VIP подписка отменена - ΑΠΑΛΛΑΚΤΗΣ',
+    en: 'Your VIP subscription has been cancelled - ΑΠΑΛΛΑΚΤΗΣ',
+    uk: 'Вашу VIP підписку скасовано - ΑΠΑΛΛΑΚΤΗΣ',
+    sq: 'Abonimi juaj VIP është anuluar - ΑΠΑΛΛΑΚΤΗΣ',
+    bg: 'Вашият VIP абонамент беше отменен - ΑΠΑΛΛΑΚΤΗΣ',
+    ro: 'Abonamentul dvs. VIP a fost anulat - ΑΠΑΛΛΑΚΤΗΣ',
+    ar: 'تم إلغاء اشتراكك VIP - ΑΠΑΛΛΑΚΤΗΣ',
+  };
+
+  const html = generateVIPCancelledHTML(userName, locale);
+
+  return sendEmail({
+    to: userEmail,
+    subject: subjects[locale as keyof typeof subjects] || subjects.el,
+    html,
+  });
+}
+
+/**
  * 7. Уведомление: Новый реферал зарегистрировался
  */
 export async function sendNewReferralEmail(
@@ -398,8 +426,270 @@ function generatePaymentFailedHTML(accountNumber: number, amount: number, locale
 }
 
 function generateVIPActivatedHTML(accountNumber: number, expiresAt: Date | null, reason: string | undefined, locale: string): string {
-  const expiryText = expiresAt ? `Expires: ${expiresAt.toLocaleDateString()}` : 'Lifetime VIP';
-  return `<html><body><h1>⭐ VIP Activated</h1><p>Account #${accountNumber}</p><p>${expiryText}</p>${reason ? `<p>Reason: ${reason}</p>` : ''}</body></html>`;
+  const texts = {
+    el: {
+      title: 'Συγχαρητήρια! Λάβατε VIP!',
+      message: 'Ο διαχειριστής σας χορήγησε VIP πρόσβαση!',
+      account: 'Λογαριασμός',
+      expires: 'Ισχύει έως',
+      lifetime: 'Αόριστη διάρκεια',
+      reason: 'Λόγος',
+      benefits: 'Τα VIP προνόμιά σας:',
+      benefit1: 'Πλήρης πρόσβαση σε όλες τις λειτουργίες',
+      benefit2: 'Προτεραιότητα υποστήριξης',
+      benefit3: 'Χωρίς διαφημίσεις',
+    },
+    ru: {
+      title: 'Поздравляем! Вам выдан VIP!',
+      message: 'Администратор предоставил вам VIP-доступ!',
+      account: 'Аккаунт',
+      expires: 'Действует до',
+      lifetime: 'Бессрочно',
+      reason: 'Причина',
+      benefits: 'Ваши VIP-привилегии:',
+      benefit1: 'Полный доступ ко всем функциям',
+      benefit2: 'Приоритетная поддержка',
+      benefit3: 'Без рекламы',
+    },
+    en: {
+      title: 'Congratulations! You received VIP!',
+      message: 'The administrator has granted you VIP access!',
+      account: 'Account',
+      expires: 'Valid until',
+      lifetime: 'Lifetime',
+      reason: 'Reason',
+      benefits: 'Your VIP benefits:',
+      benefit1: 'Full access to all features',
+      benefit2: 'Priority support',
+      benefit3: 'No advertisements',
+    },
+    uk: {
+      title: 'Вітаємо! Вам надано VIP!',
+      message: 'Адміністратор надав вам VIP-доступ!',
+      account: 'Акаунт',
+      expires: 'Дійсний до',
+      lifetime: 'Безстроково',
+      reason: 'Причина',
+      benefits: 'Ваші VIP-привілеї:',
+      benefit1: 'Повний доступ до всіх функцій',
+      benefit2: 'Пріоритетна підтримка',
+      benefit3: 'Без реклами',
+    },
+    sq: {
+      title: 'Urime! Keni marrë VIP!',
+      message: 'Administratori ju ka dhënë akses VIP!',
+      account: 'Llogaria',
+      expires: 'E vlefshme deri',
+      lifetime: 'Pa afat',
+      reason: 'Arsyeja',
+      benefits: 'Përfitimet tuaja VIP:',
+      benefit1: 'Akses i plotë në të gjitha veçoritë',
+      benefit2: 'Mbështetje me prioritet',
+      benefit3: 'Pa reklama',
+    },
+    bg: {
+      title: 'Поздравления! Получихте VIP!',
+      message: 'Администраторът ви предостави VIP достъп!',
+      account: 'Акаунт',
+      expires: 'Валиден до',
+      lifetime: 'Безсрочно',
+      reason: 'Причина',
+      benefits: 'Вашите VIP привилегии:',
+      benefit1: 'Пълен достъп до всички функции',
+      benefit2: 'Приоритетна поддръжка',
+      benefit3: 'Без реклами',
+    },
+    ro: {
+      title: 'Felicitări! Ați primit VIP!',
+      message: 'Administratorul v-a acordat acces VIP!',
+      account: 'Cont',
+      expires: 'Valabil până la',
+      lifetime: 'Pe viață',
+      reason: 'Motiv',
+      benefits: 'Beneficiile dvs. VIP:',
+      benefit1: 'Acces complet la toate funcțiile',
+      benefit2: 'Suport prioritar',
+      benefit3: 'Fără reclame',
+    },
+    ar: {
+      title: 'تهانينا! لقد حصلت على VIP!',
+      message: 'منحك المسؤول صلاحية VIP!',
+      account: 'الحساب',
+      expires: 'صالح حتى',
+      lifetime: 'مدى الحياة',
+      reason: 'السبب',
+      benefits: 'مزايا VIP الخاصة بك:',
+      benefit1: 'وصول كامل لجميع الميزات',
+      benefit2: 'دعم ذو أولوية',
+      benefit3: 'بدون إعلانات',
+    },
+  };
+
+  const t = texts[locale as keyof typeof texts] || texts.el;
+  const expiryText = expiresAt
+    ? `${t.expires}: ${expiresAt.toLocaleDateString(locale === 'el' ? 'el-GR' : locale === 'ru' ? 'ru-RU' : 'en-US')}`
+    : t.lifetime;
+
+  return `
+<!DOCTYPE html>
+<html lang="${locale}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+    <tr>
+      <td style="background: linear-gradient(135deg, #ffd700 0%, #ffb700 100%); padding: 40px 20px; text-align: center;">
+        <h1 style="color: #000000; margin: 0; font-size: 28px;">⭐ ${t.title}</h1>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 40px 30px;">
+        <p style="font-size: 18px; color: #333; margin-bottom: 20px;">${t.message}</p>
+
+        <div style="background-color: #fffbeb; border: 2px solid #ffd700; border-radius: 8px; padding: 20px; margin: 20px 0;">
+          <p style="margin: 5px 0; color: #333;"><strong>${t.account}:</strong> #${accountNumber}</p>
+          <p style="margin: 5px 0; color: #333;"><strong>${expiryText}</strong></p>
+          ${reason ? `<p style="margin: 5px 0; color: #333;"><strong>${t.reason}:</strong> ${reason}</p>` : ''}
+        </div>
+
+        <h3 style="color: #01312d; margin-top: 30px;">${t.benefits}</h3>
+        <ul style="color: #333; font-size: 16px; line-height: 1.8;">
+          <li>${t.benefit1}</li>
+          <li>${t.benefit2}</li>
+          <li>${t.benefit3}</li>
+        </ul>
+
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="https://apallaktis.gr/${locale}/dashboard" style="display: inline-block; background-color: #ffd700; color: #000000; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+            Dashboard
+          </a>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+        <p style="font-size: 12px; color: #999; margin: 0;">© 2026 ΑΠΑΛΛΑΚΤΗΣ</p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+}
+
+function generateVIPCancelledHTML(userName: string, locale: string): string {
+  const texts = {
+    el: {
+      title: 'Η VIP συνδρομή σας ακυρώθηκε',
+      greeting: 'Αγαπητέ/ή',
+      message: 'Σας ενημερώνουμε ότι η VIP συνδρομή σας στο ΑΠΑΛΛΑΚΤΗΣ ακυρώθηκε από τον διαχειριστή.',
+      info: 'Ο λογαριασμός σας είναι πλέον σε κανονική κατάσταση.',
+      action: 'Αν έχετε ερωτήσεις, επικοινωνήστε μαζί μας.',
+      button: 'Επικοινωνία',
+    },
+    ru: {
+      title: 'Ваша VIP подписка отменена',
+      greeting: 'Уважаемый(ая)',
+      message: 'Уведомляем вас, что ваша VIP подписка в ΑΠΑΛΛΑΚΤΗΣ была отменена администратором.',
+      info: 'Ваш аккаунт теперь в обычном статусе.',
+      action: 'Если у вас есть вопросы, свяжитесь с нами.',
+      button: 'Связаться',
+    },
+    en: {
+      title: 'Your VIP subscription has been cancelled',
+      greeting: 'Dear',
+      message: 'We inform you that your VIP subscription at ΑΠΑΛΛΑΚΤΗΣ has been cancelled by the administrator.',
+      info: 'Your account is now in regular status.',
+      action: 'If you have any questions, please contact us.',
+      button: 'Contact Us',
+    },
+    uk: {
+      title: 'Вашу VIP підписку скасовано',
+      greeting: 'Шановний(а)',
+      message: 'Повідомляємо вас, що вашу VIP підписку в ΑΠΑΛΛΑΚΤΗΣ було скасовано адміністратором.',
+      info: 'Ваш акаунт тепер у звичайному статусі.',
+      action: 'Якщо у вас є питання, зверніться до нас.',
+      button: 'Зв\'язатися',
+    },
+    sq: {
+      title: 'Abonimi juaj VIP është anuluar',
+      greeting: 'I/E dashur',
+      message: 'Ju njoftojmë që abonimi juaj VIP në ΑΠΑΛΛΑΚΤΗΣ është anuluar nga administratori.',
+      info: 'Llogaria juaj tani është në statusin normal.',
+      action: 'Nëse keni pyetje, na kontaktoni.',
+      button: 'Na Kontaktoni',
+    },
+    bg: {
+      title: 'Вашият VIP абонамент беше отменен',
+      greeting: 'Уважаеми(а)',
+      message: 'Уведомяваме ви, че вашият VIP абонамент в ΑΠΑΛΛΑΚΤΗΣ беше отменен от администратора.',
+      info: 'Вашият акаунт вече е в нормален статус.',
+      action: 'Ако имате въпроси, свържете се с нас.',
+      button: 'Свържете се',
+    },
+    ro: {
+      title: 'Abonamentul dvs. VIP a fost anulat',
+      greeting: 'Stimate(ă)',
+      message: 'Vă informăm că abonamentul dvs. VIP la ΑΠΑΛΛΑΚΤΗΣ a fost anulat de administrator.',
+      info: 'Contul dvs. este acum în stare normală.',
+      action: 'Dacă aveți întrebări, contactați-ne.',
+      button: 'Contactați-ne',
+    },
+    ar: {
+      title: 'تم إلغاء اشتراكك VIP',
+      greeting: 'عزيزي',
+      message: 'نعلمك أن اشتراكك VIP في ΑΠΑΛΛΑΚΤΗΣ قد تم إلغاؤه من قبل المسؤول.',
+      info: 'حسابك الآن في الحالة العادية.',
+      action: 'إذا كان لديك أي أسئلة، يرجى الاتصال بنا.',
+      button: 'اتصل بنا',
+    },
+  };
+
+  const t = texts[locale as keyof typeof texts] || texts.el;
+
+  return `
+<!DOCTYPE html>
+<html lang="${locale}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+    <tr>
+      <td style="background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); padding: 40px 20px; text-align: center;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 28px;">${t.title}</h1>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 40px 30px;">
+        <p style="font-size: 18px; color: #333; margin-bottom: 20px;">${t.greeting} ${userName},</p>
+        <p style="font-size: 16px; color: #333; margin-bottom: 20px;">${t.message}</p>
+
+        <div style="background-color: #f3f4f6; border-left: 4px solid #6b7280; padding: 15px; margin: 20px 0;">
+          <p style="margin: 0; color: #4b5563; font-size: 15px;">${t.info}</p>
+        </div>
+
+        <p style="font-size: 16px; color: #333; margin-top: 20px;">${t.action}</p>
+
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="mailto:support@apallaktis.gr" style="display: inline-block; background-color: #6b7280; color: #ffffff; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+            ${t.button}
+          </a>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+        <p style="font-size: 12px; color: #999; margin: 0;">© 2026 ΑΠΑΛΛΑΚΤΗΣ</p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
 }
 
 function generateNewReferralHTML(name: string, email: string, locale: string): string {
@@ -412,4 +702,139 @@ function generateReferralPurchaseHTML(name: string, totalBonusMonths: number, lo
 
 function generateSubscriptionActivatedHTML(accountNumber: number, plan: string, expiresAt: Date, locale: string): string {
   return `<html><body><h1>✅ Subscription Activated</h1><p>Account #${accountNumber}</p><p>Plan: ${plan}</p><p>Expires: ${expiresAt.toLocaleDateString()}</p></body></html>`;
+}
+
+// ============================================
+// 10. Admin Notification: New Payment Received
+// ============================================
+
+export interface AdminPaymentNotificationData {
+  legalName: string;
+  afm: string;
+  address: string;
+  clientEmail: string;
+  amount: number;
+  tax: number;
+  total: number;
+  paymentType: 'purchase' | 'subscription';
+  plan?: string;
+  accountNumber: number;
+  stripePaymentId?: string;
+}
+
+/**
+ * 10. Уведомление администратору: Новая оплата (для выдачи Τιμολόγιο)
+ */
+export async function sendAdminPaymentNotificationEmail(
+  adminEmail: string,
+  data: AdminPaymentNotificationData
+): Promise<boolean> {
+  const formattedDate = new Date().toLocaleDateString('el-GR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  const paymentTypeText = data.paymentType === 'purchase'
+    ? 'Αγορά Λογαριασμού'
+    : `Συνδρομή ${data.plan || ''}`;
+
+  const subject = `💰 Νέα πληρωμή: ${data.legalName || 'Ιδιώτης'} — ${data.total.toFixed(2)}€`;
+
+  const html = `
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <tr>
+      <td style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 30px 20px; text-align: center;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 24px;">💰 Νέα Πληρωμή - Έκδοση Τιμολογίου</h1>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 30px;">
+        <div style="background-color: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #059669; margin: 0 0 10px 0;">✅ Επιτυχής πληρωμή μέσω Stripe</h3>
+          <p style="margin: 0; color: #333; font-size: 14px;">Ημερομηνία: <strong>${formattedDate}</strong></p>
+        </div>
+
+        <h3 style="color: #01312d; border-bottom: 2px solid #01312d; padding-bottom: 10px;">Στοιχεία Πελάτη</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+          <tr>
+            <td style="padding: 8px 0; color: #666; width: 140px;">Επωνυμία:</td>
+            <td style="padding: 8px 0; color: #333; font-weight: bold;">${data.legalName || 'N/A'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #666;">ΑΦΜ:</td>
+            <td style="padding: 8px 0; color: #333; font-weight: bold;">${data.afm || 'N/A (Ιδιώτης)'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #666;">Διεύθυνση:</td>
+            <td style="padding: 8px 0; color: #333;">${data.address || 'N/A'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #666;">Email:</td>
+            <td style="padding: 8px 0; color: #333;"><a href="mailto:${data.clientEmail}">${data.clientEmail}</a></td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #666;">Λογαριασμός:</td>
+            <td style="padding: 8px 0; color: #333;">#${data.accountNumber}</td>
+          </tr>
+        </table>
+
+        <h3 style="color: #01312d; border-bottom: 2px solid #01312d; padding-bottom: 10px;">Στοιχεία Πληρωμής</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+          <tr>
+            <td style="padding: 8px 0; color: #666; width: 140px;">Τύπος:</td>
+            <td style="padding: 8px 0; color: #333; font-weight: bold;">${paymentTypeText}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #666;">Καθαρό ποσό:</td>
+            <td style="padding: 8px 0; color: #333;">${data.amount.toFixed(2)} €</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #666;">ΦΠΑ 24%:</td>
+            <td style="padding: 8px 0; color: #333;">${data.tax.toFixed(2)} €</td>
+          </tr>
+          <tr style="background-color: #f0fdf4;">
+            <td style="padding: 12px 8px; color: #059669; font-weight: bold;">ΣΥΝΟΛΟ:</td>
+            <td style="padding: 12px 8px; color: #059669; font-weight: bold; font-size: 18px;">${data.total.toFixed(2)} €</td>
+          </tr>
+        </table>
+
+        ${data.stripePaymentId ? `<p style="font-size: 12px; color: #666;">Stripe Payment ID: ${data.stripePaymentId}</p>` : ''}
+
+        <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin-top: 20px;">
+          <h4 style="color: #d97706; margin: 0 0 10px 0;">⚠️ Απαιτείται έκδοση Τιμολογίου</h4>
+          <p style="margin: 0 0 10px 0; color: #333; font-size: 14px;">
+            Το Stripe έχει στείλει αυτόματα επιβεβαίωση πληρωμής στον πελάτη.<br>
+            <strong>Πρέπει να εκδώσετε Τιμολόγιο/Απόδειξη μέσω timologio.aade.gr</strong>
+          </p>
+          <a href="https://timologio.aade.gr" target="_blank" style="display: inline-block; background-color: #f59e0b; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px;">
+            Άνοιγμα timologio.aade.gr →
+          </a>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; padding: 15px; text-align: center; border-top: 1px solid #e0e0e0;">
+        <p style="font-size: 11px; color: #999; margin: 0;">ΑΠΑΛΛΑΚΤΗΣ Admin Notification</p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+
+  return sendEmail({
+    to: adminEmail,
+    subject,
+    html,
+  });
 }

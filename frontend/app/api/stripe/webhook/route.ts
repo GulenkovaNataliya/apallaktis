@@ -8,7 +8,7 @@ import Stripe from 'stripe';
 import { createClient } from '@/lib/supabase/server';
 import { sendAccountPurchaseEmail } from '@/lib/email/send';
 import { sendReceiptEmail } from '@/lib/email/send-receipt';
-import { sendReferralPurchaseEmail } from '@/lib/email/notifications';
+import { sendReferralPurchaseEmail, sendAdminPaymentNotificationEmail } from '@/lib/email/notifications';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2025-12-15.clover',
@@ -171,8 +171,31 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       // Отправить email с благодарностью
       await sendAccountPurchaseEmail(userEmail, parseInt(accountNumber || '0'), userLocale);
 
-      // Сгенерировать и отправить чек/инвойс
+      // Сгенерировать и отправить подтверждение оплаты (НЕ налоговый документ!)
       await generateAndSendReceipt(userEmail, session, profile, userLocale);
+
+      // 📧 Уведомление администратору для выдачи Τιμολόγιο через myDATA
+      const adminEmail = process.env.ADMIN_EMAIL;
+      if (adminEmail) {
+        const totalAmount = (session.amount_total || 0) / 100;
+        const taxAmount = totalAmount * 0.24 / 1.24;
+        const baseAmount = totalAmount - taxAmount;
+
+        await sendAdminPaymentNotificationEmail(adminEmail, {
+          legalName: profile.company_name || profile.name || '',
+          afm: profile.afm || '',
+          address: profile.address || '',
+          clientEmail: userEmail,
+          amount: baseAmount,
+          tax: taxAmount,
+          total: totalAmount,
+          paymentType: 'purchase',
+          accountNumber: profile.account_number,
+          stripePaymentId: session.payment_intent as string,
+        });
+
+        console.log('✅ WEBHOOK: Уведомление администратору отправлено');
+      }
     }
 
   } catch (error) {
@@ -500,6 +523,7 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
         const taxAmount = totalAmount * 0.24 / 1.24;
         const baseAmount = totalAmount - taxAmount;
 
+        // Отправить подтверждение оплаты пользователю
         await sendReceiptEmail(
           userEmail,
           {
@@ -516,7 +540,27 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
           userLocale
         );
 
-        console.log('✅ WEBHOOK: Чек/инвойс за подписку отправлен');
+        console.log('✅ WEBHOOK: Подтверждение оплаты за подписку отправлено');
+
+        // 📧 Уведомление администратору для выдачи Τιμολόγιο
+        const adminEmail = process.env.ADMIN_EMAIL;
+        if (adminEmail) {
+          await sendAdminPaymentNotificationEmail(adminEmail, {
+            legalName: profile.company_name || profile.name || '',
+            afm: profile.afm || '',
+            address: profile.address || '',
+            clientEmail: userEmail,
+            amount: baseAmount,
+            tax: taxAmount,
+            total: totalAmount,
+            paymentType: 'subscription',
+            plan: plan || '',
+            accountNumber: profile.account_number,
+            stripePaymentId: (invoice as any).payment_intent || invoice.id,
+          });
+
+          console.log('✅ WEBHOOK: Уведомление администратору отправлено (подписка)');
+        }
       }
     }
 

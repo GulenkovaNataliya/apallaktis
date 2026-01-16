@@ -41,17 +41,18 @@ const translations = {
     extendSubscription: "Παράταση Συνδρομής",
     cancelSubscription: "Ακύρωση Συνδρομής",
     paymentHistory: "Ιστορικό Πληρωμών",
+    paymentHistoryNote: "Εδώ εμφανίζονται οι επιβεβαιώσεις πληρωμών μέσω Stripe.",
+    invoiceNote: "Το Τιμολόγιο/Απόδειξη θα εκδοθεί και θα αποσταλεί ξεχωριστά μέσω email.",
     date: "Ημερομηνία",
     description: "Περιγραφή",
     amount: "Ποσό",
-    receipt: "Απόδειξη",
+    receipt: "Επιβεβαίωση",
     noPayments: "Δεν υπάρχουν πληρωμές",
     download: "Λήψη",
     back: "← Πίσω",
     demo: "DEMO",
     active: "Ενεργή",
     expired: "Έληξε",
-    vip: "VIP",
     readOnly: "Μόνο Ανάγνωση",
     daysLeft: "ημέρες απομένουν",
     hoursLeft: "ώρες απομένουν",
@@ -78,17 +79,18 @@ const translations = {
     extendSubscription: "Продлить Подписку",
     cancelSubscription: "Отменить Подписку",
     paymentHistory: "История Платежей",
+    paymentHistoryNote: "Здесь отображаются подтверждения оплаты через Stripe.",
+    invoiceNote: "Τιμολόγιο/Απόδειξη будет выдан и отправлен отдельно по email.",
     date: "Дата",
     description: "Описание",
     amount: "Сумма",
-    receipt: "Чек",
+    receipt: "Подтверждение",
     noPayments: "Нет платежей",
     download: "Скачать",
     back: "← Назад",
     demo: "DEMO",
     active: "Активна",
     expired: "Истекла",
-    vip: "VIP",
     readOnly: "Только чтение",
     daysLeft: "дней осталось",
     hoursLeft: "часов осталось",
@@ -115,17 +117,18 @@ const translations = {
     extendSubscription: "Extend Subscription",
     cancelSubscription: "Cancel Subscription",
     paymentHistory: "Payment History",
+    paymentHistoryNote: "Payment confirmations via Stripe are displayed here.",
+    invoiceNote: "The official Tax Invoice will be issued and sent separately via email.",
     date: "Date",
     description: "Description",
     amount: "Amount",
-    receipt: "Receipt",
+    receipt: "Confirmation",
     noPayments: "No payments yet",
     download: "Download",
     back: "← Back",
     demo: "DEMO",
     active: "Active",
     expired: "Expired",
-    vip: "VIP",
     readOnly: "Read Only",
     daysLeft: "days left",
     hoursLeft: "hours left",
@@ -152,17 +155,18 @@ const translations = {
     extendSubscription: "Продовжити Підписку",
     cancelSubscription: "Скасувати Підписку",
     paymentHistory: "Історія Платежів",
+    paymentHistoryNote: "Тут відображаються підтвердження оплати через Stripe.",
+    invoiceNote: "Τιμολόγιο/Απόδειξη буде видано та надіслано окремо по email.",
     date: "Дата",
     description: "Опис",
     amount: "Сума",
-    receipt: "Чек",
+    receipt: "Підтвердження",
     noPayments: "Немає платежів",
     download: "Завантажити",
     back: "← Назад",
     demo: "DEMO",
     active: "Активна",
     expired: "Закінчилась",
-    vip: "VIP",
     readOnly: "Тільки читання",
     daysLeft: "днів залишилось",
     hoursLeft: "годин залишилось",
@@ -189,17 +193,18 @@ const translations = {
     extendSubscription: "Zgjat Abonimin",
     cancelSubscription: "Anulo Abonimin",
     paymentHistory: "Historia e Pagesave",
+    paymentHistoryNote: "Këtu shfaqen konfirmimet e pagesave përmes Stripe.",
+    invoiceNote: "Fatura zyrtare tatimore do të lëshohet dhe dërgohet veçmas me email.",
     date: "Data",
     description: "Përshkrimi",
     amount: "Shuma",
-    receipt: "Fatura",
+    receipt: "Konfirmimi",
     noPayments: "Nuk ka pagesa",
     download: "Shkarko",
     back: "← Kthehu",
     demo: "DEMO",
     active: "Aktiv",
     expired: "Skaduar",
-    vip: "VIP",
     readOnly: "Vetëm lexim",
     daysLeft: "ditë mbetur",
     hoursLeft: "orë mbetur",
@@ -226,17 +231,18 @@ const translations = {
     extendSubscription: "Удължи Абонамент",
     cancelSubscription: "Откажи Абонамент",
     paymentHistory: "История на Плащанията",
+    paymentHistoryNote: "Тук се показват потвържденията за плащане чрез Stripe.",
+    invoiceNote: "Официалната данъчна фактура ще бъде издадена и изпратена отделно по имейл.",
     date: "Дата",
     description: "Описание",
     amount: "Сума",
-    receipt: "Разписка",
+    receipt: "Потвърждение",
     noPayments: "Няма плащания",
     download: "Изтегли",
     back: "← Назад",
     demo: "DEMO",
     active: "Активен",
     expired: "Изтекъл",
-    vip: "VIP",
     readOnly: "Само за четене",
     daysLeft: "дни остават",
     hoursLeft: "часа остават",
@@ -263,17 +269,18 @@ const translations = {
     extendSubscription: "Prelungește Abonament",
     cancelSubscription: "Anulează Abonament",
     paymentHistory: "Istoric Plăți",
+    paymentHistoryNote: "Aici sunt afișate confirmările de plată prin Stripe.",
+    invoiceNote: "Factura fiscală oficială va fi emisă și trimisă separat prin email.",
     date: "Data",
     description: "Descriere",
     amount: "Sumă",
-    receipt: "Chitanță",
+    receipt: "Confirmare",
     noPayments: "Nu există plăți",
     download: "Descarcă",
     back: "← Înapoi",
     demo: "DEMO",
     active: "Activ",
     expired: "Expirat",
-    vip: "VIP",
     readOnly: "Doar citire",
     daysLeft: "zile rămase",
     hoursLeft: "ore rămase",
@@ -300,17 +307,18 @@ const translations = {
     extendSubscription: "تمديد الاشتراك",
     cancelSubscription: "إلغاء الاشتراك",
     paymentHistory: "سجل المدفوعات",
+    paymentHistoryNote: "يتم عرض تأكيدات الدفع عبر Stripe هنا.",
+    invoiceNote: "سيتم إصدار الفاتورة الضريبية الرسمية وإرسالها بشكل منفصل عبر البريد الإلكتروني.",
     date: "التاريخ",
     description: "الوصف",
     amount: "المبلغ",
-    receipt: "الإيصال",
+    receipt: "تأكيد",
     noPayments: "لا توجد مدفوعات",
     download: "تحميل",
     back: "← رجوع",
     demo: "DEMO",
     active: "نشط",
     expired: "منتهي",
-    vip: "VIP",
     readOnly: "للقراءة فقط",
     daysLeft: "يوم متبقي",
     hoursLeft: "ساعة متبقية",
@@ -368,9 +376,8 @@ export default function SubscriptionPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
+      case 'vip': // VIP показывается как active для клиента
         return '#25D366';
-      case 'vip':
-        return '#FFD700';
       case 'demo':
         return '#3b82f6';
       case 'expired':
@@ -384,9 +391,8 @@ export default function SubscriptionPage() {
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'active':
+      case 'vip': // VIP показывается как active для клиента
         return t.active;
-      case 'vip':
-        return t.vip;
       case 'demo':
         return t.demo;
       case 'expired':
@@ -616,7 +622,7 @@ export default function SubscriptionPage() {
                 </button>
               )}
 
-              {subscription.plan && subscription.plan !== 'demo' && subscription.status !== 'vip' && (
+              {subscription.plan && subscription.plan !== 'demo' && subscription.plan !== 'VIP' && (
                 <>
                   <button
                     onClick={() => router.push(`/${locale}/subscription`)}
@@ -634,7 +640,7 @@ export default function SubscriptionPage() {
             </div>
           </div>
 
-          {/* Payment History Placeholder */}
+          {/* Payment History */}
           <div
             className="w-full p-6 rounded-2xl"
             style={{ backgroundColor: 'var(--polar)' }}
@@ -643,7 +649,26 @@ export default function SubscriptionPage() {
               📜 {t.paymentHistory}
             </h2>
 
-            <p className="text-center py-8 text-body opacity-50" style={{ color: 'var(--deep-teal)' }}>
+            {/* Payment history note */}
+            <p className="text-sm mb-4" style={{ color: 'var(--deep-teal)', opacity: 0.8 }}>
+              {t.paymentHistoryNote}
+            </p>
+
+            {/* Invoice notice - Important! */}
+            <div
+              className="p-4 rounded-xl mb-4"
+              style={{
+                backgroundColor: '#fff3e0',
+                border: '1px solid #ff8f0a',
+              }}
+            >
+              <p className="text-sm" style={{ color: '#01312d' }}>
+                <strong style={{ color: '#ff8f0a' }}>⚠️</strong> {t.invoiceNote}
+              </p>
+            </div>
+
+            {/* Payments list placeholder */}
+            <p className="text-center py-6 text-body opacity-50" style={{ color: 'var(--deep-teal)' }}>
               {t.noPayments}
             </p>
           </div>

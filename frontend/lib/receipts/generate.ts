@@ -1,6 +1,8 @@
-// Receipt/Invoice Generation
-// ===========================
-// Генерация чеков (απόδειξη) и инвойсов (τιμολόγιο)
+// Payment Confirmation Generation
+// ================================
+// Генерация подтверждений оплаты (Επιβεβαίωση Πληρωμής)
+// ВАЖНО: Это НЕ официальный налоговый документ!
+// Τιμολόγιο/Απόδειξη выдаётся отдельно через myDATA (timologio.aade.gr)
 
 export interface ReceiptData {
   accountNumber: number;
@@ -15,7 +17,8 @@ export interface ReceiptData {
 }
 
 /**
- * Генерация HTML чека (απόδειξη)
+ * Генерация HTML подтверждения оплаты (Επιβεβαίωση Πληρωμής)
+ * ВАЖНО: Это НЕ налоговый документ! Τιμολόγιο выдаётся отдельно через myDATA
  */
 export function generateReceiptHTML(data: ReceiptData): string {
   const formattedDate = data.date.toLocaleDateString('el-GR', {
@@ -30,7 +33,7 @@ export function generateReceiptHTML(data: ReceiptData): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ΑΠΟΔΕΙΞΗ #${data.accountNumber}</title>
+  <title>ΕΠΙΒΕΒΑΙΩΣΗ ΠΛΗΡΩΜΗΣ #${data.accountNumber}</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -112,6 +115,18 @@ export function generateReceiptHTML(data: ReceiptData): string {
       color: #01312d;
       padding: 20px 15px;
     }
+    .notice {
+      background-color: #fff3e0;
+      border: 1px solid #ff8f0a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 20px 0;
+      font-size: 13px;
+      color: #333;
+    }
+    .notice strong {
+      color: #ff8f0a;
+    }
     .footer {
       margin-top: 40px;
       text-align: center;
@@ -128,14 +143,13 @@ export function generateReceiptHTML(data: ReceiptData): string {
     <div class="header">
       <h1>ΑΠΑΛΛΑΚΤΗΣ</h1>
       <p>Διαχείριση Ακινήτων & Εξόδων</p>
-      <p>ΑΦΜ: 123456789 | ΔΟΥ: Α' Αθηνών</p>
       <p>Τηλ: +30 698 320 8844</p>
     </div>
 
     <!-- Receipt Number -->
     <div style="text-align: center;">
       <div class="receipt-number">
-        ΑΠΟΔΕΙΞΗ #${data.accountNumber}
+        ΕΠΙΒΕΒΑΙΩΣΗ ΠΛΗΡΩΜΗΣ #${data.accountNumber}
       </div>
     </div>
 
@@ -175,6 +189,13 @@ export function generateReceiptHTML(data: ReceiptData): string {
       </tbody>
     </table>
 
+    <!-- Important Notice -->
+    <div class="notice">
+      <strong>⚠️ Σημαντική Σημείωση:</strong><br>
+      Η παρούσα επιβεβαίωση αφορά την πληρωμή σας μέσω Stripe.<br>
+      <strong>Το Τιμολόγιο/Απόδειξη θα εκδοθεί και θα αποσταλεί ξεχωριστά</strong> μέσω ηλεκτρονικού ταχυδρομείου.
+    </div>
+
     <!-- Footer -->
     <div class="footer">
       <p>Ευχαριστούμε για την προτίμησή σας!</p>
@@ -188,7 +209,8 @@ export function generateReceiptHTML(data: ReceiptData): string {
 }
 
 /**
- * Генерация HTML инвойса (τιμολόγιο) с данными компании
+ * Генерация HTML подтверждения оплаты для компаний (с данными ΑΦΜ)
+ * ВАЖНО: Это НЕ налоговый документ! Τιμολόγιο выдаётся отдельно через myDATA
  */
 export function generateInvoiceHTML(data: ReceiptData): string {
   const formattedDate = data.date.toLocaleDateString('el-GR', {
@@ -203,7 +225,7 @@ export function generateInvoiceHTML(data: ReceiptData): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ΤΙΜΟΛΟΓΙΟ #${data.accountNumber}</title>
+  <title>ΕΠΙΒΕΒΑΙΩΣΗ ΠΛΗΡΩΜΗΣ #${data.accountNumber}</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -286,6 +308,18 @@ export function generateInvoiceHTML(data: ReceiptData): string {
       color: #01312d;
       padding: 20px 15px;
     }
+    .notice {
+      background-color: #fff3e0;
+      border: 1px solid #ff8f0a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 20px 0;
+      font-size: 13px;
+      color: #333;
+    }
+    .notice strong {
+      color: #ff8f0a;
+    }
     .footer {
       margin-top: 40px;
       text-align: center;
@@ -303,13 +337,11 @@ export function generateInvoiceHTML(data: ReceiptData): string {
       <div class="company-info">
         <h1>ΑΠΑΛΛΑΚΤΗΣ</h1>
         <p>Διαχείριση Ακινήτων & Εξόδων</p>
-        <p><strong>ΑΦΜ:</strong> 123456789</p>
-        <p><strong>ΔΟΥ:</strong> Α' Αθηνών</p>
         <p><strong>Τηλ:</strong> +30 698 320 8844</p>
       </div>
       <div class="invoice-details">
         <div class="invoice-number">
-          ΤΙΜΟΛΟΓΙΟ #${data.accountNumber}
+          ΕΠΙΒΕΒΑΙΩΣΗ ΠΛΗΡΩΜΗΣ #${data.accountNumber}
         </div>
         <p style="margin: 10px 0; color: #666;"><strong>Ημερομηνία:</strong> ${formattedDate}</p>
       </div>
@@ -357,6 +389,13 @@ export function generateInvoiceHTML(data: ReceiptData): string {
         </tr>
       </tbody>
     </table>
+
+    <!-- Important Notice -->
+    <div class="notice">
+      <strong>⚠️ Σημαντική Σημείωση:</strong><br>
+      Η παρούσα επιβεβαίωση αφορά την πληρωμή σας μέσω Stripe.<br>
+      <strong>Το Τιμολόγιο θα εκδοθεί και θα αποσταλεί ξεχωριστά</strong> μέσω ηλεκτρονικού ταχυδρομείου.
+    </div>
 
     <!-- Footer -->
     <div class="footer">

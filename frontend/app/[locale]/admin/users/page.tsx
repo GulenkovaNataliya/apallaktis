@@ -170,6 +170,61 @@ export default function AdminUsers() {
     }
   }
 
+  async function revokeVIP(userId: string, userName: string, userEmail: string, accountNumber: number) {
+    if (!confirm(`Отозвать VIP у пользователя ${userName} (#${accountNumber})?\n\nПользователь получит уведомление по email.`)) {
+      return;
+    }
+
+    const supabase = createClient();
+
+    try {
+      // Get user's preferred language
+      const { data: user } = await supabase
+        .from('profiles')
+        .select('preferred_language')
+        .eq('id', userId)
+        .single();
+
+      // Update profile - remove VIP
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          subscription_status: 'active',
+          subscription_plan: null,
+          vip_expires_at: null,
+          vip_granted_by: null,
+          vip_reason: null,
+        })
+        .eq('id', userId);
+
+      if (error) {
+        alert('Ошибка отзыва VIP: ' + error.message);
+        return;
+      }
+
+      // Send email notification
+      try {
+        await fetch('/api/email/vip-cancelled', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userEmail,
+            userName,
+            locale: user?.preferred_language || 'el',
+          }),
+        });
+      } catch (emailError) {
+        console.error('Failed to send VIP cancellation email:', emailError);
+      }
+
+      alert('✅ VIP успешно отозван. Пользователь уведомлён по email.');
+      loadUsers();
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Ошибка отзыва VIP');
+    }
+  }
+
   const filteredUsers = users.filter(user => {
     const matchesSearch =
       user.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -374,18 +429,33 @@ export default function AdminUsers() {
                             Разблок
                           </button>
                         )}
-                        <button
-                          onClick={() => router.push(`/${locale}/admin/vip?email=${user.email || ''}`)}
-                          className="text-xl px-6 py-4 rounded-xl font-bold hover:opacity-80 transition-opacity whitespace-nowrap flex-1"
-                          style={{
-                            backgroundColor: '#FFD700',
-                            color: '#000',
-                            minWidth: '120px',
-                          }}
-                          title="Активировать VIP"
-                        >
-                          ⭐ VIP
-                        </button>
+                        {user.subscription_status === 'vip' ? (
+                          <button
+                            onClick={() => revokeVIP(user.id, user.name, user.email || '', user.account_number)}
+                            className="text-xl px-6 py-4 rounded-xl font-bold hover:opacity-80 transition-opacity whitespace-nowrap flex-1"
+                            style={{
+                              backgroundColor: '#ef4444',
+                              color: '#fff',
+                              minWidth: '150px',
+                            }}
+                            title="Отозвать VIP"
+                          >
+                            Отозвать VIP
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => router.push(`/${locale}/admin/vip?email=${user.email || ''}`)}
+                            className="text-xl px-6 py-4 rounded-xl font-bold hover:opacity-80 transition-opacity whitespace-nowrap flex-1"
+                            style={{
+                              backgroundColor: '#FFD700',
+                              color: '#000',
+                              minWidth: '120px',
+                            }}
+                            title="Активировать VIP"
+                          >
+                            ⭐ VIP
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

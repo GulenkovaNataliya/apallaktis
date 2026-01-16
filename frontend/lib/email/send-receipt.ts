@@ -1,12 +1,14 @@
-// Send Receipt/Invoice Email
-// ============================
-// Отправка чеков и инвойсов на email
+// Send Payment Confirmation Email
+// ================================
+// Отправка подтверждений оплаты на email
+// ВАЖНО: Это НЕ налоговый документ! Τιμολόγιο выдаётся отдельно через myDATA
 
 import { sendEmail } from './send';
 import { generateReceiptOrInvoice, type ReceiptData } from '../receipts/generate';
 
 /**
- * Отправка чека или инвойса на email
+ * Отправка подтверждения оплаты на email
+ * ВАЖНО: Τιμολόγιο/Απόδειξη выдаётся администратором отдельно через timologio.aade.gr
  */
 export async function sendReceiptEmail(
   userEmail: string,
@@ -23,16 +25,16 @@ export async function sendReceiptEmail(
   },
   locale: string = 'el'
 ): Promise<boolean> {
+  // Тема письма - Подтверждение оплаты (не налоговый документ!)
   const subjects = {
-    el: receiptData.invoiceType === 'invoice'
-      ? `ΤΙΜΟΛΟΓΙΟ #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`
-      : `ΑΠΟΔΕΙΞΗ #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
-    ru: receiptData.invoiceType === 'invoice'
-      ? `ИНВОЙС #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`
-      : `ЧЕК #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
-    en: receiptData.invoiceType === 'invoice'
-      ? `INVOICE #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`
-      : `RECEIPT #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
+    el: `✅ ΕΠΙΒΕΒΑΙΩΣΗ ΠΛΗΡΩΜΗΣ #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
+    ru: `✅ ПОДТВЕРЖДЕНИЕ ОПЛАТЫ #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
+    en: `✅ PAYMENT CONFIRMATION #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
+    uk: `✅ ПІДТВЕРДЖЕННЯ ОПЛАТИ #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
+    sq: `✅ KONFIRMIMI I PAGESES #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
+    bg: `✅ ПОТВЪРЖДЕНИЕ ЗА ПЛАЩАНЕ #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
+    ro: `✅ CONFIRMARE PLATĂ #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
+    ar: `✅ تأكيد الدفع #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
   };
 
   const html = generateReceiptOrInvoice(receiptData);

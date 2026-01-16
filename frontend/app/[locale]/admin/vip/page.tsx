@@ -78,23 +78,21 @@ export default function AdminVIP() {
     const supabase = createClient();
 
     try {
-      // Проверяем текущего пользователя (себя)
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
-
-      if (!currentUser) {
-        alert('Вы не авторизованы');
-        return;
-      }
-
-      // Получаем профиль текущего пользователя
+      // Ищем пользователя по email
       const { data: user, error: userError } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', currentUser.id)
+        .eq('email', email.trim().toLowerCase())
         .single();
 
       if (userError || !user) {
-        alert(`Ваш профиль не найден`);
+        alert(`Пользователь с email ${email} не найден`);
+        return;
+      }
+
+      // Проверяем, не является ли пользователь уже VIP
+      if (user.subscription_status === 'vip') {
+        alert(`Пользователь ${user.name} уже имеет VIP статус`);
         return;
       }
 
@@ -131,13 +129,18 @@ export default function AdminVIP() {
         expiresAt = now.toISOString();
       }
 
+      // Получаем ID текущего админа
+      const { data: { user: adminUser } } = await supabase.auth.getUser();
+
       // Обновляем пользователя
       const { error: updateError } = await supabase
         .from('profiles')
         .update({
           subscription_status: 'vip',
-          subscription_expires_at: expiresAt,
           subscription_plan: 'VIP',
+          vip_expires_at: expiresAt,
+          vip_granted_by: adminUser?.id || null,
+          vip_reason: reason || null,
         })
         .eq('id', user.id);
 
@@ -146,22 +149,25 @@ export default function AdminVIP() {
         return;
       }
 
-      // Отправляем email уведомление
+      // Отправляем email уведомление пользователю
       try {
         await fetch('/api/email/vip-activated', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             userId: user.id,
+            userEmail: user.email,
+            userName: user.name,
             expiresAt,
             reason: reason || undefined,
+            locale: user.preferred_language || 'el',
           }),
         });
       } catch (emailError) {
         console.error('Failed to send VIP email:', emailError);
       }
 
-      alert(`✅ VIP активирован для ${user.name} (${user.email})`);
+      alert(`✅ VIP активирован для ${user.name} (${user.email})\n${duration === 'forever' ? 'Бессрочно' : `До: ${new Date(expiresAt!).toLocaleDateString()}`}`);
       setEmail("");
       setReason("");
       loadVIPUsers();
@@ -171,28 +177,55 @@ export default function AdminVIP() {
     }
   }
 
-  async function revokeVIP(userId: string, userName: string) {
-    if (!confirm(`Отозвать VIP у пользователя ${userName}?`)) {
+  async function revokeVIP(userId: string, userName: string, userEmail: string) {
+    if (!confirm(`Отозвать VIP у пользователя ${userName}?\n\nПользователь получит уведомление по email.`)) {
       return;
     }
 
     const supabase = createClient();
 
     try {
+      // Получаем данные пользователя для email
+      const { data: user } = await supabase
+        .from('profiles')
+        .select('preferred_language')
+        .eq('id', userId)
+        .single();
+
+      // Обновляем профиль - убираем VIP
       const { error } = await supabase
         .from('profiles')
         .update({
           subscription_status: 'active',
           subscription_plan: null,
+          vip_expires_at: null,
+          vip_granted_by: null,
+          vip_reason: null,
         })
         .eq('id', userId);
 
       if (error) {
         alert('Ошибка отзыва VIP: ' + error.message);
-      } else {
-        alert('✅ VIP успешно отозван');
-        loadVIPUsers();
+        return;
       }
+
+      // Отправляем email уведомление об отмене VIP
+      try {
+        await fetch('/api/email/vip-cancelled', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userEmail,
+            userName,
+            locale: user?.preferred_language || 'el',
+          }),
+        });
+      } catch (emailError) {
+        console.error('Failed to send VIP cancellation email:', emailError);
+      }
+
+      alert('✅ VIP успешно отозван. Пользователь уведомлён по email.');
+      loadVIPUsers();
     } catch (error) {
       console.error('Error:', error);
       alert('Ошибка отзыва VIP');
@@ -379,7 +412,7 @@ export default function AdminVIP() {
                         </td>
                         <td className="py-4 px-6">
                           <button
-                            onClick={() => revokeVIP(user.id, user.name)}
+                            onClick={() => revokeVIP(user.id, user.name, user.email)}
                             className="text-base px-6 py-3 rounded-lg font-semibold hover:opacity-80 transition-opacity whitespace-nowrap"
                             style={{
                               backgroundColor: '#ef4444',
