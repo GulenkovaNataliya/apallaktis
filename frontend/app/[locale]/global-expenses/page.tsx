@@ -306,24 +306,24 @@ export default function GlobalExpensesPage() {
   if (view === 'add-category' || view === 'edit-category') {
     return (
       <BackgroundPage pageIndex={4}>
-        <div className="min-h-screen flex flex-col items-center px-4" style={{ paddingTop: '40px', paddingBottom: '120px' }}>
-          <div className="w-full max-w-sm">
+        <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
+          <div className="w-full flex flex-col gap-12">
 
           {/* Back Button */}
-          <div style={{ marginTop: '120px', marginBottom: '24px' }}>
+          <div className="flex items-center justify-between">
             <button
               onClick={() => {
                 setView('categories');
                 setEditingCategory(null);
               }}
               className="text-button"
-              style={{ color: 'var(--polar)', fontSize: '18px' }}
+              style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
             >
               {t.backToExpenses}
             </button>
           </div>
 
-          <h1 className="text-2xl font-bold mb-6" style={{ color: 'var(--polar)' }}>
+          <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
             {editingCategory ? t.edit : t.addCategory}
           </h1>
 
@@ -441,10 +441,10 @@ function CategoryForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" style={{ marginTop: '96px' }}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       {/* Name Input */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '20px' }}>
           {t.name}
         </label>
         <input
