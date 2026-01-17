@@ -123,7 +123,7 @@ export default function GlobalExpensesPage() {
           {/* Expenses List */}
           <div className="flex flex-col gap-4 flex-1">
             {expenses.length === 0 ? (
-              <p className="text-center text-body" style={{ color: 'var(--polar)', opacity: 0.9 }}>
+              <p className="text-center text-body" style={{ color: 'var(--orange)' }}>
                 {t.noExpenses}
               </p>
             ) : (
