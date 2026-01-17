@@ -102,7 +102,7 @@ export default function EmailConfirmedPage() {
           {/* Subtitle */}
           <p
             className="text-heading"
-            style={{ color: "var(--deep-teal)", marginTop: "40px" }}
+            style={{ color: "var(--zanah)", marginTop: "40px" }}
           >
             {t.subtitle}
           </p>
