@@ -180,7 +180,7 @@ export default function RegisterPage() {
         email: formData.email,
         password: formData.password,
         options: {
-          emailRedirectTo: `${window.location.origin}/${locale}/login`,
+          emailRedirectTo: `${window.location.origin}/${locale}/email-confirmed`,
         },
       });
 

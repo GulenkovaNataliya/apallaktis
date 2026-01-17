@@ -74,7 +74,7 @@ export default function EmailConfirmedPage() {
           {/* Success Icon */}
           <div
             className="mx-auto flex h-24 w-24 items-center justify-center rounded-full"
-            style={{ backgroundColor: "var(--orange)" }}
+            style={{ backgroundColor: "#25D366" }}
           >
             <svg
               className="h-12 w-12 text-white"
