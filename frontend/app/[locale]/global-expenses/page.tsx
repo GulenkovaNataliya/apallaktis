@@ -503,16 +503,80 @@ function ExpenseForm({
   const [photoPreview, setPhotoPreview] = useState<string | null>(expense?.receiptPhotoUrl || null);
   const [isUploading, setIsUploading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analyzeError, setAnalyzeError] = useState<string | null>(null);
   const [inputMethod, setInputMethod] = useState<'manual' | 'voice' | 'photo'>(expense?.inputMethod || 'manual');
+
+  // Анализ чека с помощью AI
+  const analyzeReceipt = async (imageBase64: string) => {
+    setIsAnalyzing(true);
+    setAnalyzeError(null);
+
+    try {
+      const response = await fetch('/api/analyze-receipt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageBase64, locale }),
+      });
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        const data = result.data;
+
+        // Автозаполнение формы
+        setFormData(prev => ({
+          ...prev,
+          name: data.name || prev.name,
+          amount: data.amount || prev.amount,
+          description: data.description || prev.description,
+          date: data.date || prev.date,
+        }));
+
+        // Попытка найти подходящую категорию
+        if (data.suggestedCategory && categories.length > 0) {
+          const categoryMap: Record<string, string[]> = {
+            groceries: ['продукты', 'groceries', 'τρόφιμα', 'food', 'supermarket', 'супермаркет'],
+            transport: ['транспорт', 'transport', 'μεταφορά', 'fuel', 'бензин', 'parking'],
+            utilities: ['коммунальные', 'utilities', 'κοινωφελείς', 'electric', 'water', 'phone'],
+            entertainment: ['развлечения', 'entertainment', 'ψυχαγωγία', 'restaurant', 'cinema'],
+            healthcare: ['здоровье', 'healthcare', 'υγεία', 'pharmacy', 'аптека', 'doctor'],
+            education: ['образование', 'education', 'εκπαίδευση', 'school', 'books', 'курсы'],
+          };
+
+          const keywords = categoryMap[data.suggestedCategory] || [];
+          const matchedCategory = categories.find(cat =>
+            keywords.some(kw => cat.name.toLowerCase().includes(kw.toLowerCase()))
+          );
+
+          if (matchedCategory) {
+            setFormData(prev => ({ ...prev, categoryId: matchedCategory.id }));
+          }
+        }
+
+        setInputMethod('photo');
+      } else {
+        setAnalyzeError(result.error || 'Не удалось распознать чек');
+      }
+    } catch (error) {
+      console.error('Analyze error:', error);
+      setAnalyzeError('Ошибка при анализе чека');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setPhotoFile(file);
-      // Create preview
+      // Create preview and analyze
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPhotoPreview(reader.result as string);
+        const base64 = reader.result as string;
+        setPhotoPreview(base64);
+        // Автоматически анализируем чек
+        analyzeReceipt(base64);
       };
       reader.readAsDataURL(file);
       setInputMethod('photo');
@@ -786,7 +850,7 @@ function ExpenseForm({
       {/* Receipt Photo */}
       <div>
         <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
-          {t.receiptPhoto}
+          {t.receiptPhoto} {isAnalyzing && '🔄'}
         </label>
         {!photoPreview ? (
           <label className="block w-full rounded-2xl text-center cursor-pointer flex items-center justify-center"
@@ -805,17 +869,34 @@ function ExpenseForm({
               src={photoPreview}
               alt="Receipt preview"
               className="rounded-2xl w-full"
-              style={{ maxHeight: '300px', objectFit: 'cover' }}
+              style={{ maxHeight: '300px', objectFit: 'cover', opacity: isAnalyzing ? 0.5 : 1 }}
             />
+            {isAnalyzing && (
+              <div
+                className="absolute inset-0 flex items-center justify-center rounded-2xl"
+                style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+              >
+                <div className="text-center" style={{ color: 'white' }}>
+                  <div className="text-2xl mb-2">🤖</div>
+                  <p style={{ fontSize: '16px', fontWeight: 600 }}>{t.analyzing || 'Анализируем чек...'}</p>
+                </div>
+              </div>
+            )}
             <button
               type="button"
               onClick={handleRemovePhoto}
+              disabled={isAnalyzing}
               className="absolute top-2 right-2 px-4 rounded-2xl flex items-center justify-center"
               style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '40px', fontSize: '16px', fontWeight: 600 }}
             >
               {t.removePhoto}
             </button>
           </div>
+        )}
+        {analyzeError && (
+          <p className="mt-2 text-center" style={{ color: 'var(--orange)', fontSize: '14px' }}>
+            {analyzeError}
+          </p>
         )}
       </div>
 
@@ -826,7 +907,7 @@ function ExpenseForm({
           onClick={onCancel}
           className="btn-universal flex-1"
           style={{ minHeight: '52px', backgroundColor: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
-          disabled={isUploading}
+          disabled={isUploading || isAnalyzing}
         >
           {t.cancel}
         </button>
@@ -834,9 +915,9 @@ function ExpenseForm({
           type="submit"
           className="btn-universal flex-1"
           style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', fontSize: '18px', fontWeight: 600 }}
-          disabled={isUploading || categories.length === 0 || paymentMethods.length === 0}
+          disabled={isUploading || isAnalyzing || categories.length === 0 || paymentMethods.length === 0}
         >
-          {isUploading ? '...' : t.save}
+          {isUploading ? '...' : isAnalyzing ? '🤖' : t.save}
         </button>
       </div>
     </form>
