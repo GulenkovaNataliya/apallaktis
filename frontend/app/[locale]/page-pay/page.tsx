@@ -45,7 +45,7 @@ export default function PagePay() {
         <Link
           href={`/${locale}/dashboard`}
           className="btn-universal w-full text-button flex items-center justify-center text-center"
-          style={{ minHeight: '52px', backgroundColor: '#01312d', color: '#ff8f0a' }}
+          style={{ minHeight: '52px', backgroundColor: '#01312d', color: 'var(--orange)' }}
         >
           👤 {t.userProfile}
         </Link>
