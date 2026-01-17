@@ -85,11 +85,11 @@ export default function GlobalExpensesPage() {
   if (view === 'expenses') {
     return (
       <BackgroundPage pageIndex={4}>
-        <div className="min-h-screen flex flex-col items-center px-4" style={{ paddingTop: '40px', paddingBottom: '120px' }}>
-          <div className="w-full max-w-sm flex flex-col flex-1">
+        <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
+          <div className="w-full flex flex-col flex-1 gap-12">
 
           {/* Header */}
-          <div className="flex items-center justify-between mb-6" style={{ marginTop: '120px' }}>
+          <div className="flex items-center justify-between">
             <button
               onClick={() => router.push(`/${locale}/page-pay`)}
               style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
@@ -98,7 +98,7 @@ export default function GlobalExpensesPage() {
             </button>
           </div>
 
-          <h1 className="text-2xl font-bold mb-8 text-center" style={{ color: 'var(--polar)' }}>
+          <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
             {t.title}
           </h1>
 
@@ -106,7 +106,7 @@ export default function GlobalExpensesPage() {
           <button
             onClick={() => setView('categories')}
             className="btn-universal w-full text-button"
-            style={{ minHeight: '52px', marginBottom: '48px' }}
+            style={{ minHeight: '52px' }}
           >
             {t.manageCategories}
           </button>
@@ -115,13 +115,13 @@ export default function GlobalExpensesPage() {
           <button
             onClick={() => setView('add-expense')}
             className="btn-universal w-full text-button"
-            style={{ minHeight: '52px', marginBottom: '48px' }}
+            style={{ minHeight: '52px' }}
           >
             {t.addNew}
           </button>
 
           {/* Expenses List */}
-          <div className="flex flex-col gap-4 flex-1" style={{ marginTop: '52px' }}>
+          <div className="flex flex-col gap-4 flex-1">
             {expenses.length === 0 ? (
               <p className="text-center text-body" style={{ color: 'var(--polar)', opacity: 0.9 }}>
                 {t.noExpenses}
