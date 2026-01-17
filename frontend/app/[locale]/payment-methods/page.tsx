@@ -142,33 +142,27 @@ export default function PaymentMethodsPage() {
             methods.map(method => (
               <div
                 key={method.id}
-                className="p-4 rounded-2xl flex items-center justify-between"
-                style={{ backgroundColor: 'var(--polar)' }}
+                className="px-4 rounded-2xl flex items-center justify-between"
+                style={{ backgroundColor: 'var(--polar)', height: '52px' }}
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{getMethodIcon(method.type)}</span>
-                  <div>
-                    <p className="text-button" style={{ color: 'var(--deep-teal)' }}>
-                      {method.name}
-                    </p>
-                    <p className="text-link" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                      {t.types[method.type]}
-                      {method.lastFourDigits && ` •••• ${method.lastFourDigits}`}
-                    </p>
-                  </div>
+                <div className="flex items-center gap-3" style={{ paddingLeft: '5px' }}>
+                  <span style={{ fontSize: '18px' }}>{getMethodIcon(method.type)}</span>
+                  <p className="text-button" style={{ color: 'var(--deep-teal)', fontSize: '18px', fontWeight: 600 }}>
+                    {method.name}
+                  </p>
                 </div>
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleEdit(method)}
-                    className="px-4 rounded-lg"
-                    style={{ backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)', minHeight: '104px', fontSize: '18px', fontWeight: 600 }}
+                    className="px-3 rounded-2xl"
+                    style={{ backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)', height: '40px', fontSize: '16px', fontWeight: 600 }}
                   >
                     {t.edit}
                   </button>
                   <button
                     onClick={() => handleDelete(method.id)}
-                    className="px-4 rounded-lg"
-                    style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '104px', fontSize: '18px', fontWeight: 600 }}
+                    className="px-3 rounded-2xl"
+                    style={{ backgroundColor: 'var(--orange)', color: 'white', height: '40px', fontSize: '16px', fontWeight: 600 }}
                   >
                     {t.delete}
                   </button>

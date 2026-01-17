@@ -266,7 +266,7 @@ export default function GlobalExpensesPage() {
                   className="px-4 rounded-2xl flex items-center justify-between"
                   style={{ backgroundColor: 'var(--polar)', height: '52px' }}
                 >
-                  <p className="text-button" style={{ color: 'var(--deep-teal)' }}>
+                  <p className="text-button" style={{ color: 'var(--deep-teal)', fontSize: '18px', fontWeight: 600, paddingLeft: '5px' }}>
                     {category.name}
                   </p>
                   <div className="flex gap-2">
