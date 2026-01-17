@@ -188,14 +188,14 @@ export default function GlobalExpensesPage() {
                             setEditingExpense(expense);
                             setView('edit-expense');
                           }}
-                          className="px-4 rounded-lg"
+                          className="px-4 rounded-2xl"
                           style={{ backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)', minHeight: '104px', fontSize: '18px', fontWeight: 600 }}
                         >
                           {t.edit}
                         </button>
                         <button
                           onClick={() => handleDeleteExpense(expense.id)}
-                          className="px-4 rounded-lg"
+                          className="px-4 rounded-2xl"
                           style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '104px', fontSize: '18px', fontWeight: 600 }}
                         >
                           {t.delete}
@@ -207,7 +207,7 @@ export default function GlobalExpensesPage() {
                         <img
                           src={expense.receiptPhotoUrl}
                           alt="Receipt"
-                          className="rounded-lg max-w-full"
+                          className="rounded-2xl max-w-full"
                           style={{ maxHeight: '150px', objectFit: 'cover' }}
                         />
                       </div>
@@ -263,31 +263,27 @@ export default function GlobalExpensesPage() {
               categories.map(category => (
                 <div
                   key={category.id}
-                  className="p-4 rounded-2xl flex items-center justify-between"
-                  style={{ backgroundColor: 'var(--polar)' }}
+                  className="px-4 rounded-2xl flex items-center justify-between"
+                  style={{ backgroundColor: 'var(--polar)', height: '52px' }}
                 >
-                  <div className="flex items-center gap-3">
-                    <div>
-                      <p className="text-button" style={{ color: 'var(--deep-teal)' }}>
-                        {category.name}
-                      </p>
-                    </div>
-                  </div>
+                  <p className="text-button" style={{ color: 'var(--deep-teal)' }}>
+                    {category.name}
+                  </p>
                   <div className="flex gap-2">
                     <button
                       onClick={() => {
                         setEditingCategory(category);
                         setView('edit-category');
                       }}
-                      className="px-4 rounded-lg"
-                      style={{ backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)', minHeight: '104px', fontSize: '18px', fontWeight: 600 }}
+                      className="px-3 rounded-2xl"
+                      style={{ backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)', height: '40px', fontSize: '16px', fontWeight: 600 }}
                     >
                       {t.edit}
                     </button>
                     <button
                       onClick={() => handleDeleteCategory(category.id)}
-                      className="px-4 rounded-lg"
-                      style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '104px', fontSize: '18px', fontWeight: 600 }}
+                      className="px-3 rounded-2xl"
+                      style={{ backgroundColor: 'var(--orange)', color: 'white', height: '40px', fontSize: '16px', fontWeight: 600 }}
                     >
                       {t.delete}
                     </button>
@@ -310,18 +306,16 @@ export default function GlobalExpensesPage() {
           <div className="w-full flex flex-col gap-12">
 
           {/* Back Button */}
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => {
-                setView('categories');
-                setEditingCategory(null);
-              }}
-              className="text-button"
-              style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
-            >
-              {t.backToExpenses}
-            </button>
-          </div>
+          <button
+            onClick={() => {
+              setView('categories');
+              setEditingCategory(null);
+            }}
+            className="btn-universal w-full text-button flex items-center justify-center"
+            style={{ minHeight: '52px' }}
+          >
+            {t.backToExpenses}
+          </button>
 
           <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
             {editingCategory ? t.edit : t.addCategory}
@@ -452,7 +446,8 @@ function CategoryForm({
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
-          className="w-full p-3 rounded-lg text-body"
+          maxLength={10}
+          className="w-full p-3 rounded-2xl text-body"
           style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
           placeholder={t.name}
         />
@@ -669,7 +664,7 @@ function ExpenseForm({
         <select
           value={formData.categoryId}
           onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-          className="w-full rounded-lg text-body"
+          className="w-full rounded-2xl text-body"
           style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px' }}
         >
           {categories.map(cat => (
@@ -686,7 +681,7 @@ function ExpenseForm({
         {paymentMethods.length === 0 ? (
           <Link
             href={`/${locale}/payment-methods`}
-            className="block text-sm p-3 rounded-lg text-center"
+            className="block text-sm p-3 rounded-2xl text-center"
             style={{ color: 'var(--polar)', backgroundColor: 'rgba(255,255,255,0.1)', border: '2px dashed var(--polar)' }}
           >
             {tPayments.noMethods} →
@@ -695,7 +690,7 @@ function ExpenseForm({
           <select
             value={formData.paymentMethodId}
             onChange={(e) => setFormData({ ...formData, paymentMethodId: e.target.value })}
-            className="w-full rounded-lg text-body"
+            className="w-full rounded-2xl text-body"
             style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px' }}
           >
             {paymentMethods.map((method) => (
@@ -717,7 +712,7 @@ function ExpenseForm({
           value={formData.date}
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           required
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full p-3 rounded-2xl text-body"
           style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
         />
       </div>
@@ -732,7 +727,7 @@ function ExpenseForm({
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full p-3 rounded-2xl text-body"
           style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
           placeholder={t.name}
         />
@@ -749,7 +744,7 @@ function ExpenseForm({
           onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) || 0 })}
           min="0"
           step="0.01"
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full p-3 rounded-2xl text-body"
           style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
           placeholder="€"
         />
@@ -765,7 +760,7 @@ function ExpenseForm({
             type="button"
             onClick={handleVoiceInput}
             disabled={isRecording}
-            className="px-3 py-1 rounded-lg text-sm flex items-center gap-2"
+            className="px-3 py-1 rounded-2xl text-sm flex items-center gap-2"
             style={{
               backgroundColor: isRecording ? '#ff6a1a' : 'var(--zanah)',
               color: isRecording ? 'white' : 'var(--deep-teal)',
@@ -780,7 +775,7 @@ function ExpenseForm({
             setFormData({ ...formData, description: e.target.value });
             if (e.target.value) setInputMethod('manual');
           }}
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full p-3 rounded-2xl text-body"
           style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '104px' }}
           placeholder={isRecording ? 'Listening...' : t.description}
           rows={3}
@@ -793,7 +788,7 @@ function ExpenseForm({
           {t.receiptPhoto}
         </label>
         {!photoPreview ? (
-          <label className="block w-full p-4 rounded-lg text-center cursor-pointer"
+          <label className="block w-full p-4 rounded-2xl text-center cursor-pointer"
             style={{ border: '2px dashed var(--polar)', color: 'var(--polar)' }}>
             <span className="text-button">{t.uploadPhoto}</span>
             <input
@@ -808,13 +803,13 @@ function ExpenseForm({
             <img
               src={photoPreview}
               alt="Receipt preview"
-              className="rounded-lg w-full"
+              className="rounded-2xl w-full"
               style={{ maxHeight: '300px', objectFit: 'cover' }}
             />
             <button
               type="button"
               onClick={handleRemovePhoto}
-              className="absolute top-2 right-2 px-3 py-1 rounded-lg text-sm"
+              className="absolute top-2 right-2 px-3 py-1 rounded-2xl text-sm"
               style={{ backgroundColor: '#ff6a1a', color: 'white' }}
             >
               {t.removePhoto}
