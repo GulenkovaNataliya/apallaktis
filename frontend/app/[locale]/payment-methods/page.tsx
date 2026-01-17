@@ -106,8 +106,8 @@ export default function PaymentMethodsPage() {
 
   return (
     <BackgroundPage pageIndex={3}>
-      <div className="min-h-screen flex flex-col items-center px-4" style={{ paddingTop: '40px', paddingBottom: '120px' }}>
-        <div className="w-full max-w-sm flex flex-col flex-1">
+      <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '40px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
+        <div className="w-full flex flex-col flex-1">
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6" style={{ marginTop: '120px' }}>
@@ -127,7 +127,7 @@ export default function PaymentMethodsPage() {
         <button
           onClick={handleAdd}
           className="btn-universal w-full text-button"
-          style={{ minHeight: '52px', marginBottom: '48px' }}
+          style={{ minHeight: '52px', marginBottom: '48px', marginTop: '40px' }}
         >
           {t.addNew}
         </button>
@@ -135,7 +135,7 @@ export default function PaymentMethodsPage() {
         {/* Methods List */}
         <div className="flex flex-col gap-4 flex-1" style={{ marginTop: methods.length === 0 ? '52px' : '52px' }}>
           {methods.length === 0 ? (
-            <p className="text-center text-body" style={{ color: 'var(--polar)', opacity: 0.9 }}>
+            <p className="text-center text-body" style={{ color: 'var(--orange)' }}>
               {t.noMethods}
             </p>
           ) : (
