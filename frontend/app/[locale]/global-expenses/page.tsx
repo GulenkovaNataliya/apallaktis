@@ -807,7 +807,7 @@ function ExpenseForm({
         {paymentMethods.length === 0 ? (
           <Link
             href={`/${locale}/payment-methods`}
-            className="block rounded-2xl text-center flex items-center justify-center"
+            className="rounded-2xl text-center flex items-center justify-center"
             style={{ color: 'var(--orange)', backgroundColor: 'var(--polar)', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}
           >
             {tPayments.noMethods} →
@@ -925,7 +925,7 @@ function ExpenseForm({
           {t.receiptPhoto} {isAnalyzing && '🔄'}
         </label>
         {!photoPreview ? (
-          <label className="block w-full rounded-2xl text-center cursor-pointer flex items-center justify-center"
+          <label className="w-full rounded-2xl text-center cursor-pointer flex items-center justify-center"
             style={{ border: '2px dashed var(--polar)', color: 'var(--polar)', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}>
             <span>{t.uploadPhoto}</span>
             <input
