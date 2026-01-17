@@ -450,3 +450,37 @@ shadow-color == text-color
 **Файл:** `frontend/app/[locale]/page-pay/page.tsx`
 
 **Применено на всех 8 языках:** el, ru, uk, sq, bg, ro, en, ar (RTL)
+
+---
+
+### /[locale]/payment-methods — Способы оплаты
+
+**Layout (список):**
+- `paddingTop: 40px`, `paddingBottom: 120px`
+- `paddingLeft: 40px`, `paddingRight: 40px`
+
+**Элементы (список):**
+
+| Элемент | Фон | Цвет текста | Размер/Стиль |
+|---------|-----|-------------|--------------|
+| Кнопка "Добавить..." | `btn-universal` | `var(--deep-teal)` | 52px, marginTop: 40px, marginBottom: 40px |
+| Текст "Вы ещё не добавили..." | — | `var(--orange)` | text-body |
+
+**Layout (форма добавления):**
+- `paddingLeft: 40px`, `paddingRight: 40px`
+- Заголовок "Добавить способ оплаты" — по центру
+- 40px между заголовком и первым полем "Тип"
+
+**Элементы (форма):**
+
+| Элемент | Фон | Цвет текста/рамки | Размер/Стиль |
+|---------|-----|-------------------|--------------|
+| Labels (Тип, Название, и т.д.) | — | `var(--polar)` | text-button, marginBottom: 20px |
+| Поля ввода | transparent | `var(--polar)`, border: 2px | minHeight: 52px |
+| Название | — | — | maxLength: 8 символов |
+| Кнопка "Отмена" | `var(--polar)` | `var(--deep-teal)` | 52px |
+| Кнопка "Сохранить" | `var(--zanah)` | `var(--deep-teal)` | 52px |
+
+**Файл:** `frontend/app/[locale]/payment-methods/page.tsx`
+
+**Применено на всех 8 языках:** el, ru, uk, sq, bg, ro, en, ar (RTL)
