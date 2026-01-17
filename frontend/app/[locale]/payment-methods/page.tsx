@@ -226,8 +226,8 @@ function PaymentMethodForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4" style={{ marginTop: '96px' }}>
       {/* Type Select */}
-      <div style={{ marginTop: '20px' }}>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+      <div>
+        <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '20px' }}>
           {t.type}
         </label>
         <select
@@ -244,8 +244,8 @@ function PaymentMethodForm({
       </div>
 
       {/* Name Input */}
-      <div style={{ marginTop: '20px' }}>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+      <div>
+        <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '20px' }}>
           {t.name}
         </label>
         <input
@@ -262,8 +262,8 @@ function PaymentMethodForm({
 
       {/* Last 4 Digits (for cards) */}
       {showLastFourDigits && (
-        <div style={{ marginTop: '20px' }}>
-          <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <div>
+          <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '20px' }}>
             {t.lastFourDigits}
           </label>
           <input
@@ -280,8 +280,8 @@ function PaymentMethodForm({
 
       {/* IBAN (for bank accounts) */}
       {showIban && (
-        <div style={{ marginTop: '20px' }}>
-          <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <div>
+          <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '20px' }}>
             {t.iban}
           </label>
           <input
