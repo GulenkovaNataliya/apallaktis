@@ -102,7 +102,7 @@ export default function EmailConfirmedPage() {
           {/* Message */}
           <p
             className="text-body"
-            style={{ color: "var(--zanah)" }}
+            style={{ color: "var(--zanah)", marginTop: "40px" }}
           >
             {t.message}
           </p>
