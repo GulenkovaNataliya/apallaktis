@@ -159,7 +159,7 @@ export default function EmailNotConfirmedPage() {
     <BackgroundPage pageIndex={1}>
       <div
         className="flex min-h-screen flex-col items-center gap-8 px-4"
-        style={{ direction: isRTL ? "rtl" : "ltr", paddingTop: "120px" }}
+        style={{ direction: isRTL ? "rtl" : "ltr", paddingTop: "160px" }}
       >
         <div className="w-full max-w-sm space-y-6 text-center">
           {/* Warning Icon */}
