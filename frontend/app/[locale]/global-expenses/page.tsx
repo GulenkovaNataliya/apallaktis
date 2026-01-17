@@ -589,6 +589,69 @@ function ExpenseForm({
     setInputMethod('manual');
   };
 
+  // Анализ голосового текста с помощью AI
+  const analyzeVoiceText = async (transcript: string) => {
+    setIsAnalyzing(true);
+    setAnalyzeError(null);
+
+    try {
+      const response = await fetch('/api/analyze-voice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: transcript, locale }),
+      });
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        const data = result.data;
+
+        // Автозаполнение формы
+        setFormData(prev => ({
+          ...prev,
+          name: data.name || prev.name,
+          amount: data.amount || prev.amount,
+          description: data.description || transcript,
+          date: data.date || prev.date,
+        }));
+
+        // Попытка найти подходящую категорию
+        if (data.suggestedCategory && categories.length > 0) {
+          const categoryMap: Record<string, string[]> = {
+            groceries: ['продукты', 'groceries', 'τρόφιμα', 'food', 'supermarket', 'супермаркет'],
+            transport: ['транспорт', 'transport', 'μεταφορά', 'fuel', 'бензин', 'parking'],
+            utilities: ['коммунальные', 'utilities', 'κοινωφελείς', 'electric', 'water', 'phone'],
+            entertainment: ['развлечения', 'entertainment', 'ψυχαγωγία', 'restaurant', 'cinema'],
+            healthcare: ['здоровье', 'healthcare', 'υγεία', 'pharmacy', 'аптека', 'doctor'],
+            education: ['образование', 'education', 'εκπαίδευση', 'school', 'books', 'курсы'],
+          };
+
+          const keywords = categoryMap[data.suggestedCategory] || [];
+          const matchedCategory = categories.find(cat =>
+            keywords.some(kw => cat.name.toLowerCase().includes(kw.toLowerCase()))
+          );
+
+          if (matchedCategory) {
+            setFormData(prev => ({ ...prev, categoryId: matchedCategory.id }));
+          }
+        }
+
+        setInputMethod('voice');
+      } else {
+        // Если AI не смог распознать, просто записываем текст в описание
+        setFormData(prev => ({ ...prev, description: transcript }));
+        setAnalyzeError(result.error || 'Не удалось распознать данные');
+      }
+    } catch (error) {
+      console.error('Voice analyze error:', error);
+      // Если ошибка, просто записываем текст в описание
+      setFormData(prev => ({ ...prev, description: transcript }));
+      setAnalyzeError('Ошибка при анализе голоса');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   const handleVoiceInput = () => {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
       alert('Voice input is not supported in your browser. Please use Chrome, Edge, or Safari.');
@@ -616,8 +679,9 @@ function ExpenseForm({
 
     recognition.onresult = (event: Event & { results: SpeechRecognitionResultList }) => {
       const transcript = event.results[0][0].transcript;
-      setFormData({ ...formData, description: transcript });
       setIsRecording(false);
+      // Анализируем текст с помощью AI
+      analyzeVoiceText(transcript);
     };
 
     recognition.onerror = (event: Event & { error: string }) => {
@@ -812,7 +876,7 @@ function ExpenseForm({
         />
       </div>
 
-      {/* Description Input */}
+      {/* Description Input with Voice */}
       <div>
         <div className="flex justify-between items-center" style={{ marginBottom: '12px' }}>
           <label className="text-button" style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}>
@@ -821,19 +885,27 @@ function ExpenseForm({
           <button
             type="button"
             onClick={handleVoiceInput}
-            disabled={isRecording}
+            disabled={isRecording || isAnalyzing}
             className="px-4 rounded-2xl flex items-center justify-center gap-2"
             style={{
-              backgroundColor: isRecording ? '#ff6a1a' : 'var(--zanah)',
+              backgroundColor: isRecording ? '#ff6a1a' : isAnalyzing ? 'var(--polar)' : 'var(--zanah)',
               color: isRecording ? 'white' : 'var(--deep-teal)',
               minHeight: '40px',
               fontSize: '16px',
               fontWeight: 600
             }}
           >
-            🎤 {isRecording ? '...' : t.voiceButton}
+            {isRecording ? '🎤 ...' : isAnalyzing ? '🤖 ...' : `🎤 ${t.voiceButton}`}
           </button>
         </div>
+        {(isRecording || isAnalyzing) && (
+          <div
+            className="mb-2 p-3 rounded-2xl text-center"
+            style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: 'var(--polar)' }}
+          >
+            {isRecording ? (t.listening || '🎤 Слушаю...') : (t.analyzingVoice || '🤖 Анализирую...')}
+          </div>
+        )}
         <textarea
           value={formData.description}
           onChange={(e) => {
@@ -842,7 +914,7 @@ function ExpenseForm({
           }}
           className="w-full p-3 rounded-2xl"
           style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '104px', fontSize: '18px', fontWeight: 600 }}
-          placeholder={isRecording ? 'Listening...' : t.description}
+          placeholder={isRecording ? (t.listening || 'Слушаю...') : t.description}
           rows={3}
         />
       </div>
