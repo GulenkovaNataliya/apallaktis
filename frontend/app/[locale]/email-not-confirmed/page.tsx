@@ -209,9 +209,9 @@ export default function EmailNotConfirmedPage() {
           {/* Check Spam Note */}
           <div
             className="p-4 rounded-xl"
-            style={{ backgroundColor: "#ff8f0a" }}
+            style={{ backgroundColor: "rgba(255, 143, 10, 0.1)" }}
           >
-            <p className="text-heading" style={{ color: "var(--zanah)" }}>
+            <p className="text-small" style={{ color: "var(--deep-teal)" }}>
               {t.checkSpam}
             </p>
           </div>
