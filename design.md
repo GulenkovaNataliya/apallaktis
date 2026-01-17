@@ -416,9 +416,9 @@ shadow-color == text-color
 
 | Элемент | Фон | Цвет текста | Размер/Отступ |
 |---------|-----|-------------|---------------|
-| Иконка галочка (круг) | `var(--orange)` | white | h-24 w-24 |
+| Иконка галочка (круг) | `#25D366` (зелёный) | white | h-24 w-24 |
 | Заголовок "Email Подтверждён!" | — | `var(--orange)` | text-slogan |
-| Подзаголовок "Ваш email успешно подтверждён" | — | `var(--deep-teal)` | text-heading, marginTop: 40px |
+| Подзаголовок "Ваш email успешно подтверждён" | — | `var(--zanah)` | text-heading, marginTop: 40px |
 | Сообщение "Теперь вы можете войти..." | — | `var(--deep-teal)` | text-body, opacity: 0.8 |
 | Кнопка "Войти" | `var(--zanah)` | `var(--deep-teal)` | 52px, marginTop: 40px |
 
