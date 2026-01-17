@@ -158,6 +158,34 @@ paddingRight: '40px';
 | Кнопки языков | `12px` (gap-3) |
 | Стандартные элементы | `8px`, `12px`, `16px`, `24px` |
 
+### ⚖️ ЗАКОН КНОПОК (эталон: page-pay)
+
+Стандартный layout для страниц с кнопками-меню:
+
+```jsx
+<div style={{
+  paddingTop: '180px',
+  paddingBottom: '120px',
+  paddingLeft: '40px',
+  paddingRight: '40px'
+}}>
+  <div className="w-full flex flex-col gap-12">
+    {/* кнопки */}
+  </div>
+</div>
+```
+
+| Параметр | Значение |
+|----------|----------|
+| paddingTop | `180px` |
+| paddingLeft/Right | `40px` |
+| paddingBottom | `120px` |
+| gap между кнопками | `48px` (gap-12) |
+| minHeight кнопок | `52px` |
+| ширина кнопок | `w-full` (100%) |
+
+**Применяется на:** page-pay, global-expenses, payment-methods, и других страницах с меню кнопок.
+
 ### Специальные отступы
 | Страница | paddingBottom |
 |----------|---------------|
