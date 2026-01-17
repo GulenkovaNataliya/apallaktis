@@ -209,9 +209,9 @@ export default function EmailNotConfirmedPage() {
           {/* Check Spam Note */}
           <div
             className="p-4 rounded-xl"
-            style={{ backgroundColor: "rgba(255, 143, 10, 0.1)" }}
+            style={{ backgroundColor: "#ff8f0a" }}
           >
-            <p className="text-small" style={{ color: "var(--deep-teal)" }}>
+            <p className="text-heading" style={{ color: "var(--zanah)" }}>
               {t.checkSpam}
             </p>
           </div>
@@ -237,7 +237,7 @@ export default function EmailNotConfirmedPage() {
           )}
 
           {/* Buttons */}
-          <div className="flex flex-col gap-3 items-center">
+          <div className="flex flex-col gap-3 items-center" style={{ marginTop: "40px" }}>
             <div className="btn-single-wrapper">
               <button
                 onClick={handleResend}
@@ -262,7 +262,7 @@ export default function EmailNotConfirmedPage() {
                 style={{
                   minHeight: "52px",
                   backgroundColor: "rgba(1, 49, 45, 0.1)",
-                  color: "var(--deep-teal)",
+                  color: "var(--zanah)",
                 }}
               >
                 {t.logout}
