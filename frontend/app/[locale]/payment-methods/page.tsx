@@ -251,7 +251,8 @@ function PaymentMethodForm({
         <input
           type="text"
           value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value.slice(0, 8) })}
+          maxLength={8}
           required
           className="w-full p-3 rounded-lg text-body"
           style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
