@@ -99,14 +99,6 @@ export default function EmailConfirmedPage() {
             {t.title}
           </h1>
 
-          {/* Subtitle */}
-          <p
-            className="text-heading"
-            style={{ color: "var(--zanah)", marginTop: "40px" }}
-          >
-            {t.subtitle}
-          </p>
-
           {/* Message */}
           <p
             className="text-body"
