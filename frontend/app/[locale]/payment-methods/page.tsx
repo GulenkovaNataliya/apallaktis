@@ -272,7 +272,7 @@ function PaymentMethodForm({
             onChange={(e) => setFormData({ ...formData, lastFourDigits: e.target.value.replace(/\D/g, '').slice(0, 4) })}
             maxLength={4}
             className="w-full p-3 rounded-lg text-body"
-            style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent' }}
+            style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
             placeholder="1234"
           />
         </div>
@@ -289,7 +289,7 @@ function PaymentMethodForm({
             value={formData.iban}
             onChange={(e) => setFormData({ ...formData, iban: e.target.value.toUpperCase() })}
             className="w-full p-3 rounded-lg text-body"
-            style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent' }}
+            style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
             placeholder="GR1234567890123456789012345"
           />
         </div>
