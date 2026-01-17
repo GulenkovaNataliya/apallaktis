@@ -226,7 +226,7 @@ function PaymentMethodForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4" style={{ marginTop: '96px' }}>
       {/* Type Select */}
-      <div>
+      <div style={{ marginTop: '20px' }}>
         <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
           {t.type}
         </label>
@@ -244,7 +244,7 @@ function PaymentMethodForm({
       </div>
 
       {/* Name Input */}
-      <div>
+      <div style={{ marginTop: '20px' }}>
         <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
           {t.name}
         </label>
@@ -262,7 +262,7 @@ function PaymentMethodForm({
 
       {/* Last 4 Digits (for cards) */}
       {showLastFourDigits && (
-        <div>
+        <div style={{ marginTop: '20px' }}>
           <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
             {t.lastFourDigits}
           </label>
@@ -280,7 +280,7 @@ function PaymentMethodForm({
 
       {/* IBAN (for bank accounts) */}
       {showIban && (
-        <div>
+        <div style={{ marginTop: '20px' }}>
           <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
             {t.iban}
           </label>
