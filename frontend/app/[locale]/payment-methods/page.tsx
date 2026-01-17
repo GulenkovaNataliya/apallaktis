@@ -106,11 +106,11 @@ export default function PaymentMethodsPage() {
 
   return (
     <BackgroundPage pageIndex={3}>
-      <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '40px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
-        <div className="w-full flex flex-col flex-1">
+      <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
+        <div className="w-full flex flex-col flex-1 gap-12">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-6" style={{ marginTop: '120px' }}>
+        <div className="flex items-center justify-between">
           <button
             onClick={() => router.push(`/${locale}/page-pay`)}
             style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
@@ -119,15 +119,15 @@ export default function PaymentMethodsPage() {
           </button>
         </div>
 
-        <h1 className="text-2xl font-bold mb-8 text-center" style={{ color: 'var(--polar)' }}>
+        <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
           {t.title}
         </h1>
 
         {/* Add Button */}
         <button
           onClick={handleAdd}
-          className="btn-universal w-full text-button"
-          style={{ minHeight: '52px', marginBottom: '40px', marginTop: '40px' }}
+          className="btn-universal w-full text-button flex items-center justify-center"
+          style={{ minHeight: '52px', textTransform: 'capitalize' }}
         >
           {t.addNew}
         </button>
