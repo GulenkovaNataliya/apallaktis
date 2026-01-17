@@ -58,8 +58,8 @@ export default function PaymentMethodsPage() {
   if (showForm) {
     return (
       <BackgroundPage pageIndex={3}>
-        <div className="min-h-screen flex flex-col items-center px-4" style={{ paddingTop: '40px', paddingBottom: '120px' }}>
-          <div className="w-full max-w-sm">
+        <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '40px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
+          <div className="w-full">
 
           {/* Back Button */}
           <div style={{ marginTop: '120px', marginBottom: '24px' }}>
@@ -75,7 +75,7 @@ export default function PaymentMethodsPage() {
             </button>
           </div>
 
-          <h1 className="text-2xl font-bold mb-6" style={{ color: 'var(--polar)' }}>
+          <h1 className="text-2xl font-bold mb-6 text-center" style={{ color: 'var(--polar)' }}>
             {editingMethod ? t.edit : t.addNew}
           </h1>
           <PaymentMethodForm
@@ -224,7 +224,7 @@ function PaymentMethodForm({
   const showIban = formData.type === 'bank_account';
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" style={{ marginTop: '96px' }}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4" style={{ marginTop: '80px' }}>
       {/* Type Select */}
       <div>
         <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '20px' }}>
