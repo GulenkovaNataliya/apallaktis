@@ -220,11 +220,11 @@ export default function GlobalExpensesPage() {
   if (view === 'categories') {
     return (
       <BackgroundPage pageIndex={4}>
-        <div className="min-h-screen flex flex-col items-center px-4" style={{ paddingTop: '40px', paddingBottom: '120px' }}>
-          <div className="w-full max-w-sm flex flex-col flex-1">
+        <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
+          <div className="w-full flex flex-col flex-1 gap-12">
 
           {/* Header */}
-          <div className="flex items-center justify-between mb-6" style={{ marginTop: '120px' }}>
+          <div className="flex items-center justify-between">
             <button
               onClick={() => setView('expenses')}
               style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
@@ -233,23 +233,23 @@ export default function GlobalExpensesPage() {
             </button>
           </div>
 
-          <h1 className="text-2xl font-bold mb-8 text-center" style={{ color: 'var(--polar)' }}>
+          <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
             {t.manageCategories}
           </h1>
 
           {/* Add Category Button */}
           <button
             onClick={() => setView('add-category')}
-            className="btn-universal w-full text-button"
-            style={{ minHeight: '52px', marginBottom: '48px' }}
+            className="btn-universal w-full text-button flex items-center justify-center"
+            style={{ minHeight: '52px', textTransform: 'capitalize' }}
           >
             {t.addCategory}
           </button>
 
           {/* Categories List */}
-          <div className="flex flex-col gap-4 flex-1" style={{ marginTop: '52px' }}>
+          <div className="flex flex-col gap-4 flex-1">
             {categories.length === 0 ? (
-              <p className="text-center text-body" style={{ color: 'var(--polar)', opacity: 0.9 }}>
+              <p className="text-center text-body" style={{ color: 'var(--orange)' }}>
                 {t.noCategories}
               </p>
             ) : (
