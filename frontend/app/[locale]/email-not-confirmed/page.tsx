@@ -193,7 +193,7 @@ export default function EmailNotConfirmedPage() {
           {/* Subtitle */}
           <p
             className="text-heading"
-            style={{ color: "var(--deep-teal)" }}
+            style={{ color: "var(--zanah)", marginTop: "40px" }}
           >
             {t.subtitle}
           </p>
@@ -201,7 +201,7 @@ export default function EmailNotConfirmedPage() {
           {/* Message */}
           <p
             className="text-body"
-            style={{ color: "var(--deep-teal)", opacity: 0.8 }}
+            style={{ color: "var(--zanah)" }}
           >
             {t.message}
           </p>
