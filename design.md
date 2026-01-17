@@ -175,6 +175,8 @@ paddingRight: '40px';
 </div>
 ```
 
+**Layout:**
+
 | Параметр | Значение |
 |----------|----------|
 | paddingTop | `180px` |
@@ -183,6 +185,16 @@ paddingRight: '40px';
 | gap между кнопками | `48px` (gap-12) |
 | minHeight кнопок | `52px` |
 | ширина кнопок | `w-full` (100%) |
+
+**Шрифт кнопок:**
+
+| Параметр | Значение |
+|----------|----------|
+| класс | `text-button` |
+| размер | `16px` |
+| вес | `600` (font-weight) |
+| регистр | Каждое Слово С Заглавной (textTransform: capitalize) |
+| выравнивание | по центру (text-center, justify-center) |
 
 **Применяется на:** page-pay, global-expenses, payment-methods, и других страницах с меню кнопок.
 

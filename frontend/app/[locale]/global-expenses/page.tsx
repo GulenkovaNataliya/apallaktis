@@ -105,8 +105,8 @@ export default function GlobalExpensesPage() {
           {/* Manage Categories Button */}
           <button
             onClick={() => setView('categories')}
-            className="btn-universal w-full text-button"
-            style={{ minHeight: '52px' }}
+            className="btn-universal w-full text-button flex items-center justify-center"
+            style={{ minHeight: '52px', textTransform: 'capitalize' }}
           >
             {t.manageCategories}
           </button>
@@ -114,8 +114,8 @@ export default function GlobalExpensesPage() {
           {/* Add Expense Button */}
           <button
             onClick={() => setView('add-expense')}
-            className="btn-universal w-full text-button"
-            style={{ minHeight: '52px' }}
+            className="btn-universal w-full text-button flex items-center justify-center"
+            style={{ minHeight: '52px', textTransform: 'capitalize' }}
           >
             {t.addNew}
           </button>
