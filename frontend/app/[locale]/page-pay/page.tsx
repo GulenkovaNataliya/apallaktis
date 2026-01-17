@@ -36,7 +36,7 @@ export default function PagePay() {
         <Link
           href={`/${locale}/objects`}
           className="btn-universal w-full text-button flex items-center justify-center text-center"
-          style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
+          style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)', textTransform: 'uppercase' }}
         >
           {messages[locale]?.objects?.title || 'ΕΡΓΑ'}
         </Link>
