@@ -224,7 +224,7 @@ function PaymentMethodForm({
   const showIban = formData.type === 'bank_account';
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" style={{ marginTop: '80px' }}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4" style={{ marginTop: '40px' }}>
       {/* Type Select */}
       <div>
         <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '20px' }}>
