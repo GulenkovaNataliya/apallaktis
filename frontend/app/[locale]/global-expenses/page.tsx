@@ -351,24 +351,22 @@ export default function GlobalExpensesPage() {
   if (view === 'add-expense' || view === 'edit-expense') {
     return (
       <BackgroundPage pageIndex={4}>
-        <div className="min-h-screen flex flex-col items-center px-4" style={{ paddingTop: '40px', paddingBottom: '120px' }}>
-          <div className="w-full max-w-sm">
+        <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
+          <div className="w-full flex flex-col gap-12">
 
           {/* Back Button */}
-          <div style={{ marginTop: '120px', marginBottom: '24px' }}>
-            <button
-              onClick={() => {
-                setView('expenses');
-                setEditingExpense(null);
-              }}
-              className="text-button"
-              style={{ color: 'var(--polar)', fontSize: '18px' }}
-            >
-              {t.backToPayPage}
-            </button>
-          </div>
+          <button
+            onClick={() => {
+              setView('expenses');
+              setEditingExpense(null);
+            }}
+            className="btn-universal w-full text-button flex items-center justify-center"
+            style={{ minHeight: '52px' }}
+          >
+            {t.backToExpenses}
+          </button>
 
-          <h1 className="text-2xl font-bold mb-6" style={{ color: 'var(--polar)' }}>
+          <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
             {editingExpense ? t.edit : t.addNew}
           </h1>
 
@@ -655,17 +653,17 @@ function ExpenseForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" style={{ marginTop: '96px' }}>
+    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">
       {/* Category Select */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.category}
         </label>
         <select
           value={formData.categoryId}
           onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-          className="w-full rounded-2xl text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px' }}
+          className="w-full rounded-2xl"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px', fontWeight: 600 }}
         >
           {categories.map(cat => (
             <option key={cat.id} value={cat.id} style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>{cat.name}</option>
@@ -675,7 +673,7 @@ function ExpenseForm({
 
       {/* Payment Method Selection */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.paymentMethod}
         </label>
         {paymentMethods.length === 0 ? (
@@ -690,8 +688,8 @@ function ExpenseForm({
           <select
             value={formData.paymentMethodId}
             onChange={(e) => setFormData({ ...formData, paymentMethodId: e.target.value })}
-            className="w-full rounded-2xl text-body"
-            style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px' }}
+            className="w-full rounded-2xl"
+            style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px', fontWeight: 600 }}
           >
             {paymentMethods.map((method) => (
               <option key={method.id} value={method.id} style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>
@@ -704,7 +702,7 @@ function ExpenseForm({
 
       {/* Date */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.date}
         </label>
         <input
@@ -712,14 +710,14 @@ function ExpenseForm({
           value={formData.date}
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           required
-          className="w-full p-3 rounded-2xl text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          className="w-full p-3 rounded-2xl"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}
         />
       </div>
 
       {/* Name Input */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.name}
         </label>
         <input
@@ -727,15 +725,15 @@ function ExpenseForm({
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
-          className="w-full p-3 rounded-2xl text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          className="w-full p-3 rounded-2xl"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}
           placeholder={t.name}
         />
       </div>
 
       {/* Amount Input */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.amount}
         </label>
         <input
@@ -744,26 +742,29 @@ function ExpenseForm({
           onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) || 0 })}
           min="0"
           step="0.01"
-          className="w-full p-3 rounded-2xl text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          className="w-full p-3 rounded-2xl"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}
           placeholder="€"
         />
       </div>
 
       {/* Description Input */}
       <div>
-        <div className="flex justify-between items-center mb-2">
-          <label className="text-button" style={{ color: 'var(--polar)' }}>
+        <div className="flex justify-between items-center" style={{ marginBottom: '12px' }}>
+          <label className="text-button" style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}>
             {t.description}
           </label>
           <button
             type="button"
             onClick={handleVoiceInput}
             disabled={isRecording}
-            className="px-3 py-1 rounded-2xl text-sm flex items-center gap-2"
+            className="px-4 rounded-2xl flex items-center justify-center gap-2"
             style={{
               backgroundColor: isRecording ? '#ff6a1a' : 'var(--zanah)',
               color: isRecording ? 'white' : 'var(--deep-teal)',
+              minHeight: '40px',
+              fontSize: '16px',
+              fontWeight: 600
             }}
           >
             🎤 {isRecording ? '...' : t.voiceButton}
@@ -775,8 +776,8 @@ function ExpenseForm({
             setFormData({ ...formData, description: e.target.value });
             if (e.target.value) setInputMethod('manual');
           }}
-          className="w-full p-3 rounded-2xl text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '104px' }}
+          className="w-full p-3 rounded-2xl"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '104px', fontSize: '18px', fontWeight: 600 }}
           placeholder={isRecording ? 'Listening...' : t.description}
           rows={3}
         />
@@ -784,13 +785,13 @@ function ExpenseForm({
 
       {/* Receipt Photo */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.receiptPhoto}
         </label>
         {!photoPreview ? (
-          <label className="block w-full p-4 rounded-2xl text-center cursor-pointer"
-            style={{ border: '2px dashed var(--polar)', color: 'var(--polar)' }}>
-            <span className="text-button">{t.uploadPhoto}</span>
+          <label className="block w-full rounded-2xl text-center cursor-pointer flex items-center justify-center"
+            style={{ border: '2px dashed var(--polar)', color: 'var(--polar)', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}>
+            <span>{t.uploadPhoto}</span>
             <input
               type="file"
               accept="image/*"
@@ -809,8 +810,8 @@ function ExpenseForm({
             <button
               type="button"
               onClick={handleRemovePhoto}
-              className="absolute top-2 right-2 px-3 py-1 rounded-2xl text-sm"
-              style={{ backgroundColor: '#ff6a1a', color: 'white' }}
+              className="absolute top-2 right-2 px-4 rounded-2xl flex items-center justify-center"
+              style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '40px', fontSize: '16px', fontWeight: 600 }}
             >
               {t.removePhoto}
             </button>
@@ -819,7 +820,7 @@ function ExpenseForm({
       </div>
 
       {/* Buttons */}
-      <div className="flex gap-4 mt-4">
+      <div className="flex gap-4">
         <button
           type="button"
           onClick={onCancel}
