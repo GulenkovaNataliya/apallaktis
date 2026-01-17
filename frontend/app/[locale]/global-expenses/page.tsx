@@ -111,6 +111,13 @@ export default function GlobalExpensesPage() {
             {t.manageCategories}
           </button>
 
+          {/* No Categories Message */}
+          {categories.length === 0 && (
+            <p className="text-center text-body" style={{ color: 'var(--orange)' }}>
+              {t.noCategories}
+            </p>
+          )}
+
           {/* Add Expense Button */}
           <button
             onClick={() => setView('add-expense')}
