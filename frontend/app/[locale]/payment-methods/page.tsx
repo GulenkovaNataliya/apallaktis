@@ -127,13 +127,13 @@ export default function PaymentMethodsPage() {
         <button
           onClick={handleAdd}
           className="btn-universal w-full text-button"
-          style={{ minHeight: '52px', marginBottom: '48px', marginTop: '40px' }}
+          style={{ minHeight: '52px', marginBottom: '40px', marginTop: '40px' }}
         >
           {t.addNew}
         </button>
 
         {/* Methods List */}
-        <div className="flex flex-col gap-4 flex-1" style={{ marginTop: methods.length === 0 ? '52px' : '52px' }}>
+        <div className="flex flex-col gap-4 flex-1">
           {methods.length === 0 ? (
             <p className="text-center text-body" style={{ color: 'var(--orange)' }}>
               {t.noMethods}
