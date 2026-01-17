@@ -67,14 +67,14 @@ export default function EmailConfirmedPage() {
   return (
     <BackgroundPage pageIndex={1}>
       <div
-        className="flex min-h-screen flex-col items-center justify-center gap-8 px-4"
-        style={{ direction: isRTL ? "rtl" : "ltr" }}
+        className="flex min-h-screen flex-col items-center gap-8 px-4"
+        style={{ direction: isRTL ? "rtl" : "ltr", paddingTop: "160px" }}
       >
         <div className="w-full max-w-sm space-y-6 text-center">
           {/* Success Icon */}
           <div
             className="mx-auto flex h-24 w-24 items-center justify-center rounded-full"
-            style={{ backgroundColor: "#25D366" }}
+            style={{ backgroundColor: "var(--orange)" }}
           >
             <svg
               className="h-12 w-12 text-white"
@@ -94,7 +94,7 @@ export default function EmailConfirmedPage() {
           {/* Title */}
           <h1
             className="text-slogan font-bold"
-            style={{ color: "#ff8f0a" }}
+            style={{ color: "var(--orange)" }}
           >
             {t.title}
           </h1>
@@ -102,7 +102,7 @@ export default function EmailConfirmedPage() {
           {/* Subtitle */}
           <p
             className="text-heading"
-            style={{ color: "var(--deep-teal)" }}
+            style={{ color: "var(--deep-teal)", marginTop: "40px" }}
           >
             {t.subtitle}
           </p>
@@ -116,7 +116,7 @@ export default function EmailConfirmedPage() {
           </p>
 
           {/* Login Button */}
-          <div className="btn-single-wrapper">
+          <div className="btn-single-wrapper" style={{ marginTop: "40px" }}>
             <button
               onClick={() => router.push(`/${locale}/login`)}
               className="btn-primary text-button btn-single"

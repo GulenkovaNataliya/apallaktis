@@ -403,3 +403,29 @@ shadow-color == text-color
 **Файл:** `frontend/app/[locale]/email-not-confirmed/page.tsx`
 
 **Применено на всех 8 языках:** el, ru, uk, sq, bg, ro, en, ar (RTL)
+
+---
+
+### /[locale]/email-confirmed — Email подтверждён
+
+**Layout:**
+- `paddingTop: 160px` (контент поднят вверх)
+- `justify-center` убран, контент привязан к верху
+
+**Элементы:**
+
+| Элемент | Фон | Цвет текста | Размер/Отступ |
+|---------|-----|-------------|---------------|
+| Иконка галочка (круг) | `var(--orange)` | white | h-24 w-24 |
+| Заголовок "Email Подтверждён!" | — | `var(--orange)` | text-slogan |
+| Подзаголовок "Ваш email успешно подтверждён" | — | `var(--deep-teal)` | text-heading, marginTop: 40px |
+| Сообщение "Теперь вы можете войти..." | — | `var(--deep-teal)` | text-body, opacity: 0.8 |
+| Кнопка "Войти" | `var(--zanah)` | `var(--deep-teal)` | 52px, marginTop: 40px |
+
+**Навигация:**
+- После подтверждения email → redirect на эту страницу
+- Кнопка "Войти" → `/[locale]/login`
+
+**Файл:** `frontend/app/[locale]/email-confirmed/page.tsx`
+
+**Применено на всех 8 языках:** el, ru, uk, sq, bg, ro, en, ar (RTL)
