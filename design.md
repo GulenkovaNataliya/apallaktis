@@ -428,3 +428,25 @@ shadow-color == text-color
 **Файл:** `frontend/app/[locale]/email-confirmed/page.tsx`
 
 **Применено на всех 8 языках:** el, ru, uk, sq, bg, ro, en, ar (RTL)
+
+---
+
+### /[locale]/page-pay — Главное меню
+
+**Layout:**
+- `paddingTop: 180px`
+- `paddingLeft: 40px`, `paddingRight: 40px`
+- `gap: 48px` (gap-12)
+
+**Элементы:**
+
+| Элемент | Фон | Цвет текста | Размер/Стиль |
+|---------|-----|-------------|--------------|
+| Кнопка "Способы оплаты" | `btn-payment` | `var(--deep-teal)` | 52px, text-button |
+| Кнопка "Общие расходы" | `btn-expenses` | `var(--deep-teal)` | 52px, text-button |
+| Кнопка "Объекты" | `var(--zanah)` | `var(--deep-teal)` | 52px, text-button, uppercase |
+| Кнопка "Личный кабинет" | `#01312d` | `var(--orange)` | 52px, text-button, с эмодзи 👤 |
+
+**Файл:** `frontend/app/[locale]/page-pay/page.tsx`
+
+**Применено на всех 8 языках:** el, ru, uk, sq, bg, ro, en, ar (RTL)
