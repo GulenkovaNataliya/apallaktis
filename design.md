@@ -445,7 +445,7 @@ shadow-color == text-color
 | Кнопка "Способы оплаты" | `btn-payment` | `var(--deep-teal)` | 52px, text-button |
 | Кнопка "Общие расходы" | `btn-expenses` | `var(--deep-teal)` | 52px, text-button |
 | Кнопка "Объекты" | `var(--zanah)` | `var(--deep-teal)` | 52px, text-button, uppercase |
-| Кнопка "Личный кабинет" | `#01312d` | `var(--orange)` | 52px, text-button, с эмодзи 👤 |
+| Кнопка "Личный кабинет" | `#01312d` | `var(--orange)` | 52px, text-button, SVG иконка (currentColor) |
 
 **Файл:** `frontend/app/[locale]/page-pay/page.tsx`
 
