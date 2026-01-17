@@ -165,7 +165,7 @@ export default function EmailNotConfirmedPage() {
           {/* Warning Icon */}
           <div
             className="mx-auto flex h-24 w-24 items-center justify-center rounded-full"
-            style={{ backgroundColor: "#ff8f0a" }}
+            style={{ backgroundColor: "var(--orange)" }}
           >
             <svg
               className="h-12 w-12 text-white"
@@ -185,7 +185,7 @@ export default function EmailNotConfirmedPage() {
           {/* Title */}
           <h1
             className="text-slogan font-bold"
-            style={{ color: "#ff8f0a" }}
+            style={{ color: "var(--orange)" }}
           >
             {t.title}
           </h1>
