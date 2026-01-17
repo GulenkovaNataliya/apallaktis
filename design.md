@@ -524,3 +524,87 @@ shadow-color == text-color
 **Файл:** `frontend/app/[locale]/payment-methods/page.tsx`
 
 **Применено на всех 8 языках:** el, ru, uk, sq, bg, ro, en, ar (RTL)
+
+---
+
+## 13. ЗАПОЛНЕННЫЕ КАРТОЧКИ (СПИСКИ)
+
+### Закон карточек для списков
+
+Карточки с названиями (категории, способы оплаты и т.д.):
+
+```jsx
+<div
+  className="px-4 rounded-2xl flex items-center justify-between"
+  style={{ backgroundColor: 'var(--polar)', height: '52px' }}
+>
+  <p style={{
+    color: 'var(--deep-teal)',
+    fontSize: '18px',
+    fontWeight: 600,
+    paddingLeft: '5px'
+  }}>
+    {name}
+  </p>
+  <div className="flex gap-2">
+    {/* Edit/Delete buttons */}
+  </div>
+</div>
+```
+
+### Параметры карточки
+
+| Параметр | Значение |
+|----------|----------|
+| height | `52px` (фиксированная) |
+| backgroundColor | `var(--polar)` |
+| borderRadius | `rounded-2xl` (1rem) |
+| paddingLeft/Right | `px-4` (16px) |
+| paddingLeft текста | `5px` |
+
+### Текст названия
+
+| Параметр | Значение |
+|----------|----------|
+| color | `var(--deep-teal)` |
+| fontSize | `18px` |
+| fontWeight | `600` |
+| paddingLeft | `5px` |
+
+### Кнопки Edit/Delete внутри карточки
+
+| Параметр | Значение |
+|----------|----------|
+| height | `40px` |
+| borderRadius | `rounded-2xl` |
+| paddingLeft/Right | `px-3` (12px) |
+| fontSize | `16px` |
+| fontWeight | `600` |
+
+**Edit кнопка:**
+- backgroundColor: `var(--zanah)`
+- color: `var(--deep-teal)`
+
+**Delete кнопка:**
+- backgroundColor: `var(--orange)`
+- color: `white`
+
+### Применяется на:
+- `/[locale]/global-expenses` — список категорий
+- `/[locale]/payment-methods` — список способов оплаты
+
+---
+
+## 14. ФОРМЫ ДОБАВЛЕНИЯ/РЕДАКТИРОВАНИЯ
+
+### Название категории
+
+| Параметр | Значение |
+|----------|----------|
+| maxLength | `10` символов |
+
+### Название способа оплаты
+
+| Параметр | Значение |
+|----------|----------|
+| maxLength | `8` символов |
