@@ -377,3 +377,29 @@ shadow-color == text-color
 | Кнопки | --polar | --deep-teal |
 | Слоган | — | --slogan-color |
 | Ошибки | — | --orange |
+
+---
+
+## 12. ДИЗАЙН СТРАНИЦ
+
+### /[locale]/email-not-confirmed — Email не подтверждён
+
+**Layout:**
+- `paddingTop: 160px` (контент поднят вверх)
+- `justify-center` убран, контент привязан к верху
+
+**Элементы:**
+
+| Элемент | Фон | Цвет текста | Размер |
+|---------|-----|-------------|--------|
+| Иконка email (круг) | `var(--orange)` | white | h-24 w-24 |
+| Заголовок "Подтвердите Email" | — | `var(--orange)` | text-slogan |
+| Подзаголовок "Ваш email ещё не подтверждён" | — | `var(--zanah)` | text-heading, marginTop: 40px |
+| Сообщение "Проверьте входящие..." | — | `var(--zanah)` | text-body |
+| Блок "Проверьте спам" | `var(--orange)` | `var(--deep-teal)` | text-body |
+| Кнопка "Отправить повторно" | `var(--zanah)` | `var(--deep-teal)` | 52px, marginTop: 40px |
+| Кнопка "Выйти" | rgba(1,49,45,0.1) | `var(--zanah)` | 52px |
+
+**Файл:** `frontend/app/[locale]/email-not-confirmed/page.tsx`
+
+**Применено на всех 8 языках:** el, ru, uk, sq, bg, ro, en, ar (RTL)
