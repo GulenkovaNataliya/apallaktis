@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import BackgroundPage from '@/components/BackgroundPage';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -943,8 +943,8 @@ function ExpenseForm({
   };
 
   // Ref для хранения recognition instance
-  const recognitionRef = React.useRef<any>(null);
-  const transcriptRef = React.useRef<string>('');
+  const recognitionRef = useRef<any>(null);
+  const transcriptRef = useRef<string>('');
 
   const handleVoiceInput = () => {
     // Если уже записываем - останавливаем
