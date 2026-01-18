@@ -524,6 +524,13 @@ function ExpenseForm({
       if (result.success && result.data) {
         const data = result.data;
 
+        // DEBUG: Photo auto-fill
+        console.log('=== PHOTO AUTO-FILL DEBUG ===');
+        console.log('LLM response data:', JSON.stringify(data, null, 2));
+        console.log('suggestedCategory:', data.suggestedCategory);
+        console.log('Available categories:', categories.map(c => ({ id: c.id, name: c.name })));
+        console.log('Available paymentMethods:', paymentMethods.map(p => ({ id: p.id, name: p.name, type: p.type })));
+
         // Автозаполнение формы
         setFormData(prev => ({
           ...prev,
@@ -615,9 +622,13 @@ function ExpenseForm({
 
       if (result.success && result.data) {
         const data = result.data;
-        console.log('Parsed data:', data);
+        // DEBUG: Voice auto-fill
+        console.log('=== VOICE AUTO-FILL DEBUG ===');
+        console.log('LLM response data:', JSON.stringify(data, null, 2));
+        console.log('suggestedCategory:', data.suggestedCategory);
+        console.log('paymentMethod:', data.paymentMethod);
         console.log('Available categories:', categories.map(c => ({ id: c.id, name: c.name })));
-        console.log('Available payment methods:', paymentMethods.map(pm => ({ id: pm.id, name: pm.name, type: pm.type })));
+        console.log('Available paymentMethods:', paymentMethods.map(p => ({ id: p.id, name: p.name, type: p.type })));
 
         // DEBUG: Показываем что вернул AI
         alert(`AI вернул:\nНазвание: ${data.name}\nСумма: ${data.amount}\nДата: ${data.date}\nКатегория: ${data.suggestedCategory}\nОплата: ${data.paymentMethod}`);
@@ -1089,6 +1100,12 @@ function ExpenseForm({
             >
               {t.removePhoto}
             </button>
+            {!isAnalyzing && (
+              <p className="absolute bottom-0 left-0 right-0 text-center py-2 rounded-b-2xl"
+                style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: 'var(--orange)', fontSize: '18px', fontWeight: 600 }}>
+                {t.deletePhotoToSave}
+              </p>
+            )}
           </div>
         )}
         {analyzeError && (
