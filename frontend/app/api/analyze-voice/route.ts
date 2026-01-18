@@ -68,7 +68,7 @@ Expected JSON format:
   "date": "YYYY-MM-DD",
   "description": "Brief description (in user's language)",
   "confidence": "high/medium/low",
-  "suggestedCategory": "groceries/transport/utilities/entertainment/healthcare/education/other",
+  "suggestedCategory": "materials/tools/work/groceries/transport/utilities/entertainment/healthcare/education/other",
   "paymentMethod": "cash/card/bank/null"
 }
 
@@ -78,6 +78,9 @@ Rules:
 3. Convert relative dates to YYYY-MM-DD
 4. Extract numbers for amount (евро/euro/ευρώ/€ = EUR currency)
 5. Categories:
+   - Materials, supplies, paint, cement, wood, tiles, pipes, cables, υλικά, материалы → "materials"
+   - Tools, equipment, drill, hammer, machines, εργαλεία, инструменты → "tools"
+   - Work, services, labor, subcontract, repair, installation, εργασία, работа, услуги → "work"
    - Supermarkets, food, Лидл, Σκλαβενίτης, магазин → "groceries"
    - Gas, бензин, parking, taxi, bus, метро → "transport"
    - Electric, вода, телефон, интернет, ДЕΗ → "utilities"

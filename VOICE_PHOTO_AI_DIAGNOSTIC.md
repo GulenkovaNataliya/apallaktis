@@ -1,5 +1,7 @@
 # AI Auto-fill Diagnostic (Voice + Photo)
 
+**Последнее обновление:** 2026-01-18
+
 ---
 
 # ЧАСТЬ 1: VOICE (Голосовой ввод)
@@ -20,7 +22,7 @@ Expected JSON format:
   "date": "YYYY-MM-DD",
   "description": "Brief description (in user's language)",
   "confidence": "high/medium/low",
-  "suggestedCategory": "groceries/transport/utilities/entertainment/healthcare/education/other",
+  "suggestedCategory": "materials/tools/work/groceries/transport/utilities/entertainment/healthcare/education/other",
   "paymentMethod": "cash/card/bank/null"
 }
 
@@ -30,6 +32,9 @@ Rules:
 3. Convert relative dates to YYYY-MM-DD
 4. Extract numbers for amount (евро/euro/ευρώ/€ = EUR currency)
 5. Categories:
+   - Materials, supplies, paint, cement, wood, tiles, pipes, cables, υλικά, материалы → "materials"
+   - Tools, equipment, drill, hammer, machines, εργαλεία, инструменты → "tools"
+   - Work, services, labor, subcontract, repair, installation, εργασία, работа, услуги → "work"
    - Supermarkets, food, Лидл, Σκλαβενίτης, магазин → "groceries"
    - Gas, бензин, parking, taxi, bus, метро → "transport"
    - Electric, вода, телефон, интернет, ДЕΗ → "utilities"
@@ -71,101 +76,136 @@ Voice input to analyze: "${text}"
 ```
 
 **Допустимые значения:**
-- `suggestedCategory`: `"groceries"` | `"transport"` | `"utilities"` | `"entertainment"` | `"healthcare"` | `"education"` | `"other"`
+- `suggestedCategory`: `"materials"` | `"tools"` | `"work"` | `"groceries"` | `"transport"` | `"utilities"` | `"entertainment"` | `"healthcare"` | `"education"` | `"other"`
 - `paymentMethod`: `"cash"` | `"card"` | `"bank"` | `null`
 
 ## 1.3 КОД ПРИМЕНЕНИЯ К ФОРМЕ (Voice)
 
-**Файл:** `frontend/app/[locale]/global-expenses/page.tsx`, строки 625-718
+**Файл:** `frontend/app/[locale]/global-expenses/page.tsx`
+
+### categoryMap (10 категорий, 8 языков)
 
 ```typescript
-// Автозаполнение формы - используем данные если они есть
-setFormData(prev => ({
-  ...prev,
-  name: data.name && data.name !== 'null' ? data.name.slice(0, 10) : prev.name,
-  amount: data.amount !== null && data.amount !== undefined ? data.amount : prev.amount,
-  description: data.description || transcript,
-  date: data.date || prev.date,
-}));
+const categoryMap: Record<string, string[]> = {
+  // === КАТЕГОРИИ ДЛЯ МАСТЕРОВ ===
+  materials: [
+    'material', 'supply', 'supplies', 'paint', 'cement', 'wood', 'lumber', 'tile', 'pipe', 'wire', 'cable',
+    'υλικ', 'μπογιά', 'χρώμα', 'τσιμέντο', 'ξύλο', 'πλακάκ', 'σωλήν', 'καλώδ', 'προμήθ',
+    'материал', 'краск', 'цемент', 'дерев', 'древес', 'плитк', 'труб', 'провод', 'кабел', 'гипс', 'шпакл',
+    'матеріал', 'фарб', 'цемент', 'дерев', 'плитк', 'труб', 'провід', 'кабел', 'гіпс', 'шпакл',
+    'материал', 'боя', 'цимент', 'дърв', 'плочк', 'тръб', 'кабел', 'гипс',
+    'material', 'vopsea', 'ciment', 'lemn', 'țiglă', 'țeavă', 'cablu', 'gips',
+    'material', 'bojë', 'çimento', 'dru', 'pllakë', 'tub', 'kabllo', 'gips',
+    'مواد', 'طلاء', 'أسمنت', 'خشب', 'بلاط', 'أنبوب', 'كابل', 'جبس'
+  ],
+  tools: [
+    'tool', 'equipment', 'drill', 'hammer', 'saw', 'screwdriver', 'machine',
+    'εργαλεί', 'τρυπάνι', 'σφυρί', 'πριόνι', 'κατσαβίδι', 'μηχάνημα',
+    'инструмент', 'оборудован', 'дрель', 'молоток', 'пила', 'отвёртк', 'отвертк', 'станок', 'шуруповёрт',
+    'інструмент', 'обладнан', 'дриль', 'молоток', 'пилк', 'викрутк', 'станок', 'шуруповерт',
+    'инструмент', 'оборудван', 'бормашин', 'чук', 'трион', 'отвертк',
+    'unealtă', 'sculă', 'echipament', 'bormaşină', 'ciocan', 'fierăstrău', 'şurubelniţă',
+    'vegël', 'pajisje', 'trapan', 'çekiç', 'sharrë', 'kaçavidë',
+    'أداة', 'معدات', 'مثقاب', 'مطرقة', 'منشار', 'مفك'
+  ],
+  work: [
+    'work', 'service', 'labor', 'subcontract', 'contractor', 'worker', 'job', 'repair',
+    'εργασί', 'υπηρεσί', 'εργάτ', 'υπεργολάβ', 'επισκευ', 'δουλει',
+    'работ', 'услуг', 'субподряд', 'подрядчик', 'рабочи', 'ремонт', 'монтаж', 'установк',
+    'робот', 'послуг', 'субпідряд', 'підрядник', 'робітник', 'ремонт', 'монтаж', 'встановл',
+    'работ', 'услуг', 'подизпълнител', 'работник', 'ремонт', 'монтаж',
+    'muncă', 'serviciu', 'subcontract', 'contractor', 'lucrător', 'reparație', 'montaj',
+    'punë', 'shërbim', 'nënkontratë', 'kontraktor', 'punëtor', 'riparim', 'montim',
+    'عمل', 'خدمة', 'مقاول', 'عامل', 'إصلاح', 'تركيب'
+  ],
+  // === СТАНДАРТНЫЕ КАТЕГОРИИ ===
+  groceries: [
+    'grocery', 'food', 'supermarket', 'shop', 'store',
+    'τρόφιμ', 'σούπερ', 'μαγαζί', 'σκλαβενίτ', 'λιδλ',
+    'продукт', 'еда', 'магазин', 'супермаркет', 'лидл', 'покупк',
+    'продукт', 'їжа', 'магазин', 'супермаркет',
+    'храна', 'магазин', 'супермаркет', 'продукт',
+    'aliment', 'mâncare', 'magazin', 'supermarket',
+    'ushqim', 'dyqan', 'supermarket',
+    'طعام', 'بقالة', 'سوبرماركت', 'متجر'
+  ],
+  transport: [
+    'transport', 'fuel', 'gas', 'parking', 'taxi', 'bus', 'metro', 'petrol', 'diesel',
+    'μεταφορ', 'βενζίν', 'καύσιμ', 'πάρκινγκ', 'ταξί', 'λεωφορ', 'μετρό', 'πετρέλαιο', 'ντίζελ',
+    'транспорт', 'бензин', 'топливо', 'парковк', 'такси', 'автобус', 'метро', 'горюч', 'дизель', 'солярк',
+    'транспорт', 'бензин', 'паливо', 'парковк', 'таксі', 'автобус', 'метро', 'дизель',
+    'транспорт', 'бензин', 'гориво', 'паркинг', 'такси', 'автобус', 'метро', 'дизел',
+    'transport', 'benzină', 'combustibil', 'parcare', 'taxi', 'autobuz', 'metrou', 'motorină',
+    'transport', 'benzinë', 'karburant', 'parking', 'taksi', 'autobus', 'metro', 'naftë',
+    'نقل', 'بنزين', 'وقود', 'موقف', 'تاكسي', 'باص', 'مترو', 'ديزل'
+  ],
+  utilities: [
+    'utilit', 'electric', 'water', 'phone', 'internet', 'bill',
+    'κοινωφελ', 'ρεύμα', 'νερό', 'τηλέφωνο', 'ίντερνετ', 'δεη', 'λογαριασμ',
+    'коммунал', 'электрич', 'свет', 'вода', 'телефон', 'интернет', 'счет', 'счёт',
+    'комунал', 'електрик', 'світло', 'вода', 'телефон', 'інтернет', 'рахунок',
+    'комунал', 'електрич', 'ток', 'вода', 'телефон', 'интернет', 'сметка',
+    'utilități', 'electric', 'apă', 'telefon', 'internet', 'factură',
+    'komunal', 'elektrik', 'ujë', 'telefon', 'internet', 'faturë',
+    'مرافق', 'كهرباء', 'ماء', 'هاتف', 'إنترنت', 'فاتورة'
+  ],
+  entertainment: [
+    'entertain', 'restaurant', 'cafe', 'cinema', 'movie', 'leisure',
+    'ψυχαγωγ', 'εστιατόρ', 'καφέ', 'σινεμά', 'ταινία',
+    'развлеч', 'рестор', 'кафе', 'кино', 'фильм', 'отдых',
+    'розваг', 'рестор', 'кафе', 'кіно', 'фільм', 'відпочин',
+    'развлеч', 'рестор', 'кафе', 'кино', 'филм', 'отдих',
+    'divertisment', 'restaurant', 'cafenea', 'cinema', 'film',
+    'argëtim', 'restorant', 'kafe', 'kinema', 'film',
+    'ترفيه', 'مطعم', 'مقهى', 'سينما', 'فيلم'
+  ],
+  healthcare: [
+    'health', 'pharmacy', 'doctor', 'hospital', 'medicine', 'medical',
+    'υγεί', 'φαρμακ', 'γιατρ', 'νοσοκομ', 'φάρμακο',
+    'здоров', 'аптек', 'врач', 'больниц', 'лекарств', 'медиц',
+    'здоров', 'аптек', 'лікар', 'лікарн', 'ліки', 'медиц',
+    'здрав', 'аптек', 'лекар', 'болниц', 'лекарств', 'медиц',
+    'sănătate', 'farmacie', 'doctor', 'spital', 'medicament', 'medical',
+    'shëndet', 'farmaci', 'doktor', 'spital', 'ilaç', 'mjekësor',
+    'صحة', 'صيدلية', 'طبيب', 'مستشفى', 'دواء', 'طبي'
+  ],
+  education: [
+    'educat', 'school', 'course', 'book', 'university', 'college',
+    'εκπαίδευ', 'σχολ', 'μάθημα', 'βιβλί', 'πανεπιστ',
+    'образован', 'школ', 'курс', 'книг', 'универ', 'учеб',
+    'освіт', 'школ', 'курс', 'книг', 'універ', 'навчан',
+    'образован', 'учил', 'курс', 'книг', 'универ', 'обучен',
+    'educație', 'școală', 'curs', 'carte', 'universitate',
+    'arsim', 'shkollë', 'kurs', 'libër', 'universitet',
+    'تعليم', 'مدرسة', 'دورة', 'كتاب', 'جامعة'
+  ],
+};
+```
 
-// Выбор категории
-if (categories.length > 0) {
-  const categoryMap: Record<string, string[]> = {
-    groceries: ['продукт', 'grocery', 'τρόφιμ', 'food', 'supermarket', 'супермаркет', 'магазин', 'лидл', 'lidl', 'aldi', 'σκλαβενίτ', 'еда', 'покупк'],
-    transport: ['транспорт', 'transport', 'μεταφορ', 'fuel', 'бензин', 'benzin', 'βενζίν', 'parking', 'парковк', 'такси', 'taxi', 'автобус', 'metro', 'метро', 'горюч'],
-    utilities: ['коммунал', 'utilit', 'κοινωφελ', 'electric', 'свет', 'электрич', 'вода', 'water', 'νερό', 'ρεύμα', 'телефон', 'phone', 'internet', 'интернет', 'δεη', 'счет', 'счёт'],
-    entertainment: ['развлеч', 'entertain', 'ψυχαγωγ', 'restaurant', 'рестор', 'кафе', 'cafe', 'cinema', 'кино', 'σινεμά', 'εστιατόρ', 'отдых'],
-    healthcare: ['здоров', 'health', 'υγεί', 'pharmacy', 'аптек', 'φαρμακ', 'doctor', 'врач', 'γιατρ', 'больниц', 'hospital', 'νοσοκομ', 'лекарств', 'medicine', 'медиц'],
-    education: ['образован', 'educat', 'εκπαίδευ', 'school', 'школ', 'σχολ', 'курс', 'course', 'book', 'книг', 'βιβλί', 'универ', 'учеб'],
-  };
+### paymentKeywords (8 языков)
 
-  let matchedCategory: ExpenseCategory | undefined;
-
-  // Сначала ищем по suggestedCategory от AI
-  if (data.suggestedCategory) {
-    const keywords = categoryMap[data.suggestedCategory] || [];
-    matchedCategory = categories.find(cat =>
-      keywords.some(kw => cat.name.toLowerCase().includes(kw.toLowerCase()))
-    );
-  }
-
-  // Если не нашли, ищем по имени из data.name
-  if (!matchedCategory && data.name) {
-    matchedCategory = categories.find(cat =>
-      cat.name.toLowerCase().includes(data.name.toLowerCase()) ||
-      data.name.toLowerCase().includes(cat.name.toLowerCase())
-    );
-  }
-
-  // Если всё ещё не нашли, берем первую категорию
-  if (!matchedCategory) {
-    matchedCategory = categories[0];
-  }
-
-  if (matchedCategory) {
-    setFormData(prev => ({ ...prev, categoryId: matchedCategory!.id }));
-  }
-}
-
-// Выбор способа оплаты
-if (paymentMethods.length > 0) {
-  let matchedPayment: PaymentMethod | undefined;
-
-  if (data.paymentMethod) {
-    // Ищем по типу
-    if (data.paymentMethod === 'card') {
-      matchedPayment = paymentMethods.find(pm =>
-        pm.type === 'credit_card' || pm.type === 'debit_card'
-      );
-    } else if (data.paymentMethod === 'cash') {
-      matchedPayment = paymentMethods.find(pm => pm.type === 'cash');
-    } else if (data.paymentMethod === 'bank') {
-      matchedPayment = paymentMethods.find(pm => pm.type === 'bank_account');
-    }
-
-    // Если не нашли по типу, ищем по имени
-    if (!matchedPayment) {
-      const paymentKeywords: Record<string, string[]> = {
-        cash: ['наличн', 'cash', 'μετρητ', 'кэш'],
-        card: ['карт', 'card', 'κάρτ', 'credit', 'debit', 'visa', 'master'],
-        bank: ['банк', 'bank', 'τράπεζ', 'перевод', 'transfer', 'iban', 'счет', 'счёт'],
-      };
-      const keywords = paymentKeywords[data.paymentMethod] || [];
-      matchedPayment = paymentMethods.find(pm =>
-        keywords.some(kw => pm.name.toLowerCase().includes(kw.toLowerCase()))
-      );
-    }
-  }
-
-  // Если AI не предложил или не нашли, берем первый способ оплаты
-  if (!matchedPayment) {
-    matchedPayment = paymentMethods[0];
-  }
-
-  if (matchedPayment) {
-    setFormData(prev => ({ ...prev, paymentMethodId: matchedPayment!.id }));
-  }
-}
+```typescript
+const paymentKeywords: Record<string, string[]> = {
+  cash: [
+    'cash', 'μετρητ', 'μετρητά', 'наличн', 'наличные', 'кэш', 'нал',
+    'готівк', 'готівка', 'кеш', 'брой', 'в брой', 'numerar', 'para', 'نقد', 'كاش'
+  ],
+  card: [
+    'card', 'credit', 'debit', 'visa', 'master', 'mastercard',
+    'κάρτ', 'κάρτα', 'πιστωτ', 'χρεωστ',
+    'карт', 'карта', 'картой', 'кредит', 'дебет',
+    'картк', 'кредит', 'дебет',
+    'carte', 'kartë', 'بطاقة', 'كارت', 'ائتمان', 'فيزا', 'ماستر'
+  ],
+  bank: [
+    'bank', 'transfer', 'wire', 'iban',
+    'τράπεζ', 'έμβασμα', 'μεταφορ',
+    'банк', 'перевод', 'ибан', 'счет', 'счёт',
+    'переказ', 'рахунок', 'превод', 'сметка',
+    'bancă', 'cont', 'bankë', 'transfertë', 'llogari',
+    'بنك', 'تحويل', 'حساب'
+  ],
+};
 ```
 
 ---
@@ -185,7 +225,7 @@ You are analyzing a receipt/invoice image. Extract the following information and
   "date": "YYYY-MM-DD",
   "description": "Brief description of items purchased",
   "confidence": "high/medium/low",
-  "suggestedCategory": "groceries/transport/utilities/entertainment/healthcare/education/other"
+  "suggestedCategory": "materials/tools/work/groceries/transport/utilities/entertainment/healthcare/education/other"
 }
 
 Important rules:
@@ -195,6 +235,9 @@ Important rules:
 4. For "name": use the store name or merchant name
 5. For "description": briefly list main items if visible
 6. For "suggestedCategory": suggest based on the type of store/items:
+   - Building materials, supplies, paint, cement, wood, tiles, pipes, cables → "materials"
+   - Tools, equipment, drills, hammers, machines → "tools"
+   - Work, services, labor, subcontract, repair, installation → "work"
    - Supermarkets, food stores → "groceries"
    - Gas stations, parking, taxis → "transport"
    - Electric, water, phone bills → "utilities"
@@ -227,12 +270,14 @@ Analyze this receipt image now:
 ```
 
 **Допустимые значения:**
-- `suggestedCategory`: `"groceries"` | `"transport"` | `"utilities"` | `"entertainment"` | `"healthcare"` | `"education"` | `"other"`
+- `suggestedCategory`: `"materials"` | `"tools"` | `"work"` | `"groceries"` | `"transport"` | `"utilities"` | `"entertainment"` | `"healthcare"` | `"education"` | `"other"`
 - `paymentMethod`: **НЕТ** (не возвращается для фото)
 
 ## 2.3 КОД ПРИМЕНЕНИЯ К ФОРМЕ (Photo)
 
-**Файл:** `frontend/app/[locale]/global-expenses/page.tsx`, строки 527-555
+**Файл:** `frontend/app/[locale]/global-expenses/page.tsx`
+
+Photo использует тот же `categoryMap` что и Voice (10 категорий, 8 языков).
 
 ```typescript
 // Автозаполнение формы
@@ -244,31 +289,18 @@ setFormData(prev => ({
   date: data.date || prev.date,
 }));
 
-// Попытка найти подходящую категорию
-if (data.suggestedCategory && categories.length > 0) {
-  const categoryMap: Record<string, string[]> = {
-    groceries: ['продукты', 'groceries', 'τρόφιμα', 'food', 'supermarket', 'супермаркет'],
-    transport: ['транспорт', 'transport', 'μεταφορά', 'fuel', 'бензин', 'parking'],
-    utilities: ['коммунальные', 'utilities', 'κοινωφελείς', 'electric', 'water', 'phone'],
-    entertainment: ['развлечения', 'entertainment', 'ψυχαγωγία', 'restaurant', 'cinema'],
-    healthcare: ['здоровье', 'healthcare', 'υγεία', 'pharmacy', 'аптека', 'doctor'],
-    education: ['образование', 'education', 'εκπαίδευση', 'school', 'books', 'курсы'],
-  };
-
-  const keywords = categoryMap[data.suggestedCategory] || [];
-  const matchedCategory = categories.find(cat =>
-    keywords.some(kw => cat.name.toLowerCase().includes(kw.toLowerCase()))
-  );
-
-  if (matchedCategory) {
-    setFormData(prev => ({ ...prev, categoryId: matchedCategory.id }));
-  }
+// Категория с fallback на первую
+if (matchedCategory) {
+  setFormData(prev => ({ ...prev, categoryId: matchedCategory.id }));
+} else if (categories.length > 0) {
+  setFormData(prev => ({ ...prev, categoryId: categories[0].id }));
 }
 
-setInputMethod('photo');
+// Способ оплаты (fallback на первый)
+if (paymentMethods.length > 0) {
+  setFormData(prev => ({ ...prev, paymentMethodId: paymentMethods[0].id }));
+}
 ```
-
-**ВАЖНО:** Для фото НЕТ выбора способа оплаты и НЕТ fallback на первую категорию!
 
 ---
 
@@ -318,49 +350,52 @@ const [formData, setFormData] = useState({
 
 ---
 
-# ЧАСТЬ 4: UI КОМПОНЕНТЫ
-
-## 4.1 Category Select
-
-```jsx
-<select
-  value={formData.categoryId}
-  onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
->
-  {categories.map(cat => (
-    <option key={cat.id} value={cat.id}>{cat.name}</option>
-  ))}
-</select>
-```
-
-## 4.2 Payment Method Select
-
-```jsx
-<select
-  value={formData.paymentMethodId}
-  onChange={(e) => setFormData({ ...formData, paymentMethodId: e.target.value })}
->
-  {paymentMethods.map((method) => (
-    <option key={method.id} value={method.id}>{method.name}</option>
-  ))}
-</select>
-```
-
----
-
-# ЧАСТЬ 5: РАЗЛИЧИЯ МЕЖДУ VOICE И PHOTO
+# ЧАСТЬ 4: РАЗЛИЧИЯ МЕЖДУ VOICE И PHOTO
 
 | Параметр | Voice | Photo |
 |----------|-------|-------|
 | API endpoint | `/api/analyze-voice` | `/api/analyze-receipt` |
 | Возвращает paymentMethod | ✅ Да | ❌ Нет |
-| Fallback на первую категорию | ✅ Да | ❌ Нет |
-| Fallback на первый способ оплаты | ✅ Да | ❌ Нет |
-| Ключевые слова для категорий | Расширенный список | Базовый список |
+| Fallback на первую категорию | ✅ Да | ✅ Да |
+| Fallback на первый способ оплаты | ✅ Да | ✅ Да |
+| categoryMap | 10 категорий, 8 языков | 10 категорий, 8 языков |
+| paymentKeywords | 8 языков | — |
 
 ---
 
-# ЧАСТЬ 6: ФАЙЛЫ
+# ЧАСТЬ 5: ПОДДЕРЖИВАЕМЫЕ ЯЗЫКИ
+
+| Код | Язык |
+|-----|------|
+| en | English |
+| el | Ελληνικά (Greek) |
+| ru | Русский |
+| uk | Українська |
+| bg | Български |
+| ro | Română |
+| sq | Shqip (Albanian) |
+| ar | العربية (Arabic) |
+
+---
+
+# ЧАСТЬ 6: КАТЕГОРИИ
+
+| Код | Описание | Примеры |
+|-----|----------|---------|
+| materials | Строительные материалы | краска, цемент, плитка, трубы, кабели |
+| tools | Инструменты | дрель, молоток, станок, шуруповёрт |
+| work | Работы/Услуги | ремонт, монтаж, субподряд, установка |
+| groceries | Продукты | супермаркет, еда, магазин |
+| transport | Транспорт | бензин, такси, парковка, метро |
+| utilities | Коммунальные | свет, вода, телефон, интернет |
+| entertainment | Развлечения | ресторан, кафе, кино |
+| healthcare | Здоровье | аптека, врач, лекарства |
+| education | Образование | школа, курсы, книги |
+| other | Прочее | всё остальное |
+
+---
+
+# ЧАСТЬ 7: ФАЙЛЫ
 
 - `frontend/app/api/analyze-voice/route.ts` — API для голоса
 - `frontend/app/api/analyze-receipt/route.ts` — API для фото
@@ -371,26 +406,25 @@ const [formData, setFormData] = useState({
 
 ---
 
-# ЧАСТЬ 7: УВЕДОМЛЕНИЕ "УДАЛИТЕ ФОТО"
+# ЧАСТЬ 8: УВЕДОМЛЕНИЕ "УДАЛИТЕ ФОТО"
 
-## 7.1 Описание
+## 8.1 Описание
 
 Когда пользователь загружает фото чека, под фотографией отображается предупреждение:
 **"Удалите фото, чтобы сохранить"**
 
 Это связано с тем, что фото не хранится в базе данных — только анализируется для автозаполнения.
 
-## 7.2 Стиль
+## 8.2 Стиль
 
 ```css
 color: var(--orange)
 fontSize: 18px
 fontWeight: 600
-marginTop: 12px
-textAlign: center
+backgroundColor: rgba(0,0,0,0.6)
 ```
 
-## 7.3 Переводы (deletePhotoToSave)
+## 8.3 Переводы (deletePhotoToSave)
 
 | Язык | Перевод |
 |------|---------|
@@ -403,11 +437,7 @@ textAlign: center
 | en | Delete photo to save |
 | ar | احذف الصورة للحفظ |
 
-## 7.4 Код уведомления
-
-**Файл:** `frontend/app/[locale]/global-expenses/page.tsx`
-
-Уведомление отображается внизу фотографии с полупрозрачным тёмным фоном:
+## 8.4 Код уведомления
 
 ```tsx
 {!isAnalyzing && (
@@ -417,3 +447,36 @@ textAlign: center
   </p>
 )}
 ```
+
+---
+
+# ЧАСТЬ 9: DEBUG ЛОГИ
+
+## Voice Debug
+
+```typescript
+console.log('=== VOICE AUTO-FILL DEBUG ===');
+console.log('LLM response data:', JSON.stringify(data, null, 2));
+console.log('suggestedCategory:', data.suggestedCategory);
+console.log('paymentMethod:', data.paymentMethod);
+console.log('Available categories:', categories.map(c => ({ id: c.id, name: c.name })));
+console.log('Available paymentMethods:', paymentMethods.map(p => ({ id: p.id, name: p.name, type: p.type })));
+```
+
+## Photo Debug
+
+```typescript
+console.log('=== PHOTO AUTO-FILL DEBUG ===');
+console.log('LLM response data:', JSON.stringify(data, null, 2));
+console.log('suggestedCategory:', data.suggestedCategory);
+console.log('Available categories:', categories.map(c => ({ id: c.id, name: c.name })));
+console.log('Available paymentMethods:', paymentMethods.map(p => ({ id: p.id, name: p.name, type: p.type })));
+```
+
+---
+
+# ЧАСТЬ 10: НАСТРОЙКИ
+
+- **Время записи голоса:** 30 секунд
+- **Лимит названия расхода:** 10 символов
+- **Модель Claude:** claude-sonnet-4-20250514

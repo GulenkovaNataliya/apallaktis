@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
   "date": "YYYY-MM-DD",
   "description": "Brief description of items purchased",
   "confidence": "high/medium/low",
-  "suggestedCategory": "groceries/transport/utilities/entertainment/healthcare/education/other"
+  "suggestedCategory": "materials/tools/work/groceries/transport/utilities/entertainment/healthcare/education/other"
 }
 
 Important rules:
@@ -68,6 +68,9 @@ Important rules:
 4. For "name": use the store name or merchant name
 5. For "description": briefly list main items if visible
 6. For "suggestedCategory": suggest based on the type of store/items:
+   - Building materials, supplies, paint, cement, wood, tiles, pipes, cables → "materials"
+   - Tools, equipment, drills, hammers, machines → "tools"
+   - Work, services, labor, subcontract, repair, installation → "work"
    - Supermarkets, food stores → "groceries"
    - Gas stations, parking, taxis → "transport"
    - Electric, water, phone bills → "utilities"
