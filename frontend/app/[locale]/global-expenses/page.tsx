@@ -825,12 +825,12 @@ function ExpenseForm({
 
     recognition.start();
 
-    // Автоматическая остановка через 15 секунд
+    // Автоматическая остановка через 30 секунд
     setTimeout(() => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
-    }, 15000);
+    }, 30000);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
