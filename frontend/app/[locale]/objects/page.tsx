@@ -8,8 +8,33 @@ import { messages, type Locale } from '@/lib/messages';
 import type { PropertyObject, ObjectStatus } from '@/types/object';
 import { formatEuro } from '@/lib/formatters';
 import { createClient } from '@/lib/supabase/client';
+import { useAuth } from '@/lib/auth-context';
+import {
+  getObjects,
+  createObject,
+  updateObject,
+  deleteObject as deleteObjectApi,
+  type PropertyObject as SupabasePropertyObject,
+} from '@/lib/supabase/services';
 
 type ViewType = 'list' | 'add-object' | 'edit-object';
+
+// Конвертер из Supabase формата в локальный
+function toLocalObject(obj: SupabasePropertyObject): PropertyObject {
+  return {
+    id: obj.id,
+    userId: obj.user_id,
+    name: obj.name,
+    address: obj.address || '',
+    clientName: obj.client_name || '',
+    clientContact: obj.client_contact || '',
+    contractPrice: Number(obj.contract_price),
+    status: obj.status,
+    color: obj.color || undefined,
+    createdAt: new Date(obj.created_at),
+    updatedAt: new Date(obj.updated_at),
+  };
+}
 
 export default function ObjectsPage() {
   const params = useParams();
@@ -17,6 +42,7 @@ export default function ObjectsPage() {
   const locale = (params.locale as Locale) || 'el';
   const t = messages[locale]?.objects || messages.el.objects;
   const tDemo = messages[locale]?.demoExpired || messages.el.demoExpired;
+  const { user } = useAuth();
 
   // Objects state
   const [objects, setObjects] = useState<PropertyObject[]>([]);
@@ -30,27 +56,41 @@ export default function ObjectsPage() {
   const [isDemo, setIsDemo] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load objects from localStorage after mount
+  // Load objects from Supabase
   useEffect(() => {
-    setMounted(true);
-    const stored = localStorage.getItem('propertyObjects');
-    if (stored) {
-      setObjects(JSON.parse(stored));
+    async function loadObjects() {
+      setMounted(true);
+
+      if (!user?.id) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const data = await getObjects(user.id);
+        setObjects(data.map(toLocalObject));
+      } catch (error) {
+        console.error('Error loading objects:', error);
+      } finally {
+        setIsLoading(false);
+      }
     }
-  }, []);
+
+    loadObjects();
+  }, [user?.id]);
 
   // Check user subscription status
   useEffect(() => {
     const checkSubscription = async () => {
       try {
         const supabase = createClient();
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user: supabaseUser } } = await supabase.auth.getUser();
 
-        if (user) {
+        if (supabaseUser) {
           const { data: profile } = await supabase
             .from('profiles')
             .select('subscription_status, account_purchased')
-            .eq('id', user.id)
+            .eq('id', supabaseUser.id)
             .single();
 
           if (profile) {
@@ -59,8 +99,6 @@ export default function ObjectsPage() {
         }
       } catch (error) {
         console.error('Error checking subscription:', error);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -93,11 +131,16 @@ export default function ObjectsPage() {
     setView('add-object');
   };
 
-  const handleDeleteObject = (id: string) => {
-    if (confirm(t.confirmDelete)) {
-      const updated = objects.filter(obj => obj.id !== id);
-      setObjects(updated);
-      localStorage.setItem('propertyObjects', JSON.stringify(updated));
+  const handleDeleteObject = async (id: string) => {
+    if (!user?.id) return;
+    if (!confirm(t.confirmDelete)) return;
+
+    try {
+      await deleteObjectApi(id, user.id);
+      setObjects(objects.filter(obj => obj.id !== id));
+    } catch (error) {
+      console.error('Error deleting object:', error);
+      alert('Failed to delete object');
     }
   };
 
@@ -105,6 +148,20 @@ export default function ObjectsPage() {
   const filteredObjects = filter === 'all'
     ? objects
     : objects.filter(obj => obj.status === filter);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <BackgroundPage specialPage="objekt">
+        <div className="min-h-screen flex flex-col items-center justify-center">
+          <div className="text-center" style={{ color: 'var(--polar)' }}>
+            <div className="text-2xl mb-2">⏳</div>
+            <p>Loading...</p>
+          </div>
+        </div>
+      </BackgroundPage>
+    );
+  }
 
   // OBJECTS LIST VIEW
   if (view === 'list') {
@@ -241,15 +298,13 @@ export default function ObjectsPage() {
 
           <ObjectForm
             object={editingObject}
+            userId={user?.id || ''}
             onSave={(object) => {
-              let updated;
               if (editingObject) {
-                updated = objects.map(obj => obj.id === editingObject.id ? object : obj);
+                setObjects(objects.map(obj => obj.id === editingObject.id ? object : obj));
               } else {
-                updated = [...objects, object];
+                setObjects([...objects, object]);
               }
-              setObjects(updated);
-              localStorage.setItem('propertyObjects', JSON.stringify(updated));
               setView('list');
               setEditingObject(null);
             }}
@@ -271,11 +326,13 @@ export default function ObjectsPage() {
 // Object Form Component
 function ObjectForm({
   object,
+  userId,
   onSave,
   onCancel,
   locale,
 }: {
   object: PropertyObject | null;
+  userId: string;
   onSave: (object: PropertyObject) => void;
   onCancel: () => void;
   locale: Locale;
@@ -289,24 +346,48 @@ function ObjectForm({
     contractPrice: object?.contractPrice || 0,
     status: object?.status || 'open' as ObjectStatus,
   });
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!userId) return;
 
-    const newObject: PropertyObject = {
-      id: object?.id || Date.now().toString(),
-      userId: 'current-user',
-      name: formData.name,
-      address: formData.address,
-      clientName: formData.clientName,
-      clientContact: formData.clientContact,
-      contractPrice: formData.contractPrice,
-      status: formData.status,
-      createdAt: object?.createdAt || new Date(),
-      updatedAt: new Date(),
-    };
+    setIsSaving(true);
 
-    onSave(newObject);
+    try {
+      let savedObject: PropertyObject;
+
+      if (object?.id) {
+        // Обновление существующего
+        const updated = await updateObject(object.id, userId, {
+          name: formData.name,
+          address: formData.address || null,
+          client_name: formData.clientName || null,
+          client_contact: formData.clientContact || null,
+          contract_price: formData.contractPrice,
+          status: formData.status,
+        });
+        savedObject = toLocalObject(updated);
+      } else {
+        // Создание нового
+        const created = await createObject(userId, {
+          name: formData.name,
+          address: formData.address || null,
+          client_name: formData.clientName || null,
+          client_contact: formData.clientContact || null,
+          contract_price: formData.contractPrice,
+          status: formData.status,
+        });
+        savedObject = toLocalObject(created);
+      }
+
+      onSave(savedObject);
+    } catch (error) {
+      console.error('Error saving object:', error);
+      alert('Failed to save object');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -411,6 +492,7 @@ function ObjectForm({
         <button
           type="button"
           onClick={onCancel}
+          disabled={isSaving}
           className="btn-universal flex-1 text-button"
           style={{ minHeight: '52px', backgroundColor: 'var(--polar)' }}
         >
@@ -418,10 +500,11 @@ function ObjectForm({
         </button>
         <button
           type="submit"
+          disabled={isSaving}
           className="btn-universal flex-1 text-button"
           style={{ minHeight: '52px', backgroundColor: 'var(--zanah)' }}
         >
-          {t.save || 'Αποθήκευση'}
+          {isSaving ? '...' : (t.save || 'Αποθήκευση')}
         </button>
       </div>
     </form>

@@ -11,9 +11,112 @@ import type { PaymentMethod } from '@/types/paymentMethod';
 import type { ObjectExpense } from '@/types/objectExpense';
 import type { ExpenseCategory } from '@/types/globalExpense';
 import { formatEuro } from '@/lib/formatters';
-import { uploadReceiptPhoto, deleteReceiptPhoto } from '@/lib/supabase/storage';
+import { useAuth } from '@/lib/auth-context';
+import {
+  getExpenseCategories,
+  createExpenseCategory,
+  getPaymentMethods,
+  getObjectById,
+  getObjectExpenses,
+  createObjectExpense,
+  deleteObjectExpense as deleteObjectExpenseApi,
+  getObjectExtras,
+  createObjectExtra,
+  deleteObjectExtra,
+  getObjectPayments,
+  createObjectPayment,
+  deleteObjectPayment,
+  type ExpenseCategory as SupabaseCategory,
+  type PaymentMethod as SupabasePaymentMethod,
+  type ObjectExpense as SupabaseObjectExpense,
+  type PropertyObject as SupabasePropertyObject,
+  type ObjectExtra as SupabaseObjectExtra,
+  type ObjectPayment as SupabaseObjectPayment,
+} from '@/lib/supabase/services';
 
 type ViewType = 'main' | 'add-work' | 'add-payment' | 'add-expense';
+
+// Конвертеры из Supabase формата в локальный
+function toLocalCategory(cat: SupabaseCategory): ExpenseCategory {
+  const name = typeof cat.name === 'string' ? cat.name : (cat.name as any)?.el || (cat.name as any)?.en || '';
+  return {
+    id: cat.id,
+    userId: cat.user_id,
+    name,
+    createdAt: new Date(cat.created_at),
+    updatedAt: new Date(cat.created_at),
+  };
+}
+
+function toLocalPaymentMethod(pm: SupabasePaymentMethod): PaymentMethod {
+  return {
+    id: pm.id,
+    userId: pm.user_id,
+    type: pm.type,
+    name: pm.name,
+    lastFourDigits: pm.last_four_digits || undefined,
+    iban: pm.iban || undefined,
+    createdAt: new Date(pm.created_at),
+    updatedAt: new Date(pm.created_at),
+  };
+}
+
+function toLocalObjectExpense(exp: SupabaseObjectExpense, categories: ExpenseCategory[], paymentMethods: PaymentMethod[]): ObjectExpense {
+  const category = categories.find(c => c.id === exp.category_id);
+  const paymentMethod = paymentMethods.find(pm => pm.id === exp.payment_method_id);
+  return {
+    id: exp.id,
+    objectId: exp.object_id,
+    categoryId: exp.category_id || '',
+    categoryName: category?.name,
+    paymentMethodId: exp.payment_method_id || '',
+    paymentMethodName: paymentMethod?.name,
+    amount: Number(exp.amount),
+    description: exp.description || undefined,
+    date: new Date(exp.date),
+    inputMethod: exp.input_method as 'manual' | 'voice' | 'photo' | undefined,
+    createdAt: new Date(exp.created_at),
+    updatedAt: new Date(exp.created_at),
+  };
+}
+
+function toLocalObject(obj: SupabasePropertyObject): PropertyObject {
+  return {
+    id: obj.id,
+    userId: obj.user_id,
+    name: obj.name,
+    address: obj.address || '',
+    clientName: obj.client_name || '',
+    clientContact: obj.client_contact || '',
+    contractPrice: Number(obj.contract_price),
+    status: obj.status,
+    color: obj.color || undefined,
+    createdAt: new Date(obj.created_at),
+    updatedAt: new Date(obj.updated_at),
+  };
+}
+
+function toLocalAdditionalWork(extra: SupabaseObjectExtra): AdditionalWork {
+  return {
+    id: extra.id,
+    objectId: extra.object_id,
+    date: new Date(extra.date),
+    amount: Number(extra.amount),
+    description: extra.description || '',
+    createdAt: new Date(extra.created_at),
+  };
+}
+
+function toLocalPayment(payment: SupabaseObjectPayment): Payment {
+  return {
+    id: payment.id,
+    objectId: payment.object_id,
+    date: new Date(payment.date),
+    amount: Number(payment.amount),
+    paymentMethodId: payment.payment_method_id || '',
+    createdAt: new Date(payment.created_at),
+  };
+}
 
 export default function ObjectFinancePage() {
   const params = useParams();
@@ -22,8 +125,10 @@ export default function ObjectFinancePage() {
   const objectId = params.id as string;
   const t = messages[locale]?.finance || messages.el.finance;
   const tObjects = messages[locale]?.objects || messages.el.objects;
+  const { user } = useAuth();
 
   const [mounted, setMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [object, setObject] = useState<PropertyObject | null>(null);
   const [finance, setFinance] = useState<ObjectFinance | null>(null);
   const [view, setView] = useState<ViewType>('main');
@@ -35,81 +140,75 @@ export default function ObjectFinancePage() {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [expandedPaymentMethods, setExpandedPaymentMethods] = useState<Set<string>>(new Set());
 
-  // Load object and finance data
+  // Load data from Supabase
   useEffect(() => {
-    setMounted(true);
+    async function loadData() {
+      setMounted(true);
 
-    // Load payment methods
-    const storedMethods = localStorage.getItem('paymentMethods');
-    if (storedMethods) {
-      setPaymentMethods(JSON.parse(storedMethods));
-    }
-
-    // Load expense categories
-    const storedCategories = localStorage.getItem('expenseCategories');
-    if (storedCategories) {
-      setCategories(JSON.parse(storedCategories));
-    }
-
-    // Load expenses for this object
-    const storedExpenses = localStorage.getItem(`objectExpenses_${objectId}`);
-    if (storedExpenses) {
-      const parsedExpenses = JSON.parse(storedExpenses);
-      // Convert date strings back to Date objects
-      const expensesWithDates = parsedExpenses.map((expense: any) => ({
-        ...expense,
-        date: new Date(expense.date),
-        createdAt: new Date(expense.createdAt),
-        updatedAt: new Date(expense.updatedAt),
-      }));
-      setExpenses(expensesWithDates);
-    }
-
-    // Load object
-    const storedObjects = localStorage.getItem('propertyObjects');
-    if (storedObjects) {
-      const objects: PropertyObject[] = JSON.parse(storedObjects);
-      const foundObject = objects.find(obj => obj.id === objectId);
-      if (foundObject) {
-        setObject(foundObject);
-
-        // Initialize finance if not exists
-        const storedFinance = localStorage.getItem(`objectFinance_${objectId}`);
-        if (storedFinance) {
-          const parsedFinance = JSON.parse(storedFinance);
-          // Convert date strings back to Date objects
-          parsedFinance.additionalWorks = parsedFinance.additionalWorks.map((work: any) => ({
-            ...work,
-            date: new Date(work.date),
-            createdAt: new Date(work.createdAt),
-          }));
-          parsedFinance.payments = parsedFinance.payments.map((payment: any) => ({
-            ...payment,
-            date: new Date(payment.date),
-            createdAt: new Date(payment.createdAt),
-          }));
-          setFinance(parsedFinance);
-        } else {
-          // Initialize empty finance
-          const initialFinance: ObjectFinance = {
-            objectId,
-            contractPrice: foundObject.contractPrice,
-            additionalWorks: [],
-            payments: [],
-            totalAdditionalWorks: 0,
-            totalPayments: 0,
-            balance: foundObject.contractPrice,
-            balanceStatus: foundObject.contractPrice > 0 ? 'debt' : 'closed',
-          };
-          setFinance(initialFinance);
-        }
+      if (!user?.id) {
+        setIsLoading(false);
+        return;
       }
-    }
-  }, [objectId]);
 
-  // Save finance data
-  const saveFinance = (updatedFinance: ObjectFinance) => {
-    localStorage.setItem(`objectFinance_${objectId}`, JSON.stringify(updatedFinance));
+      try {
+        // Загружаем все данные из Supabase параллельно
+        const [
+          categoriesData,
+          methodsData,
+          expensesData,
+          objectData,
+          extrasData,
+          paymentsData,
+        ] = await Promise.all([
+          getExpenseCategories(user.id),
+          getPaymentMethods(user.id),
+          getObjectExpenses(objectId),
+          getObjectById(objectId, user.id),
+          getObjectExtras(objectId),
+          getObjectPayments(objectId),
+        ]);
+
+        const localCategories = categoriesData.map(toLocalCategory);
+        const localMethods = methodsData.map(toLocalPaymentMethod);
+
+        setCategories(localCategories);
+        setPaymentMethods(localMethods);
+        setExpenses(expensesData.map(exp => toLocalObjectExpense(exp, localCategories, localMethods)));
+
+        // Загружаем объект
+        if (objectData) {
+          const foundObject = toLocalObject(objectData);
+          setObject(foundObject);
+
+          // Загружаем additionalWorks и payments
+          const additionalWorks = extrasData.map(toLocalAdditionalWork);
+          const payments = paymentsData.map(toLocalPayment);
+
+          // Рассчитываем finance
+          const calculatedFinance = calculateFinance(
+            foundObject.contractPrice,
+            additionalWorks,
+            payments
+          );
+          setFinance(calculatedFinance);
+        }
+      } catch (error) {
+        console.error('Error loading data from Supabase:', error);
+      }
+
+      setIsLoading(false);
+    }
+
+    loadData();
+  }, [objectId, user?.id]);
+
+  // Recalculate and update finance state (no localStorage needed - data in Supabase)
+  const updateFinanceState = (
+    additionalWorks: AdditionalWork[],
+    payments: Payment[]
+  ) => {
+    if (!object) return;
+    const updatedFinance = calculateFinance(object.contractPrice, additionalWorks, payments);
     setFinance(updatedFinance);
   };
 
@@ -145,85 +244,111 @@ export default function ObjectFinancePage() {
   };
 
   // Add additional work
-  const handleAddWork = (work: Omit<AdditionalWork, 'id' | 'createdAt'>) => {
+  const handleAddWork = async (work: Omit<AdditionalWork, 'id' | 'createdAt'>) => {
     if (!finance || !object) return;
 
-    const newWork: AdditionalWork = {
-      ...work,
-      id: Date.now().toString(),
-      createdAt: new Date(),
-    };
+    try {
+      const created = await createObjectExtra({
+        object_id: objectId,
+        amount: work.amount,
+        description: work.description || null,
+        date: work.date instanceof Date ? work.date.toISOString().split('T')[0] : work.date,
+      });
 
-    const updatedWorks = [...finance.additionalWorks, newWork];
-    const updatedFinance = calculateFinance(finance.contractPrice, updatedWorks, finance.payments);
-    saveFinance(updatedFinance);
-    setView('main');
+      const newWork = toLocalAdditionalWork(created);
+      const updatedWorks = [...finance.additionalWorks, newWork];
+      updateFinanceState(updatedWorks, finance.payments);
+      setView('main');
+    } catch (error) {
+      console.error('Error adding work:', error);
+      alert('Failed to add additional work');
+    }
   };
 
   // Add payment
-  const handleAddPayment = (payment: Omit<Payment, 'id' | 'createdAt'>) => {
+  const handleAddPayment = async (payment: Omit<Payment, 'id' | 'createdAt'>) => {
     if (!finance || !object) return;
 
-    const newPayment: Payment = {
-      ...payment,
-      id: Date.now().toString(),
-      createdAt: new Date(),
-    };
+    try {
+      const created = await createObjectPayment({
+        object_id: objectId,
+        payment_method_id: payment.paymentMethodId || null,
+        amount: payment.amount,
+        date: payment.date instanceof Date ? payment.date.toISOString().split('T')[0] : payment.date,
+      });
 
-    const updatedPayments = [...finance.payments, newPayment];
-    const updatedFinance = calculateFinance(finance.contractPrice, finance.additionalWorks, updatedPayments);
-    saveFinance(updatedFinance);
-    setView('main');
+      const newPayment = toLocalPayment(created);
+      const updatedPayments = [...finance.payments, newPayment];
+      updateFinanceState(finance.additionalWorks, updatedPayments);
+      setView('main');
+    } catch (error) {
+      console.error('Error adding payment:', error);
+      alert('Failed to add payment');
+    }
   };
 
   // Delete additional work
-  const handleDeleteWork = (workId: string) => {
+  const handleDeleteWork = async (workId: string) => {
     if (!finance || !confirm(t.confirmDeleteWork)) return;
 
-    const updatedWorks = finance.additionalWorks.filter(work => work.id !== workId);
-    const updatedFinance = calculateFinance(finance.contractPrice, updatedWorks, finance.payments);
-    saveFinance(updatedFinance);
+    try {
+      await deleteObjectExtra(workId, objectId);
+      const updatedWorks = finance.additionalWorks.filter(work => work.id !== workId);
+      updateFinanceState(updatedWorks, finance.payments);
+    } catch (error) {
+      console.error('Error deleting work:', error);
+      alert('Failed to delete additional work');
+    }
   };
 
   // Delete payment
-  const handleDeletePayment = (paymentId: string) => {
+  const handleDeletePayment = async (paymentId: string) => {
     if (!finance || !confirm(t.confirmDeletePayment)) return;
 
-    const updatedPayments = finance.payments.filter(payment => payment.id !== paymentId);
-    const updatedFinance = calculateFinance(finance.contractPrice, finance.additionalWorks, updatedPayments);
-    saveFinance(updatedFinance);
+    try {
+      await deleteObjectPayment(paymentId, objectId);
+      const updatedPayments = finance.payments.filter(payment => payment.id !== paymentId);
+      updateFinanceState(finance.additionalWorks, updatedPayments);
+    } catch (error) {
+      console.error('Error deleting payment:', error);
+      alert('Failed to delete payment');
+    }
   };
 
   // Add expense
-  const handleAddExpense = (expense: Omit<ObjectExpense, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const newExpense: ObjectExpense = {
-      ...expense,
-      id: Date.now().toString(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+  const handleAddExpense = async (expense: Omit<ObjectExpense, 'id' | 'createdAt' | 'updatedAt'>) => {
+    try {
+      const created = await createObjectExpense({
+        object_id: objectId,
+        category_id: expense.categoryId || null,
+        payment_method_id: expense.paymentMethodId || null,
+        name: expense.categoryName || 'Expense',
+        amount: expense.amount,
+        description: expense.description || null,
+        date: expense.date instanceof Date ? expense.date.toISOString().split('T')[0] : expense.date,
+        input_method: expense.inputMethod || 'manual',
+      });
 
-    const updatedExpenses = [...expenses, newExpense];
-    setExpenses(updatedExpenses);
-    localStorage.setItem(`objectExpenses_${objectId}`, JSON.stringify(updatedExpenses));
-    setView('main');
+      const newExpense = toLocalObjectExpense(created, categories, paymentMethods);
+      setExpenses([...expenses, newExpense]);
+      setView('main');
+    } catch (error) {
+      console.error('Error adding expense:', error);
+      alert('Failed to add expense');
+    }
   };
 
   // Delete expense
   const handleDeleteExpense = async (expenseId: string) => {
     if (!confirm(t.confirmDeleteExpense)) return;
 
-    const expense = expenses.find(e => e.id === expenseId);
-    if (!expense) return;
-
-    // Delete photo from storage if exists
-    if (expense.receiptPhotoPath) {
-      await deleteReceiptPhoto(expense.receiptPhotoPath);
+    try {
+      await deleteObjectExpenseApi(expenseId, objectId);
+      setExpenses(expenses.filter(e => e.id !== expenseId));
+    } catch (error) {
+      console.error('Error deleting expense:', error);
+      alert('Failed to delete expense');
     }
-
-    const updatedExpenses = expenses.filter(e => e.id !== expenseId);
-    setExpenses(updatedExpenses);
-    localStorage.setItem(`objectExpenses_${objectId}`, JSON.stringify(updatedExpenses));
   };
 
   // Toggle category expansion
@@ -279,6 +404,20 @@ export default function ObjectFinancePage() {
   }
 
   // MAIN VIEW
+  // Loading state
+  if (isLoading || !finance) {
+    return (
+      <BackgroundPage specialPage="objekt">
+        <div className="min-h-screen flex flex-col items-center justify-center">
+          <div className="text-center" style={{ color: 'var(--polar)' }}>
+            <div className="text-2xl mb-2">⏳</div>
+            <p>Loading...</p>
+          </div>
+        </div>
+      </BackgroundPage>
+    );
+  }
+
   if (view === 'main') {
     return (
       <BackgroundPage specialPage="objekt">
@@ -775,6 +914,7 @@ export default function ObjectFinancePage() {
 
           <AddExpenseForm
             objectId={objectId}
+            userId={user?.id || ''}
             categories={categories}
             setCategories={setCategories}
             paymentMethods={paymentMethods}
@@ -1019,6 +1159,7 @@ function AddPaymentForm({
 // Add Expense Form Component
 function AddExpenseForm({
   objectId,
+  userId,
   categories,
   setCategories,
   paymentMethods,
@@ -1027,6 +1168,7 @@ function AddExpenseForm({
   locale,
 }: {
   objectId: string;
+  userId: string;
   categories: ExpenseCategory[];
   setCategories: (categories: ExpenseCategory[]) => void;
   paymentMethods: PaymentMethod[];
@@ -1113,24 +1255,23 @@ function AddExpenseForm({
     recognition.start();
   };
 
-  const handleCreateCategory = () => {
-    if (!newCategoryName.trim()) return;
+  const handleCreateCategory = async () => {
+    if (!newCategoryName.trim() || !userId) return;
 
-    const newCategory: ExpenseCategory = {
-      id: Date.now().toString(),
-      userId: 'local', // Will be replaced when user auth is implemented
-      name: newCategoryName.trim(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    try {
+      const created = await createExpenseCategory(userId, { name: newCategoryName.trim() });
+      const newCategory = toLocalCategory(created);
 
-    const updatedCategories = [...categories, newCategory];
-    setCategories(updatedCategories);
-    localStorage.setItem('expenseCategories', JSON.stringify(updatedCategories));
+      const updatedCategories = [...categories, newCategory];
+      setCategories(updatedCategories);
 
-    setFormData({ ...formData, categoryId: newCategory.id });
-    setNewCategoryName('');
-    setShowNewCategory(false);
+      setFormData({ ...formData, categoryId: newCategory.id });
+      setNewCategoryName('');
+      setShowNewCategory(false);
+    } catch (error) {
+      console.error('Error creating category:', error);
+      alert('Failed to create category');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -1148,26 +1289,10 @@ function AddExpenseForm({
 
     setIsUploading(true);
 
-    let receiptPhotoUrl: string | undefined;
-    let receiptPhotoPath: string | undefined;
-
-    // Upload photo if selected
-    if (photoFile) {
-      const uploadResult = await uploadReceiptPhoto(photoFile, objectId);
-      if (uploadResult) {
-        receiptPhotoUrl = uploadResult.url;
-        receiptPhotoPath = uploadResult.path;
-      } else {
-        alert('Failed to upload photo. Please try again.');
-        setIsUploading(false);
-        return;
-      }
-    }
-
     const category = categories.find(c => c.id === formData.categoryId);
     const paymentMethod = paymentMethods.find(pm => pm.id === formData.paymentMethodId);
 
-    // Determine input method
+    // Determine input method (photo is used for OCR only, not stored)
     let finalInputMethod: 'manual' | 'voice' | 'photo' = inputMethod;
     if (photoFile && !isRecording) {
       finalInputMethod = 'photo';
@@ -1182,8 +1307,6 @@ function AddExpenseForm({
       amount: formData.amount,
       description: formData.description || undefined,
       date: new Date(formData.date),
-      receiptPhotoUrl,
-      receiptPhotoPath,
       inputMethod: finalInputMethod,
     });
 

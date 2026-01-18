@@ -8,15 +8,75 @@ import { messages, type Locale } from '@/lib/messages';
 import type { GlobalExpense, ExpenseCategory } from '@/types/globalExpense';
 import type { PaymentMethod } from '@/types/paymentMethod';
 import { formatEuro } from '@/lib/formatters';
-import { uploadReceiptPhoto, deleteReceiptPhoto } from '@/lib/supabase/storage';
+import { useAuth } from '@/lib/auth-context';
+import {
+  getExpenseCategories,
+  createExpenseCategory,
+  updateExpenseCategory,
+  deleteExpenseCategory as deleteExpenseCategoryApi,
+  getPaymentMethods,
+  getGlobalExpenses,
+  createGlobalExpense,
+  updateGlobalExpense,
+  deleteGlobalExpense as deleteGlobalExpenseApi,
+  type ExpenseCategory as SupabaseCategory,
+  type PaymentMethod as SupabasePaymentMethod,
+  type GlobalExpense as SupabaseGlobalExpense,
+} from '@/lib/supabase/services';
 
 type ViewType = 'expenses' | 'categories' | 'add-expense' | 'edit-expense' | 'add-category' | 'edit-category';
+
+// Конвертеры из Supabase формата в локальный
+function toLocalCategory(cat: SupabaseCategory): ExpenseCategory {
+  const name = typeof cat.name === 'string' ? cat.name : (cat.name as any)?.el || (cat.name as any)?.en || '';
+  return {
+    id: cat.id,
+    userId: cat.user_id,
+    name,
+    createdAt: new Date(cat.created_at),
+    updatedAt: new Date(cat.created_at),
+  };
+}
+
+function toLocalPaymentMethod(pm: SupabasePaymentMethod): PaymentMethod {
+  return {
+    id: pm.id,
+    userId: pm.user_id,
+    type: pm.type,
+    name: pm.name,
+    lastFourDigits: pm.last_four_digits || undefined,
+    iban: pm.iban || undefined,
+    createdAt: new Date(pm.created_at),
+    updatedAt: new Date(pm.created_at),
+  };
+}
+
+function toLocalExpense(exp: SupabaseGlobalExpense, categories: ExpenseCategory[], paymentMethods: PaymentMethod[]): GlobalExpense {
+  const category = categories.find(c => c.id === exp.category_id);
+  const paymentMethod = paymentMethods.find(pm => pm.id === exp.payment_method_id);
+  return {
+    id: exp.id,
+    userId: exp.user_id,
+    categoryId: exp.category_id || '',
+    categoryName: category?.name,
+    paymentMethodId: exp.payment_method_id || '',
+    paymentMethodName: paymentMethod?.name,
+    name: exp.name,
+    amount: Number(exp.amount),
+    description: exp.description || undefined,
+    date: new Date(exp.date),
+    inputMethod: exp.input_method as 'manual' | 'voice' | 'photo' | undefined,
+    createdAt: new Date(exp.created_at),
+    updatedAt: new Date(exp.created_at),
+  };
+}
 
 export default function GlobalExpensesPage() {
   const params = useParams();
   const router = useRouter();
   const locale = (params.locale as Locale) || 'el';
   const t = messages[locale]?.globalExpenses || messages.el.globalExpenses;
+  const { user } = useAuth();
 
   // Categories state
   const [categories, setCategories] = useState<ExpenseCategory[]>([]);
@@ -27,59 +87,84 @@ export default function GlobalExpensesPage() {
   // Payment methods state
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
 
-  // Load from localStorage on client side only
+  // Loading state
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load from Supabase
   useEffect(() => {
-    const storedCategories = localStorage.getItem('expenseCategories');
-    if (storedCategories) {
-      setCategories(JSON.parse(storedCategories));
+    async function loadData() {
+      if (!user?.id) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        // Загружаем параллельно
+        const [categoriesData, methodsData, expensesData] = await Promise.all([
+          getExpenseCategories(user.id),
+          getPaymentMethods(user.id),
+          getGlobalExpenses(user.id),
+        ]);
+
+        const localCategories = categoriesData.map(toLocalCategory);
+        const localMethods = methodsData.map(toLocalPaymentMethod);
+
+        setCategories(localCategories);
+        setPaymentMethods(localMethods);
+        setExpenses(expensesData.map(exp => toLocalExpense(exp, localCategories, localMethods)));
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setIsLoading(false);
+      }
     }
 
-    const storedExpenses = localStorage.getItem('globalExpenses');
-    if (storedExpenses) {
-      const parsedExpenses = JSON.parse(storedExpenses);
-      // Convert date strings back to Date objects
-      const expensesWithDates = parsedExpenses.map((expense: GlobalExpense) => ({
-        ...expense,
-        date: expense.date ? new Date(expense.date) : undefined,
-        createdAt: new Date(expense.createdAt),
-        updatedAt: new Date(expense.updatedAt),
-      }));
-      setExpenses(expensesWithDates);
-    }
-
-    const storedMethods = localStorage.getItem('paymentMethods');
-    if (storedMethods) {
-      setPaymentMethods(JSON.parse(storedMethods));
-    }
-  }, []);
+    loadData();
+  }, [user?.id]);
 
   const [view, setView] = useState<ViewType>('expenses');
   const [editingExpense, setEditingExpense] = useState<GlobalExpense | null>(null);
   const [editingCategory, setEditingCategory] = useState<ExpenseCategory | null>(null);
 
   const handleDeleteExpense = async (id: string) => {
+    if (!user?.id) return;
     if (!confirm(t.confirmDelete)) return;
 
-    const expense = expenses.find(e => e.id === id);
-    if (!expense) return;
-
-    // Delete photo from storage if exists
-    if (expense.receiptPhotoPath) {
-      await deleteReceiptPhoto(expense.receiptPhotoPath);
-    }
-
-    const updated = expenses.filter(e => e.id !== id);
-    setExpenses(updated);
-    localStorage.setItem('globalExpenses', JSON.stringify(updated));
-  };
-
-  const handleDeleteCategory = (id: string) => {
-    if (confirm(t.confirmDeleteCategory)) {
-      const updated = categories.filter(c => c.id !== id);
-      setCategories(updated);
-      localStorage.setItem('expenseCategories', JSON.stringify(updated));
+    try {
+      await deleteGlobalExpenseApi(id, user.id);
+      setExpenses(expenses.filter(e => e.id !== id));
+    } catch (error) {
+      console.error('Error deleting expense:', error);
+      alert('Failed to delete expense');
     }
   };
+
+  const handleDeleteCategory = async (id: string) => {
+    if (!user?.id) return;
+    if (!confirm(t.confirmDeleteCategory)) return;
+
+    try {
+      await deleteExpenseCategoryApi(id, user.id);
+      setCategories(categories.filter(c => c.id !== id));
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      alert('Failed to delete category');
+    }
+  };
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <BackgroundPage pageIndex={4}>
+        <div className="min-h-screen flex flex-col items-center justify-center">
+          <div className="text-center" style={{ color: 'var(--polar)' }}>
+            <div className="text-2xl mb-2">⏳</div>
+            <p>Loading...</p>
+          </div>
+        </div>
+      </BackgroundPage>
+    );
+  }
 
   // EXPENSES VIEW
   if (view === 'expenses') {
@@ -323,15 +408,13 @@ export default function GlobalExpensesPage() {
 
           <CategoryForm
             category={editingCategory}
+            userId={user?.id || ''}
             onSave={(category) => {
-              let updated;
               if (editingCategory) {
-                updated = categories.map(c => c.id === editingCategory.id ? category : c);
+                setCategories(categories.map(c => c.id === editingCategory.id ? category : c));
               } else {
-                updated = [...categories, category];
+                setCategories([...categories, category]);
               }
-              setCategories(updated);
-              localStorage.setItem('expenseCategories', JSON.stringify(updated));
               setView('categories');
               setEditingCategory(null);
             }}
@@ -374,15 +457,13 @@ export default function GlobalExpensesPage() {
             expense={editingExpense}
             categories={categories}
             paymentMethods={paymentMethods}
+            userId={user?.id || ''}
             onSave={(expense) => {
-              let updated;
               if (editingExpense) {
-                updated = expenses.map(e => e.id === editingExpense.id ? expense : e);
+                setExpenses(expenses.map(e => e.id === editingExpense.id ? expense : e));
               } else {
-                updated = [...expenses, expense];
+                setExpenses([...expenses, expense]);
               }
-              setExpenses(updated);
-              localStorage.setItem('globalExpenses', JSON.stringify(updated));
               setView('expenses');
               setEditingExpense(null);
             }}
@@ -404,11 +485,13 @@ export default function GlobalExpensesPage() {
 // Category Form Component
 function CategoryForm({
   category,
+  userId,
   onSave,
   onCancel,
   locale,
 }: {
   category: ExpenseCategory | null;
+  userId: string;
   onSave: (category: ExpenseCategory) => void;
   onCancel: () => void;
   locale: Locale;
@@ -417,19 +500,34 @@ function CategoryForm({
   const [formData, setFormData] = useState({
     name: category?.name || '',
   });
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!userId) return;
 
-    const newCategory: ExpenseCategory = {
-      id: category?.id || Date.now().toString(),
-      userId: 'current-user',
-      name: formData.name,
-      createdAt: category?.createdAt || new Date(),
-      updatedAt: new Date(),
-    };
+    setIsSaving(true);
 
-    onSave(newCategory);
+    try {
+      let savedCategory: ExpenseCategory;
+
+      if (category?.id) {
+        // Обновление
+        const updated = await updateExpenseCategory(category.id, userId, { name: formData.name });
+        savedCategory = toLocalCategory(updated);
+      } else {
+        // Создание
+        const created = await createExpenseCategory(userId, { name: formData.name });
+        savedCategory = toLocalCategory(created);
+      }
+
+      onSave(savedCategory);
+    } catch (error) {
+      console.error('Error saving category:', error);
+      alert('Failed to save category');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -456,6 +554,7 @@ function CategoryForm({
         <button
           type="button"
           onClick={onCancel}
+          disabled={isSaving}
           className="btn-universal flex-1"
           style={{ minHeight: '52px', backgroundColor: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
         >
@@ -463,10 +562,11 @@ function CategoryForm({
         </button>
         <button
           type="submit"
+          disabled={isSaving}
           className="btn-universal flex-1"
           style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', fontSize: '18px', fontWeight: 600 }}
         >
-          {t.save}
+          {isSaving ? '...' : t.save}
         </button>
       </div>
     </form>
@@ -478,6 +578,7 @@ function ExpenseForm({
   expense,
   categories,
   paymentMethods,
+  userId,
   onSave,
   onCancel,
   locale,
@@ -485,6 +586,7 @@ function ExpenseForm({
   expense: GlobalExpense | null;
   categories: ExpenseCategory[];
   paymentMethods: PaymentMethod[];
+  userId: string;
   onSave: (expense: GlobalExpense) => void;
   onCancel: () => void;
   locale: Locale;
@@ -1031,6 +1133,8 @@ function ExpenseForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!userId) return;
+
     if (!formData.categoryId) {
       alert(t.noCategories);
       return;
@@ -1043,26 +1147,6 @@ function ExpenseForm({
 
     setIsUploading(true);
 
-    let receiptPhotoUrl: string | undefined = expense?.receiptPhotoUrl;
-    let receiptPhotoPath: string | undefined = expense?.receiptPhotoPath;
-
-    // Upload photo if new file selected
-    if (photoFile) {
-      const uploadResult = await uploadReceiptPhoto(photoFile, 'global');
-      if (uploadResult) {
-        // Delete old photo if exists
-        if (expense?.receiptPhotoPath) {
-          await deleteReceiptPhoto(expense.receiptPhotoPath);
-        }
-        receiptPhotoUrl = uploadResult.url;
-        receiptPhotoPath = uploadResult.path;
-      } else {
-        alert('Failed to upload photo. Please try again.');
-        setIsUploading(false);
-        return;
-      }
-    }
-
     const category = categories.find(c => c.id === formData.categoryId);
     const paymentMethod = paymentMethods.find(pm => pm.id === formData.paymentMethodId);
 
@@ -1072,26 +1156,42 @@ function ExpenseForm({
       finalInputMethod = 'photo';
     }
 
-    const newExpense: GlobalExpense = {
-      id: expense?.id || Date.now().toString(),
-      userId: 'current-user',
-      categoryId: formData.categoryId,
-      categoryName: category?.name,
-      paymentMethodId: formData.paymentMethodId,
-      paymentMethodName: paymentMethod?.name,
-      name: formData.name,
-      amount: formData.amount,
-      description: formData.description || undefined,
-      date: new Date(formData.date),
-      receiptPhotoUrl,
-      receiptPhotoPath,
-      inputMethod: finalInputMethod,
-      createdAt: expense?.createdAt || new Date(),
-      updatedAt: new Date(),
-    };
+    try {
+      let savedExpense: GlobalExpense;
 
-    onSave(newExpense);
-    setIsUploading(false);
+      if (expense?.id) {
+        // Обновление существующего
+        const updated = await updateGlobalExpense(expense.id, userId, {
+          category_id: formData.categoryId || null,
+          payment_method_id: formData.paymentMethodId || null,
+          name: formData.name,
+          amount: formData.amount,
+          description: formData.description || null,
+          date: formData.date,
+          input_method: finalInputMethod,
+        });
+        savedExpense = toLocalExpense(updated, categories, paymentMethods);
+      } else {
+        // Создание нового
+        const created = await createGlobalExpense(userId, {
+          category_id: formData.categoryId || null,
+          payment_method_id: formData.paymentMethodId || null,
+          name: formData.name,
+          amount: formData.amount,
+          description: formData.description || null,
+          date: formData.date,
+          input_method: finalInputMethod,
+        });
+        savedExpense = toLocalExpense(created, categories, paymentMethods);
+      }
+
+      onSave(savedExpense);
+    } catch (error) {
+      console.error('Error saving expense:', error);
+      alert('Failed to save expense');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   if (categories.length === 0) {

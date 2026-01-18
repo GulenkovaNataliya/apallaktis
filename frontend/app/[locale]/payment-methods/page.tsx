@@ -1,34 +1,76 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BackgroundPage from '@/components/BackgroundPage';
 import { useParams, useRouter } from 'next/navigation';
 import { messages, type Locale } from '@/lib/messages';
 import type { PaymentMethod, PaymentMethodType } from '@/types/paymentMethod';
+import { useAuth } from '@/lib/auth-context';
+import {
+  getPaymentMethods,
+  createPaymentMethod,
+  updatePaymentMethod,
+  deletePaymentMethod as deletePaymentMethodApi,
+  type PaymentMethod as SupabasePaymentMethod,
+} from '@/lib/supabase/services';
+
+// Конвертер из Supabase формата в локальный
+function toLocalPaymentMethod(pm: SupabasePaymentMethod): PaymentMethod {
+  return {
+    id: pm.id,
+    userId: pm.user_id,
+    type: pm.type,
+    name: pm.name,
+    lastFourDigits: pm.last_four_digits || undefined,
+    iban: pm.iban || undefined,
+    createdAt: new Date(pm.created_at),
+    updatedAt: new Date(pm.created_at),
+  };
+}
 
 export default function PaymentMethodsPage() {
   const params = useParams();
   const router = useRouter();
   const locale = (params.locale as Locale) || 'el';
   const t = messages[locale]?.paymentMethods || messages.el.paymentMethods;
+  const { user } = useAuth();
 
-  // Временное хранилище в localStorage (позже будет API)
-  const [methods, setMethods] = useState<PaymentMethod[]>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('paymentMethods');
-      return stored ? JSON.parse(stored) : [];
-    }
-    return [];
-  });
-
+  const [methods, setMethods] = useState<PaymentMethod[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingMethod, setEditingMethod] = useState<PaymentMethod | null>(null);
 
-  const handleDelete = (id: string) => {
-    if (confirm(t.confirmDelete)) {
-      const updated = methods.filter(m => m.id !== id);
-      setMethods(updated);
-      localStorage.setItem('paymentMethods', JSON.stringify(updated));
+  // Загрузка данных из Supabase
+  useEffect(() => {
+    async function loadData() {
+      if (!user?.id) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const data = await getPaymentMethods(user.id);
+        setMethods(data.map(toLocalPaymentMethod));
+      } catch (error) {
+        console.error('Error loading payment methods:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadData();
+  }, [user?.id]);
+
+  const handleDelete = async (id: string) => {
+    if (!user?.id) return;
+    if (!confirm(t.confirmDelete)) return;
+
+    try {
+      await deletePaymentMethodApi(id, user.id);
+      setMethods(methods.filter(m => m.id !== id));
+    } catch (error) {
+      console.error('Error deleting payment method:', error);
+      alert('Failed to delete payment method');
     }
   };
 
@@ -80,15 +122,13 @@ export default function PaymentMethodsPage() {
           </h1>
           <PaymentMethodForm
             method={editingMethod}
+            userId={user?.id || ''}
             onSave={(method) => {
-              let updated;
               if (editingMethod) {
-                updated = methods.map(m => m.id === editingMethod.id ? method : m);
+                setMethods(methods.map(m => m.id === editingMethod.id ? method : m));
               } else {
-                updated = [...methods, method];
+                setMethods([...methods, method]);
               }
-              setMethods(updated);
-              localStorage.setItem('paymentMethods', JSON.stringify(updated));
               setShowForm(false);
               setEditingMethod(null);
             }}
@@ -98,6 +138,20 @@ export default function PaymentMethodsPage() {
             }}
             locale={locale}
           />
+          </div>
+        </div>
+      </BackgroundPage>
+    );
+  }
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <BackgroundPage pageIndex={3}>
+        <div className="min-h-screen flex flex-col items-center justify-center">
+          <div className="text-center" style={{ color: 'var(--polar)' }}>
+            <div className="text-2xl mb-2">⏳</div>
+            <p>Loading...</p>
           </div>
         </div>
       </BackgroundPage>
@@ -180,11 +234,13 @@ export default function PaymentMethodsPage() {
 // Payment Method Form Component
 function PaymentMethodForm({
   method,
+  userId,
   onSave,
   onCancel,
   locale,
 }: {
   method: PaymentMethod | null;
+  userId: string;
   onSave: (method: PaymentMethod) => void;
   onCancel: () => void;
   locale: Locale;
@@ -196,22 +252,44 @@ function PaymentMethodForm({
     lastFourDigits: method?.lastFourDigits || '',
     iban: method?.iban || '',
   });
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!userId) return;
 
-    const newMethod: PaymentMethod = {
-      id: method?.id || Date.now().toString(),
-      userId: 'current-user', // TODO: Get from auth context
-      type: formData.type,
-      name: formData.name,
-      lastFourDigits: formData.lastFourDigits || undefined,
-      iban: formData.iban || undefined,
-      createdAt: method?.createdAt || new Date(),
-      updatedAt: new Date(),
-    };
+    setIsSaving(true);
 
-    onSave(newMethod);
+    try {
+      let savedMethod: PaymentMethod;
+
+      if (method?.id) {
+        // Обновление существующего
+        const updated = await updatePaymentMethod(method.id, userId, {
+          type: formData.type,
+          name: formData.name,
+          last_four_digits: formData.lastFourDigits || undefined,
+          iban: formData.iban || undefined,
+        });
+        savedMethod = toLocalPaymentMethod(updated);
+      } else {
+        // Создание нового
+        const created = await createPaymentMethod(userId, {
+          type: formData.type,
+          name: formData.name,
+          last_four_digits: formData.lastFourDigits || undefined,
+          iban: formData.iban || undefined,
+        });
+        savedMethod = toLocalPaymentMethod(created);
+      }
+
+      onSave(savedMethod);
+    } catch (error) {
+      console.error('Error saving payment method:', error);
+      alert('Failed to save payment method');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const showLastFourDigits = formData.type === 'credit_card' || formData.type === 'debit_card';
@@ -294,6 +372,7 @@ function PaymentMethodForm({
         <button
           type="button"
           onClick={onCancel}
+          disabled={isSaving}
           className="btn-universal flex-1"
           style={{ minHeight: '52px', backgroundColor: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
         >
@@ -301,10 +380,11 @@ function PaymentMethodForm({
         </button>
         <button
           type="submit"
+          disabled={isSaving}
           className="btn-universal flex-1"
           style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', fontSize: '18px', fontWeight: 600 }}
         >
-          {t.save}
+          {isSaving ? '...' : t.save}
         </button>
       </div>
     </form>
