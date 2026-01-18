@@ -610,6 +610,8 @@ function ExpenseForm({
       if (result.success && result.data) {
         const data = result.data;
         console.log('Parsed data:', data);
+        console.log('Available categories:', categories.map(c => ({ id: c.id, name: c.name })));
+        console.log('Available payment methods:', paymentMethods.map(pm => ({ id: pm.id, name: pm.name, type: pm.type })));
 
         // Автозаполнение формы - используем данные если они есть
         setFormData(prev => ({
@@ -623,21 +625,67 @@ function ExpenseForm({
         // Попытка найти подходящую категорию
         if (data.suggestedCategory && categories.length > 0) {
           const categoryMap: Record<string, string[]> = {
-            groceries: ['продукты', 'groceries', 'τρόφιμα', 'food', 'supermarket', 'супермаркет'],
-            transport: ['транспорт', 'transport', 'μεταφορά', 'fuel', 'бензин', 'parking'],
-            utilities: ['коммунальные', 'utilities', 'κοινωφελείς', 'electric', 'water', 'phone'],
-            entertainment: ['развлечения', 'entertainment', 'ψυχαγωγία', 'restaurant', 'cinema'],
-            healthcare: ['здоровье', 'healthcare', 'υγεία', 'pharmacy', 'аптека', 'doctor'],
-            education: ['образование', 'education', 'εκπαίδευση', 'school', 'books', 'курсы'],
+            groceries: ['продукты', 'groceries', 'τρόφιμα', 'food', 'supermarket', 'супермаркет', 'магазин', 'лидл', 'lidl', 'aldi', 'σκλαβενίτης', 'αβ'],
+            transport: ['транспорт', 'transport', 'μεταφορά', 'fuel', 'бензин', 'benzin', 'βενζίνη', 'parking', 'парковка', 'такси', 'taxi', 'автобус', 'metro', 'метро'],
+            utilities: ['коммунальные', 'utilities', 'κοινωφελείς', 'electric', 'electricity', 'свет', 'электричество', 'вода', 'water', 'νερό', 'ρεύμα', 'телефон', 'phone', 'internet', 'интернет', 'δεη'],
+            entertainment: ['развлечения', 'entertainment', 'ψυχαγωγία', 'restaurant', 'ресторан', 'кафе', 'cafe', 'cinema', 'кино', 'σινεμά', 'εστιατόριο'],
+            healthcare: ['здоровье', 'healthcare', 'υγεία', 'pharmacy', 'аптека', 'φαρμακείο', 'doctor', 'врач', 'γιατρός', 'больница', 'hospital', 'νοσοκομείο', 'лекарства', 'medicine'],
+            education: ['образование', 'education', 'εκπαίδευση', 'school', 'школа', 'σχολείο', 'курсы', 'courses', 'books', 'книги', 'βιβλία', 'университет', 'university'],
           };
 
           const keywords = categoryMap[data.suggestedCategory] || [];
-          const matchedCategory = categories.find(cat =>
+          let matchedCategory = categories.find(cat =>
             keywords.some(kw => cat.name.toLowerCase().includes(kw.toLowerCase()))
           );
 
+          // Если не нашли по ключевым словам, берем первую категорию
+          if (!matchedCategory && categories.length > 0) {
+            // Попробуем найти категорию с похожим названием на suggestedCategory
+            matchedCategory = categories.find(cat =>
+              cat.name.toLowerCase().includes(data.suggestedCategory.toLowerCase())
+            );
+          }
+
           if (matchedCategory) {
-            setFormData(prev => ({ ...prev, categoryId: matchedCategory.id }));
+            setFormData(prev => ({ ...prev, categoryId: matchedCategory!.id }));
+          }
+        }
+
+        // Попытка найти подходящий способ оплаты
+        if (data.paymentMethod && paymentMethods.length > 0) {
+          const paymentMap: Record<string, string[]> = {
+            cash: ['cash', 'наличные', 'μετρητά', 'кэш', 'numerar', 'para', 'пари', 'نقدي'],
+            card: ['card', 'карта', 'картой', 'κάρτα', 'credit', 'debit', 'кредитка', 'дебетовая', 'credit_card', 'debit_card', 'بطاقة'],
+            bank: ['bank', 'банк', 'перевод', 'transfer', 'τράπεζα', 'bank_account', 'iban', 'حساب'],
+          };
+
+          const keywords = paymentMap[data.paymentMethod] || [];
+          let matchedPayment = paymentMethods.find(pm =>
+            keywords.some(kw =>
+              pm.name.toLowerCase().includes(kw.toLowerCase()) ||
+              pm.type.toLowerCase().includes(kw.toLowerCase())
+            )
+          );
+
+          // Если card - ищем любую карту
+          if (!matchedPayment && data.paymentMethod === 'card') {
+            matchedPayment = paymentMethods.find(pm =>
+              pm.type === 'credit_card' || pm.type === 'debit_card'
+            );
+          }
+
+          // Если cash - ищем наличные
+          if (!matchedPayment && data.paymentMethod === 'cash') {
+            matchedPayment = paymentMethods.find(pm => pm.type === 'cash');
+          }
+
+          // Если bank - ищем банковский счет
+          if (!matchedPayment && data.paymentMethod === 'bank') {
+            matchedPayment = paymentMethods.find(pm => pm.type === 'bank_account');
+          }
+
+          if (matchedPayment) {
+            setFormData(prev => ({ ...prev, paymentMethodId: matchedPayment!.id }));
           }
         }
 
