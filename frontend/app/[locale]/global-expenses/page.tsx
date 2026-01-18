@@ -622,28 +622,41 @@ function ExpenseForm({
           date: data.date || prev.date,
         }));
 
-        // Попытка найти подходящую категорию
-        if (data.suggestedCategory && categories.length > 0) {
+        // Выбор категории
+        if (categories.length > 0) {
           const categoryMap: Record<string, string[]> = {
-            groceries: ['продукты', 'groceries', 'τρόφιμα', 'food', 'supermarket', 'супермаркет', 'магазин', 'лидл', 'lidl', 'aldi', 'σκλαβενίτης', 'αβ'],
-            transport: ['транспорт', 'transport', 'μεταφορά', 'fuel', 'бензин', 'benzin', 'βενζίνη', 'parking', 'парковка', 'такси', 'taxi', 'автобус', 'metro', 'метро'],
-            utilities: ['коммунальные', 'utilities', 'κοινωφελείς', 'electric', 'electricity', 'свет', 'электричество', 'вода', 'water', 'νερό', 'ρεύμα', 'телефон', 'phone', 'internet', 'интернет', 'δεη'],
-            entertainment: ['развлечения', 'entertainment', 'ψυχαγωγία', 'restaurant', 'ресторан', 'кафе', 'cafe', 'cinema', 'кино', 'σινεμά', 'εστιατόριο'],
-            healthcare: ['здоровье', 'healthcare', 'υγεία', 'pharmacy', 'аптека', 'φαρμακείο', 'doctor', 'врач', 'γιατρός', 'больница', 'hospital', 'νοσοκομείο', 'лекарства', 'medicine'],
-            education: ['образование', 'education', 'εκπαίδευση', 'school', 'школа', 'σχολείο', 'курсы', 'courses', 'books', 'книги', 'βιβλία', 'университет', 'university'],
+            groceries: ['продукт', 'grocery', 'τρόφιμ', 'food', 'supermarket', 'супермаркет', 'магазин', 'лидл', 'lidl', 'aldi', 'σκλαβενίτ', 'еда', 'покупк'],
+            transport: ['транспорт', 'transport', 'μεταφορ', 'fuel', 'бензин', 'benzin', 'βενζίν', 'parking', 'парковк', 'такси', 'taxi', 'автобус', 'metro', 'метро', 'горюч'],
+            utilities: ['коммунал', 'utilit', 'κοινωφελ', 'electric', 'свет', 'электрич', 'вода', 'water', 'νερό', 'ρεύμα', 'телефон', 'phone', 'internet', 'интернет', 'δεη', 'счет', 'счёт'],
+            entertainment: ['развлеч', 'entertain', 'ψυχαγωγ', 'restaurant', 'рестор', 'кафе', 'cafe', 'cinema', 'кино', 'σινεμά', 'εστιατόρ', 'отдых'],
+            healthcare: ['здоров', 'health', 'υγεί', 'pharmacy', 'аптек', 'φαρμακ', 'doctor', 'врач', 'γιατρ', 'больниц', 'hospital', 'νοσοκομ', 'лекарств', 'medicine', 'медиц'],
+            education: ['образован', 'educat', 'εκπαίδευ', 'school', 'школ', 'σχολ', 'курс', 'course', 'book', 'книг', 'βιβλί', 'универ', 'учеб'],
           };
 
-          const keywords = categoryMap[data.suggestedCategory] || [];
-          let matchedCategory = categories.find(cat =>
-            keywords.some(kw => cat.name.toLowerCase().includes(kw.toLowerCase()))
-          );
+          let matchedCategory: ExpenseCategory | undefined;
 
-          // Если не нашли по ключевым словам, берем первую категорию
-          if (!matchedCategory && categories.length > 0) {
-            // Попробуем найти категорию с похожим названием на suggestedCategory
+          // Сначала ищем по suggestedCategory от AI
+          if (data.suggestedCategory) {
+            const keywords = categoryMap[data.suggestedCategory] || [];
             matchedCategory = categories.find(cat =>
-              cat.name.toLowerCase().includes(data.suggestedCategory.toLowerCase())
+              keywords.some(kw => cat.name.toLowerCase().includes(kw.toLowerCase()))
             );
+            console.log('Looking for category:', data.suggestedCategory, 'keywords:', keywords, 'found:', matchedCategory?.name);
+          }
+
+          // Если не нашли, ищем по имени из data.name
+          if (!matchedCategory && data.name) {
+            matchedCategory = categories.find(cat =>
+              cat.name.toLowerCase().includes(data.name.toLowerCase()) ||
+              data.name.toLowerCase().includes(cat.name.toLowerCase())
+            );
+            console.log('Looking by name:', data.name, 'found:', matchedCategory?.name);
+          }
+
+          // Если всё ещё не нашли, берем первую категорию
+          if (!matchedCategory) {
+            matchedCategory = categories[0];
+            console.log('Using first category:', matchedCategory?.name);
           }
 
           if (matchedCategory) {
@@ -651,37 +664,44 @@ function ExpenseForm({
           }
         }
 
-        // Попытка найти подходящий способ оплаты
-        if (data.paymentMethod && paymentMethods.length > 0) {
-          const paymentMap: Record<string, string[]> = {
-            cash: ['cash', 'наличные', 'μετρητά', 'кэш', 'numerar', 'para', 'пари', 'نقدي'],
-            card: ['card', 'карта', 'картой', 'κάρτα', 'credit', 'debit', 'кредитка', 'дебетовая', 'credit_card', 'debit_card', 'بطاقة'],
-            bank: ['bank', 'банк', 'перевод', 'transfer', 'τράπεζα', 'bank_account', 'iban', 'حساب'],
-          };
+        // Выбор способа оплаты
+        if (paymentMethods.length > 0) {
+          let matchedPayment: PaymentMethod | undefined;
 
-          const keywords = paymentMap[data.paymentMethod] || [];
-          let matchedPayment = paymentMethods.find(pm =>
-            keywords.some(kw =>
-              pm.name.toLowerCase().includes(kw.toLowerCase()) ||
-              pm.type.toLowerCase().includes(kw.toLowerCase())
-            )
-          );
+          if (data.paymentMethod) {
+            console.log('AI suggested payment method:', data.paymentMethod);
 
-          // Если card - ищем любую карту
-          if (!matchedPayment && data.paymentMethod === 'card') {
-            matchedPayment = paymentMethods.find(pm =>
-              pm.type === 'credit_card' || pm.type === 'debit_card'
-            );
+            // Ищем по типу
+            if (data.paymentMethod === 'card') {
+              matchedPayment = paymentMethods.find(pm =>
+                pm.type === 'credit_card' || pm.type === 'debit_card'
+              );
+            } else if (data.paymentMethod === 'cash') {
+              matchedPayment = paymentMethods.find(pm => pm.type === 'cash');
+            } else if (data.paymentMethod === 'bank') {
+              matchedPayment = paymentMethods.find(pm => pm.type === 'bank_account');
+            }
+
+            // Если не нашли по типу, ищем по имени
+            if (!matchedPayment) {
+              const paymentKeywords: Record<string, string[]> = {
+                cash: ['наличн', 'cash', 'μετρητ', 'кэш'],
+                card: ['карт', 'card', 'κάρτ', 'credit', 'debit', 'visa', 'master'],
+                bank: ['банк', 'bank', 'τράπεζ', 'перевод', 'transfer', 'iban', 'счет', 'счёт'],
+              };
+              const keywords = paymentKeywords[data.paymentMethod] || [];
+              matchedPayment = paymentMethods.find(pm =>
+                keywords.some(kw => pm.name.toLowerCase().includes(kw.toLowerCase()))
+              );
+            }
+
+            console.log('Found payment method:', matchedPayment?.name, matchedPayment?.type);
           }
 
-          // Если cash - ищем наличные
-          if (!matchedPayment && data.paymentMethod === 'cash') {
-            matchedPayment = paymentMethods.find(pm => pm.type === 'cash');
-          }
-
-          // Если bank - ищем банковский счет
-          if (!matchedPayment && data.paymentMethod === 'bank') {
-            matchedPayment = paymentMethods.find(pm => pm.type === 'bank_account');
+          // Если AI не предложил или не нашли, берем первый способ оплаты
+          if (!matchedPayment) {
+            matchedPayment = paymentMethods[0];
+            console.log('Using first payment method:', matchedPayment?.name);
           }
 
           if (matchedPayment) {
