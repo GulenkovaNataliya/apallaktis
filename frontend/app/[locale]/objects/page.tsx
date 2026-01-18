@@ -49,7 +49,7 @@ export default function ObjectsPage() {
   const [mounted, setMounted] = useState(false);
 
   const [view, setView] = useState<ViewType>('list');
-  const [filter, setFilter] = useState<'all' | ObjectStatus>('all');
+  const [filter, setFilter] = useState<ObjectStatus>('open');
   const [editingObject, setEditingObject] = useState<PropertyObject | null>(null);
 
   // User subscription state
@@ -145,9 +145,7 @@ export default function ObjectsPage() {
   };
 
   // Filter objects based on status
-  const filteredObjects = filter === 'all'
-    ? objects
-    : objects.filter(obj => obj.status === filter);
+  const filteredObjects = objects.filter(obj => obj.status === filter);
 
   // Loading state
   if (isLoading) {
@@ -174,8 +172,8 @@ export default function ObjectsPage() {
           <div className="flex items-center justify-between mb-6" style={{ marginTop: '120px' }}>
             <button
               onClick={() => router.push(`/${locale}/page-pay`)}
-              className="text-subheading"
-              style={{ color: 'var(--polar)' }}
+              className="btn-universal text-button"
+              style={{ minHeight: '44px', padding: '8px 16px' }}
             >
               {t.backToDashboard}
             </button>
@@ -186,39 +184,27 @@ export default function ObjectsPage() {
           </h1>
 
           {/* Filter Toggle */}
-          <div className="flex gap-6" style={{ marginTop: '48px', marginBottom: '48px' }}>
-            <button
-              onClick={() => setFilter('all')}
-              className="flex-1 rounded-lg text-button px-6 py-3"
-              style={{
-                minHeight: '52px',
-                backgroundColor: filter === 'all' ? 'var(--zanah)' : 'var(--polar)',
-                color: 'var(--deep-teal)',
-                opacity: filter === 'all' ? 1 : 0.6,
-              }}
-            >
-              {t.filterAll || 'Όλα'}
-            </button>
+          <div className="flex gap-4" style={{ marginTop: '48px', marginBottom: '48px' }}>
             <button
               onClick={() => setFilter('open')}
-              className="flex-1 rounded-lg text-button px-6 py-3"
+              className="btn-universal flex-1 text-button"
               style={{
                 minHeight: '52px',
-                backgroundColor: filter === 'open' ? 'var(--zanah)' : 'var(--polar)',
-                color: 'var(--deep-teal)',
-                opacity: filter === 'open' ? 1 : 0.6,
+                backgroundColor: filter === 'open' ? 'var(--polar)' : 'transparent',
+                border: filter === 'open' ? 'none' : '2px solid var(--polar)',
+                color: filter === 'open' ? 'var(--deep-teal)' : 'var(--polar)',
               }}
             >
               {t.filterOpen}
             </button>
             <button
               onClick={() => setFilter('closed')}
-              className="flex-1 rounded-lg text-button px-6 py-3"
+              className="btn-universal flex-1 text-button"
               style={{
                 minHeight: '52px',
-                backgroundColor: filter === 'closed' ? 'var(--zanah)' : 'var(--polar)',
-                color: 'var(--deep-teal)',
-                opacity: filter === 'closed' ? 1 : 0.6,
+                backgroundColor: filter === 'closed' ? 'var(--zanah)' : 'transparent',
+                border: filter === 'closed' ? 'none' : '2px solid var(--polar)',
+                color: filter === 'closed' ? 'var(--deep-teal)' : 'var(--polar)',
               }}
             >
               {t.filterClosed}
@@ -285,8 +271,8 @@ export default function ObjectsPage() {
                 setView('list');
                 setEditingObject(null);
               }}
-              className="text-subheading"
-              style={{ color: 'var(--polar)' }}
+              className="btn-universal text-button"
+              style={{ minHeight: '44px', padding: '8px 16px' }}
             >
               {t.backToDashboard}
             </button>

@@ -269,14 +269,14 @@ function ObjectCard({
       </div>
 
       {onEdit && onDelete && editLabel && deleteLabel && (
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-3 mt-4">
           <button
             onClick={(e) => {
               e.stopPropagation();
               onEdit();
             }}
-            className="flex-1 px-4 py-2 rounded-lg text-lg font-semibold"
-            style={{ backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
+            className="btn-universal flex-1 text-button"
+            style={{ minHeight: '48px', backgroundColor: 'var(--zanah)' }}
           >
             {editLabel}
           </button>
@@ -285,8 +285,8 @@ function ObjectCard({
               e.stopPropagation();
               onDelete();
             }}
-            className="flex-1 px-4 py-2 rounded-lg text-lg font-semibold"
-            style={{ backgroundColor: 'var(--orange)', color: 'white' }}
+            className="btn-universal flex-1 text-button"
+            style={{ minHeight: '48px', backgroundColor: 'var(--orange)', color: 'white' }}
           >
             {deleteLabel}
           </button>
