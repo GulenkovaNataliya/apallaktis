@@ -603,14 +603,19 @@ function ExpenseForm({
 
       const result = await response.json();
 
+      // Debug logging
+      console.log('Voice API response:', result);
+      console.log('Transcript:', transcript);
+
       if (result.success && result.data) {
         const data = result.data;
+        console.log('Parsed data:', data);
 
-        // Автозаполнение формы
+        // Автозаполнение формы - используем данные если они есть
         setFormData(prev => ({
           ...prev,
-          name: data.name || prev.name,
-          amount: data.amount || prev.amount,
+          name: data.name && data.name !== 'null' ? data.name : prev.name,
+          amount: data.amount !== null && data.amount !== undefined ? data.amount : prev.amount,
           description: data.description || transcript,
           date: data.date || prev.date,
         }));
@@ -652,7 +657,17 @@ function ExpenseForm({
     }
   };
 
+  // Ref для хранения recognition instance
+  const recognitionRef = React.useRef<any>(null);
+  const transcriptRef = React.useRef<string>('');
+
   const handleVoiceInput = () => {
+    // Если уже записываем - останавливаем
+    if (isRecording && recognitionRef.current) {
+      recognitionRef.current.stop();
+      return;
+    }
+
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
       alert('Voice input is not supported in your browser. Please use Chrome, Edge, or Safari.');
       return;
@@ -660,6 +675,8 @@ function ExpenseForm({
 
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
+    transcriptRef.current = '';
 
     recognition.lang = locale === 'el' ? 'el-GR' :
                       locale === 'ru' ? 'ru-RU' :
@@ -669,32 +686,61 @@ function ExpenseForm({
                       locale === 'ro' ? 'ro-RO' :
                       locale === 'ar' ? 'ar-SA' : 'en-US';
 
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    // Включаем непрерывную запись для более длинных фраз
+    recognition.continuous = true;
+    recognition.interimResults = true;
 
     recognition.onstart = () => {
       setIsRecording(true);
       setInputMethod('voice');
     };
 
-    recognition.onresult = (event: Event & { results: SpeechRecognitionResultList }) => {
-      const transcript = event.results[0][0].transcript;
-      setIsRecording(false);
-      // Анализируем текст с помощью AI
-      analyzeVoiceText(transcript);
+    recognition.onresult = (event: any) => {
+      let finalTranscript = '';
+      let interimTranscript = '';
+
+      for (let i = 0; i < event.results.length; i++) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript + ' ';
+        } else {
+          interimTranscript += event.results[i][0].transcript;
+        }
+      }
+
+      transcriptRef.current = finalTranscript.trim();
+      // Показываем промежуточный текст в описании
+      setFormData(prev => ({
+        ...prev,
+        description: (finalTranscript + interimTranscript).trim() || prev.description
+      }));
     };
 
     recognition.onerror = (event: Event & { error: string }) => {
       console.error('Speech recognition error:', event.error);
-      setIsRecording(false);
-      alert('Voice input failed. Please try again.');
+      if (event.error !== 'no-speech') {
+        setIsRecording(false);
+      }
     };
 
     recognition.onend = () => {
       setIsRecording(false);
+      recognitionRef.current = null;
+
+      // Анализируем собранный текст
+      const finalText = transcriptRef.current;
+      if (finalText && finalText.length > 0) {
+        analyzeVoiceText(finalText);
+      }
     };
 
     recognition.start();
+
+    // Автоматическая остановка через 15 секунд
+    setTimeout(() => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    }, 15000);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -885,7 +931,7 @@ function ExpenseForm({
           <button
             type="button"
             onClick={handleVoiceInput}
-            disabled={isRecording || isAnalyzing}
+            disabled={isAnalyzing}
             className="px-4 rounded-2xl flex items-center justify-center gap-2"
             style={{
               backgroundColor: isRecording ? '#ff6a1a' : isAnalyzing ? 'var(--polar)' : 'var(--zanah)',
@@ -895,7 +941,7 @@ function ExpenseForm({
               fontWeight: 600
             }}
           >
-            {isRecording ? '🎤 ...' : isAnalyzing ? '🤖 ...' : `🎤 ${t.voiceButton}`}
+            {isRecording ? '⏹️ STOP' : isAnalyzing ? '🤖 ...' : `🎤 ${t.voiceButton}`}
           </button>
         </div>
         {(isRecording || isAnalyzing) && (
@@ -903,7 +949,7 @@ function ExpenseForm({
             className="mb-2 p-3 rounded-2xl text-center"
             style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: 'var(--polar)' }}
           >
-            {isRecording ? (t.listening || '🎤 Слушаю...') : (t.analyzingVoice || '🤖 Анализирую...')}
+            {isRecording ? (t.listeningTapStop || '🎤 Говорите... (нажмите STOP когда закончите)') : (t.analyzingVoice || '🤖 Анализирую...')}
           </div>
         )}
         <textarea

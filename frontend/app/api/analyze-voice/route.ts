@@ -57,34 +57,40 @@ export async function POST(request: NextRequest) {
     const yesterdayStr = yesterday.toISOString().split('T')[0];
 
     // Промпт для анализа голосового текста
-    const prompt = `You are analyzing a voice input about an expense. The user spoke in ${language} (but may use other languages). Extract expense information and return ONLY a valid JSON object (no markdown, no explanation):
+    const prompt = `You are analyzing a voice input about an expense. The user spoke in ${language}. Extract expense information and return ONLY a valid JSON object (no markdown, no explanation).
 
+IMPORTANT: Keep the "name" and "description" fields in the SAME LANGUAGE as the user's input (${language}). Do NOT translate to English.
+
+Expected JSON format:
 {
-  "name": "Store/business name or what was purchased",
+  "name": "Store name or what was purchased (in user's language)",
   "amount": 0.00,
   "date": "YYYY-MM-DD",
-  "description": "Brief description",
+  "description": "Brief description (in user's language)",
   "confidence": "high/medium/low",
   "suggestedCategory": "groceries/transport/utilities/entertainment/healthcare/education/other"
 }
 
-Important rules:
-1. Today's date is ${todayStr}
-2. "today/сегодня/σήμερα" = ${todayStr}
-3. "yesterday/вчера/χθες" = ${yesterdayStr}
-4. Convert relative dates (last week, 3 days ago, etc.) to YYYY-MM-DD format
-5. For amounts: extract numbers, understand "евро/euro/ευρώ/€" as currency
-6. For "suggestedCategory":
-   - Supermarkets, food, groceries → "groceries"
-   - Gas/petrol, parking, taxi, bus → "transport"
-   - Electric, water, phone, internet bills → "utilities"
-   - Restaurants, cafes, cinema, entertainment → "entertainment"
-   - Pharmacy, doctor, medicine → "healthcare"
-   - School, courses, books → "education"
+Rules:
+1. Today is ${todayStr}
+2. Date words: "today/сегодня/σήμερα/bugün" = ${todayStr}, "yesterday/вчера/χθες" = ${yesterdayStr}
+3. Convert relative dates to YYYY-MM-DD
+4. Extract numbers for amount (евро/euro/ευρώ/€ = EUR currency)
+5. Categories:
+   - Supermarkets, food, Лидл, Σκλαβενίτης, магазин → "groceries"
+   - Gas, бензин, parking, taxi, bus, метро → "transport"
+   - Electric, вода, телефон, интернет, ДЕΗ → "utilities"
+   - Restaurant, кафе, cinema, кино → "entertainment"
+   - Pharmacy, аптека, doctor, врач → "healthcare"
+   - School, курсы, books, книги → "education"
    - Everything else → "other"
-7. If date is not mentioned, use today: ${todayStr}
-8. If amount is not clear, use null
-9. Return ONLY the JSON object, nothing else
+6. If date not mentioned, use: ${todayStr}
+7. If amount unclear, use: null
+8. "name" should be the store/place name if mentioned, otherwise what was purchased
+9. ALWAYS try to extract amount - look for numbers followed by currency words
+
+Example input: "вчера в Лидле потратил 45 евро на продукты"
+Example output: {"name":"Лидл","amount":45,"date":"${yesterdayStr}","description":"продукты","confidence":"high","suggestedCategory":"groceries"}
 
 Voice input to analyze: "${text}"`;
 
