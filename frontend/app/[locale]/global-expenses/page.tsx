@@ -527,7 +527,7 @@ function ExpenseForm({
         // Автозаполнение формы
         setFormData(prev => ({
           ...prev,
-          name: data.name || prev.name,
+          name: data.name ? data.name.slice(0, 10) : prev.name,
           amount: data.amount || prev.amount,
           description: data.description || prev.description,
           date: data.date || prev.date,
@@ -616,7 +616,7 @@ function ExpenseForm({
         // Автозаполнение формы - используем данные если они есть
         setFormData(prev => ({
           ...prev,
-          name: data.name && data.name !== 'null' ? data.name : prev.name,
+          name: data.name && data.name !== 'null' ? data.name.slice(0, 10) : prev.name,
           amount: data.amount !== null && data.amount !== undefined ? data.amount : prev.amount,
           description: data.description || transcript,
           date: data.date || prev.date,
@@ -967,6 +967,7 @@ function ExpenseForm({
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
+          maxLength={10}
           className="w-full p-3 rounded-2xl"
           style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}
           placeholder={t.name}
