@@ -68,7 +68,8 @@ Expected JSON format:
   "date": "YYYY-MM-DD",
   "description": "Brief description (in user's language)",
   "confidence": "high/medium/low",
-  "suggestedCategory": "groceries/transport/utilities/entertainment/healthcare/education/other"
+  "suggestedCategory": "groceries/transport/utilities/entertainment/healthcare/education/other",
+  "paymentMethod": "cash/card/bank/null"
 }
 
 Rules:
@@ -88,9 +89,14 @@ Rules:
 7. If amount unclear, use: null
 8. "name" should be the store/place name if mentioned, otherwise what was purchased
 9. ALWAYS try to extract amount - look for numbers followed by currency words
+10. Payment method:
+    - "наличные/cash/μετρητά/кэш" → "cash"
+    - "карта/картой/card/κάρτα/credit/debit" → "card"
+    - "перевод/bank/transfer/τράπεζα" → "bank"
+    - If not mentioned → null
 
-Example input: "вчера в Лидле потратил 45 евро на продукты"
-Example output: {"name":"Лидл","amount":45,"date":"${yesterdayStr}","description":"продукты","confidence":"high","suggestedCategory":"groceries"}
+Example input: "вчера в Лидле потратил 45 евро картой на продукты"
+Example output: {"name":"Лидл","amount":45,"date":"${yesterdayStr}","description":"продукты","confidence":"high","suggestedCategory":"groceries","paymentMethod":"card"}
 
 Voice input to analyze: "${text}"`;
 
@@ -145,6 +151,7 @@ Voice input to analyze: "${text}"`;
         description: parsedData.description || null,
         confidence: parsedData.confidence || 'low',
         suggestedCategory: parsedData.suggestedCategory || 'other',
+        paymentMethod: parsedData.paymentMethod || null,
       }
     });
 
