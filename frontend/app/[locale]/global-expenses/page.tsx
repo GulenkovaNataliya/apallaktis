@@ -613,6 +613,9 @@ function ExpenseForm({
         console.log('Available categories:', categories.map(c => ({ id: c.id, name: c.name })));
         console.log('Available payment methods:', paymentMethods.map(pm => ({ id: pm.id, name: pm.name, type: pm.type })));
 
+        // DEBUG: Показываем что вернул AI
+        alert(`AI вернул:\nНазвание: ${data.name}\nСумма: ${data.amount}\nДата: ${data.date}\nКатегория: ${data.suggestedCategory}\nОплата: ${data.paymentMethod}`);
+
         // Автозаполнение формы - используем данные если они есть
         setFormData(prev => ({
           ...prev,
