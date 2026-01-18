@@ -594,6 +594,9 @@ function ExpenseForm({
     setIsAnalyzing(true);
     setAnalyzeError(null);
 
+    // DEBUG: Показываем что отправляем на API
+    alert(`Отправляем на API:\nТекст: "${transcript}"\nЯзык: ${locale}`);
+
     try {
       const response = await fetch('/api/analyze-voice', {
         method: 'POST',
@@ -723,6 +726,8 @@ function ExpenseForm({
       }
     } catch (error) {
       console.error('Voice analyze error:', error);
+      // DEBUG: Показываем ошибку
+      alert(`ОШИБКА API:\n${error instanceof Error ? error.message : String(error)}`);
       // Если ошибка, просто записываем текст в описание
       setFormData(prev => ({ ...prev, description: transcript }));
       setAnalyzeError('Ошибка при анализе голоса');
