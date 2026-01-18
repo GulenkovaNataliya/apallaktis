@@ -603,6 +603,9 @@ function ExpenseForm({
 
       const result = await response.json();
 
+      // DEBUG: Показываем сырой ответ от API
+      alert(`API ответ:\n${JSON.stringify(result, null, 2)}`);
+
       // Debug logging
       console.log('Voice API response:', result);
       console.log('Transcript:', transcript);
