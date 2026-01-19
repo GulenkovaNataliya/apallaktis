@@ -196,9 +196,9 @@ export default function GlobalExpensesPage() {
             {t.manageCategories}
           </button>
 
-          {/* No Categories Message */}
+          {/* No Categories Message - follows button law */}
           {categories.length === 0 && (
-            <p className="text-center text-body" style={{ color: 'var(--orange)' }}>
+            <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
               {t.noCategories}
             </p>
           )}
@@ -215,7 +215,7 @@ export default function GlobalExpensesPage() {
           {/* Expenses List */}
           <div className="flex flex-col gap-4 flex-1">
             {expenses.length === 0 ? (
-              <p className="text-center text-body" style={{ color: 'var(--orange)' }}>
+              <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
                 {t.noExpenses}
               </p>
             ) : (
@@ -341,7 +341,7 @@ export default function GlobalExpensesPage() {
           {/* Categories List */}
           <div className="flex flex-col gap-4 flex-1">
             {categories.length === 0 ? (
-              <p className="text-center text-body" style={{ color: 'var(--orange)' }}>
+              <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
                 {t.noCategories}
               </p>
             ) : (

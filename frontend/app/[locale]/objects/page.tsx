@@ -221,14 +221,11 @@ export default function ObjectsPage() {
               )}
             </button>
 
-            {/* No Objects Message - orange button, only when no objects */}
+            {/* No Objects Message - text only, follows button law */}
             {objects.length === 0 && (
-              <button
-                className="btn-universal w-full text-button"
-                style={{ minHeight: '52px', backgroundColor: 'var(--orange)', color: 'white' }}
-              >
+              <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
                 {t.noObjects}
-              </button>
+              </p>
             )}
 
           </div>
