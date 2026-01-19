@@ -427,12 +427,12 @@ export default function ObjectFinancePage() {
           <p
             onClick={() => router.push(`/${locale}/objects`)}
             className="text-button cursor-pointer"
-            style={{ color: 'var(--polar)', marginTop: '120px' }}
+            style={{ color: 'var(--polar)', marginTop: '120px', marginBottom: '48px' }}
           >
             {t.backToObject}
           </p>
 
-          <h1 className="text-2xl font-bold mb-6 text-center" style={{ color: 'var(--polar)' }}>
+          <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
             {t.title}
           </h1>
 
@@ -462,7 +462,7 @@ export default function ObjectFinancePage() {
             </div>
 
             {finance.additionalWorks.length === 0 ? (
-              <p className="text-sm opacity-70" style={{ color: 'var(--deep-teal)' }}>
+              <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
                 {t.noAdditionalWorks}
               </p>
             ) : (
@@ -520,7 +520,7 @@ export default function ObjectFinancePage() {
             </div>
 
             {finance.payments.length === 0 ? (
-              <p className="text-sm opacity-70" style={{ color: 'var(--deep-teal)' }}>
+              <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
                 {t.noPayments}
               </p>
             ) : (
@@ -917,17 +917,17 @@ export default function ObjectFinancePage() {
   if (view === 'add-expense') {
     return (
       <BackgroundPage specialPage="objekt">
-        <div className="min-h-screen" style={{ paddingLeft: '38px', paddingRight: '38px', paddingTop: '40px', paddingBottom: '120px' }}>
+        <div className="min-h-screen flex flex-col gap-12" style={{ paddingLeft: '38px', paddingRight: '38px', paddingTop: '160px', paddingBottom: '120px' }}>
           {/* Back - phrase, not a button */}
           <p
             onClick={() => setView('main')}
             className="text-button cursor-pointer"
-            style={{ color: 'var(--polar)', marginTop: '120px' }}
+            style={{ color: 'var(--polar)' }}
           >
             {t.backToObject}
           </p>
 
-          <h1 className="text-2xl font-bold mb-6 mt-12" style={{ color: 'var(--polar)' }}>
+          <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
             {t.addExpense}
           </h1>
 
@@ -1892,7 +1892,7 @@ function AddExpenseForm({
     <form onSubmit={handleSubmit} className="flex flex-col gap-12" style={{ marginTop: '96px' }}>
       {/* Category Selection */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <label className="block mb-3 text-button" style={{ color: 'var(--polar)' }}>
           {t.category}
         </label>
         {!showNewCategory ? (
@@ -1961,7 +1961,7 @@ function AddExpenseForm({
 
       {/* Payment Method Selection */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <label className="block mb-3 text-button" style={{ color: 'var(--polar)' }}>
           {t.paymentMethod}
         </label>
         {paymentMethods.length === 0 ? (
@@ -1990,7 +1990,7 @@ function AddExpenseForm({
 
       {/* Date */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <label className="block mb-3 text-button" style={{ color: 'var(--polar)' }}>
           {t.date}
         </label>
         <input
@@ -2005,7 +2005,7 @@ function AddExpenseForm({
 
       {/* Amount */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <label className="block mb-3 text-button" style={{ color: 'var(--polar)' }}>
           {t.amount}
         </label>
         <input
@@ -2064,7 +2064,7 @@ function AddExpenseForm({
 
       {/* Receipt Photo */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <label className="block mb-3 text-button" style={{ color: 'var(--polar)' }}>
           {t.receiptPhoto} {isAnalyzing && '🔄'}
         </label>
         {!photoPreview ? (

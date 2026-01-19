@@ -173,15 +173,14 @@ export default function GlobalExpensesPage() {
         <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
           <div className="w-full flex flex-col flex-1 gap-12">
 
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => router.push(`/${locale}/page-pay`)}
-              style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
-            >
-              {t.backToPayPage}
-            </button>
-          </div>
+          {/* Back - phrase, not a button */}
+          <p
+            onClick={() => router.push(`/${locale}/page-pay`)}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)' }}
+          >
+            {t.backToPayPage}
+          </p>
 
           <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
             {t.title}
@@ -530,7 +529,7 @@ function CategoryForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-12">
       {/* Name Input */}
       <div>
         <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '20px' }}>
@@ -1181,7 +1180,7 @@ function ExpenseForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">
+    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-12">
       {/* Category Select */}
       <div>
         <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>

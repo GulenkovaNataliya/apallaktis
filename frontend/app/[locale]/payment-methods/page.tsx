@@ -111,12 +111,12 @@ export default function PaymentMethodsPage() {
               setEditingMethod(null);
             }}
             className="text-button cursor-pointer"
-            style={{ color: 'var(--polar)', marginTop: '120px' }}
+            style={{ color: 'var(--polar)', marginTop: '120px', marginBottom: '48px' }}
           >
             {t.backToPayPage}
           </p>
 
-          <h1 className="text-2xl font-bold mb-6 text-center" style={{ color: 'var(--polar)' }}>
+          <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
             {editingMethod ? t.edit : t.addNew}
           </h1>
           <PaymentMethodForm

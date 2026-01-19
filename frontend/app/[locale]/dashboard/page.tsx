@@ -518,7 +518,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="flex flex-col gap-4 w-full">
+          <div className="flex flex-col gap-12 w-full">
             <button
               onClick={() => router.push(`/${locale}/page-pay`)}
               className="btn-primary text-button w-full text-center"
