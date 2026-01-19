@@ -179,33 +179,34 @@ export default function ObjectsPage() {
           {/* Buttons */}
           <div className="w-full flex flex-col gap-12">
 
-            {/* Filter: Open */}
-            <button
-              onClick={() => setFilter('open')}
-              className="btn-universal w-full text-button"
-              style={{
-                minHeight: '52px',
-                backgroundColor: filter === 'open' ? 'var(--polar)' : 'transparent',
-                border: filter === 'open' ? 'none' : '2px solid var(--polar)',
-                color: filter === 'open' ? 'var(--deep-teal)' : 'var(--polar)',
-              }}
-            >
-              {t.filterOpen}
-            </button>
+            {/* Filter Buttons Row: Open & Closed */}
+            <div className="flex gap-4">
+              <button
+                onClick={() => setFilter('open')}
+                className="btn-universal flex-1 text-button"
+                style={{
+                  minHeight: '52px',
+                  backgroundColor: filter === 'open' ? 'var(--polar)' : 'transparent',
+                  border: filter === 'open' ? 'none' : '2px solid var(--polar)',
+                  color: filter === 'open' ? 'var(--deep-teal)' : 'var(--polar)',
+                }}
+              >
+                {t.filterOpen}
+              </button>
 
-            {/* Filter: Closed */}
-            <button
-              onClick={() => setFilter('closed')}
-              className="btn-universal w-full text-button"
-              style={{
-                minHeight: '52px',
-                backgroundColor: filter === 'closed' ? 'var(--zanah)' : 'transparent',
-                border: filter === 'closed' ? 'none' : '2px solid var(--polar)',
-                color: filter === 'closed' ? 'var(--deep-teal)' : 'var(--polar)',
-              }}
-            >
-              {t.filterClosed}
-            </button>
+              <button
+                onClick={() => setFilter('closed')}
+                className="btn-universal flex-1 text-button"
+                style={{
+                  minHeight: '52px',
+                  backgroundColor: filter === 'closed' ? 'var(--zanah)' : 'transparent',
+                  border: filter === 'closed' ? 'none' : '2px solid var(--polar)',
+                  color: filter === 'closed' ? 'var(--deep-teal)' : 'var(--polar)',
+                }}
+              >
+                {t.filterClosed}
+              </button>
+            </div>
 
             {/* Add Object Button */}
             <button
