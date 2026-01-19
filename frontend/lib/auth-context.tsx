@@ -12,6 +12,24 @@ interface AuthContextType extends AuthState {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Helper function to create User object from Supabase session
+function createUserFromSession(session: any): User {
+  const metadata = session.user.user_metadata || {};
+  return {
+    id: session.user.id,
+    email: session.user.email || '',
+    name: metadata.name || session.user.email?.split('@')[0] || '',
+    createdAt: session.user.created_at,
+    isBusiness: metadata.isBusiness || false,
+    accountNumber: metadata.accountNumber || 1000,
+    subscriptionStatus: metadata.subscriptionStatus || 'demo',
+    demoExpiresAt: metadata.demoExpiresAt || new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
+    subscriptionPlan: metadata.subscriptionPlan || 'demo',
+    referralCode: metadata.referralCode,
+    referredBy: metadata.referredBy,
+  };
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
@@ -37,19 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
 
         if (session?.user) {
-          const user: User = {
-            id: session.user.id,
-            email: session.user.email || '',
-            name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || '',
-            createdAt: session.user.created_at,
-            subscription: session.user.user_metadata?.subscription || {
-              type: 'demo',
-              startDate: new Date().toISOString(),
-              endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-            },
-            referralCode: session.user.user_metadata?.referralCode,
-            referredBy: session.user.user_metadata?.referredBy,
-          };
+          const user = createUserFromSession(session);
 
           setAuthState({
             user,
@@ -92,19 +98,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.log('Auth state changed:', event, session?.user?.id);
 
         if (session?.user) {
-          const user: User = {
-            id: session.user.id,
-            email: session.user.email || '',
-            name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || '',
-            createdAt: session.user.created_at,
-            subscription: session.user.user_metadata?.subscription || {
-              type: 'demo',
-              startDate: new Date().toISOString(),
-              endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-            },
-            referralCode: session.user.user_metadata?.referralCode,
-            referredBy: session.user.user_metadata?.referredBy,
-          };
+          const user = createUserFromSession(session);
 
           setAuthState({
             user,
