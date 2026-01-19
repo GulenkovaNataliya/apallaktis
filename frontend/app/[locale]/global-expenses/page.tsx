@@ -626,12 +626,6 @@ function ExpenseForm({
       if (result.success && result.data) {
         const data = result.data;
 
-        // DEBUG: Photo auto-fill
-        console.log('=== PHOTO AUTO-FILL DEBUG ===');
-        console.log('LLM response data:', JSON.stringify(data, null, 2));
-        console.log('suggestedCategory:', data.suggestedCategory);
-        console.log('Available categories:', categories.map(c => ({ id: c.id, name: c.name })));
-        console.log('Available paymentMethods:', paymentMethods.map(p => ({ id: p.id, name: p.name, type: p.type })));
 
         // Автозаполнение формы
         setFormData(prev => ({
@@ -805,19 +799,9 @@ function ExpenseForm({
 
       const result = await response.json();
 
-      // Debug logging
-      console.log('Voice API response:', result);
-      console.log('Transcript:', transcript);
 
       if (result.success && result.data) {
         const data = result.data;
-        // DEBUG: Voice auto-fill
-        console.log('=== VOICE AUTO-FILL DEBUG ===');
-        console.log('LLM response data:', JSON.stringify(data, null, 2));
-        console.log('suggestedCategory:', data.suggestedCategory);
-        console.log('paymentMethod:', data.paymentMethod);
-        console.log('Available categories:', categories.map(c => ({ id: c.id, name: c.name })));
-        console.log('Available paymentMethods:', paymentMethods.map(p => ({ id: p.id, name: p.name, type: p.type })));
 
         // Автозаполнение формы - используем данные если они есть
         setFormData(prev => ({
@@ -933,7 +917,6 @@ function ExpenseForm({
             matchedCategory = categories.find(cat =>
               keywords.some(kw => cat.name.toLowerCase().includes(kw.toLowerCase()))
             );
-            console.log('Looking for category:', data.suggestedCategory, 'keywords:', keywords, 'found:', matchedCategory?.name);
           }
 
           // Если не нашли, ищем по имени из data.name
@@ -942,13 +925,11 @@ function ExpenseForm({
               cat.name.toLowerCase().includes(data.name.toLowerCase()) ||
               data.name.toLowerCase().includes(cat.name.toLowerCase())
             );
-            console.log('Looking by name:', data.name, 'found:', matchedCategory?.name);
           }
 
           // Если всё ещё не нашли, берем первую категорию
           if (!matchedCategory) {
             matchedCategory = categories[0];
-            console.log('Using first category:', matchedCategory?.name);
           }
 
           if (matchedCategory) {
@@ -961,8 +942,6 @@ function ExpenseForm({
           let matchedPayment: PaymentMethod | undefined;
 
           if (data.paymentMethod) {
-            console.log('AI suggested payment method:', data.paymentMethod);
-
             // Ищем по типу
             if (data.paymentMethod === 'card') {
               matchedPayment = paymentMethods.find(pm =>
@@ -1002,14 +981,11 @@ function ExpenseForm({
                 keywords.some(kw => pm.name.toLowerCase().includes(kw.toLowerCase()))
               );
             }
-
-            console.log('Found payment method:', matchedPayment?.name, matchedPayment?.type);
           }
 
           // Если AI не предложил или не нашли, берем первый способ оплаты
           if (!matchedPayment) {
             matchedPayment = paymentMethods[0];
-            console.log('Using first payment method:', matchedPayment?.name);
           }
 
           if (matchedPayment) {
@@ -1072,22 +1048,27 @@ function ExpenseForm({
     };
 
     recognition.onresult = (event: any) => {
-      let finalTranscript = '';
-      let interimTranscript = '';
+      // Используем event.resultIndex чтобы не дублировать результаты
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const result = event.results[i];
+        if (result.isFinal) {
+          // Добавляем только НОВЫЕ финальные результаты
+          transcriptRef.current += result[0].transcript + ' ';
+        }
+      }
 
+      // Собираем текущий interim для отображения
+      let interimTranscript = '';
       for (let i = 0; i < event.results.length; i++) {
-        if (event.results[i].isFinal) {
-          finalTranscript += event.results[i][0].transcript + ' ';
-        } else {
+        if (!event.results[i].isFinal) {
           interimTranscript += event.results[i][0].transcript;
         }
       }
 
-      transcriptRef.current = finalTranscript.trim();
-      // Показываем промежуточный текст в описании
+      // Показываем финальный + промежуточный текст
       setFormData(prev => ({
         ...prev,
-        description: (finalTranscript + interimTranscript).trim() || prev.description
+        description: (transcriptRef.current + interimTranscript).trim() || prev.description
       }));
     };
 
