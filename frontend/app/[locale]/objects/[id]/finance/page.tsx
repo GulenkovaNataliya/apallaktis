@@ -868,19 +868,29 @@ export default function ObjectFinancePage() {
   if (view === 'add-payment') {
     return (
       <BackgroundPage specialPage="objekt">
-        <div className="min-h-screen" style={{ paddingLeft: '38px', paddingRight: '38px', paddingTop: '40px', paddingBottom: '120px' }}>
-          <div style={{ marginTop: '120px', marginBottom: '24px' }}>
-            <button
-              onClick={() => setView('main')}
-              style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
-            >
-              {t.backToObject}
-            </button>
-          </div>
+        <div className="min-h-screen flex flex-col" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
 
-          <h1 className="text-2xl font-bold mb-6" style={{ color: 'var(--polar)' }}>
+          {/* Back - text, not a button */}
+          <p
+            onClick={() => setView('main')}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)', marginBottom: '48px' }}
+          >
+            {t.backToObject}
+          </p>
+
+          {/* Add Payment Button (title) */}
+          <button
+            type="button"
+            className="btn-universal w-full text-button"
+            style={{
+              minHeight: '52px',
+              backgroundColor: 'var(--polar)',
+              color: 'var(--deep-teal)',
+            }}
+          >
             {t.addPayment}
-          </h1>
+          </button>
 
           <AddPaymentForm
             objectId={objectId}
@@ -1042,12 +1052,57 @@ function AddPaymentForm({
   locale: Locale;
 }) {
   const t = messages[locale]?.finance || messages.el.finance;
+  const tPayments = messages[locale]?.paymentMethods || messages.el.paymentMethods;
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     amount: 0,
     paymentMethodId: paymentMethods.length > 0 ? paymentMethods[0].id : '',
     description: '',
   });
+  const [isRecording, setIsRecording] = useState(false);
+
+  const handleVoiceInput = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert(t.voiceInputNotSupported);
+      return;
+    }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = locale === 'el' ? 'el-GR' :
+                      locale === 'ru' ? 'ru-RU' :
+                      locale === 'uk' ? 'uk-UA' :
+                      locale === 'sq' ? 'sq-AL' :
+                      locale === 'bg' ? 'bg-BG' :
+                      locale === 'ro' ? 'ro-RO' :
+                      locale === 'ar' ? 'ar-SA' : 'en-US';
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setFormData({ ...formData, description: transcript });
+      setIsRecording(false);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error:', event.error);
+      setIsRecording(false);
+      alert(t.voiceInputFailed);
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+    };
+
+    recognition.start();
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -1065,35 +1120,78 @@ function AddPaymentForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" style={{ marginTop: '96px' }}>
+    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-12" style={{ marginTop: '48px' }}>
+      {/* Date Button */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <button
+          type="button"
+          className="btn-universal w-full text-button"
+          style={{
+            minHeight: '52px',
+            backgroundColor: 'transparent',
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+          }}
+        >
           {t.date}
-        </label>
+        </button>
         <input
           type="date"
           value={formData.date}
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           required
           className="w-full p-3 rounded-lg text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          style={{
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+            backgroundColor: 'transparent',
+            minHeight: '52px',
+            marginTop: '12px'
+          }}
         />
       </div>
 
+      {/* Payment Method Button */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <button
+          type="button"
+          className="btn-universal w-full text-button"
+          style={{
+            minHeight: '52px',
+            backgroundColor: 'transparent',
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+          }}
+        >
           {t.paymentMethod}
-        </label>
+        </button>
         {paymentMethods.length === 0 ? (
-          <p className="text-sm" style={{ color: 'var(--polar)', opacity: 0.7 }}>
-            {messages[locale]?.paymentMethods?.noMethods || 'No payment methods available'}
-          </p>
+          <Link
+            href={`/${locale}/payment-methods`}
+            className="block text-sm p-3 rounded-lg text-center"
+            style={{
+              color: 'var(--polar)',
+              backgroundColor: 'rgba(255,255,255,0.1)',
+              border: '2px dashed var(--polar)',
+              marginTop: '12px'
+            }}
+          >
+            {tPayments.noMethods} →
+          </Link>
         ) : (
           <select
             value={formData.paymentMethodId}
             onChange={(e) => setFormData({ ...formData, paymentMethodId: e.target.value })}
             className="w-full rounded-lg text-body"
-            style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px' }}
+            style={{
+              border: '2px solid var(--polar)',
+              color: 'var(--polar)',
+              backgroundColor: 'transparent',
+              minHeight: '52px',
+              padding: '12px',
+              fontSize: '18px',
+              marginTop: '12px'
+            }}
           >
             {paymentMethods.map((method) => (
               <option key={method.id} value={method.id} style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>
@@ -1104,10 +1202,20 @@ function AddPaymentForm({
         )}
       </div>
 
+      {/* Amount Button */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <button
+          type="button"
+          className="btn-universal w-full text-button"
+          style={{
+            minHeight: '52px',
+            backgroundColor: 'transparent',
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+          }}
+        >
           {t.amount}
-        </label>
+        </button>
         <input
           type="number"
           value={formData.amount || ''}
@@ -1116,37 +1224,70 @@ function AddPaymentForm({
           min="0"
           step="0.01"
           className="w-full p-3 rounded-lg text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          style={{
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+            backgroundColor: 'transparent',
+            minHeight: '52px',
+            marginTop: '12px'
+          }}
           placeholder="€"
         />
       </div>
 
+      {/* Description Button with Voice */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
-          {t.description}
-        </label>
+        <button
+          type="button"
+          onClick={handleVoiceInput}
+          disabled={isRecording}
+          className="btn-universal w-full text-button"
+          style={{
+            minHeight: '52px',
+            backgroundColor: isRecording ? '#ff6a1a' : 'var(--zanah)',
+            color: isRecording ? 'white' : 'var(--deep-teal)',
+          }}
+        >
+          🎤 {t.description} {isRecording ? '...' : ''}
+        </button>
         <textarea
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           className="w-full p-3 rounded-lg text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '104px' }}
+          style={{
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+            backgroundColor: 'transparent',
+            minHeight: '104px',
+            marginTop: '12px'
+          }}
           rows={3}
+          placeholder={isRecording ? 'Listening...' : ''}
         />
       </div>
 
-      <div className="flex gap-4 mt-4">
+      {/* Action Buttons */}
+      <div className="flex gap-4">
         <button
           type="button"
           onClick={onCancel}
-          className="btn-universal flex-1"
-          style={{ minHeight: '52px', backgroundColor: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
+          className="btn-universal flex-1 text-button"
+          style={{
+            minHeight: '52px',
+            backgroundColor: 'var(--polar)',
+            color: 'var(--deep-teal)'
+          }}
         >
           {t.cancel}
         </button>
         <button
           type="submit"
-          className="btn-universal flex-1"
-          style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', fontSize: '18px', fontWeight: 600 }}
+          className="btn-universal flex-1 text-button"
+          style={{
+            minHeight: '52px',
+            backgroundColor: 'var(--zanah)',
+            color: 'var(--deep-teal)'
+          }}
           disabled={paymentMethods.length === 0}
         >
           {t.save}

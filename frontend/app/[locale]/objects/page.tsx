@@ -165,29 +165,24 @@ export default function ObjectsPage() {
   if (view === 'list') {
     return (
       <BackgroundPage specialPage="objekt">
-        <div className="min-h-screen flex flex-col items-center px-4" style={{ paddingTop: '40px', paddingBottom: '120px' }}>
-          <div className="w-full max-w-sm">
+        <div className="min-h-screen flex flex-col" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
 
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6" style={{ marginTop: '120px' }}>
-            <button
-              onClick={() => router.push(`/${locale}/page-pay`)}
-              className="btn-universal text-button"
-              style={{ minHeight: '44px', padding: '8px 16px' }}
-            >
-              {t.backToDashboard}
-            </button>
-          </div>
+          {/* Back - just text, not a button */}
+          <p
+            onClick={() => router.push(`/${locale}/page-pay`)}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)', marginBottom: '48px' }}
+          >
+            {t.backToDashboard}
+          </p>
 
-          <h1 className="text-2xl font-bold mb-8 text-center" style={{ color: 'var(--polar)' }}>
-            {t.title}
-          </h1>
+          {/* Buttons */}
+          <div className="w-full flex flex-col gap-12">
 
-          {/* Filter Toggle */}
-          <div className="flex gap-4" style={{ marginTop: '48px', marginBottom: '48px' }}>
+            {/* Filter: Open */}
             <button
               onClick={() => setFilter('open')}
-              className="btn-universal flex-1 text-button"
+              className="btn-universal w-full text-button"
               style={{
                 minHeight: '52px',
                 backgroundColor: filter === 'open' ? 'var(--polar)' : 'transparent',
@@ -197,9 +192,11 @@ export default function ObjectsPage() {
             >
               {t.filterOpen}
             </button>
+
+            {/* Filter: Closed */}
             <button
               onClick={() => setFilter('closed')}
-              className="btn-universal flex-1 text-button"
+              className="btn-universal w-full text-button"
               style={{
                 minHeight: '52px',
                 backgroundColor: filter === 'closed' ? 'var(--zanah)' : 'transparent',
@@ -209,29 +206,36 @@ export default function ObjectsPage() {
             >
               {t.filterClosed}
             </button>
+
+            {/* Add Object Button */}
+            <button
+              onClick={handleAddObjectClick}
+              className="btn-universal w-full text-button"
+              style={{ minHeight: '52px' }}
+            >
+              {t.addNew}
+              {isDemo && objects.length >= 2 && (
+                <span className="text-small" style={{ marginLeft: '8px', opacity: 0.8 }}>
+                  ({objects.length}/3)
+                </span>
+              )}
+            </button>
+
+            {/* No Objects Message - orange button, only when no objects */}
+            {objects.length === 0 && (
+              <button
+                className="btn-universal w-full text-button"
+                style={{ minHeight: '52px', backgroundColor: 'var(--orange)', color: 'white' }}
+              >
+                {t.noObjects}
+              </button>
+            )}
+
           </div>
 
-          {/* Add Object Button */}
-          <button
-            onClick={handleAddObjectClick}
-            className="btn-universal w-full text-button"
-            style={{ minHeight: '52px', marginBottom: '48px' }}
-          >
-            {t.addNew}
-            {isDemo && objects.length >= 2 && (
-              <span className="text-small" style={{ marginLeft: '8px', opacity: 0.8 }}>
-                ({objects.length}/3)
-              </span>
-            )}
-          </button>
-
           {/* Objects Carousel */}
-          <div className="flex-1" style={{ marginTop: '52px' }}>
-            {filteredObjects.length === 0 ? (
-              <p className="text-center text-body" style={{ color: 'var(--polar)', opacity: 0.9 }}>
-                {t.noObjects}
-              </p>
-            ) : (
+          <div className="flex-1" style={{ marginTop: '48px' }}>
+            {filteredObjects.length > 0 && (
               <ObjectCarousel
                 objects={filteredObjects}
                 onObjectClick={(object) => {
@@ -250,7 +254,6 @@ export default function ObjectsPage() {
                 priceLabel={t.contractPrice}
               />
             )}
-          </div>
           </div>
         </div>
       </BackgroundPage>
