@@ -27,7 +27,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const loadAuthState = async () => {
       try {
         // Get current session from Supabase
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        console.log('Auth context - getSession result:', {
+          hasSession: !!session,
+          userId: session?.user?.id,
+          email: session?.user?.email,
+          error: error?.message
+        });
 
         if (session?.user) {
           const user: User = {

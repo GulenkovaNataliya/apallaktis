@@ -33,7 +33,14 @@ export default function PaymentMethodsPage() {
   const router = useRouter();
   const locale = (params.locale as Locale) || 'el';
   const t = messages[locale]?.paymentMethods || messages.el.paymentMethods;
-  const { user } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
+
+  // Debug
+  console.log('PaymentMethods - auth state:', {
+    userId: user?.id,
+    authLoading,
+    hasUser: !!user
+  });
 
   const [methods, setMethods] = useState<PaymentMethod[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -144,14 +151,14 @@ export default function PaymentMethodsPage() {
     );
   }
 
-  // Loading state
-  if (isLoading) {
+  // Loading state (wait for both auth and data)
+  if (authLoading || isLoading) {
     return (
       <BackgroundPage pageIndex={3}>
         <div className="min-h-screen flex flex-col items-center justify-center">
           <div className="text-center" style={{ color: 'var(--polar)' }}>
             <div className="text-2xl mb-2">⏳</div>
-            <p>Loading...</p>
+            <p>Loading... {authLoading ? '(auth)' : '(data)'}</p>
           </div>
         </div>
       </BackgroundPage>
