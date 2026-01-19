@@ -416,13 +416,15 @@ function ObjectForm({
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full rounded-2xl text-button"
           style={{
             border: '2px solid var(--polar)',
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            marginTop: '12px'
+            marginTop: '12px',
+            paddingLeft: '40px',
+            paddingRight: '40px'
           }}
           placeholder={t.name || 'Όνομα'}
         />
@@ -445,13 +447,15 @@ function ObjectForm({
           type="text"
           value={formData.address}
           onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full rounded-2xl text-button"
           style={{
             border: '2px solid var(--polar)',
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            marginTop: '12px'
+            marginTop: '12px',
+            paddingLeft: '40px',
+            paddingRight: '40px'
           }}
           placeholder={t.address}
         />
@@ -474,13 +478,15 @@ function ObjectForm({
           type="text"
           value={formData.clientName}
           onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full rounded-2xl text-button"
           style={{
             border: '2px solid var(--polar)',
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            marginTop: '12px'
+            marginTop: '12px',
+            paddingLeft: '40px',
+            paddingRight: '40px'
           }}
           placeholder={t.client}
         />
@@ -503,13 +509,15 @@ function ObjectForm({
           type="text"
           value={formData.clientContact}
           onChange={(e) => setFormData({ ...formData, clientContact: e.target.value })}
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full rounded-2xl text-button"
           style={{
             border: '2px solid var(--polar)',
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            marginTop: '12px'
+            marginTop: '12px',
+            paddingLeft: '40px',
+            paddingRight: '40px'
           }}
           placeholder={t.clientContact || 'Τηλέφωνο'}
         />
@@ -535,13 +543,15 @@ function ObjectForm({
           required
           min="0"
           step="0.01"
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full rounded-2xl text-button"
           style={{
             border: '2px solid var(--polar)',
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            marginTop: '12px'
+            marginTop: '12px',
+            paddingLeft: '40px',
+            paddingRight: '40px'
           }}
           placeholder="€"
         />
@@ -563,14 +573,14 @@ function ObjectForm({
         <select
           value={formData.status}
           onChange={(e) => setFormData({ ...formData, status: e.target.value as ObjectStatus })}
-          className="w-full rounded-lg text-body"
+          className="w-full rounded-2xl text-button"
           style={{
             border: '2px solid var(--polar)',
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            padding: '12px',
-            fontSize: '18px',
+            paddingLeft: '40px',
+            paddingRight: '40px',
             marginTop: '12px'
           }}
         >

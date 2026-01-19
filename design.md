@@ -714,3 +714,94 @@ shadow-color == text-color
 - `/[locale]/objects/[id]/finance` — добавление оплаты, расхода, доп. работы
 - `/[locale]/global-expenses` — все view
 - Все страницы с формами добавления/редактирования
+
+---
+
+## 17. ФОРМА ОБЪЕКТА (Object Form)
+
+### Структура формы
+
+Форма добавления/редактирования объекта следует закону кнопок.
+
+**Структура каждого поля:**
+```
+[Кнопка-заголовок (label)]
+[Поле ввода (input)]
+```
+
+### Кнопки-заголовки (Labels)
+
+| Параметр | Значение |
+|----------|----------|
+| элемент | `<button type="button">` |
+| className | `btn-universal w-full text-button` |
+| backgroundColor | `var(--polar)` |
+| color | `var(--deep-teal)` |
+| minHeight | `52px` |
+
+### Поля ввода (Inputs)
+
+| Параметр | Значение |
+|----------|----------|
+| className | `w-full rounded-2xl text-button` |
+| border | `2px solid var(--polar)` |
+| color | `var(--polar)` |
+| backgroundColor | `transparent` |
+| minHeight | `52px` |
+| paddingLeft | `40px` |
+| paddingRight | `40px` |
+| marginTop | `12px` (от кнопки-заголовка) |
+
+### Gap между полями
+
+| Параметр | Значение |
+|----------|----------|
+| gap между группами полей | `48px` (gap-12) |
+| marginTop input от label | `12px` |
+
+### Код
+
+```jsx
+<form className="w-full flex flex-col gap-12" style={{ marginTop: '48px' }}>
+  {/* Каждое поле */}
+  <div>
+    <button
+      type="button"
+      className="btn-universal w-full text-button"
+      style={{
+        minHeight: '52px',
+        backgroundColor: 'var(--polar)',
+        color: 'var(--deep-teal)',
+      }}
+    >
+      {t.fieldLabel}
+    </button>
+    <input
+      className="w-full rounded-2xl text-button"
+      style={{
+        border: '2px solid var(--polar)',
+        color: 'var(--polar)',
+        backgroundColor: 'transparent',
+        minHeight: '52px',
+        marginTop: '12px',
+        paddingLeft: '40px',
+        paddingRight: '40px'
+      }}
+    />
+  </div>
+</form>
+```
+
+### Кнопки действий (Отмена/Сохранить)
+
+| Кнопка | Фон | Цвет текста |
+|--------|-----|-------------|
+| Отмена | `var(--polar)` | `var(--deep-teal)` |
+| Сохранить | `var(--zanah)` | `var(--deep-teal)` |
+
+Располагаются в ряд с `gap-4` между ними.
+
+### Применяется на:
+
+- `/[locale]/objects` — форма добавления/редактирования объекта
+- `/[locale]/objects/[id]/finance` — формы добавления оплаты, расхода, доп. работы
