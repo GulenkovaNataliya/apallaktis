@@ -95,20 +95,26 @@ export async function createObject(
 ): Promise<PropertyObject> {
   const supabase = createClient();
 
+  const insertData = {
+    user_id: userId,
+    name: input.name,
+    address: input.address || null,
+    client_name: input.client_name || null,
+    client_contact: input.client_contact || null,
+    contract_price: input.contract_price || 0,
+    status: input.status || 'open',
+    color: input.color || null,
+  };
+
+  console.log('createObject - inserting:', insertData);
+
   const { data, error } = await supabase
     .from('objects')
-    .insert({
-      user_id: userId,
-      name: input.name,
-      address: input.address || null,
-      client_name: input.client_name || null,
-      client_contact: input.client_contact || null,
-      contract_price: input.contract_price || 0,
-      status: input.status || 'open',
-      color: input.color || null,
-    })
+    .insert(insertData)
     .select()
     .single();
+
+  console.log('createObject - result:', { data, error });
 
   if (error) {
     console.error('Error creating object:', error);

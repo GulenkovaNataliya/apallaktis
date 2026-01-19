@@ -42,7 +42,14 @@ export default function ObjectsPage() {
   const locale = (params.locale as Locale) || 'el';
   const t = messages[locale]?.objects || messages.el.objects;
   const tDemo = messages[locale]?.demoExpired || messages.el.demoExpired;
-  const { user } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
+
+  // Debug
+  console.log('ObjectsPage - auth state:', {
+    userId: user?.id,
+    authLoading,
+    hasUser: !!user
+  });
 
   // Objects state
   const [objects, setObjects] = useState<PropertyObject[]>([]);
@@ -342,12 +349,21 @@ function ObjectForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userId) return;
+
+    console.log('ObjectForm handleSubmit called, userId:', userId);
+
+    if (!userId) {
+      console.error('No userId provided!');
+      alert('Error: User not authenticated. Please log in again.');
+      return;
+    }
 
     setIsSaving(true);
 
     try {
       let savedObject: PropertyObject;
+
+      console.log('Saving object...', { formData, userId, isEdit: !!object?.id });
 
       if (object?.id) {
         // Обновление существующего
@@ -359,6 +375,7 @@ function ObjectForm({
           contract_price: formData.contractPrice,
           status: formData.status,
         });
+        console.log('Updated:', updated);
         savedObject = toLocalObject(updated);
       } else {
         // Создание нового
@@ -370,13 +387,15 @@ function ObjectForm({
           contract_price: formData.contractPrice,
           status: formData.status,
         });
+        console.log('Created:', created);
         savedObject = toLocalObject(created);
       }
 
+      console.log('Saved successfully:', savedObject);
       onSave(savedObject);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving object:', error);
-      alert('Failed to save object');
+      alert(`Failed to save object: ${error?.message || error}`);
     } finally {
       setIsSaving(false);
     }
