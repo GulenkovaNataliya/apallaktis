@@ -679,13 +679,13 @@ function ExpenseForm({
             // === СТАНДАРТНЫЕ КАТЕГОРИИ ===
             groceries: [
               'grocery', 'food', 'supermarket', 'shop', 'store',
-              'τρόφιμ', 'σούπερ', 'μαγαζί', 'σκλαβενίτ', 'λιδλ',
-              'продукт', 'еда', 'магазин', 'супермаркет', 'лидл', 'покупк',
-              'продукт', 'їжа', 'магазин', 'супермаркет',
-              'храна', 'магазин', 'супермаркет', 'продукт',
-              'aliment', 'mâncare', 'magazin', 'supermarket',
+              'τρόφιμ', 'σούπερ', 'μαγαζί', 'σκλαβενίτ', 'λιδλ', 'φαγητ',
+              'продукт', 'еда', 'магазин', 'супермаркет', 'лидл', 'покупк', 'питан', 'питание',
+              'продукт', 'їжа', 'їж', 'магазин', 'супермаркет',
+              'храна', 'хран', 'магазин', 'супермаркет', 'продукт',
+              'aliment', 'mâncare', 'mâncar', 'magazin', 'supermarket',
               'ushqim', 'dyqan', 'supermarket',
-              'طعام', 'بقالة', 'سوبرماركت', 'متجر'
+              'طعام', 'بقالة', 'سوبرماركت', 'متجر', 'غذاء'
             ],
             transport: [
               'transport', 'fuel', 'gas', 'parking', 'taxi', 'bus', 'metro', 'petrol', 'diesel',
@@ -796,9 +796,6 @@ function ExpenseForm({
     setIsAnalyzing(true);
     setAnalyzeError(null);
 
-    // DEBUG: Показываем что отправляем на API
-    alert(`Отправляем на API:\nТекст: "${transcript}"\nЯзык: ${locale}`);
-
     try {
       const response = await fetch('/api/analyze-voice', {
         method: 'POST',
@@ -807,9 +804,6 @@ function ExpenseForm({
       });
 
       const result = await response.json();
-
-      // DEBUG: Показываем сырой ответ от API
-      alert(`API ответ:\n${JSON.stringify(result, null, 2)}`);
 
       // Debug logging
       console.log('Voice API response:', result);
@@ -824,9 +818,6 @@ function ExpenseForm({
         console.log('paymentMethod:', data.paymentMethod);
         console.log('Available categories:', categories.map(c => ({ id: c.id, name: c.name })));
         console.log('Available paymentMethods:', paymentMethods.map(p => ({ id: p.id, name: p.name, type: p.type })));
-
-        // DEBUG: Показываем что вернул AI
-        alert(`AI вернул:\nНазвание: ${data.name}\nСумма: ${data.amount}\nДата: ${data.date}\nКатегория: ${data.suggestedCategory}\nОплата: ${data.paymentMethod}`);
 
         // Автозаполнение формы - используем данные если они есть
         setFormData(prev => ({
@@ -874,13 +865,13 @@ function ExpenseForm({
             // === СТАНДАРТНЫЕ КАТЕГОРИИ ===
             groceries: [
               'grocery', 'food', 'supermarket', 'shop', 'store',
-              'τρόφιμ', 'σούπερ', 'μαγαζί', 'σκλαβενίτ', 'λιδλ',
-              'продукт', 'еда', 'магазин', 'супермаркет', 'лидл', 'покупк',
-              'продукт', 'їжа', 'магазин', 'супермаркет',
-              'храна', 'магазин', 'супермаркет', 'продукт',
-              'aliment', 'mâncare', 'magazin', 'supermarket',
+              'τρόφιμ', 'σούπερ', 'μαγαζί', 'σκλαβενίτ', 'λιδλ', 'φαγητ',
+              'продукт', 'еда', 'магазин', 'супермаркет', 'лидл', 'покупк', 'питан', 'питание',
+              'продукт', 'їжа', 'їж', 'магазин', 'супермаркет',
+              'храна', 'хран', 'магазин', 'супермаркет', 'продукт',
+              'aliment', 'mâncare', 'mâncar', 'magazin', 'supermarket',
               'ushqim', 'dyqan', 'supermarket',
-              'طعام', 'بقالة', 'سوبرماركت', 'متجر'
+              'طعام', 'بقالة', 'سوبرماركت', 'متجر', 'غذاء'
             ],
             transport: [
               'transport', 'fuel', 'gas', 'parking', 'taxi', 'bus', 'metro', 'petrol', 'diesel',
@@ -1034,8 +1025,6 @@ function ExpenseForm({
       }
     } catch (error) {
       console.error('Voice analyze error:', error);
-      // DEBUG: Показываем ошибку
-      alert(`ОШИБКА API:\n${error instanceof Error ? error.message : String(error)}`);
       // Если ошибка, просто записываем текст в описание
       setFormData(prev => ({ ...prev, description: transcript }));
       setAnalyzeError('Ошибка при анализе голоса');
