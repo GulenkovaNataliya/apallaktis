@@ -974,6 +974,24 @@ shadow-color == text-color
 | backgroundColor | `transparent` |
 | color | `var(--polar)` |
 
+### Исключение: Карточки с 3 частями
+
+Для карточек с 3 частями (описание + редактировать + удалить) используется меньший отступ:
+
+```jsx
+<div className="flex-1" style={{ paddingLeft: '6px' }}>
+  {/* Описание */}
+</div>
+<div className="flex gap-2">
+  <button>{t.edit}</button>
+  <button>{t.delete}</button>
+</div>
+```
+
+| Параметр | Значение |
+|----------|----------|
+| paddingLeft | `6px` (вместо 12px) |
+
 ### Применяется на:
 
 - `/[locale]/login` — поля email, password
@@ -1021,7 +1039,9 @@ shadow-color == text-color
 | элемент | `<p>` |
 | className | `text-button cursor-pointer` |
 | color | `var(--polar)` |
-| marginBottom | `48px` |
+| marginBottom | `48px` если контейнер БЕЗ gap-12, иначе НЕ нужен |
+
+**ВАЖНО:** Если контейнер имеет `gap-12`, НЕ добавляйте `marginBottom` — это создаст двойной отступ (96px).
 
 ### Применяется на:
 

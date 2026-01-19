@@ -229,7 +229,7 @@ export default function GlobalExpensesPage() {
                     style={{ backgroundColor: 'var(--polar)' }}
                   >
                     <div className="flex items-start justify-between mb-3">
-                      <div className="flex-1" style={{ paddingLeft: '30px' }}>
+                      <div className="flex-1" style={{ paddingLeft: '6px' }}>
                         <p className="text-button" style={{ color: 'var(--deep-teal)' }}>
                           {expense.name}
                         </p>
@@ -288,7 +288,7 @@ export default function GlobalExpensesPage() {
                       </div>
                     </div>
                     {expense.receiptPhotoUrl && (
-                      <div className="mt-2" style={{ paddingLeft: '30px' }}>
+                      <div className="mt-2" style={{ paddingLeft: '6px' }}>
                         <img
                           src={expense.receiptPhotoUrl}
                           alt="Receipt"
@@ -315,15 +315,14 @@ export default function GlobalExpensesPage() {
         <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
           <div className="w-full flex flex-col flex-1 gap-12">
 
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => setView('expenses')}
-              style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
-            >
-              {t.backToExpenses}
-            </button>
-          </div>
+          {/* Back - phrase, not a button */}
+          <p
+            onClick={() => setView('expenses')}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)' }}
+          >
+            {t.backToExpenses}
+          </p>
 
           <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
             {t.manageCategories}
@@ -397,7 +396,7 @@ export default function GlobalExpensesPage() {
               setEditingCategory(null);
             }}
             className="text-button cursor-pointer"
-            style={{ color: 'var(--polar)', marginBottom: '48px' }}
+            style={{ color: 'var(--polar)' }}
           >
             {t.backToExpenses}
           </p>
@@ -444,7 +443,7 @@ export default function GlobalExpensesPage() {
               setEditingExpense(null);
             }}
             className="text-button cursor-pointer"
-            style={{ color: 'var(--polar)', marginBottom: '48px' }}
+            style={{ color: 'var(--polar)' }}
           >
             {t.backToExpenses}
           </p>

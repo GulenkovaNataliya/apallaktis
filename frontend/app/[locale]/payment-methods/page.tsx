@@ -35,12 +35,6 @@ export default function PaymentMethodsPage() {
   const t = messages[locale]?.paymentMethods || messages.el.paymentMethods;
   const { user, isLoading: authLoading } = useAuth();
 
-  // Debug
-  console.log('PaymentMethods - auth state:', {
-    userId: user?.id,
-    authLoading,
-    hasUser: !!user
-  });
 
   const [methods, setMethods] = useState<PaymentMethod[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -110,19 +104,17 @@ export default function PaymentMethodsPage() {
         <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '40px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
           <div className="w-full">
 
-          {/* Back Button */}
-          <div style={{ marginTop: '120px', marginBottom: '24px' }}>
-            <button
-              onClick={() => {
-                setShowForm(false);
-                setEditingMethod(null);
-              }}
-              className="text-button"
-              style={{ color: 'var(--polar)', fontSize: '18px' }}
-            >
-              {t.backToPayPage}
-            </button>
-          </div>
+          {/* Back - phrase, not a button */}
+          <p
+            onClick={() => {
+              setShowForm(false);
+              setEditingMethod(null);
+            }}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)', marginTop: '120px' }}
+          >
+            {t.backToPayPage}
+          </p>
 
           <h1 className="text-2xl font-bold mb-6 text-center" style={{ color: 'var(--polar)' }}>
             {editingMethod ? t.edit : t.addNew}
@@ -170,15 +162,14 @@ export default function PaymentMethodsPage() {
       <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
         <div className="w-full flex flex-col flex-1 gap-12">
 
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <button
-            onClick={() => router.push(`/${locale}/page-pay`)}
-            style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
-          >
-            {t.backToPayPage}
-          </button>
-        </div>
+        {/* Back - phrase, not a button */}
+        <p
+          onClick={() => router.push(`/${locale}/page-pay`)}
+          className="text-button cursor-pointer"
+          style={{ color: 'var(--polar)' }}
+        >
+          {t.backToPayPage}
+        </p>
 
         <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
           {t.title}
@@ -264,10 +255,7 @@ function PaymentMethodForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log('handleSubmit called, userId:', userId);
-
     if (!userId) {
-      console.error('No userId provided!');
       alert('Error: User not authenticated. Please log in again.');
       return;
     }
@@ -276,8 +264,6 @@ function PaymentMethodForm({
 
     try {
       let savedMethod: PaymentMethod;
-
-      console.log('Saving payment method...', { formData, userId });
 
       if (method?.id) {
         // Обновление существующего
@@ -296,11 +282,9 @@ function PaymentMethodForm({
           last_four_digits: formData.lastFourDigits || undefined,
           iban: formData.iban || undefined,
         });
-        console.log('Created:', created);
         savedMethod = toLocalPaymentMethod(created);
       }
 
-      console.log('Saved successfully:', savedMethod);
       onSave(savedMethod);
     } catch (error: any) {
       console.error('Error saving payment method:', error);
@@ -314,7 +298,7 @@ function PaymentMethodForm({
   const showIban = formData.type === 'bank_account';
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" style={{ marginTop: '40px' }}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-12" style={{ marginTop: '48px' }}>
       {/* Type Select */}
       <div>
         <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '20px' }}>
@@ -323,7 +307,7 @@ function PaymentMethodForm({
         <select
           value={formData.type}
           onChange={(e) => setFormData({ ...formData, type: e.target.value as PaymentMethodType })}
-          className="w-full rounded-lg text-body"
+          className="w-full rounded-2xl text-body"
           style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px' }}
         >
           <option value="cash" style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>{t.types.cash}</option>
@@ -344,8 +328,8 @@ function PaymentMethodForm({
           onChange={(e) => setFormData({ ...formData, name: e.target.value.slice(0, 8) })}
           maxLength={8}
           required
-          className="w-full p-3 rounded-lg text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          className="w-full rounded-2xl text-body"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px' }}
           placeholder={t.name}
         />
       </div>
@@ -361,8 +345,8 @@ function PaymentMethodForm({
             value={formData.lastFourDigits}
             onChange={(e) => setFormData({ ...formData, lastFourDigits: e.target.value.replace(/\D/g, '').slice(0, 4) })}
             maxLength={4}
-            className="w-full p-3 rounded-lg text-body"
-            style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+            className="w-full rounded-2xl text-body"
+            style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px' }}
             placeholder="1234"
           />
         </div>
@@ -378,8 +362,8 @@ function PaymentMethodForm({
             type="text"
             value={formData.iban}
             onChange={(e) => setFormData({ ...formData, iban: e.target.value.toUpperCase() })}
-            className="w-full p-3 rounded-lg text-body"
-            style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+            className="w-full rounded-2xl text-body"
+            style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px' }}
             placeholder="GR1234567890123456789012345"
           />
         </div>
