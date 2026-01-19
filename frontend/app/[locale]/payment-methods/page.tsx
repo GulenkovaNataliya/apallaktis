@@ -256,12 +256,21 @@ function PaymentMethodForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userId) return;
+
+    console.log('handleSubmit called, userId:', userId);
+
+    if (!userId) {
+      console.error('No userId provided!');
+      alert('Error: User not authenticated. Please log in again.');
+      return;
+    }
 
     setIsSaving(true);
 
     try {
       let savedMethod: PaymentMethod;
+
+      console.log('Saving payment method...', { formData, userId });
 
       if (method?.id) {
         // Обновление существующего
@@ -280,13 +289,15 @@ function PaymentMethodForm({
           last_four_digits: formData.lastFourDigits || undefined,
           iban: formData.iban || undefined,
         });
+        console.log('Created:', created);
         savedMethod = toLocalPaymentMethod(created);
       }
 
+      console.log('Saved successfully:', savedMethod);
       onSave(savedMethod);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving payment method:', error);
-      alert('Failed to save payment method');
+      alert(`Failed to save: ${error?.message || error}`);
     } finally {
       setIsSaving(false);
     }
