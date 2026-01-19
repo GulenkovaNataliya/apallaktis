@@ -222,11 +222,6 @@ export default function ObjectsPage() {
               style={{ minHeight: '52px' }}
             >
               {t.addNew}
-              {isDemo && objects.length >= 2 && (
-                <span className="text-small" style={{ marginLeft: '8px', opacity: 0.8 }}>
-                  ({objects.length}/3)
-                </span>
-              )}
             </button>
 
             {/* No Objects Message - text only, follows button law */}
@@ -410,9 +405,8 @@ function ObjectForm({
           className="btn-universal w-full text-button"
           style={{
             minHeight: '52px',
-            backgroundColor: 'transparent',
-            border: '2px solid var(--polar)',
-            color: 'var(--polar)',
+            backgroundColor: 'var(--polar)',
+            color: 'var(--deep-teal)',
           }}
         >
           {t.name || 'Όνομα'}
@@ -441,9 +435,8 @@ function ObjectForm({
           className="btn-universal w-full text-button"
           style={{
             minHeight: '52px',
-            backgroundColor: 'transparent',
-            border: '2px solid var(--polar)',
-            color: 'var(--polar)',
+            backgroundColor: 'var(--polar)',
+            color: 'var(--deep-teal)',
           }}
         >
           {t.address}
@@ -471,9 +464,8 @@ function ObjectForm({
           className="btn-universal w-full text-button"
           style={{
             minHeight: '52px',
-            backgroundColor: 'transparent',
-            border: '2px solid var(--polar)',
-            color: 'var(--polar)',
+            backgroundColor: 'var(--polar)',
+            color: 'var(--deep-teal)',
           }}
         >
           {t.client}
@@ -501,9 +493,8 @@ function ObjectForm({
           className="btn-universal w-full text-button"
           style={{
             minHeight: '52px',
-            backgroundColor: 'transparent',
-            border: '2px solid var(--polar)',
-            color: 'var(--polar)',
+            backgroundColor: 'var(--polar)',
+            color: 'var(--deep-teal)',
           }}
         >
           {t.clientContact || 'Τηλέφωνο Πελάτη'}
@@ -531,9 +522,8 @@ function ObjectForm({
           className="btn-universal w-full text-button"
           style={{
             minHeight: '52px',
-            backgroundColor: 'transparent',
-            border: '2px solid var(--polar)',
-            color: 'var(--polar)',
+            backgroundColor: 'var(--polar)',
+            color: 'var(--deep-teal)',
           }}
         >
           {t.contractPrice}
@@ -564,9 +554,8 @@ function ObjectForm({
           className="btn-universal w-full text-button"
           style={{
             minHeight: '52px',
-            backgroundColor: 'transparent',
-            border: '2px solid var(--polar)',
-            color: 'var(--polar)',
+            backgroundColor: 'var(--polar)',
+            color: 'var(--deep-teal)',
           }}
         >
           {t.status}
