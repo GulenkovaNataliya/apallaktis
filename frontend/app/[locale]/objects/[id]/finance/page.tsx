@@ -838,13 +838,13 @@ export default function ObjectFinancePage() {
   if (view === 'add-work') {
     return (
       <BackgroundPage specialPage="objekt">
-        <div className="min-h-screen flex flex-col" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
+        <div className="min-h-screen flex flex-col gap-12" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
 
           {/* Back - text, not a button */}
           <p
             onClick={() => setView('main')}
             className="text-button cursor-pointer"
-            style={{ color: 'var(--polar)', marginBottom: '48px' }}
+            style={{ color: 'var(--polar)' }}
           >
             {t.backToObject}
           </p>
@@ -877,13 +877,13 @@ export default function ObjectFinancePage() {
   if (view === 'add-payment') {
     return (
       <BackgroundPage specialPage="objekt">
-        <div className="min-h-screen flex flex-col" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
+        <div className="min-h-screen flex flex-col gap-12" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
 
           {/* Back - text, not a button */}
           <p
             onClick={() => setView('main')}
             className="text-button cursor-pointer"
-            style={{ color: 'var(--polar)', marginBottom: '48px' }}
+            style={{ color: 'var(--polar)' }}
           >
             {t.backToObject}
           </p>
@@ -1023,7 +1023,7 @@ function AddWorkForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-12" style={{ marginTop: '48px' }}>
+    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-12">
       {/* Date Button */}
       <div>
         <button
@@ -1043,13 +1043,14 @@ function AddWorkForm({
           value={formData.date}
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           required
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full rounded-2xl text-body"
           style={{
             border: '2px solid var(--polar)',
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            marginTop: '12px'
+            marginTop: '12px',
+            padding: '12px'
           }}
         />
       </div>
@@ -1075,13 +1076,14 @@ function AddWorkForm({
           required
           min="0"
           step="0.01"
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full rounded-2xl text-body"
           style={{
             border: '2px solid var(--polar)',
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            marginTop: '12px'
+            marginTop: '12px',
+            padding: '12px'
           }}
           placeholder="€"
         />
@@ -1106,13 +1108,14 @@ function AddWorkForm({
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full rounded-2xl text-body"
           style={{
             border: '2px solid var(--polar)',
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '104px',
-            marginTop: '12px'
+            marginTop: '12px',
+            padding: '12px'
           }}
           rows={3}
           placeholder={isRecording ? 'Listening...' : ''}
@@ -1232,7 +1235,7 @@ function AddPaymentForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-12" style={{ marginTop: '48px' }}>
+    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-12">
       {/* Date Button */}
       <div>
         <button
@@ -1252,13 +1255,14 @@ function AddPaymentForm({
           value={formData.date}
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           required
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full rounded-2xl text-body"
           style={{
             border: '2px solid var(--polar)',
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            marginTop: '12px'
+            marginTop: '12px',
+            padding: '12px'
           }}
         />
       </div>
@@ -1294,7 +1298,7 @@ function AddPaymentForm({
           <select
             value={formData.paymentMethodId}
             onChange={(e) => setFormData({ ...formData, paymentMethodId: e.target.value })}
-            className="w-full rounded-lg text-body"
+            className="w-full rounded-2xl text-body"
             style={{
               border: '2px solid var(--polar)',
               color: 'var(--polar)',
@@ -1335,13 +1339,14 @@ function AddPaymentForm({
           required
           min="0"
           step="0.01"
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full rounded-2xl text-body"
           style={{
             border: '2px solid var(--polar)',
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            marginTop: '12px'
+            marginTop: '12px',
+            padding: '12px'
           }}
           placeholder="€"
         />
@@ -1365,13 +1370,14 @@ function AddPaymentForm({
         <textarea
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          className="w-full p-3 rounded-lg text-body"
+          className="w-full rounded-2xl text-body"
           style={{
             border: '2px solid var(--polar)',
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '104px',
-            marginTop: '12px'
+            marginTop: '12px',
+            padding: '12px'
           }}
           rows={3}
           placeholder={isRecording ? 'Listening...' : ''}
@@ -1567,7 +1573,7 @@ function AddExpenseForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" style={{ marginTop: '96px' }}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-12" style={{ marginTop: '96px' }}>
       {/* Category Selection */}
       <div>
         <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
@@ -1585,7 +1591,7 @@ function AddExpenseForm({
               <select
                 value={formData.categoryId}
                 onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                className="flex-1 rounded-lg text-body"
+                className="flex-1 rounded-2xl text-body"
                 style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px' }}
               >
                 {categories.map((category) => (
@@ -1611,8 +1617,8 @@ function AddExpenseForm({
               value={newCategoryName}
               onChange={(e) => setNewCategoryName(e.target.value)}
               placeholder={t.createNewCategory}
-              className="flex-1 p-3 rounded-lg text-body"
-              style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+              className="flex-1 rounded-2xl text-body"
+              style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px' }}
             />
             <button
               type="button"
@@ -1654,7 +1660,7 @@ function AddExpenseForm({
           <select
             value={formData.paymentMethodId}
             onChange={(e) => setFormData({ ...formData, paymentMethodId: e.target.value })}
-            className="w-full rounded-lg text-body"
+            className="w-full rounded-2xl text-body"
             style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px' }}
           >
             {paymentMethods.map((method) => (
@@ -1676,8 +1682,8 @@ function AddExpenseForm({
           value={formData.date}
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           required
-          className="w-full p-3 rounded-lg text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          className="w-full rounded-2xl text-body"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px' }}
         />
       </div>
 
@@ -1693,8 +1699,8 @@ function AddExpenseForm({
           required
           min="0"
           step="0.01"
-          className="w-full p-3 rounded-lg text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          className="w-full rounded-2xl text-body"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px' }}
           placeholder="€"
         />
       </div>
@@ -1726,8 +1732,8 @@ function AddExpenseForm({
             setFormData({ ...formData, description: e.target.value });
             if (e.target.value) setInputMethod('manual');
           }}
-          className="w-full p-3 rounded-lg text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '104px' }}
+          className="w-full rounded-2xl text-body"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '104px', padding: '12px' }}
           rows={3}
           placeholder={isRecording ? 'Listening...' : ''}
         />
