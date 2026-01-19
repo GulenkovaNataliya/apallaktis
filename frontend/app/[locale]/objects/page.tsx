@@ -231,6 +231,11 @@ export default function ObjectsPage() {
               </p>
             )}
 
+            {/* Hint phrase - always visible, styled like back link */}
+            <p className="text-button" style={{ color: 'var(--zanah)' }}>
+              {t.clickToAnalyze}
+            </p>
+
           </div>
 
           {/* Objects Carousel */}

@@ -805,3 +805,122 @@ shadow-color == text-color
 
 - `/[locale]/objects` — форма добавления/редактирования объекта
 - `/[locale]/objects/[id]/finance` — формы добавления оплаты, расхода, доп. работы
+
+---
+
+## 18. ФРАЗА-ПОДСКАЗКА (Hint Phrase)
+
+### Закон фразы-подсказки
+
+Подсказка пользователю о действии. Постоянно видима (не исчезает).
+
+**Правила:**
+
+1. **Элемент**: `<p>`, НЕ `<button>`
+2. **Цвет текста**: `var(--zanah)`
+3. **Шрифт**: `text-button` (16px, font-weight: 600)
+4. **Не исчезает**: всегда видна независимо от количества элементов
+5. **Отступ**: по закону кнопок (gap-12 = 48px)
+
+### Код
+
+```jsx
+{/* Hint phrase - always visible */}
+<p className="text-button" style={{ color: 'var(--zanah)' }}>
+  {t.clickToAnalyze}
+</p>
+```
+
+### Параметры
+
+| Параметр | Значение |
+|----------|----------|
+| элемент | `<p>` |
+| color | `var(--zanah)` |
+| className | `text-button` |
+| fontSize | `16px` (наследуется от text-button) |
+| fontWeight | `600` (наследуется от text-button) |
+
+### Применяется на:
+
+- `/[locale]/objects` — "Нажмите на объект для финансового анализа"
+
+### Переводы (8 языков)
+
+| Язык | Текст |
+|------|-------|
+| el | Πατήστε στο έργο για οικονομική ανάλυση |
+| ru | Нажмите на объект для финансового анализа |
+| uk | Натисніть на об'єкт для фінансового аналізу |
+| sq | Klikoni në projekt për analizë financiare |
+| bg | Кликнете върху обект за финансов анализ |
+| ro | Apăsați pe proiect pentru analiză financiară |
+| en | Click on project for financial analysis |
+| ar | انقر على المشروع للتحليل المالي |
+
+---
+
+## 19. ДВЕ КНОПКИ В РЯД (Two Buttons in Row)
+
+### Закон двух кнопок в ряд
+
+Когда две кнопки-фильтра располагаются горизонтально на одной строке.
+
+**Правила:**
+
+1. **Container**: `<div className="flex gap-4">`
+2. **Кнопки**: `flex-1` (равная ширина)
+3. **Gap между кнопками**: `gap-4` (16px)
+4. **Высота**: `minHeight: 52px`
+
+### Код
+
+```jsx
+<div className="flex gap-4">
+  <button
+    className="btn-universal flex-1 text-button"
+    style={{
+      minHeight: '52px',
+      backgroundColor: isActive ? 'var(--polar)' : 'transparent',
+      border: isActive ? 'none' : '2px solid var(--polar)',
+      color: isActive ? 'var(--deep-teal)' : 'var(--polar)',
+    }}
+  >
+    {t.filterOpen}
+  </button>
+
+  <button
+    className="btn-universal flex-1 text-button"
+    style={{
+      minHeight: '52px',
+      backgroundColor: isActive ? 'var(--zanah)' : 'transparent',
+      border: isActive ? 'none' : '2px solid var(--polar)',
+      color: isActive ? 'var(--deep-teal)' : 'var(--polar)',
+    }}
+  >
+    {t.filterClosed}
+  </button>
+</div>
+```
+
+### Параметры
+
+| Параметр | Значение |
+|----------|----------|
+| container | `flex gap-4` |
+| кнопки | `flex-1` (равная ширина) |
+| gap | `16px` (gap-4) |
+| minHeight | `52px` |
+
+### Состояния кнопки
+
+| Состояние | Фон | Рамка | Цвет текста |
+|-----------|-----|-------|-------------|
+| Активная (Open) | `var(--polar)` | нет | `var(--deep-teal)` |
+| Активная (Closed) | `var(--zanah)` | нет | `var(--deep-teal)` |
+| Неактивная | `transparent` | `2px solid var(--polar)` | `var(--polar)` |
+
+### Применяется на:
+
+- `/[locale]/objects` — фильтры "Открытые" / "Закрытые"
+- Любая страница с двумя фильтрами в ряд
