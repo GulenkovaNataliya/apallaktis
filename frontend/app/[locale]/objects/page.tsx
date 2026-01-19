@@ -231,10 +231,11 @@ export default function ObjectsPage() {
               </p>
             )}
 
-            {/* Hint phrase - always visible, styled like back link */}
-            <p className="text-button" style={{ color: 'var(--zanah)' }}>
-              {t.clickToAnalyze}
-            </p>
+            {/* Hint phrase - always visible, two lines centered */}
+            <div className="text-center text-button" style={{ color: 'var(--zanah)' }}>
+              <p>{t.clickToAnalyzeLine1}</p>
+              <p>{t.clickToAnalyzeLine2}</p>
+            </div>
 
           </div>
 
