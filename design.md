@@ -147,8 +147,7 @@ paddingTop: '180px';  /* Для страниц с кнопками */
 
 #### Поля ввода
 ```css
-paddingLeft: '40px';
-paddingRight: '40px';
+padding: '12px';
 ```
 
 ### Gap между элементами
@@ -748,8 +747,7 @@ shadow-color == text-color
 | color | `var(--polar)` |
 | backgroundColor | `transparent` |
 | minHeight | `52px` |
-| paddingLeft | `40px` |
-| paddingRight | `40px` |
+| padding | `12px` |
 | marginTop | `12px` (от кнопки-заголовка) |
 
 ### Gap между полями
@@ -784,8 +782,7 @@ shadow-color == text-color
         backgroundColor: 'transparent',
         minHeight: '52px',
         marginTop: '12px',
-        paddingLeft: '40px',
-        paddingRight: '40px'
+        padding: '12px'
       }}
     />
   </div>
@@ -924,3 +921,130 @@ shadow-color == text-color
 
 - `/[locale]/objects` — фильтры "Открытые" / "Закрытые"
 - Любая страница с двумя фильтрами в ряд
+
+---
+
+## 20. ЗАКОН ЛЕВОГО ОТСТУПА (Input Padding)
+
+### Закон левого отступа для полей ввода
+
+Все поля ввода (input, select, textarea) должны иметь одинаковый внутренний отступ.
+
+**Правила:**
+
+1. **Padding**: `12px` со всех сторон
+2. **НЕ** `paddingLeft: 40px` — это неправильно!
+3. Эталонная страница: `/[locale]/payment-methods`
+
+### Код
+
+```jsx
+<input
+  className="w-full rounded-2xl text-button"
+  style={{
+    border: '2px solid var(--polar)',
+    color: 'var(--polar)',
+    backgroundColor: 'transparent',
+    minHeight: '52px',
+    padding: '12px'
+  }}
+/>
+
+<select
+  className="w-full rounded-2xl"
+  style={{
+    border: '2px solid var(--polar)',
+    color: 'var(--polar)',
+    backgroundColor: 'transparent',
+    minHeight: '52px',
+    padding: '12px',
+    fontSize: '18px'
+  }}
+>
+```
+
+### Параметры
+
+| Параметр | Значение |
+|----------|----------|
+| padding | `12px` |
+| minHeight | `52px` |
+| border | `2px solid var(--polar)` |
+| borderRadius | `rounded-2xl` (1rem) |
+| backgroundColor | `transparent` |
+| color | `var(--polar)` |
+
+### Применяется на:
+
+- `/[locale]/login` — поля email, password
+- `/[locale]/register` — поля email, password
+- `/[locale]/reset-password` — поле email
+- `/[locale]/update-password` — поля password
+- `/[locale]/payment-methods` — форма добавления (эталон)
+- `/[locale]/global-expenses` — все формы
+- `/[locale]/objects` — форма добавления/редактирования объекта
+- `/[locale]/objects/[id]/finance` — формы оплаты, расхода, доп. работы
+
+---
+
+## 21. ЗАКОН ФРАЗЫ НАЗАД (Back Phrase)
+
+### Закон фразы "Назад"
+
+Ссылка "Назад" на формах — это **фраза**, а не кнопка.
+
+**Правила:**
+
+1. **Элемент**: `<p>`, не `<button>`
+2. **className**: `text-button cursor-pointer`
+3. **Цвет**: `var(--polar)`
+4. **marginBottom**: `48px` (перед следующим элементом)
+5. НЕ использовать `btn-universal`
+
+### Код
+
+```jsx
+{/* Back - phrase, not a button */}
+<p
+  onClick={() => setView('list')}
+  className="text-button cursor-pointer"
+  style={{ color: 'var(--polar)', marginBottom: '48px' }}
+>
+  {t.back}
+</p>
+```
+
+### Параметры
+
+| Параметр | Значение |
+|----------|----------|
+| элемент | `<p>` |
+| className | `text-button cursor-pointer` |
+| color | `var(--polar)` |
+| marginBottom | `48px` |
+
+### Применяется на:
+
+- `/[locale]/objects` — "Назад" на форме объекта
+- `/[locale]/global-expenses` — "Назад к расходам" на формах
+- `/[locale]/objects/[id]/finance` — "Назад к объекту"
+- Все формы с навигацией "назад"
+
+---
+
+## 22. РАЗВЁРТЫВАНИЕ (Deployment)
+
+### Закон развёртывания
+
+**Проект работает ТОЛЬКО на Vercel.**
+
+- ❌ НЕ запускать `npm run dev` локально
+- ❌ НЕ использовать localhost
+- ✅ Все изменения проверять на Vercel после push
+
+### Рабочий процесс
+
+1. Внести изменения в код
+2. `git add . && git commit -m "описание" && git push`
+3. Vercel автоматически развернёт изменения
+4. Проверить на production URL

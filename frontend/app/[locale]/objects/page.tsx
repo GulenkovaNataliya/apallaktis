@@ -429,8 +429,7 @@ function ObjectForm({
             backgroundColor: 'transparent',
             minHeight: '52px',
             marginTop: '12px',
-            paddingLeft: '40px',
-            paddingRight: '40px'
+            padding: '12px'
           }}
           placeholder={t.name || 'Όνομα'}
         />
@@ -460,8 +459,7 @@ function ObjectForm({
             backgroundColor: 'transparent',
             minHeight: '52px',
             marginTop: '12px',
-            paddingLeft: '40px',
-            paddingRight: '40px'
+            padding: '12px'
           }}
           placeholder={t.address}
         />
@@ -491,8 +489,7 @@ function ObjectForm({
             backgroundColor: 'transparent',
             minHeight: '52px',
             marginTop: '12px',
-            paddingLeft: '40px',
-            paddingRight: '40px'
+            padding: '12px'
           }}
           placeholder={t.client}
         />
@@ -522,8 +519,7 @@ function ObjectForm({
             backgroundColor: 'transparent',
             minHeight: '52px',
             marginTop: '12px',
-            paddingLeft: '40px',
-            paddingRight: '40px'
+            padding: '12px'
           }}
           placeholder={t.clientContact || 'Τηλέφωνο'}
         />
@@ -556,8 +552,7 @@ function ObjectForm({
             backgroundColor: 'transparent',
             minHeight: '52px',
             marginTop: '12px',
-            paddingLeft: '40px',
-            paddingRight: '40px'
+            padding: '12px'
           }}
           placeholder="€"
         />
@@ -585,8 +580,7 @@ function ObjectForm({
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            paddingLeft: '40px',
-            paddingRight: '40px',
+            padding: '12px',
             marginTop: '12px'
           }}
         >

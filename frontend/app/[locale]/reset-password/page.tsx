@@ -83,7 +83,7 @@ export default function ResetPasswordPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
-                style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '40px', color: 'white' }}
+                style={{ minHeight: '52px', padding: '12px', color: 'white' }}
               />
 
               {message && (

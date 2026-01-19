@@ -191,7 +191,7 @@ export default function UpdatePasswordPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
-                  style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '50px', color: 'white' }}
+                  style={{ minHeight: '52px', padding: '12px 50px 12px 12px', color: 'white' }}
                 />
                 <button
                   type="button"
@@ -211,7 +211,7 @@ export default function UpdatePasswordPage() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                   className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
-                  style={{ minHeight: '52px', paddingLeft: '40px', paddingRight: '50px', color: 'white' }}
+                  style={{ minHeight: '52px', padding: '12px 50px 12px 12px', color: 'white' }}
                 />
                 <button
                   type="button"

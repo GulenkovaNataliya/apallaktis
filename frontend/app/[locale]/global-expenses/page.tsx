@@ -390,17 +390,17 @@ export default function GlobalExpensesPage() {
         <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
           <div className="w-full flex flex-col gap-12">
 
-          {/* Back Button */}
-          <button
+          {/* Back - phrase, not a button */}
+          <p
             onClick={() => {
               setView('categories');
               setEditingCategory(null);
             }}
-            className="btn-universal w-full text-button flex items-center justify-center"
-            style={{ minHeight: '52px' }}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)', marginBottom: '48px' }}
           >
             {t.backToExpenses}
-          </button>
+          </p>
 
           <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
             {editingCategory ? t.edit : t.addCategory}
@@ -437,17 +437,17 @@ export default function GlobalExpensesPage() {
         <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
           <div className="w-full flex flex-col gap-12">
 
-          {/* Back Button */}
-          <button
+          {/* Back - phrase, not a button */}
+          <p
             onClick={() => {
               setView('expenses');
               setEditingExpense(null);
             }}
-            className="btn-universal w-full text-button flex items-center justify-center"
-            style={{ minHeight: '52px' }}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)', marginBottom: '48px' }}
           >
             {t.backToExpenses}
-          </button>
+          </p>
 
           <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
             {editingExpense ? t.edit : t.addNew}
@@ -543,8 +543,8 @@ function CategoryForm({
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
           maxLength={10}
-          className="w-full p-3 rounded-2xl text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          className="w-full rounded-2xl text-button"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px' }}
           placeholder={t.name}
         />
       </div>
@@ -1258,8 +1258,8 @@ function ExpenseForm({
           value={formData.date}
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           required
-          className="w-full p-3 rounded-2xl"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}
+          className="w-full rounded-2xl text-button"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px' }}
         />
       </div>
 
@@ -1274,8 +1274,8 @@ function ExpenseForm({
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
           maxLength={10}
-          className="w-full p-3 rounded-2xl"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}
+          className="w-full rounded-2xl text-button"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px' }}
           placeholder={t.name}
         />
       </div>
@@ -1291,8 +1291,8 @@ function ExpenseForm({
           onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) || 0 })}
           min="0"
           step="0.01"
-          className="w-full p-3 rounded-2xl"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}
+          className="w-full rounded-2xl text-button"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px' }}
           placeholder="€"
         />
       </div>
@@ -1333,8 +1333,8 @@ function ExpenseForm({
             setFormData({ ...formData, description: e.target.value });
             if (e.target.value) setInputMethod('manual');
           }}
-          className="w-full p-3 rounded-2xl"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '104px', fontSize: '18px', fontWeight: 600 }}
+          className="w-full rounded-2xl text-button"
+          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '104px', padding: '12px' }}
           placeholder={isRecording ? (t.listening || 'Слушаю...') : t.description}
           rows={3}
         />
