@@ -262,26 +262,32 @@ export default function ObjectsPage() {
   if (view === 'add-object' || view === 'edit-object') {
     return (
       <BackgroundPage specialPage="objekt">
-        <div className="min-h-screen flex flex-col items-center px-4" style={{ paddingTop: '40px', paddingBottom: '120px' }}>
-          <div className="w-full max-w-sm">
+        <div className="min-h-screen flex flex-col" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
 
-          {/* Back Button */}
-          <div style={{ marginTop: '120px', marginBottom: '24px' }}>
-            <button
-              onClick={() => {
-                setView('list');
-                setEditingObject(null);
-              }}
-              className="btn-universal text-button"
-              style={{ minHeight: '44px', padding: '8px 16px' }}
-            >
-              {t.backToDashboard}
-            </button>
-          </div>
+          {/* Back - text, not a button */}
+          <p
+            onClick={() => {
+              setView('list');
+              setEditingObject(null);
+            }}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)', marginBottom: '48px' }}
+          >
+            {t.backToDashboard}
+          </p>
 
-          <h1 className="text-2xl font-bold mb-6" style={{ color: 'var(--polar)' }}>
+          {/* Add/Edit Object Button (title) */}
+          <button
+            type="button"
+            className="btn-universal w-full text-button"
+            style={{
+              minHeight: '52px',
+              backgroundColor: 'var(--polar)',
+              color: 'var(--deep-teal)',
+            }}
+          >
             {editingObject ? t.edit : t.addNew}
-          </h1>
+          </button>
 
           <ObjectForm
             object={editingObject}
@@ -301,7 +307,6 @@ export default function ObjectsPage() {
             }}
             locale={locale}
           />
-          </div>
         </div>
       </BackgroundPage>
     );
@@ -378,73 +383,142 @@ function ObjectForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" style={{ marginTop: '96px' }}>
-      {/* Name Input */}
+    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-12" style={{ marginTop: '48px' }}>
+      {/* Name Button + Input */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <button
+          type="button"
+          className="btn-universal w-full text-button"
+          style={{
+            minHeight: '52px',
+            backgroundColor: 'transparent',
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+          }}
+        >
           {t.name || 'Όνομα'}
-        </label>
+        </button>
         <input
           type="text"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
           className="w-full p-3 rounded-lg text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          style={{
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+            backgroundColor: 'transparent',
+            minHeight: '52px',
+            marginTop: '12px'
+          }}
           placeholder={t.name || 'Όνομα'}
         />
       </div>
 
-      {/* Address Input */}
+      {/* Address Button + Input */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <button
+          type="button"
+          className="btn-universal w-full text-button"
+          style={{
+            minHeight: '52px',
+            backgroundColor: 'transparent',
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+          }}
+        >
           {t.address}
-        </label>
+        </button>
         <input
           type="text"
           value={formData.address}
           onChange={(e) => setFormData({ ...formData, address: e.target.value })}
           className="w-full p-3 rounded-lg text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          style={{
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+            backgroundColor: 'transparent',
+            minHeight: '52px',
+            marginTop: '12px'
+          }}
           placeholder={t.address}
         />
       </div>
 
-      {/* Client Name Input */}
+      {/* Client Button + Input */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <button
+          type="button"
+          className="btn-universal w-full text-button"
+          style={{
+            minHeight: '52px',
+            backgroundColor: 'transparent',
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+          }}
+        >
           {t.client}
-        </label>
+        </button>
         <input
           type="text"
           value={formData.clientName}
           onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
           className="w-full p-3 rounded-lg text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          style={{
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+            backgroundColor: 'transparent',
+            minHeight: '52px',
+            marginTop: '12px'
+          }}
           placeholder={t.client}
         />
       </div>
 
-      {/* Client Contact Input */}
+      {/* Client Contact Button + Input */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <button
+          type="button"
+          className="btn-universal w-full text-button"
+          style={{
+            minHeight: '52px',
+            backgroundColor: 'transparent',
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+          }}
+        >
           {t.clientContact || 'Τηλέφωνο Πελάτη'}
-        </label>
+        </button>
         <input
           type="text"
           value={formData.clientContact}
           onChange={(e) => setFormData({ ...formData, clientContact: e.target.value })}
           className="w-full p-3 rounded-lg text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          style={{
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+            backgroundColor: 'transparent',
+            minHeight: '52px',
+            marginTop: '12px'
+          }}
           placeholder={t.clientContact || 'Τηλέφωνο'}
         />
       </div>
 
-      {/* Contract Price Input */}
+      {/* Contract Price Button + Input */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <button
+          type="button"
+          className="btn-universal w-full text-button"
+          style={{
+            minHeight: '52px',
+            backgroundColor: 'transparent',
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+          }}
+        >
           {t.contractPrice}
-        </label>
+        </button>
         <input
           type="number"
           value={formData.contractPrice || ''}
@@ -453,35 +527,62 @@ function ObjectForm({
           min="0"
           step="0.01"
           className="w-full p-3 rounded-lg text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+          style={{
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+            backgroundColor: 'transparent',
+            minHeight: '52px',
+            marginTop: '12px'
+          }}
           placeholder="€"
         />
       </div>
 
-      {/* Status Select */}
+      {/* Status Button + Select */}
       <div>
-        <label className="block mb-2 text-button" style={{ color: 'var(--polar)' }}>
+        <button
+          type="button"
+          className="btn-universal w-full text-button"
+          style={{
+            minHeight: '52px',
+            backgroundColor: 'transparent',
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+          }}
+        >
           {t.status}
-        </label>
+        </button>
         <select
           value={formData.status}
           onChange={(e) => setFormData({ ...formData, status: e.target.value as ObjectStatus })}
           className="w-full rounded-lg text-body"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px' }}
+          style={{
+            border: '2px solid var(--polar)',
+            color: 'var(--polar)',
+            backgroundColor: 'transparent',
+            minHeight: '52px',
+            padding: '12px',
+            fontSize: '18px',
+            marginTop: '12px'
+          }}
         >
           <option value="open" style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>{t.statusOpen || t.filterOpen}</option>
           <option value="closed" style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>{t.statusClosed || t.filterClosed}</option>
         </select>
       </div>
 
-      {/* Buttons */}
-      <div className="flex gap-4 mt-4">
+      {/* Action Buttons */}
+      <div className="flex gap-4">
         <button
           type="button"
           onClick={onCancel}
           disabled={isSaving}
           className="btn-universal flex-1 text-button"
-          style={{ minHeight: '52px', backgroundColor: 'var(--polar)' }}
+          style={{
+            minHeight: '52px',
+            backgroundColor: 'var(--polar)',
+            color: 'var(--deep-teal)'
+          }}
         >
           {t.cancel || 'Ακύρωση'}
         </button>
@@ -489,7 +590,11 @@ function ObjectForm({
           type="submit"
           disabled={isSaving}
           className="btn-universal flex-1 text-button"
-          style={{ minHeight: '52px', backgroundColor: 'var(--zanah)' }}
+          style={{
+            minHeight: '52px',
+            backgroundColor: 'var(--zanah)',
+            color: 'var(--deep-teal)'
+          }}
         >
           {isSaving ? '...' : (t.save || 'Αποθήκευση')}
         </button>
