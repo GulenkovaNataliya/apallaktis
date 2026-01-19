@@ -423,15 +423,14 @@ export default function ObjectFinancePage() {
       <BackgroundPage specialPage="objekt">
         <div className="min-h-screen flex flex-col" style={{ paddingLeft: '38px', paddingRight: '38px', paddingTop: '40px', paddingBottom: '120px' }}>
 
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6" style={{ marginTop: '120px' }}>
-            <button
-              onClick={() => router.push(`/${locale}/objects`)}
-              style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
-            >
-              {t.backToObject}
-            </button>
-          </div>
+          {/* Back - phrase, not a button */}
+          <p
+            onClick={() => router.push(`/${locale}/objects`)}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)', marginTop: '120px' }}
+          >
+            {t.backToObject}
+          </p>
 
           <h1 className="text-2xl font-bold mb-6 text-center" style={{ color: 'var(--polar)' }}>
             {t.title}
@@ -603,7 +602,7 @@ export default function ObjectFinancePage() {
             </h2>
 
             {expenses.length === 0 ? (
-              <p className="text-center text-sm mb-6" style={{ color: 'var(--polar)', opacity: 0.7 }}>
+              <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
                 {t.noExpenses}
               </p>
             ) : (
@@ -919,16 +918,16 @@ export default function ObjectFinancePage() {
     return (
       <BackgroundPage specialPage="objekt">
         <div className="min-h-screen" style={{ paddingLeft: '38px', paddingRight: '38px', paddingTop: '40px', paddingBottom: '120px' }}>
-          <div style={{ marginTop: '120px', marginBottom: '24px' }}>
-            <button
-              onClick={() => setView('main')}
-              style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
-            >
-              {t.backToObject}
-            </button>
-          </div>
+          {/* Back - phrase, not a button */}
+          <p
+            onClick={() => setView('main')}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)', marginTop: '120px' }}
+          >
+            {t.backToObject}
+          </p>
 
-          <h1 className="text-2xl font-bold mb-6" style={{ color: 'var(--polar)' }}>
+          <h1 className="text-2xl font-bold mb-6 mt-12" style={{ color: 'var(--polar)' }}>
             {t.addExpense}
           </h1>
 
