@@ -657,3 +657,60 @@ shadow-color == text-color
 
 Тексты пустых состояний определены в `messages.ts`:
 - `noCategories`, `noExpenses`, `noMethods`, `noObjects`, `noPayments`
+
+---
+
+## 16. ССЫЛКА "НАЗАД" (Back Link)
+
+### Закон ссылки "Назад"
+
+Элемент "Назад" (← Назад, ← Back, ← Πίσω и т.д.) — это **текст**, НЕ кнопка.
+
+**Правила:**
+
+1. **Элемент**: `<p>` с `onClick`, НЕ `<button>`
+2. **Цвет текста**: `var(--polar)`
+3. **Шрифт**: `text-button` (16px, font-weight: 600)
+4. **Курсор**: `cursor-pointer`
+5. **Отступ снизу**: `48px` (marginBottom) — по закону кнопок
+6. **Расположение**: в начале страницы, перед заголовком/кнопкой-заголовком
+
+### Код
+
+```jsx
+{/* Back - text, not a button */}
+<p
+  onClick={() => router.push(`/${locale}/previous-page`)}
+  className="text-button cursor-pointer"
+  style={{ color: 'var(--polar)', marginBottom: '48px' }}
+>
+  {t.backToDashboard}
+</p>
+```
+
+### Параметры
+
+| Параметр | Значение |
+|----------|----------|
+| элемент | `<p>` (НЕ `<button>`) |
+| color | `var(--polar)` |
+| className | `text-button cursor-pointer` |
+| fontSize | `16px` (наследуется от text-button) |
+| fontWeight | `600` (наследуется от text-button) |
+| marginBottom | `48px` |
+| cursor | `pointer` |
+
+### ВАЖНО
+
+- **НЕ использовать** `<button>` для "Назад"
+- **НЕ использовать** `btn-universal` класс
+- **НЕ добавлять** background или border
+- Это просто кликабельный текст
+
+### Применяется на:
+
+- `/[locale]/objects` — список объектов
+- `/[locale]/objects` — форма добавления/редактирования объекта
+- `/[locale]/objects/[id]/finance` — добавление оплаты, расхода, доп. работы
+- `/[locale]/global-expenses` — все view
+- Все страницы с формами добавления/редактирования
