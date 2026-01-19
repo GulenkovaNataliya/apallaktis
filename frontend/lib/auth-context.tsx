@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, AuthState } from '@/types/user';
+import { createClient } from '@/lib/supabase/client';
 
 interface AuthContextType extends AuthState {
   login: (token: string, user: User) => void;
@@ -19,23 +20,56 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     isLoading: true,
   });
 
-  // Load auth state from localStorage on mount
+  // Load auth state from Supabase on mount
   useEffect(() => {
-    const loadAuthState = () => {
-      try {
-        const token = localStorage.getItem('authToken');
-        const userStr = localStorage.getItem('user');
+    const supabase = createClient();
 
-        if (token && userStr) {
-          const user = JSON.parse(userStr);
+    const loadAuthState = async () => {
+      try {
+        // Get current session from Supabase
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session?.user) {
+          const user: User = {
+            id: session.user.id,
+            email: session.user.email || '',
+            name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || '',
+            createdAt: new Date(session.user.created_at),
+            subscription: session.user.user_metadata?.subscription || {
+              type: 'demo',
+              startDate: new Date(),
+              endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+            },
+            referralCode: session.user.user_metadata?.referralCode,
+            referredBy: session.user.user_metadata?.referredBy,
+          };
+
           setAuthState({
             user,
-            token,
+            token: session.access_token,
             isAuthenticated: true,
             isLoading: false,
           });
+
+          // Also store in localStorage for backwards compatibility
+          localStorage.setItem('authToken', session.access_token);
+          localStorage.setItem('user', JSON.stringify(user));
         } else {
-          setAuthState((prev) => ({ ...prev, isLoading: false }));
+          // No session - check localStorage as fallback
+          const token = localStorage.getItem('authToken');
+          const userStr = localStorage.getItem('user');
+
+          if (token && userStr) {
+            const user = JSON.parse(userStr);
+            setAuthState({
+              user,
+              token,
+              isAuthenticated: true,
+              isLoading: false,
+            });
+          } else {
+            setAuthState((prev) => ({ ...prev, isLoading: false }));
+          }
         }
       } catch (error) {
         console.error('Error loading auth state:', error);
@@ -44,6 +78,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     loadAuthState();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.id);
+
+        if (session?.user) {
+          const user: User = {
+            id: session.user.id,
+            email: session.user.email || '',
+            name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || '',
+            createdAt: new Date(session.user.created_at),
+            subscription: session.user.user_metadata?.subscription || {
+              type: 'demo',
+              startDate: new Date(),
+              endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            },
+            referralCode: session.user.user_metadata?.referralCode,
+            referredBy: session.user.user_metadata?.referredBy,
+          };
+
+          setAuthState({
+            user,
+            token: session.access_token,
+            isAuthenticated: true,
+            isLoading: false,
+          });
+
+          localStorage.setItem('authToken', session.access_token);
+          localStorage.setItem('user', JSON.stringify(user));
+        } else if (event === 'SIGNED_OUT') {
+          setAuthState({
+            user: null,
+            token: null,
+            isAuthenticated: false,
+            isLoading: false,
+          });
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('user');
+        }
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const login = (token: string, user: User) => {
@@ -57,7 +137,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const logout = () => {
+  const logout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
     setAuthState({
