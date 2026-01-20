@@ -164,7 +164,7 @@ export default function SubscriptionPage() {
             className="text-button cursor-pointer w-full"
             style={{ color: 'var(--polar)' }}
           >
-            ← {messages[locale]?.purchaseAccount?.backToDashboard || 'Back'}
+{messages[locale]?.purchaseAccount?.backToDashboard || '← Back'}
           </p>
 
           {/* Header - Beautiful non-clickable button style */}

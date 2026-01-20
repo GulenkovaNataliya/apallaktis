@@ -89,18 +89,17 @@ export default function SubscriptionPlanCard({
         {plan.description}
       </p>
 
-      {/* Features - Compact */}
-      <ul className="space-y-1 mb-3 flex-1">
+      {/* Features */}
+      <ul className="space-y-2 mb-3 flex-1">
         {plan.features.map((feature, index) => (
           <li
             key={index}
-            className="flex items-start gap-2 text-xs"
+            className="flex items-start gap-2 text-sm"
             style={{ color: 'var(--deep-teal)' }}
           >
             {/* Checkmark Icon */}
             <span
-              className="shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold"
-
+              className="shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-sm font-bold"
               style={{
                 backgroundColor: 'var(--zanah)',
                 color: 'var(--deep-teal)',
