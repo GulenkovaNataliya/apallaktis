@@ -158,6 +158,15 @@ export default function SubscriptionPage() {
     <BackgroundPage pageIndex={2}>
       <div className="flex flex-col items-center gap-12" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}>
 
+          {/* Back - law: <p> element at top */}
+          <p
+            onClick={() => router.push(`/${locale}/dashboard`)}
+            className="text-button cursor-pointer w-full"
+            style={{ color: 'var(--polar)' }}
+          >
+            ← {messages[locale]?.purchaseAccount?.backToDashboard || 'Back'}
+          </p>
+
           {/* Header - Beautiful non-clickable button style */}
           <div
             className="w-full text-button flex items-center justify-center text-center"
@@ -226,14 +235,6 @@ export default function SubscriptionPage() {
             />
           ))}
 
-          {/* Back - law: <p> element */}
-          <p
-            onClick={() => router.back()}
-            className="text-button cursor-pointer w-full text-center"
-            style={{ color: 'var(--polar)' }}
-          >
-            ← {messages[locale]?.purchaseAccount?.backToDashboard || 'Back'}
-          </p>
       </div>
     </BackgroundPage>
   );
