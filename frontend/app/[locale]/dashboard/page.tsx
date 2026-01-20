@@ -334,7 +334,7 @@ export default function DashboardPage() {
             <div className="space-y-3 text-body" style={{ color: 'var(--deep-teal)' }}>
               {/* Account Purchase Status */}
               <div className="p-4 rounded-xl" style={{ backgroundColor: 'rgba(1, 49, 45, 0.05)' }}>
-                <p className="font-semibold mb-2">Account Purchase (97€ + ΦΠΑ)</p>
+                <p className="font-semibold mb-2">Account Purchase (62€ με ΦΠΑ)</p>
                 {user.accountPurchased ? (
                   <>
                     <p style={{ color: '#25D366' }}>

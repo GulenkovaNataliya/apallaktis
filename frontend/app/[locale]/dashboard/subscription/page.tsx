@@ -529,7 +529,7 @@ export default function SubscriptionPage() {
             style={{ backgroundColor: 'var(--polar)' }}
           >
             <h2 className="text-heading font-semibold mb-4" style={{ color: 'var(--deep-teal)' }}>
-              💳 {t.accountPurchase} (97€ + ΦΠΑ)
+              💳 {t.accountPurchase} (62€ με ΦΠΑ)
             </h2>
 
             <div className="space-y-3">

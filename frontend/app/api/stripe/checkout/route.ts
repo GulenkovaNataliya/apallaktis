@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       line_items: [
         {
           // TODO: Замени на реальный Price ID из Stripe Dashboard
-          // Создай продукт "ΑΠΑΛΛΑΚΤΗΣ Account Purchase" - 97€ + ΦΠΑ
+          // Создай продукт "ΑΠΑΛΛΑΚΤΗΣ Account Purchase" - 62€ με ΦΠΑ
           // Добавь в .env.local: STRIPE_ACCOUNT_PRICE_ID=price_...
           price: process.env.STRIPE_ACCOUNT_PRICE_ID,
           quantity: 1,

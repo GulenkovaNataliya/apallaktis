@@ -304,19 +304,19 @@ function generateDemoExpiringHTML(accountNumber: number, expiresAt: Date, locale
       title: 'Το DEMO σας λήγει σύντομα',
       message: `Το DEMO περίοδο για το λογαριασμό <strong>#${accountNumber}</strong> λήγει στις <strong>${expiresAt.toLocaleDateString('el-GR')}</strong>.`,
       info: 'Αγοράστε τώρα λογαριασμό για να συνεχίσετε να χρησιμοποιείτε όλες τις λειτουργίες!',
-      button: 'Αγορά Λογαριασμού (97€)',
+      button: 'Αγορά Λογαριασμού (62€ με ΦΠΑ)',
     },
     ru: {
       title: 'Ваше DEMO скоро истекает',
       message: `DEMO период для аккаунта <strong>#${accountNumber}</strong> истекает <strong>${expiresAt.toLocaleDateString('ru-RU')}</strong>.`,
       info: 'Купите аккаунт сейчас, чтобы продолжить использовать все функции!',
-      button: 'Купить аккаунт (97€)',
+      button: 'Купить аккаунт (62€ με ΦΠΑ)',
     },
     en: {
       title: 'Your DEMO is expiring soon',
       message: `DEMO period for account <strong>#${accountNumber}</strong> expires on <strong>${expiresAt.toLocaleDateString('en-US')}</strong>.`,
       info: 'Purchase an account now to continue using all features!',
-      button: 'Purchase Account (€97)',
+      button: 'Purchase Account (62€ με ΦΠΑ)',
     },
   };
 

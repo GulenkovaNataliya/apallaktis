@@ -22,7 +22,7 @@ export interface User {
   subscriptionStatus: SubscriptionStatus;
   demoExpiresAt: string | null; // Когда заканчивается DEMO
 
-  // Покупка аккаунта (97€+ΦΠΑ)
+  // Покупка аккаунта (62€ με ΦΠΑ)
   accountPurchased?: boolean; // Куплен ли аккаунт
   accountPurchasedAt?: string | null; // Дата покупки (для расчета ежемесячной оплаты)
   firstMonthFreeExpiresAt?: string | null; // Конец первого бесплатного месяца
