@@ -78,68 +78,70 @@ export default function PurchaseAccountPage() {
 
   return (
     <BackgroundPage pageIndex={1}>
-      <div className="min-h-screen flex flex-col items-center justify-center py-20" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
+      <div className="min-h-screen flex flex-col items-center justify-center py-20 gap-12" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
 
-        {/* Back Button */}
-        <div className="w-full max-w-sm mb-6">
-          <button
+        {/* Back - law: <p> element */}
+        <div className="w-full max-w-sm">
+          <p
             onClick={() => router.back()}
+            className="cursor-pointer"
             style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
           >
             {t.backToDashboard}
-          </button>
+          </p>
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl font-bold text-center mb-4" style={{ color: 'var(--polar)' }}>
+        <h1 className="text-3xl font-bold text-center" style={{ color: 'var(--polar)' }}>
           {t.title}
         </h1>
 
-        {/* Subtitle */}
-        <p className="text-lg text-center mb-8 max-w-sm" style={{ color: 'var(--polar)', opacity: 0.9 }}>
-          {t.subtitle}
-        </p>
-
-        {/* Free Month Notice */}
-        <p className="text-md text-center mb-12 max-w-sm font-semibold" style={{ color: '#ff8f0a' }}>
-          {t.firstMonthFree}
-        </p>
+        {/* Price Block */}
+        <div className="flex flex-col items-center text-center">
+          {/* Line 1: Special Price */}
+          <p className="text-lg" style={{ color: 'var(--orange)', fontWeight: 600 }}>
+            {t.specialPrice}
+          </p>
+          {/* Line 2: 62€ με ΦΠΑ - always Greek */}
+          <p className="text-3xl font-bold" style={{ color: 'var(--orange)' }}>
+            62€ με ΦΠΑ
+          </p>
+          {/* Line 3: BONUS - English only */}
+          <p className="text-lg font-bold mt-2" style={{ color: 'var(--zanah)' }}>
+            BONUS
+          </p>
+          {/* Line 4: 30 days free */}
+          <p style={{ color: 'var(--orange)', fontSize: '18px', fontWeight: 600 }}>
+            {t.firstMonthFree}
+          </p>
+        </div>
 
         {/* Payment Methods */}
 
         {/* 1. Stripe Online Payment */}
-        <div className="w-full max-w-sm mb-6">
+        <div className="w-full max-w-sm">
           <button
             onClick={handleStripePayment}
-            className="w-full rounded-2xl flex flex-col items-center justify-center text-button relative"
+            className="w-full rounded-2xl flex items-center justify-center text-button"
             style={{
-              minHeight: '64px',
-              backgroundColor: 'var(--zanah)',
+              minHeight: '52px',
+              background: 'linear-gradient(135deg, #e7f4f1 0%, #c3e2dc 100%)',
               color: 'var(--deep-teal)',
               cursor: 'pointer',
               padding: '16px',
             }}
           >
-            {/* Special Price Tag */}
-            <span
-              className="absolute -top-3 right-4 px-3 py-1 rounded-full text-xs font-bold"
-              style={{ backgroundColor: '#ff6a1a', color: 'white' }}
-            >
-              {t.specialPrice}
-            </span>
-
             <span className="text-lg font-semibold">{t.onlinePayment}</span>
-            <span className="text-sm mt-1 font-bold">{t.price}</span>
           </button>
         </div>
 
         {/* 2. Bank Transfer - ΤΡΑΠΕΖΑ ΠΕΙΡΑΙΩΣ */}
-        <div className="w-full max-w-sm mb-6">
+        <div className="w-full max-w-sm">
           <button
             className="w-full rounded-2xl flex flex-col items-center justify-center text-button"
             style={{
               minHeight: '100px',
-              backgroundColor: 'var(--polar)',
+              background: 'linear-gradient(135deg, #e7f4f1 0%, #c3e2dc 100%)',
               color: 'var(--deep-teal)',
               padding: '16px',
             }}
@@ -148,7 +150,7 @@ export default function PurchaseAccountPage() {
               alert('IBAN copied!');
             }}
           >
-            <span className="text-sm font-semibold">Τραπεζική μεταφορά</span>
+            <span className="text-sm font-semibold">{t.bankTransfer}</span>
             <span className="text-lg font-bold mt-1">ΤΡΑΠΕΖΑ ΠΕΙΡΑΙΩΣ</span>
             <span className="text-xs mt-1" style={{ fontFamily: 'monospace' }}>IBAN GR9001721020005102086382968</span>
             <span className="text-xs mt-1" style={{ opacity: 0.8 }}>NATALIYA GULENKOVA</span>
@@ -156,12 +158,12 @@ export default function PurchaseAccountPage() {
         </div>
 
         {/* 3. Bank Transfer - EUROBANK */}
-        <div className="w-full max-w-sm mb-6">
+        <div className="w-full max-w-sm">
           <button
             className="w-full rounded-2xl flex flex-col items-center justify-center text-button"
             style={{
               minHeight: '100px',
-              backgroundColor: 'var(--polar)',
+              background: 'linear-gradient(135deg, #e7f4f1 0%, #c3e2dc 100%)',
               color: 'var(--deep-teal)',
               padding: '16px',
             }}
@@ -170,7 +172,7 @@ export default function PurchaseAccountPage() {
               alert('IBAN copied!');
             }}
           >
-            <span className="text-sm font-semibold">Τραπεζική μεταφορά</span>
+            <span className="text-sm font-semibold">{t.bankTransfer}</span>
             <span className="text-lg font-bold mt-1">EUROBANK</span>
             <span className="text-xs mt-1" style={{ fontFamily: 'monospace' }}>IBAN GR1602601070000280201824734</span>
             <span className="text-xs mt-1" style={{ opacity: 0.8 }}>NATALIYA GULENKOVA</span>
