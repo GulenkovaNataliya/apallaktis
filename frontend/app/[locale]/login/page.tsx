@@ -79,16 +79,25 @@ export default function LoginPage() {
       />
 
       {/* Content */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 safe-area-top safe-area-bottom py-8">
-        <div className="w-full max-w-sm">
+      <div className="relative z-10 flex min-h-screen flex-col items-center px-4 safe-area-top safe-area-bottom" style={{ paddingTop: '180px', paddingLeft: '40px', paddingRight: '40px' }}>
+        <div className="w-full max-w-sm flex flex-col gap-12">
+          {/* Back */}
+          <p
+            onClick={() => router.push(`/${locale}`)}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)' }}
+          >
+            {t.backToHome}
+          </p>
+
           <h1
             className="text-center text-slogan font-semibold"
-            style={{ color: "#ff8f0a", marginBottom: "80px" }}
+            style={{ color: "#ff8f0a" }}
           >
             {t.title}
           </h1>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-12">
             {/* Email */}
             <input
               type="email"
@@ -144,31 +153,21 @@ export default function LoginPage() {
             )}
 
             {/* Submit Button */}
-            <div className="btn-single-wrapper mt-4">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="btn-primary text-button btn-single text-center"
-                style={{
-                  backgroundColor: "var(--polar)",
-                  color: "var(--deep-teal)",
-                  boxShadow: "0 4px 8px var(--deep-teal)",
-                  opacity: isLoading ? 0.6 : 1,
-                  cursor: isLoading ? "not-allowed" : "pointer",
-                }}
-              >
-                {isLoading ? "..." : t.submit}
-              </button>
-            </div>
-
-            {/* Back to Home Link */}
-            <Link
-              href={`/${locale}`}
-              className="text-center text-sm mt-4"
-              style={{ color: "#daf3f6" }}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="btn-primary text-button w-full text-center"
+              style={{
+                minHeight: '52px',
+                backgroundColor: "var(--polar)",
+                color: "var(--deep-teal)",
+                boxShadow: "0 4px 8px var(--deep-teal)",
+                opacity: isLoading ? 0.6 : 1,
+                cursor: isLoading ? "not-allowed" : "pointer",
+              }}
             >
-              {t.backToHome}
-            </Link>
+              {isLoading ? "..." : t.submit}
+            </button>
           </form>
         </div>
       </div>

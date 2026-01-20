@@ -207,15 +207,24 @@ export default function RegisterPage() {
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* Content */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-between px-4 safe-area-top safe-area-bottom py-8">
+      <div className="relative z-10 flex min-h-screen flex-col items-center px-4 safe-area-top safe-area-bottom" style={{ paddingTop: '180px', paddingLeft: '40px', paddingRight: '40px' }}>
         {/* Main content */}
-        <div className="w-full max-w-sm flex flex-col flex-1">
+        <div className="w-full max-w-sm flex flex-col flex-1 gap-12">
+          {/* Back */}
+          <p
+            onClick={() => router.push(`/${locale}`)}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--deep-teal)' }}
+          >
+            {t.backToHome || '← Πίσω'}
+          </p>
+
           <h1
-                className="text-center text-slogan font-semibold"
-                style={{ color: "#ff8f0a", marginBottom: "50px" }}
-              >
-                {t.title}
-              </h1>
+            className="text-center text-slogan font-semibold"
+            style={{ color: "#ff8f0a" }}
+          >
+            {t.title}
+          </h1>
 
               <form onSubmit={handleSubmit} className="flex flex-col flex-1 gap-6">
             {/* Invoice Type Toggle */}

@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { messages, type Locale } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/client";
 
 export default function ResetPasswordPage() {
   const params = useParams();
+  const router = useRouter();
   const locale = (params.locale as Locale) || "el";
   const t = messages[locale]?.resetPassword || messages.el.resetPassword;
 
@@ -65,17 +65,26 @@ export default function ResetPasswordPage() {
       />
 
       {/* Content */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 safe-area-top safe-area-bottom py-8">
-        <div className="w-full max-w-sm">
+      <div className="relative z-10 flex min-h-screen flex-col items-center px-4 safe-area-top safe-area-bottom" style={{ paddingTop: '180px', paddingLeft: '40px', paddingRight: '40px' }}>
+        <div className="w-full max-w-sm flex flex-col gap-12">
+          {/* Back */}
+          <p
+            onClick={() => router.push(`/${locale}/login`)}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)' }}
+          >
+            {t.backToLogin}
+          </p>
+
           <h1
             className="text-center text-slogan font-semibold"
-            style={{ color: "#ff8f0a", marginBottom: "80px" }}
+            style={{ color: "#ff8f0a" }}
           >
             {t.title}
           </h1>
 
           {!isSuccess ? (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-12">
               <input
                 type="email"
                 placeholder={t.email}
@@ -95,30 +104,21 @@ export default function ResetPasswordPage() {
                 </p>
               )}
 
-              <div className="btn-single-wrapper mt-4">
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="btn-primary text-button btn-single text-center"
-                  style={{
-                    backgroundColor: "var(--polar)",
-                    color: "var(--deep-teal)",
-                    boxShadow: "0 4px 8px var(--deep-teal)",
-                    opacity: isLoading ? 0.6 : 1,
-                    cursor: isLoading ? "not-allowed" : "pointer",
-                  }}
-                >
-                  {isLoading ? "..." : t.sendLink}
-                </button>
-              </div>
-
-              <Link
-                href={`/${locale}/login`}
-                className="text-center text-sm mt-4"
-                style={{ color: "#daf3f6" }}
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="btn-primary text-button w-full text-center"
+                style={{
+                  minHeight: '52px',
+                  backgroundColor: "var(--polar)",
+                  color: "var(--deep-teal)",
+                  boxShadow: "0 4px 8px var(--deep-teal)",
+                  opacity: isLoading ? 0.6 : 1,
+                  cursor: isLoading ? "not-allowed" : "pointer",
+                }}
               >
-                {t.backToLogin}
-              </Link>
+                {isLoading ? "..." : t.sendLink}
+              </button>
             </form>
           ) : (
             <div
@@ -128,13 +128,6 @@ export default function ResetPasswordPage() {
               <p className="text-body" style={{ color: "var(--deep-teal)" }}>
                 {message}
               </p>
-              <Link
-                href={`/${locale}/login`}
-                className="text-center text-sm mt-4 block"
-                style={{ color: "var(--deep-teal)", opacity: 0.8 }}
-              >
-                {t.backToLogin}
-              </Link>
             </div>
           )}
         </div>

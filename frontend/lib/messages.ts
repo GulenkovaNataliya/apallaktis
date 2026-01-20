@@ -60,6 +60,7 @@ export const messages = {
       invalidAfm: "Το ΑΦΜ πρέπει να έχει 9 ψηφία",
       invalidAfmInactive: "Το ΑΦΜ είναι για ιδιώτη. Παρακαλώ επιλέξτε 'Με απόδειξη'",
       countryCode: "Κωδικός χώρας",
+      backToHome: "← Πίσω",
     },
     thankYou: {
       title: "Ευχαριστούμε για την εγγραφή!",
@@ -383,6 +384,7 @@ export const messages = {
       invalidAfm: "ΑΦΜ должен содержать 9 цифр",
       invalidAfmInactive: "ΑΦΜ для частного лица. Пожалуйста, выберите 'С чеком'",
       countryCode: "Код страны",
+      backToHome: "← Назад",
     },
     thankYou: {
       title: "Спасибо за регистрацию!",
@@ -706,6 +708,7 @@ export const messages = {
       invalidAfm: "ΑΦΜ повинен містити 9 цифр",
       invalidAfmInactive: "ΑΦΜ для приватної особи. Будь ласка, оберіть 'З чеком'",
       countryCode: "Код країни",
+      backToHome: "← Назад",
     },
     thankYou: {
       title: "Дякуємо за реєстрацію!",
@@ -938,6 +941,7 @@ export const messages = {
       invalidAfm: "ΑΦΜ duhet të ketë 9 shifra",
       invalidAfmInactive: "ΑΦΜ për individ privat. Ju lutemi zgjidhni 'Me kupon'",
       countryCode: "Kodi i vendit",
+      backToHome: "← Kthehu",
     },
     thankYou: {
       title: "Faleminderit për regjistrimin!",
@@ -1170,6 +1174,7 @@ export const messages = {
       invalidAfm: "ΑΦΜ трябва да съдържа 9 цифри",
       invalidAfmInactive: "ΑΦΜ е за частно лице. Моля изберете 'С касова бележка'",
       countryCode: "Код на държава",
+      backToHome: "← Назад",
     },
     thankYou: {
       title: "Благодарим за регистрацията!",
@@ -1402,6 +1407,7 @@ export const messages = {
       invalidAfm: "ΑΦΜ trebuie să conțină 9 cifre",
       invalidAfmInactive: "ΑΦΜ pentru persoană fizică. Vă rugăm selectați 'Cu chitanță'",
       countryCode: "Cod țară",
+      backToHome: "← Înapoi",
     },
     thankYou: {
       title: "Vă mulțumim pentru înregistrare!",
@@ -1634,6 +1640,7 @@ export const messages = {
       invalidAfm: "ΑΦΜ must contain 9 digits",
       invalidAfmInactive: "ΑΦΜ is for private individual. Please select 'With receipt'",
       countryCode: "Country code",
+      backToHome: "← Back",
     },
     thankYou: {
       title: "Thank you for registering!",
@@ -1866,6 +1873,7 @@ export const messages = {
       invalidAfm: "يجب أن يحتوي ΑΦΜ على 9 أرقام",
       invalidAfmInactive: "ΑΦΜ للفرد الخاص. الرجاء اختيار 'مع إيصال'",
       countryCode: "رمز البلد",
+      backToHome: "← رجوع",
     },
     thankYou: {
       title: "!شكراً لتسجيلك",
