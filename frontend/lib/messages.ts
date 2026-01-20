@@ -412,14 +412,14 @@ export const messages = {
     purchaseAccount: {
       title: "Покупка аккаунта",
       subtitle: "Выберите способ оплаты",
-      price: "97€ + НДС",
+      price: "97€ + ΦΠΑ",
       specialPrice: "Специальная цена!",
       onlinePayment: "Online оплата (Stripe)",
       cashPayment: "Оплата наличными",
       irisTransfer: "Перевод IRIS",
       irisPhone: "+306983208844",
       irisName: "Gulenkova Nataliya",
-      irisPriceWithTax: "120,28€ с НДС",
+      irisPriceWithTax: "120,28€ με ΦΠΑ",
       irisCopied: "Скопировано в буфер обмена!",
       firstMonthFree: "30 дней бесплатного использования!",
       contactForCash: "Свяжитесь с нами для оплаты наличными",
@@ -581,7 +581,7 @@ export const messages = {
       // 4 тарифа
       basic: {
         name: "Basic",
-        price: "20€ + НДС",
+        price: "20€ + ΦΠΑ",
         description: "Идеально для личного использования",
         features: [
           "До 10 объектов",
@@ -594,7 +594,7 @@ export const messages = {
       },
       standard: {
         name: "Standard",
-        price: "45€ + НДС",
+        price: "45€ + ΦΠΑ",
         description: "Для профессионалов",
         features: [
           "До 50 объектов",
@@ -606,7 +606,7 @@ export const messages = {
       },
       premium: {
         name: "Premium",
-        price: "90€ + НДС",
+        price: "90€ + ΦΠΑ",
         description: "Для команд и бизнеса",
         features: [
           "Неограниченные объекты",

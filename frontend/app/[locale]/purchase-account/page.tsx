@@ -42,24 +42,6 @@ export default function PurchaseAccountPage() {
     fetchAccountNumber();
   }, []);
 
-  // Purchase is always available
-  const isPurchaseAvailable = true;
-
-  // WhatsApp message for cash payment
-  const cashWhatsappMessage = encodeURIComponent(
-    `${t.cashMessage} ${accountNumber ? `#${accountNumber}` : ''}`
-  );
-  const cashWhatsappUrl = `https://wa.me/306983208844?text=${cashWhatsappMessage}`;
-
-  // Viber message for cash payment
-  const cashViberMessage = encodeURIComponent(
-    `${t.cashMessage} ${accountNumber ? `#${accountNumber}` : ''}`
-  );
-  const cashViberUrl = `viber://chat?number=306983208844&text=${cashViberMessage}`;
-
-  // IRIS transfer info
-  const irisInfo = 'IRIS: +306983208844 Gulenkova Nataliya';
-
   const handleStripePayment = async () => {
     try {
       setIsLoading(true);
@@ -151,91 +133,47 @@ export default function PurchaseAccountPage() {
           </button>
         </div>
 
-        {/* OR Divider */}
-        <div className="flex items-center w-full max-w-sm mb-6">
-          <div className="flex-1 h-px" style={{ backgroundColor: 'var(--polar)', opacity: 0.3 }} />
-          <span className="px-4 text-sm" style={{ color: 'var(--polar)', opacity: 0.7 }}>
-            {messages[locale]?.demoExpired?.or || 'Ή'}
-          </span>
-          <div className="flex-1 h-px" style={{ backgroundColor: 'var(--polar)', opacity: 0.3 }} />
-        </div>
-
-        {/* 2. Cash Payment */}
+        {/* 2. Bank Transfer - ΤΡΑΠΕΖΑ ΠΕΙΡΑΙΩΣ */}
         <div className="w-full max-w-sm mb-6">
-          <p className="text-sm text-center mb-3" style={{ color: 'var(--polar)', opacity: 0.9 }}>
-            {t.contactForCash}
-          </p>
-          <div className="flex gap-3">
-            {/* WhatsApp */}
-            <a
-              href={cashWhatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 rounded-2xl flex flex-col items-center justify-center text-button"
-              style={{
-                minHeight: '52px',
-                backgroundColor: '#25D366',
-                color: 'white',
-                textDecoration: 'none',
-              }}
-            >
-              <span className="text-xl mb-1">📱</span>
-              <span className="text-sm">WhatsApp</span>
-              <span className="text-xs mt-1">{t.price}</span>
-            </a>
-
-            {/* Viber */}
-            <a
-              href={cashViberUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 rounded-2xl flex flex-col items-center justify-center text-button"
-              style={{
-                minHeight: '52px',
-                backgroundColor: '#7360F2',
-                color: 'white',
-                textDecoration: 'none',
-              }}
-            >
-              <span className="text-xl mb-1">📞</span>
-              <span className="text-sm">Viber</span>
-              <span className="text-xs mt-1">{t.price}</span>
-            </a>
-          </div>
-        </div>
-
-        {/* OR Divider */}
-        <div className="flex items-center w-full max-w-sm mb-6">
-          <div className="flex-1 h-px" style={{ backgroundColor: 'var(--polar)', opacity: 0.3 }} />
-          <span className="px-4 text-sm" style={{ color: 'var(--polar)', opacity: 0.7 }}>
-            {messages[locale]?.demoExpired?.or || 'Ή'}
-          </span>
-          <div className="flex-1 h-px" style={{ backgroundColor: 'var(--polar)', opacity: 0.3 }} />
-        </div>
-
-        {/* 3. IRIS Transfer */}
-        <div className="w-full max-w-sm mb-6">
-          <p className="text-sm text-center mb-3" style={{ color: 'var(--polar)', opacity: 0.9 }}>
-            {t.contactForIris}
-          </p>
           <button
             className="w-full rounded-2xl flex flex-col items-center justify-center text-button"
             style={{
-              minHeight: '64px',
+              minHeight: '100px',
               backgroundColor: 'var(--polar)',
               color: 'var(--deep-teal)',
               padding: '16px',
             }}
             onClick={() => {
-              // Копируем данные в буфер обмена
-              navigator.clipboard.writeText(`${t.irisPhone} ${t.irisName}`);
-              alert(t.irisCopied);
+              navigator.clipboard.writeText('GR9001721020005102086382968');
+              alert('IBAN copied!');
             }}
           >
-            <span className="text-lg font-semibold">💳 {t.irisTransfer}</span>
-            <span className="text-sm mt-1">{t.irisPhone}</span>
-            <span className="text-xs mt-1" style={{ opacity: 0.8 }}>{t.irisName}</span>
-            <span className="text-xs mt-2 font-bold">{t.irisPriceWithTax}</span>
+            <span className="text-sm font-semibold">Τραπεζική μεταφορά</span>
+            <span className="text-lg font-bold mt-1">ΤΡΑΠΕΖΑ ΠΕΙΡΑΙΩΣ</span>
+            <span className="text-xs mt-1" style={{ fontFamily: 'monospace' }}>IBAN GR9001721020005102086382968</span>
+            <span className="text-xs mt-1" style={{ opacity: 0.8 }}>NATALIYA GULENKOVA</span>
+          </button>
+        </div>
+
+        {/* 3. Bank Transfer - EUROBANK */}
+        <div className="w-full max-w-sm mb-6">
+          <button
+            className="w-full rounded-2xl flex flex-col items-center justify-center text-button"
+            style={{
+              minHeight: '100px',
+              backgroundColor: 'var(--polar)',
+              color: 'var(--deep-teal)',
+              padding: '16px',
+            }}
+            onClick={() => {
+              navigator.clipboard.writeText('GR1602601070000280201824734');
+              alert('IBAN copied!');
+            }}
+          >
+            <span className="text-sm font-semibold">Τραπεζική μεταφορά</span>
+            <span className="text-lg font-bold mt-1">EUROBANK</span>
+            <span className="text-xs mt-1" style={{ fontFamily: 'monospace' }}>IBAN GR1602601070000280201824734</span>
+            <span className="text-xs mt-1" style={{ opacity: 0.8 }}>NATALIYA GULENKOVA</span>
           </button>
         </div>
 
