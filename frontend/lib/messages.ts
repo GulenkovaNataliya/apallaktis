@@ -108,6 +108,7 @@ export const messages = {
       paymentMethods: "ΤΡΟΠΟΙ ΠΛΗΡΩΜΗΣ",
       globalExpenses: "ΓΕΝΙΚΑ ΕΞΟΔΑ",
       userProfile: "ΠΡΟΦΙΛ",
+      analysis: "ΑΝΑΛΥΣΗ",
     },
     paymentMethods: {
       title: "Τρόποι Πληρωμής",
@@ -430,6 +431,7 @@ export const messages = {
       paymentMethods: "СПОСОБЫ ОПЛАТЫ",
       globalExpenses: "ОБЩИЕ РАСХОДЫ",
       userProfile: "ЛИЧНЫЙ КАБИНЕТ",
+      analysis: "АНАЛИЗ",
     },
     paymentMethods: {
       title: "Способы Оплаты",
@@ -752,6 +754,7 @@ export const messages = {
       paymentMethods: "СПОСОБИ ОПЛАТИ",
       globalExpenses: "ЗАГАЛЬНІ ВИТРАТИ",
       userProfile: "ОСОБИСТИЙ КАБІНЕТ",
+      analysis: "АНАЛІЗ",
     },
     paymentMethods: {
       title: "Способи Оплати",
@@ -983,6 +986,7 @@ export const messages = {
       paymentMethods: "METODAT E PAGESËS",
       globalExpenses: "SHPENZIMET E PËRGJITHSHME",
       userProfile: "PROFILI I PËRDORUESIT",
+      analysis: "ANALIZA",
     },
     paymentMethods: {
       title: "Metodat e Pagesës",
@@ -1214,6 +1218,7 @@ export const messages = {
       paymentMethods: "МЕТОДИ НА ПЛАЩАНЕ",
       globalExpenses: "ОБЩИ РАЗХОДИ",
       userProfile: "ЛИЧЕН КАБИНЕТ",
+      analysis: "АНАЛИЗ",
     },
     paymentMethods: {
       title: "Методи на Плащане",
@@ -1445,6 +1450,7 @@ export const messages = {
       paymentMethods: "METODE DE PLATĂ",
       globalExpenses: "CHELTUIELI GENERALE",
       userProfile: "PROFILUL UTILIZATORULUI",
+      analysis: "ANALIZĂ",
     },
     paymentMethods: {
       title: "Metode de Plată",
@@ -1676,6 +1682,7 @@ export const messages = {
       paymentMethods: "PAYMENT METHODS",
       globalExpenses: "GENERAL EXPENSES",
       userProfile: "USER PROFILE",
+      analysis: "ANALYSIS",
     },
     paymentMethods: {
       title: "Payment Methods",
@@ -1907,6 +1914,7 @@ export const messages = {
       paymentMethods: "طرق الدفع",
       globalExpenses: "المصروفات العامة",
       userProfile: "الملف الشخصي",
+      analysis: "تحليل",
     },
     paymentMethods: {
       title: "طرق الدفع",

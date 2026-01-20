@@ -41,6 +41,15 @@ export default function PagePay() {
           {messages[locale]?.objects?.title || 'ΕΡΓΑ'}
         </Link>
 
+        {/* Analysis Button */}
+        <Link
+          href={`/${locale}/analysis`}
+          className="btn-universal w-full text-button flex items-center justify-center text-center gap-2"
+          style={{ minHeight: '52px', backgroundColor: 'var(--deep-teal)', color: '#ff8f0a', boxShadow: '0 4px 8px #ff8f0a' }}
+        >
+          📊 {t.analysis || 'ANALYSIS'}
+        </Link>
+
         {/* User Profile / Dashboard Button */}
         <Link
           href={`/${locale}/dashboard`}
