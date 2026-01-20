@@ -21,7 +21,7 @@ import {
 // Translations for Analysis page
 const translations = {
   el: {
-    title: "Ανάλυση",
+    title: "Οικονομική Ανάλυση",
     accessDenied: "Διαθέσιμο στο Standard ή Premium",
     upgradeButton: "Αναβάθμιση πλάνου",
     dateFrom: "Από",
@@ -50,7 +50,7 @@ const translations = {
     emailError: "Σφάλμα αποστολής email",
   },
   ru: {
-    title: "Анализ",
+    title: "Финансовый анализ",
     accessDenied: "Доступно в Standard или Premium",
     upgradeButton: "Улучшить план",
     dateFrom: "От",
@@ -79,7 +79,7 @@ const translations = {
     emailError: "Ошибка отправки email",
   },
   en: {
-    title: "Analysis",
+    title: "Financial Analysis",
     accessDenied: "Available in Standard or Premium",
     upgradeButton: "Upgrade plan",
     dateFrom: "From",
@@ -108,7 +108,7 @@ const translations = {
     emailError: "Email sending error",
   },
   uk: {
-    title: "Аналіз",
+    title: "Фінансовий аналіз",
     accessDenied: "Доступно в Standard або Premium",
     upgradeButton: "Покращити план",
     dateFrom: "Від",
@@ -137,7 +137,7 @@ const translations = {
     emailError: "Помилка надсилання email",
   },
   sq: {
-    title: "Analiza",
+    title: "Analiza Financiare",
     accessDenied: "E disponueshme në Standard ose Premium",
     upgradeButton: "Përmirëso planin",
     dateFrom: "Nga",
@@ -166,7 +166,7 @@ const translations = {
     emailError: "Gabim në dërgimin e email",
   },
   bg: {
-    title: "Анализ",
+    title: "Финансов анализ",
     accessDenied: "Налично в Standard или Premium",
     upgradeButton: "Подобри плана",
     dateFrom: "От",
@@ -195,7 +195,7 @@ const translations = {
     emailError: "Грешка при изпращане на имейл",
   },
   ro: {
-    title: "Analiză",
+    title: "Analiză Financiară",
     accessDenied: "Disponibil în Standard sau Premium",
     upgradeButton: "Îmbunătățește planul",
     dateFrom: "De la",
@@ -224,7 +224,7 @@ const translations = {
     emailError: "Eroare la trimiterea email-ului",
   },
   ar: {
-    title: "تحليل",
+    title: "التحليل المالي",
     accessDenied: "متاح في Standard أو Premium",
     upgradeButton: "ترقية الخطة",
     dateFrom: "من",
@@ -754,11 +754,11 @@ export default function AnalysisPage() {
               minHeight: '52px',
               borderRadius: '1rem',
               backgroundColor: 'var(--deep-teal)',
-              color: '#ff8f0a',
-              boxShadow: '0 4px 8px #ff8f0a',
+              color: 'var(--zanah)',
+              boxShadow: '0 4px 8px var(--zanah)',
             }}
           >
-            {t.title}
+            📊 {t.title}
           </div>
 
           {/* Access Denied Message */}
@@ -809,8 +809,8 @@ export default function AnalysisPage() {
             minHeight: '52px',
             borderRadius: '1rem',
             backgroundColor: 'var(--deep-teal)',
-            color: '#ff8f0a',
-            boxShadow: '0 4px 8px #ff8f0a',
+            color: 'var(--zanah)',
+            boxShadow: '0 4px 8px var(--zanah)',
           }}
         >
           📊 {t.title}

@@ -81,20 +81,12 @@ export default function SubscriptionPlanCard({
         </div>
       </div>
 
-      {/* Description */}
-      <p
-        className="text-button mb-3"
-        style={{ color: 'var(--deep-teal)' }}
-      >
-        {plan.description}
-      </p>
-
       {/* Features */}
       <ul className="space-y-2 mb-3 flex-1">
         {plan.features.map((feature, index) => (
           <li
             key={index}
-            className="flex items-start gap-2 text-sm"
+            className="flex items-start gap-2 text-button"
             style={{ color: 'var(--deep-teal)' }}
           >
             {/* Checkmark Icon */}
@@ -125,17 +117,17 @@ export default function SubscriptionPlanCard({
             ? '#cccccc'
             : isRecommended
             ? '#ff8f0a'
-            : 'var(--zanah)',
+            : 'var(--deep-teal)',
           color: isCurrent
             ? '#666666'
             : isRecommended
             ? 'white'
-            : 'var(--deep-teal)',
+            : 'var(--zanah)',
           boxShadow: isCurrent
             ? 'none'
             : isRecommended
             ? '0 4px 0 #cc7208, 0 6px 12px rgba(255, 143, 10, 0.3)'
-            : '0 4px 0 rgba(1, 49, 45, 0.3), 0 6px 12px rgba(1, 49, 45, 0.2)',
+            : '0 4px 0 #001a17, 0 6px 12px rgba(1, 49, 45, 0.4)',
           transform: 'translateY(0)',
           cursor: isCurrent ? 'not-allowed' : 'pointer',
         }}
@@ -144,7 +136,7 @@ export default function SubscriptionPlanCard({
             e.currentTarget.style.transform = 'translateY(3px)';
             e.currentTarget.style.boxShadow = isRecommended
               ? '0 1px 0 #cc7208, 0 3px 6px rgba(255, 143, 10, 0.2)'
-              : '0 1px 0 rgba(1, 49, 45, 0.3), 0 3px 6px rgba(1, 49, 45, 0.1)';
+              : '0 1px 0 #001a17, 0 3px 6px rgba(1, 49, 45, 0.2)';
           }
         }}
         onMouseUp={(e) => {
@@ -152,7 +144,7 @@ export default function SubscriptionPlanCard({
             e.currentTarget.style.transform = 'translateY(0)';
             e.currentTarget.style.boxShadow = isRecommended
               ? '0 4px 0 #cc7208, 0 6px 12px rgba(255, 143, 10, 0.3)'
-              : '0 4px 0 rgba(1, 49, 45, 0.3), 0 6px 12px rgba(1, 49, 45, 0.2)';
+              : '0 4px 0 #001a17, 0 6px 12px rgba(1, 49, 45, 0.4)';
           }
         }}
         onMouseLeave={(e) => {
@@ -160,7 +152,7 @@ export default function SubscriptionPlanCard({
             e.currentTarget.style.transform = 'translateY(0)';
             e.currentTarget.style.boxShadow = isRecommended
               ? '0 4px 0 #cc7208, 0 6px 12px rgba(255, 143, 10, 0.3)'
-              : '0 4px 0 rgba(1, 49, 45, 0.3), 0 6px 12px rgba(1, 49, 45, 0.2)';
+              : '0 4px 0 #001a17, 0 6px 12px rgba(1, 49, 45, 0.4)';
           }
         }}
         onMouseEnter={(e) => {
@@ -168,7 +160,7 @@ export default function SubscriptionPlanCard({
             e.currentTarget.style.transform = 'translateY(-2px)';
             e.currentTarget.style.boxShadow = isRecommended
               ? '0 6px 0 #cc7208, 0 8px 16px rgba(255, 143, 10, 0.4)'
-              : '0 6px 0 rgba(1, 49, 45, 0.3), 0 8px 16px rgba(1, 49, 45, 0.3)';
+              : '0 6px 0 #001a17, 0 8px 16px rgba(1, 49, 45, 0.5)';
           }
         }}
       >

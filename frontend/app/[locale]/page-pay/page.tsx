@@ -45,9 +45,9 @@ export default function PagePay() {
         <Link
           href={`/${locale}/analysis`}
           className="btn-universal w-full text-button flex items-center justify-center text-center gap-2"
-          style={{ minHeight: '52px', backgroundColor: 'var(--deep-teal)', color: '#ff8f0a', boxShadow: '0 4px 8px #ff8f0a' }}
+          style={{ minHeight: '52px', backgroundColor: 'var(--deep-teal)', color: 'var(--zanah)', boxShadow: '0 4px 8px var(--zanah)' }}
         >
-          📊 {t.analysis || 'ANALYSIS'}
+          📊 {t.analysis || 'FINANCIAL ANALYSIS'}
         </Link>
 
         {/* User Profile / Dashboard Button */}
