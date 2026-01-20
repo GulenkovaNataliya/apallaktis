@@ -72,6 +72,12 @@ export default function SubscriptionPlanCard({
           >
             {plan.price}
           </span>
+          <span
+            className="text-xs ml-1"
+            style={{ color: 'var(--deep-teal)', opacity: 0.7 }}
+          >
+            {translations.monthly}
+          </span>
         </div>
       </div>
 
