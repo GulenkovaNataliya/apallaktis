@@ -391,6 +391,11 @@ shadow-color == text-color
 - Вместе с чекбоксом согласия
 - Высота 52px, цвета как у кнопок языков
 
+### Вертикальное позиционирование
+- **НЕ использовать** `justify-center` + `min-h-screen` для страниц с контентом
+- **ИСПОЛЬЗОВАТЬ** `paddingTop: 180px` — контент привязан к верху под логотипом
+- Это позволяет странице скроллиться при необходимости
+
 ### Проверка
 - **ОБЯЗАТЕЛЬНО на реальном телефоне**
 - Desktop проверка — вспомогательная
@@ -467,6 +472,34 @@ shadow-color == text-color
 **Файл:** `frontend/app/[locale]/email-confirmed/page.tsx`
 
 **Применено на всех 8 языках:** el, ru, uk, sq, bg, ro, en, ar (RTL)
+
+---
+
+### /[locale]/purchase-account — Покупка аккаунта
+
+**Layout:**
+- `paddingTop: 180px` (НЕ justify-center!)
+- `paddingLeft: 40px`, `paddingRight: 40px`
+- `gap: 48px` (gap-12) между основными блоками
+- Страница должна скроллиться (НЕ min-h-screen с justify-center)
+
+**Элементы:**
+
+| Элемент | Фон | Цвет текста | Размер/Стиль |
+|---------|-----|-------------|--------------|
+| Фраза "Назад" | — | `var(--polar)` | text-button, `<p>` элемент |
+| Заголовок "Покупка аккаунта" | — | `var(--polar)` | text-3xl font-bold |
+| "Специальная цена!" | — | `var(--orange)` | text-lg, fontWeight: 600 |
+| "62€ με ΦΠΑ" | — | `var(--orange)` | text-3xl font-bold |
+| "BONUS" | — | `var(--zanah)` | text-lg font-bold |
+| "30 дней бесплатно" | — | `var(--orange)` | 18px, fontWeight: 600 |
+| Кнопки оплаты | object gradient | `var(--deep-teal)` | 52px / 100px для банковских |
+
+**Группировка:**
+- Заголовок + блок цены объединены в один div с `gap-2` (8px)
+- Расстояние от "Покупка аккаунта" до "Специальная цена" = расстояние от "Специальная цена" до "62€"
+
+**Файл:** `frontend/app/[locale]/purchase-account/page.tsx`
 
 ---
 

@@ -78,26 +78,24 @@ export default function PurchaseAccountPage() {
 
   return (
     <BackgroundPage pageIndex={1}>
-      <div className="min-h-screen flex flex-col items-center justify-center py-20 gap-12" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
+      <div className="flex flex-col items-center pb-20 gap-12" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px' }}>
 
         {/* Back - law: <p> element */}
-        <div className="w-full max-w-sm">
-          <p
-            onClick={() => router.back()}
-            className="cursor-pointer"
-            style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}
-          >
-            {t.backToDashboard}
-          </p>
-        </div>
+        <p
+          onClick={() => router.back()}
+          className="text-button cursor-pointer w-full"
+          style={{ color: 'var(--polar)' }}
+        >
+          {t.backToDashboard}
+        </p>
 
-        {/* Title */}
-        <h1 className="text-3xl font-bold text-center" style={{ color: 'var(--polar)' }}>
-          {t.title}
-        </h1>
+        {/* Title + Price Block - grouped with small gap */}
+        <div className="flex flex-col items-center text-center gap-2">
+          {/* Title */}
+          <h1 className="text-3xl font-bold text-center" style={{ color: 'var(--polar)' }}>
+            {t.title}
+          </h1>
 
-        {/* Price Block */}
-        <div className="flex flex-col items-center text-center">
           {/* Line 1: Special Price */}
           <p className="text-lg" style={{ color: 'var(--orange)', fontWeight: 600 }}>
             {t.specialPrice}
