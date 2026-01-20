@@ -53,7 +53,7 @@ export default function SubscriptionPage() {
       description: t.premium.description,
       features: t.premium.features,
       maxProjects: null,
-      maxTeamMembers: 3,
+      maxTeamMembers: -1, // unlimited
       stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PREMIUM_PRICE_ID,
     },
   ];
