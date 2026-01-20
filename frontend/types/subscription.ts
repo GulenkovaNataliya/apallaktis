@@ -6,7 +6,7 @@ import { SubscriptionPlan } from './user';
 export interface PlanDetails {
   id: SubscriptionPlan;
   name: string;
-  price: string; // "20€ + ΦΠΑ"
+  price: string; // "24,80€ με ΦΠΑ"
   priceMonthly: number; // 20 (для сравнения)
   description: string;
   features: string[];
@@ -117,8 +117,8 @@ export const SUBSCRIPTION_PLANS: Record<SubscriptionPlanKey, PlanDetails> = {
   basic: {
     id: 'basic',
     name: 'Базовая',
-    price: '20€ + ΦΠΑ',
-    priceMonthly: 20,
+    price: '24,80€ με ΦΠΑ',
+    priceMonthly: 24.80,
     description: 'Для начинающих',
     features: [
       'До 10 проектов',
@@ -134,8 +134,8 @@ export const SUBSCRIPTION_PLANS: Record<SubscriptionPlanKey, PlanDetails> = {
   standard: {
     id: 'standard',
     name: 'Стандартная',
-    price: '45€ + ΦΠΑ',
-    priceMonthly: 45,
+    price: '49,60€ με ΦΠΑ',
+    priceMonthly: 49.60,
     description: 'Для профессионалов',
     features: [
       'До 50 проектов',
@@ -153,8 +153,8 @@ export const SUBSCRIPTION_PLANS: Record<SubscriptionPlanKey, PlanDetails> = {
   premium: {
     id: 'premium',
     name: 'Премиум',
-    price: '90€ + ΦΠΑ',
-    priceMonthly: 90,
+    price: '93,00€ με ΦΠΑ',
+    priceMonthly: 93.00,
     description: 'Для команд',
     features: [
       'Неограниченные проекты',

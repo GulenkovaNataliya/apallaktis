@@ -78,7 +78,7 @@ export default function PurchaseAccountPage() {
 
   return (
     <BackgroundPage pageIndex={1}>
-      <div className="flex flex-col items-center pb-20 gap-12" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px' }}>
+      <div className="flex flex-col items-center gap-12" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}>
 
         {/* Back - law: <p> element */}
         <p

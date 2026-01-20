@@ -21,13 +21,13 @@ export default function SubscriptionPage() {
   const [daysRemaining, setDaysRemaining] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 4 тарифных плана
+  // 3 тарифных плана (VIP removed)
   const plans: PlanDetails[] = [
     {
       id: 'basic',
       name: t.basic.name,
       price: t.basic.price,
-      priceMonthly: 20,
+      priceMonthly: 24.80,
       description: t.basic.description,
       features: t.basic.features,
       maxProjects: 10,
@@ -38,7 +38,7 @@ export default function SubscriptionPage() {
       id: 'standard',
       name: t.standard.name,
       price: t.standard.price,
-      priceMonthly: 45,
+      priceMonthly: 49.60,
       description: t.standard.description,
       features: t.standard.features,
       maxProjects: 50,
@@ -49,22 +49,12 @@ export default function SubscriptionPage() {
       id: 'premium',
       name: t.premium.name,
       price: t.premium.price,
-      priceMonthly: 90,
+      priceMonthly: 93.00,
       description: t.premium.description,
       features: t.premium.features,
       maxProjects: null,
       maxTeamMembers: 3,
       stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PREMIUM_PRICE_ID,
-    },
-    {
-      id: 'vip',
-      name: t.vip.name,
-      price: t.vip.price,
-      priceMonthly: 0,
-      description: t.vip.description,
-      features: [],
-      maxProjects: null,
-      maxTeamMembers: 999,
     },
   ];
 
@@ -112,12 +102,6 @@ export default function SubscriptionPage() {
   }, [locale, router]);
 
   const handleSelectPlan = async (planId: SubscriptionPlan) => {
-    if (planId === 'vip') {
-      // VIP plan - contact admin
-      alert(t.vip.contactAdmin);
-      return;
-    }
-
     // Находим выбранный план
     const selectedPlan = plans.find(p => p.id === planId);
     if (!selectedPlan || !selectedPlan.stripePriceId) {
@@ -172,7 +156,7 @@ export default function SubscriptionPage() {
 
   return (
     <BackgroundPage pageIndex={2}>
-      <div className="flex min-h-screen flex-col items-center gap-12 pb-20" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px' }}>
+      <div className="flex flex-col items-center gap-12" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}>
 
           {/* Header - Beautiful non-clickable button style */}
           <div
@@ -242,21 +226,14 @@ export default function SubscriptionPage() {
             />
           ))}
 
-          {/* Back Button */}
-          <button
+          {/* Back - law: <p> element */}
+          <p
             onClick={() => router.back()}
-            className="w-full text-button flex items-center justify-center text-center"
-            style={{
-              minHeight: '52px',
-              borderRadius: '1rem',
-              backgroundColor: 'transparent',
-              color: 'var(--polar)',
-              border: '2px solid var(--polar)',
-              transition: 'all 0.2s',
-            }}
+            className="text-button cursor-pointer w-full text-center"
+            style={{ color: 'var(--polar)' }}
           >
             ← {messages[locale]?.purchaseAccount?.backToDashboard || 'Back'}
-          </button>
+          </p>
       </div>
     </BackgroundPage>
   );

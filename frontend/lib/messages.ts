@@ -238,10 +238,10 @@ export const messages = {
       currentPlan: "Τρέχον πλάνο",
       recommended: "Συνιστάται",
 
-      // 4 тарифа
+      // 3 тарифа (VIP removed)
       basic: {
         name: "Basic",
-        price: "20€ + ΦΠΑ",
+        price: "24,80€ με ΦΠΑ",
         description: "Ιδανικό για ατομική χρήση",
         features: [
           "Έως 10 έργα",
@@ -254,7 +254,7 @@ export const messages = {
       },
       standard: {
         name: "Standard",
-        price: "45€ + ΦΠΑ",
+        price: "49,60€ με ΦΠΑ",
         description: "Για επαγγελματίες",
         features: [
           "Έως 50 έργα",
@@ -266,19 +266,13 @@ export const messages = {
       },
       premium: {
         name: "Premium",
-        price: "90€ + ΦΠΑ",
+        price: "93,00€ με ΦΠΑ",
         description: "Για ομάδες και επιχειρήσεις",
         features: [
           "Απεριόριστα έργα",
           "Ομάδα έως 3 χρήστες",
           "Όλα από Standard",
         ],
-      },
-      vip: {
-        name: "VIP",
-        price: "Επικοινωνία",
-        description: "Προσαρμοσμένη λύση",
-        contactAdmin: "Επικοινωνήστε με διαχειριστή",
       },
 
       // Умная рекомендация
@@ -556,10 +550,10 @@ export const messages = {
       currentPlan: "Текущий план",
       recommended: "Рекомендуем",
 
-      // 4 тарифа
+      // 3 тарифа (VIP removed)
       basic: {
         name: "Basic",
-        price: "20€ + ΦΠΑ",
+        price: "24,80€ με ΦΠΑ",
         description: "Идеально для личного использования",
         features: [
           "До 10 объектов",
@@ -572,7 +566,7 @@ export const messages = {
       },
       standard: {
         name: "Standard",
-        price: "45€ + ΦΠΑ",
+        price: "49,60€ με ΦΠΑ",
         description: "Для профессионалов",
         features: [
           "До 50 объектов",
@@ -584,19 +578,13 @@ export const messages = {
       },
       premium: {
         name: "Premium",
-        price: "90€ + ΦΠΑ",
+        price: "93,00€ με ΦΠΑ",
         description: "Для команд и бизнеса",
         features: [
           "Неограниченные объекты",
           "Команда до 3 пользователей",
           "Всё из Standard",
         ],
-      },
-      vip: {
-        name: "VIP",
-        price: "По запросу",
-        description: "Индивидуальное решение",
-        contactAdmin: "Свяжитесь с администратором",
       },
 
       // Умная рекомендация

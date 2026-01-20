@@ -61,30 +61,24 @@ export default function SubscriptionPlanCard({
       <div className="flex items-center justify-between mb-3">
         <h3
           className="text-lg font-bold"
-          style={{ color: 'var(--deep-teal)' }}
+          style={{ color: 'var(--orange)' }}
         >
           {plan.name}
         </h3>
         <div className="text-right">
           <span
             className="text-xl font-bold"
-            style={{ color: '#ff8f0a' }}
+            style={{ color: 'var(--orange)' }}
           >
-            {plan.price.split(' ')[0]}
-          </span>
-          <span
-            className="text-xs ml-1"
-            style={{ color: 'var(--deep-teal)', opacity: 0.7 }}
-          >
-            {translations.monthly}
+            {plan.price}
           </span>
         </div>
       </div>
 
       {/* Description */}
       <p
-        className="text-xs mb-3"
-        style={{ color: 'var(--deep-teal)', opacity: 0.8 }}
+        className="text-button mb-3"
+        style={{ color: 'var(--deep-teal)' }}
       >
         {plan.description}
       </p>
