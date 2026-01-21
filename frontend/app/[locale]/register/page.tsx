@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { messages, type Locale } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/client";
+import BackgroundPage from "@/components/BackgroundPage";
 
 // Common country codes for the region
 const countryCodes = [
@@ -205,16 +206,23 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Content */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center px-4 safe-area-top safe-area-bottom" style={{ paddingTop: '180px', paddingLeft: '40px', paddingRight: '40px' }}>
+    <BackgroundPage pageIndex={3}>
+      <div
+        className="flex flex-col items-center"
+        style={{
+          paddingTop: '180px',
+          paddingBottom: '120px',
+          paddingLeft: '40px',
+          paddingRight: '40px',
+        }}
+      >
         {/* Main content */}
         <div className="w-full max-w-sm flex flex-col flex-1 gap-12">
           {/* Back */}
           <p
             onClick={() => router.push(`/${locale}`)}
             className="text-button cursor-pointer"
-            style={{ color: 'var(--deep-teal)' }}
+            style={{ color: 'var(--polar)' }}
           >
             {t.backToHome || '← Πίσω'}
           </p>
@@ -492,7 +500,7 @@ export default function RegisterPage() {
                 onChange={(e) => setAgreeTerms(e.target.checked)}
                 className="mt-1 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-              <span className="text-body" style={{ color: "var(--deep-teal)" }}>
+              <span className="text-body" style={{ color: "var(--polar)" }}>
                 {t.agreeTerms}
               </span>
             </label>
@@ -517,27 +525,35 @@ export default function RegisterPage() {
         </div>
 
         {/* Legal Section at Bottom */}
-        <div className="w-full max-w-sm" style={{ marginTop: "40px", marginBottom: "80px" }}>
-          {/* Legal Buttons */}
-          <div className="grid w-full grid-cols-2 gap-3">
+        <div className="w-full max-w-sm" style={{ marginTop: "40px" }}>
+          {/* Legal Buttons - full width, stacked */}
+          <div className="flex flex-col w-full gap-12">
             <Link
               href={`/${locale}/privacy`}
-              className="btn-primary text-button text-center"
+              className="btn-primary text-button text-center w-full rounded-2xl"
               style={{
                 backgroundColor: "var(--polar)",
                 color: "var(--deep-teal)",
                 boxShadow: "0 4px 8px var(--deep-teal)",
+                minHeight: "52px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               {tLanding.privacy}
             </Link>
             <Link
               href={`/${locale}/terms`}
-              className="btn-primary text-button text-center"
+              className="btn-primary text-button text-center w-full rounded-2xl"
               style={{
                 backgroundColor: "var(--polar)",
                 color: "var(--deep-teal)",
                 boxShadow: "0 4px 8px var(--deep-teal)",
+                minHeight: "52px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               {tLanding.terms}
@@ -545,6 +561,6 @@ export default function RegisterPage() {
           </div>
         </div>
       </div>
-    </div>
+    </BackgroundPage>
   );
 }

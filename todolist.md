@@ -1472,6 +1472,23 @@ POST /api/clients/lookup-afm
 - `frontend/app/[locale]/subscription/success/page.tsx` ✅
 
 ---
+
+### Задача: /[locale]/register — Страница регистрации ✅ ГОТОВО
+
+**Описание**:
+Обновлён дизайн страницы регистрации согласно design.md.
+
+**Выполненные изменения**:
+- [x] Добавлен BackgroundPage компонент с циклическим фоном (page-01...page-08)
+- [x] Кнопки "Политика конфиденциальности" и "Условия использования" — на всю ширину (w-full), одна под другой (flex-col), gap-12, minHeight: 52px
+- [x] Цвета проверены: "← Назад" и checkbox label изменены на var(--polar) для читаемости на тёмном фоне
+- [x] "← Назад" уже использует `<p>` элемент (не button)
+- [x] Layout по закону кнопок: paddingTop 180px, paddingLeft/Right 40px, paddingBottom 120px
+
+**Файлы**:
+- `frontend/app/[locale]/register/page.tsx` ✅
+
+---
 ## ВАЖНЫЕ ПРАВИЛА ДЛЯ CLAUDE CODE
 
 1. **СЛОГАН** — ВСЕГДА пишется с восклицательным знаком: `Τέλος στη ρουτίνα!`
