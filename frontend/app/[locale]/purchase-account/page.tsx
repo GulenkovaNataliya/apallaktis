@@ -108,10 +108,16 @@ export default function PurchaseAccountPage() {
           <p className="text-lg font-bold mt-2" style={{ color: 'var(--zanah)' }}>
             BONUS
           </p>
-          {/* Line 4: 30 days free */}
-          <p style={{ color: 'var(--orange)', fontSize: '18px', fontWeight: 600 }}>
+          {/* Line 4: 30 days free - one line, no bold */}
+          <p style={{ color: 'var(--orange)', fontSize: '18px', whiteSpace: 'nowrap' }}>
             {t.firstMonthFree}
           </p>
+          {/* Account Number - right after 30 days */}
+          {accountNumber && (
+            <p className="text-sm mt-2" style={{ color: 'var(--orange)' }}>
+              {messages[locale]?.demoExpired?.accountNumber || 'Номер аккаунта'}: #{accountNumber}
+            </p>
+          )}
         </div>
 
         {/* Payment Methods */}
@@ -176,13 +182,6 @@ export default function PurchaseAccountPage() {
             <span className="text-xs mt-1" style={{ opacity: 0.8 }}>NATALIYA GULENKOVA</span>
           </button>
         </div>
-
-        {/* Account Number */}
-        {accountNumber && (
-          <p className="text-sm text-center mt-8" style={{ color: 'var(--orange)' }}>
-            {messages[locale]?.demoExpired?.accountNumber || 'Номер аккаунта'}: #{accountNumber}
-          </p>
-        )}
       </div>
     </BackgroundPage>
   );
