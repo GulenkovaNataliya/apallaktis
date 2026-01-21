@@ -1011,7 +1011,7 @@ export default function AnalysisPage() {
                 onClick={handleExportExcel}
                 disabled={isExporting}
                 className="flex-1 py-3 rounded-xl font-semibold"
-                style={{ backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
+                style={{ backgroundColor: '#25D366', color: 'white' }}
               >
                 📥 {t.exportExcel}
               </button>
@@ -1019,7 +1019,7 @@ export default function AnalysisPage() {
                 onClick={handleExportPdf}
                 disabled={isExporting}
                 className="flex-1 py-3 rounded-xl font-semibold"
-                style={{ backgroundColor: 'var(--polar)', color: 'var(--deep-teal)' }}
+                style={{ backgroundColor: '#ef4444', color: 'white' }}
               >
                 📄 {t.exportPdf}
               </button>
@@ -1027,7 +1027,7 @@ export default function AnalysisPage() {
                 onClick={handleSendEmail}
                 disabled={isExporting || !userEmail}
                 className="flex-1 py-3 rounded-xl font-semibold"
-                style={{ backgroundColor: '#ff8f0a', color: 'white' }}
+                style={{ backgroundColor: '#3b82f6', color: 'white' }}
               >
                 📧 {t.exportEmail}
               </button>
