@@ -314,56 +314,56 @@ export default function DashboardPage() {
             {(translations[locale] || translations.el).personalAccount}
           </h1>
 
-          {/* Profile Button - gradient index 0/5 = #e7f4f1 */}
+          {/* Profile Button - lightest */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/profile`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: 'var(--aqua-squeeze)', color: 'var(--blue-whale)' }}
+            style={{ minHeight: '52px', backgroundColor: '#e7f4f1', color: '#01312d' }}
           >
             {(translations[locale] || translations.el).profile}
           </button>
 
-          {/* My Subscription Button - gradient index 1/5 */}
+          {/* My Subscription Button - 3x darker */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/subscription`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#e0f0ed', color: 'var(--blue-whale)' }}
+            style={{ minHeight: '52px', backgroundColor: '#b5ddd4', color: '#01312d' }}
           >
             {(translations[locale] || translations.el).mySubscription}
           </button>
 
-          {/* Security Button - gradient index 2/5 */}
+          {/* Security Button - 3x darker */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/security`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#d9ede9', color: 'var(--blue-whale)' }}
+            style={{ minHeight: '52px', backgroundColor: '#7fc4b8', color: '#01312d' }}
           >
             {(translations[locale] || translations.el).security}
           </button>
 
-          {/* Referrals Button - gradient index 3/5 */}
+          {/* Referrals Button - 3x darker */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/referral`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#d1e9e4', color: 'var(--blue-whale)' }}
+            style={{ minHeight: '52px', backgroundColor: '#4aab9c', color: '#ffffff' }}
           >
             {(translations[locale] || translations.el).referral}
           </button>
 
-          {/* Export Button - gradient index 4/5 */}
+          {/* Export Button - 3x darker */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/export`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#cae6e0', color: 'var(--blue-whale)' }}
+            style={{ minHeight: '52px', backgroundColor: '#208d7d', color: '#ffffff' }}
           >
             {(translations[locale] || translations.el).export}
           </button>
 
-          {/* Go to Finances Button - gradient index 5/5 = #c3e2dc (skeptic) */}
+          {/* Go to Finances Button - darkest */}
           <button
             onClick={() => router.push(`/${locale}/page-pay`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: 'var(--skeptic)', color: 'var(--blue-whale)' }}
+            style={{ minHeight: '52px', backgroundColor: '#01756a', color: '#ffffff' }}
           >
             {(translations[locale] || translations.el).goToFinances}
           </button>
@@ -387,7 +387,7 @@ export default function DashboardPage() {
           </button>
 
           {/* Support Section */}
-          <div className="w-full flex flex-col gap-12 items-center">
+          <div className="w-full flex flex-col gap-12 items-center" style={{ marginBottom: '60px' }}>
             <p
               className="text-button text-center"
               style={{ color: 'var(--orange)' }}
@@ -423,8 +423,8 @@ export default function DashboardPage() {
             </div>
 
             <p
-              className="text-body text-center"
-              style={{ color: 'var(--polar)' }}
+              className="text-heading text-center"
+              style={{ color: '#ffffff', marginTop: '20px' }}
             >
               {(translations[locale] || translations.el).responseTime}
             </p>
