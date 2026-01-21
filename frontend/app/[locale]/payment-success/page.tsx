@@ -74,6 +74,13 @@ export default function PaymentSuccessPage() {
           {t.title}
         </h1>
 
+        {/* Account Number */}
+        {accountNumber && (
+          <p className="text-md text-center mb-4" style={{ color: 'var(--orange)' }}>
+            {t.accountNumber}: <span className="font-bold">#{accountNumber}</span>
+          </p>
+        )}
+
         {/* Subtitle */}
         <p className="text-lg text-center mb-8 max-w-sm" style={{ color: 'var(--polar)', opacity: 0.9 }}>
           {t.subtitle}
@@ -81,23 +88,9 @@ export default function PaymentSuccessPage() {
 
         {/* Success Messages */}
         <div className="w-full max-w-sm mb-8 space-y-4">
-          <div
-            className="p-4 rounded-lg text-center"
-            style={{ backgroundColor: 'rgba(37, 211, 102, 0.1)', border: '2px solid #25D366' }}
-          >
-            <p className="font-semibold" style={{ color: 'var(--polar)' }}>
-              {t.accountActivated}
-            </p>
-          </div>
-
-          <div
-            className="p-4 rounded-lg text-center"
-            style={{ backgroundColor: 'rgba(255, 143, 10, 0.1)', border: '2px solid #ff8f0a' }}
-          >
-            <p className="font-semibold" style={{ color: '#ff8f0a' }}>
-              {t.freeMonthStarted}
-            </p>
-          </div>
+          <p className="font-semibold text-center" style={{ color: '#ff8f0a' }}>
+            {t.freeMonthStarted}
+          </p>
 
           <div
             className="p-4 rounded-lg text-center"
@@ -108,13 +101,6 @@ export default function PaymentSuccessPage() {
             </p>
           </div>
         </div>
-
-        {/* Account Number */}
-        {accountNumber && (
-          <p className="text-md text-center mb-8" style={{ color: 'var(--polar)', opacity: 0.7 }}>
-            {t.accountNumber}: <span className="font-bold">#{accountNumber}</span>
-          </p>
-        )}
 
         {/* Go to Dashboard Button */}
         <button

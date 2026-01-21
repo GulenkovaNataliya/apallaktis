@@ -92,7 +92,6 @@ export const messages = {
     paymentSuccess: {
       title: "Ευχαριστούμε για την αγορά!",
       subtitle: "Ο λογαριασμός σας ενεργοποιήθηκε επιτυχώς",
-      accountActivated: "Ο λογαριασμός σας είναι πλέον πλήρως ενεργός!",
       freeMonthStarted: "30 ημέρες δωρεάν χρήση ξεκίνησαν!",
       receiptSent: "Το παραστατικό (απόδειξη/τιμολόγιο) εστάλη στο email σας",
       goToDashboard: "Μετάβαση στο Dashboard",
@@ -413,7 +412,6 @@ export const messages = {
     paymentSuccess: {
       title: "Спасибо за покупку!",
       subtitle: "Ваш аккаунт успешно активирован",
-      accountActivated: "Ваш аккаунт теперь полностью активен!",
       freeMonthStarted: "30 дней бесплатного использования начались!",
       receiptSent: "Документ (чек/инвойс) отправлен на ваш email",
       goToDashboard: "Перейти в Dashboard",
@@ -734,7 +732,6 @@ export const messages = {
     paymentSuccess: {
       title: "Дякуємо за покупку!",
       subtitle: "Ваш акаунт успішно активовано",
-      accountActivated: "Ваш акаунт тепер повністю активний!",
       freeMonthStarted: "30 днів безкоштовного використання почалися!",
       receiptSent: "Документ (чек/інвойс) надіслано на ваш email",
       goToDashboard: "Перейти в Dashboard",
@@ -874,6 +871,94 @@ export const messages = {
       voiceInputNotSupported: "Голосовий ввід не підтримується вашим браузером. Використовуйте Chrome, Edge або Safari.",
       voiceInputFailed: "Голосовий ввід не вдався. Спробуйте ще раз.",
     },
+    subscription: {
+      title: "Оберіть ваш план",
+      subtitle: "Оберіть план, який відповідає вашим потребам",
+      monthly: "/міс",
+      selectPlan: "Обрати план",
+      currentPlan: "Поточний план",
+      recommended: "Рекомендуємо",
+
+      // 3 тарифи (VIP removed)
+      basic: {
+        name: "Basic",
+        price: "24,80€ з ПДВ",
+        features: [
+          "До 10 об'єктів",
+          "1 користувач",
+          "Базова аналітика",
+          "Viber/WhatsApp",
+        ],
+      },
+      standard: {
+        name: "Standard",
+        price: "49,60€ з ПДВ",
+        features: [
+          "До 50 об'єктів",
+          "До 2 користувачів",
+          "Голосовий ввід",
+          "OCR+ розпізнавання",
+          "Фото чеків",
+          "Базова аналітика",
+          "Сторінка «Аналіз»",
+          "Експорт Excel/PDF",
+          "Відправка на email",
+          "Viber/WhatsApp",
+        ],
+      },
+      premium: {
+        name: "Premium",
+        price: "93,00€ з ПДВ",
+        features: [
+          "Необмежені об'єкти",
+          "Необмежені користувачі",
+          "Голосовий ввід",
+          "OCR+ розпізнавання",
+          "Фото чеків",
+          "Базова аналітика",
+          "Сторінка «Аналіз»",
+          "Експорт Excel/PDF",
+          "Відправка на email",
+          "Viber/WhatsApp",
+        ],
+      },
+
+      // Розумна рекомендація
+      smartRecommendation: {
+        title: "Наша рекомендація для вас",
+        basedOn: "На основі вашої активності:",
+        projects: "{count} проєктів",
+        entries: "{count} записів",
+        logins: "{count} входів",
+        ocrUsage: "{count} використань OCR",
+        voiceUsage: "{count} голосових записів",
+        lightUsage: "Легке використання - рекомендуємо Базовий план",
+        mediumUsage: "Середнє використання - рекомендуємо Стандарт",
+        heavyUsage: "Активне використання - рекомендуємо Преміум",
+      },
+
+      // Бонусні місяці
+      bonusMonths: {
+        title: "У вас {count} безкоштовний місяць!",
+        titlePlural: "У вас {count} безкоштовних місяці!",
+        description: "За реферальною програмою",
+        nextPayment: "Наступний платіж: {date}",
+        noBonuses: "У вас немає бонусних місяців",
+      },
+
+      // Кнопки та дії
+      startFreeTrial: "Почати безкоштовний період",
+      upgradeNow: "Оновити зараз",
+      downgrade: "Знизити план",
+      cancel: "Скасувати",
+      confirmSelection: "Підтвердити вибір",
+
+      // Статуси
+      freeMonthRemaining: "{days} днів безкоштовного використання залишилось",
+      subscriptionExpires: "Підписка закінчується {date}",
+      readOnlyMode: "Режим лише для читання",
+      readOnlyMessage: "Оберіть план, щоб продовжити редагування",
+    },
   },
   sq: {
     landing: {
@@ -967,7 +1052,6 @@ export const messages = {
     paymentSuccess: {
       title: "Faleminderit për blerjen!",
       subtitle: "Llogaria juaj është aktivizuar me sukses",
-      accountActivated: "Llogaria juaj tani është plotësisht aktive!",
       freeMonthStarted: "30 ditë përdorim falas kanë filluar!",
       receiptSent: "Dokumenti (faturë/flete) është dërguar në emailin tuaj",
       goToDashboard: "Shko te Dashboard",
@@ -1107,6 +1191,94 @@ export const messages = {
       voiceInputNotSupported: "Hyrja me zë nuk mbështetet në shfletuesin tuaj. Përdorni Chrome, Edge ose Safari.",
       voiceInputFailed: "Hyrja me zë dështoi. Ju lutemi provoni përsëri.",
     },
+    subscription: {
+      title: "Zgjidhni planin tuaj",
+      subtitle: "Zgjidhni planin që i përshtatet nevojave tuaja",
+      monthly: "/muaj",
+      selectPlan: "Zgjidhni planin",
+      currentPlan: "Plani aktual",
+      recommended: "Rekomandohet",
+
+      // 3 plane (VIP removed)
+      basic: {
+        name: "Basic",
+        price: "24,80€ me TVSH",
+        features: [
+          "Deri në 10 projekte",
+          "1 përdorues",
+          "Analiza bazike",
+          "Viber/WhatsApp",
+        ],
+      },
+      standard: {
+        name: "Standard",
+        price: "49,60€ me TVSH",
+        features: [
+          "Deri në 50 projekte",
+          "Deri në 2 përdorues",
+          "Hyrje me zë",
+          "Njohje OCR+",
+          "Foto faturash",
+          "Analiza bazike",
+          "Faqja «Analiza»",
+          "Eksporto Excel/PDF",
+          "Dërgim në email",
+          "Viber/WhatsApp",
+        ],
+      },
+      premium: {
+        name: "Premium",
+        price: "93,00€ me TVSH",
+        features: [
+          "Projekte të pakufizuara",
+          "Përdorues të pakufizuar",
+          "Hyrje me zë",
+          "Njohje OCR+",
+          "Foto faturash",
+          "Analiza bazike",
+          "Faqja «Analiza»",
+          "Eksporto Excel/PDF",
+          "Dërgim në email",
+          "Viber/WhatsApp",
+        ],
+      },
+
+      // Rekomandim i zgjuar
+      smartRecommendation: {
+        title: "Rekomandimi ynë për ju",
+        basedOn: "Bazuar në përdorimin tuaj:",
+        projects: "{count} projekte",
+        entries: "{count} regjistrime",
+        logins: "{count} hyrje",
+        ocrUsage: "{count} përdorime OCR",
+        voiceUsage: "{count} regjistrime me zë",
+        lightUsage: "Përdorim i lehtë - rekomandojmë planin Bazik",
+        mediumUsage: "Përdorim mesatar - rekomandojmë planin Standard",
+        heavyUsage: "Përdorim i rëndë - rekomandojmë planin Premium",
+      },
+
+      // Muaj bonus
+      bonusMonths: {
+        title: "Keni {count} muaj falas!",
+        titlePlural: "Keni {count} muaj falas!",
+        description: "Nga programi i referimit",
+        nextPayment: "Pagesa e ardhshme: {date}",
+        noBonuses: "Nuk keni muaj bonus",
+      },
+
+      // Butona dhe veprime
+      startFreeTrial: "Filloni provën falas",
+      upgradeNow: "Përmirëso tani",
+      downgrade: "Ul planin",
+      cancel: "Anulo",
+      confirmSelection: "Konfirmo zgjedhjen",
+
+      // Statuset
+      freeMonthRemaining: "{days} ditë përdorim falas të mbetura",
+      subscriptionExpires: "Abonimi skadon më {date}",
+      readOnlyMode: "Mënyra vetëm lexim",
+      readOnlyMessage: "Zgjidhni një plan për të vazhduar redaktimin",
+    },
   },
   bg: {
     landing: {
@@ -1200,7 +1372,6 @@ export const messages = {
     paymentSuccess: {
       title: "Благодарим за покупката!",
       subtitle: "Вашият акаунт е успешно активиран",
-      accountActivated: "Вашият акаунт вече е напълно активен!",
       freeMonthStarted: "30 дни безплатно ползване започнаха!",
       receiptSent: "Документът (фактура/разписка) е изпратен на вашия имейл",
       goToDashboard: "Отиди в Dashboard",
@@ -1340,6 +1511,94 @@ export const messages = {
       voiceInputNotSupported: "Гласовият вход не се поддържа във вашия браузър. Използвайте Chrome, Edge или Safari.",
       voiceInputFailed: "Гласовият вход се провали. Моля, опитайте отново.",
     },
+    subscription: {
+      title: "Изберете вашия план",
+      subtitle: "Изберете плана, който отговаря на вашите нужди",
+      monthly: "/месец",
+      selectPlan: "Избери план",
+      currentPlan: "Текущ план",
+      recommended: "Препоръчително",
+
+      // 3 плана (VIP removed)
+      basic: {
+        name: "Basic",
+        price: "24,80€ с ДДС",
+        features: [
+          "До 10 обекта",
+          "1 потребител",
+          "Базова аналитика",
+          "Viber/WhatsApp",
+        ],
+      },
+      standard: {
+        name: "Standard",
+        price: "49,60€ с ДДС",
+        features: [
+          "До 50 обекта",
+          "До 2 потребители",
+          "Гласов вход",
+          "OCR+ разпознаване",
+          "Снимки на разписки",
+          "Базова аналитика",
+          "Страница «Анализ»",
+          "Експорт Excel/PDF",
+          "Изпращане на email",
+          "Viber/WhatsApp",
+        ],
+      },
+      premium: {
+        name: "Premium",
+        price: "93,00€ с ДДС",
+        features: [
+          "Неограничени обекти",
+          "Неограничени потребители",
+          "Гласов вход",
+          "OCR+ разпознаване",
+          "Снимки на разписки",
+          "Базова аналитика",
+          "Страница «Анализ»",
+          "Експорт Excel/PDF",
+          "Изпращане на email",
+          "Viber/WhatsApp",
+        ],
+      },
+
+      // Умна препоръка
+      smartRecommendation: {
+        title: "Нашата препоръка за вас",
+        basedOn: "На база вашата активност:",
+        projects: "{count} проекта",
+        entries: "{count} записа",
+        logins: "{count} влизания",
+        ocrUsage: "{count} използвания на OCR",
+        voiceUsage: "{count} гласови записа",
+        lightUsage: "Лека употреба - препоръчваме Базовия план",
+        mediumUsage: "Средна употреба - препоръчваме Стандарт",
+        heavyUsage: "Активна употреба - препоръчваме Премиум",
+      },
+
+      // Бонус месеци
+      bonusMonths: {
+        title: "Имате {count} безплатен месец!",
+        titlePlural: "Имате {count} безплатни месеца!",
+        description: "От реферална програма",
+        nextPayment: "Следващо плащане: {date}",
+        noBonuses: "Нямате бонус месеци",
+      },
+
+      // Бутони и действия
+      startFreeTrial: "Започни безплатен период",
+      upgradeNow: "Надгради сега",
+      downgrade: "Понижи плана",
+      cancel: "Отказ",
+      confirmSelection: "Потвърди избора",
+
+      // Статуси
+      freeMonthRemaining: "{days} дни безплатна употреба останали",
+      subscriptionExpires: "Абонаментът изтича на {date}",
+      readOnlyMode: "Режим само за четене",
+      readOnlyMessage: "Изберете план, за да продължите редактирането",
+    },
   },
   ro: {
     landing: {
@@ -1433,7 +1692,6 @@ export const messages = {
     paymentSuccess: {
       title: "Vă mulțumim pentru achiziție!",
       subtitle: "Contul dvs. a fost activat cu succes",
-      accountActivated: "Contul dvs. este acum complet activ!",
       freeMonthStarted: "30 de zile de utilizare gratuită au început!",
       receiptSent: "Documentul (chitanță/factură) a fost trimis pe email-ul dvs.",
       goToDashboard: "Mergi la Dashboard",
@@ -1573,6 +1831,94 @@ export const messages = {
       voiceInputNotSupported: "Intrarea vocală nu este acceptată în browserul dvs. Utilizați Chrome, Edge sau Safari.",
       voiceInputFailed: "Intrarea vocală a eșuat. Vă rugăm să încercați din nou.",
     },
+    subscription: {
+      title: "Alegeți planul dvs.",
+      subtitle: "Selectați planul care se potrivește nevoilor dvs.",
+      monthly: "/lună",
+      selectPlan: "Selectați planul",
+      currentPlan: "Plan curent",
+      recommended: "Recomandat",
+
+      // 3 planuri (VIP removed)
+      basic: {
+        name: "Basic",
+        price: "24,80€ cu TVA",
+        features: [
+          "Până la 10 proiecte",
+          "1 utilizator",
+          "Analiză de bază",
+          "Viber/WhatsApp",
+        ],
+      },
+      standard: {
+        name: "Standard",
+        price: "49,60€ cu TVA",
+        features: [
+          "Până la 50 proiecte",
+          "Până la 2 utilizatori",
+          "Intrare vocală",
+          "Recunoaștere OCR+",
+          "Fotografii chitanțe",
+          "Analiză de bază",
+          "Pagina «Analiză»",
+          "Export Excel/PDF",
+          "Trimitere pe email",
+          "Viber/WhatsApp",
+        ],
+      },
+      premium: {
+        name: "Premium",
+        price: "93,00€ cu TVA",
+        features: [
+          "Proiecte nelimitate",
+          "Utilizatori nelimitați",
+          "Intrare vocală",
+          "Recunoaștere OCR+",
+          "Fotografii chitanțe",
+          "Analiză de bază",
+          "Pagina «Analiză»",
+          "Export Excel/PDF",
+          "Trimitere pe email",
+          "Viber/WhatsApp",
+        ],
+      },
+
+      // Recomandare inteligentă
+      smartRecommendation: {
+        title: "Recomandarea noastră pentru dvs.",
+        basedOn: "Pe baza activității dvs.:",
+        projects: "{count} proiecte",
+        entries: "{count} înregistrări",
+        logins: "{count} autentificări",
+        ocrUsage: "{count} utilizări OCR",
+        voiceUsage: "{count} înregistrări vocale",
+        lightUsage: "Utilizare ușoară - recomandăm planul Basic",
+        mediumUsage: "Utilizare medie - recomandăm planul Standard",
+        heavyUsage: "Utilizare intensă - recomandăm planul Premium",
+      },
+
+      // Luni bonus
+      bonusMonths: {
+        title: "Aveți {count} lună gratuită!",
+        titlePlural: "Aveți {count} luni gratuite!",
+        description: "Din programul de recomandare",
+        nextPayment: "Următoarea plată: {date}",
+        noBonuses: "Nu aveți luni bonus",
+      },
+
+      // Butoane și acțiuni
+      startFreeTrial: "Începeți perioada gratuită",
+      upgradeNow: "Actualizați acum",
+      downgrade: "Reduceți planul",
+      cancel: "Anulează",
+      confirmSelection: "Confirmați selecția",
+
+      // Statusuri
+      freeMonthRemaining: "{days} zile de utilizare gratuită rămase",
+      subscriptionExpires: "Abonamentul expiră pe {date}",
+      readOnlyMode: "Mod doar citire",
+      readOnlyMessage: "Selectați un plan pentru a continua editarea",
+    },
   },
   en: {
     landing: {
@@ -1666,7 +2012,6 @@ export const messages = {
     paymentSuccess: {
       title: "Thank you for your purchase!",
       subtitle: "Your account has been successfully activated",
-      accountActivated: "Your account is now fully active!",
       freeMonthStarted: "30 days of free usage have started!",
       receiptSent: "The document (receipt/invoice) has been sent to your email",
       goToDashboard: "Go to Dashboard",
@@ -1806,6 +2151,94 @@ export const messages = {
       voiceInputNotSupported: "Voice input is not supported in your browser. Please use Chrome, Edge, or Safari.",
       voiceInputFailed: "Voice input failed. Please try again.",
     },
+    subscription: {
+      title: "Choose your plan",
+      subtitle: "Select the plan that fits your needs",
+      monthly: "/month",
+      selectPlan: "Select plan",
+      currentPlan: "Current plan",
+      recommended: "Recommended",
+
+      // 3 plans (VIP removed)
+      basic: {
+        name: "Basic",
+        price: "24,80€ with VAT",
+        features: [
+          "Up to 10 projects",
+          "1 user",
+          "Basic analytics",
+          "Viber/WhatsApp",
+        ],
+      },
+      standard: {
+        name: "Standard",
+        price: "49,60€ with VAT",
+        features: [
+          "Up to 50 projects",
+          "Up to 2 users",
+          "Voice input",
+          "OCR+ recognition",
+          "Receipt photos",
+          "Basic analytics",
+          "Analysis page",
+          "Excel/PDF export",
+          "Email delivery",
+          "Viber/WhatsApp",
+        ],
+      },
+      premium: {
+        name: "Premium",
+        price: "93,00€ with VAT",
+        features: [
+          "Unlimited projects",
+          "Unlimited users",
+          "Voice input",
+          "OCR+ recognition",
+          "Receipt photos",
+          "Basic analytics",
+          "Analysis page",
+          "Excel/PDF export",
+          "Email delivery",
+          "Viber/WhatsApp",
+        ],
+      },
+
+      // Smart recommendation
+      smartRecommendation: {
+        title: "Our recommendation for you",
+        basedOn: "Based on your usage:",
+        projects: "{count} projects",
+        entries: "{count} entries",
+        logins: "{count} logins",
+        ocrUsage: "{count} OCR uses",
+        voiceUsage: "{count} voice entries",
+        lightUsage: "Light usage - we recommend the Basic plan",
+        mediumUsage: "Medium usage - we recommend the Standard plan",
+        heavyUsage: "Heavy usage - we recommend the Premium plan",
+      },
+
+      // Bonus months
+      bonusMonths: {
+        title: "You have {count} free month!",
+        titlePlural: "You have {count} free months!",
+        description: "From the referral program",
+        nextPayment: "Next payment: {date}",
+        noBonuses: "You have no bonus months",
+      },
+
+      // Buttons and actions
+      startFreeTrial: "Start free trial",
+      upgradeNow: "Upgrade now",
+      downgrade: "Downgrade",
+      cancel: "Cancel",
+      confirmSelection: "Confirm selection",
+
+      // Statuses
+      freeMonthRemaining: "{days} days of free usage remaining",
+      subscriptionExpires: "Subscription expires on {date}",
+      readOnlyMode: "Read-only mode",
+      readOnlyMessage: "Select a plan to continue editing",
+    },
   },
   ar: {
     landing: {
@@ -1899,7 +2332,6 @@ export const messages = {
     paymentSuccess: {
       title: "شكراً لك على الشراء!",
       subtitle: "تم تفعيل حسابك بنجاح",
-      accountActivated: "حسابك الآن نشط بالكامل!",
       freeMonthStarted: "بدأت 30 يوماً من الاستخدام المجاني!",
       receiptSent: "تم إرسال المستند (إيصال/فاتورة) إلى بريدك الإلكتروني",
       goToDashboard: "الانتقال إلى لوحة التحكم",
@@ -2038,6 +2470,94 @@ export const messages = {
       voiceButton: "Voice",
       voiceInputNotSupported: "إدخال الصوت غير مدعوم في متصفحك. يرجى استخدام Chrome أو Edge أو Safari.",
       voiceInputFailed: "فشل إدخال الصوت. يرجى المحاولة مرة أخرى.",
+    },
+    subscription: {
+      title: "اختر خطتك",
+      subtitle: "اختر الخطة التي تناسب احتياجاتك",
+      monthly: "/شهر",
+      selectPlan: "اختر الخطة",
+      currentPlan: "الخطة الحالية",
+      recommended: "موصى به",
+
+      // 3 خطط (VIP removed)
+      basic: {
+        name: "Basic",
+        price: "24,80€ شامل ضريبة القيمة المضافة",
+        features: [
+          "حتى 10 مشاريع",
+          "مستخدم واحد",
+          "تحليلات أساسية",
+          "Viber/WhatsApp",
+        ],
+      },
+      standard: {
+        name: "Standard",
+        price: "49,60€ شامل ضريبة القيمة المضافة",
+        features: [
+          "حتى 50 مشروع",
+          "حتى 2 مستخدمين",
+          "إدخال صوتي",
+          "التعرف OCR+",
+          "صور الإيصالات",
+          "تحليلات أساسية",
+          "صفحة «التحليل»",
+          "تصدير Excel/PDF",
+          "إرسال بالبريد الإلكتروني",
+          "Viber/WhatsApp",
+        ],
+      },
+      premium: {
+        name: "Premium",
+        price: "93,00€ شامل ضريبة القيمة المضافة",
+        features: [
+          "مشاريع غير محدودة",
+          "مستخدمون غير محدودين",
+          "إدخال صوتي",
+          "التعرف OCR+",
+          "صور الإيصالات",
+          "تحليلات أساسية",
+          "صفحة «التحليل»",
+          "تصدير Excel/PDF",
+          "إرسال بالبريد الإلكتروني",
+          "Viber/WhatsApp",
+        ],
+      },
+
+      // توصية ذكية
+      smartRecommendation: {
+        title: "توصيتنا لك",
+        basedOn: "بناءً على استخدامك:",
+        projects: "{count} مشاريع",
+        entries: "{count} إدخالات",
+        logins: "{count} تسجيلات دخول",
+        ocrUsage: "{count} استخدامات OCR",
+        voiceUsage: "{count} إدخالات صوتية",
+        lightUsage: "استخدام خفيف - نوصي بالخطة الأساسية",
+        mediumUsage: "استخدام متوسط - نوصي بخطة Standard",
+        heavyUsage: "استخدام مكثف - نوصي بخطة Premium",
+      },
+
+      // أشهر مجانية
+      bonusMonths: {
+        title: "لديك {count} شهر مجاني!",
+        titlePlural: "لديك {count} أشهر مجانية!",
+        description: "من برنامج الإحالة",
+        nextPayment: "الدفعة التالية: {date}",
+        noBonuses: "ليس لديك أشهر مجانية",
+      },
+
+      // الأزرار والإجراءات
+      startFreeTrial: "ابدأ الفترة التجريبية المجانية",
+      upgradeNow: "ترقية الآن",
+      downgrade: "تخفيض الخطة",
+      cancel: "إلغاء",
+      confirmSelection: "تأكيد الاختيار",
+
+      // الحالات
+      freeMonthRemaining: "{days} أيام من الاستخدام المجاني متبقية",
+      subscriptionExpires: "ينتهي الاشتراك في {date}",
+      readOnlyMode: "وضع القراءة فقط",
+      readOnlyMessage: "اختر خطة للمتابعة في التحرير",
     },
   },
 };
