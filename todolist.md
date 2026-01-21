@@ -1453,6 +1453,25 @@ POST /api/clients/lookup-afm
 - `frontend/lib/messages.ts` ✅ (receiptSent обновлён на 8 языках)
 
 ---
+
+### Задача: /[locale]/subscription/success — Успех подписки ✅ ГОТОВО
+
+**Описание**:
+Обновлён дизайн страницы успешной подписки согласно design.md.
+
+**Выполненные изменения**:
+- [x] Убрана рамка и карточка, на странице только фразы
+- [x] Эмодзи как на payment-success (#25D366, 100x100px, галочка ✓)
+- [x] Удалён блок "что дальше..." (features list)
+- [x] Удалена фраза "ваша подписка успешно активирована" (description)
+- [x] Новый текст receiptSent: "Чек на подтверждение оплаты отправлен на email. Τιμολόγιο/Απόδειξη будет отправлено отдельно" (email и Τιμολόγιο/Απόδειξη не переводятся)
+- [x] Кнопка "перейти в dashboard" → фраза `<p>` с cursor-pointer, цвет var(--polar)
+- [x] Layout по закону кнопок: paddingTop 180px, paddingLeft/Right 40px, paddingBottom 120px, gap-12
+
+**Файлы**:
+- `frontend/app/[locale]/subscription/success/page.tsx` ✅
+
+---
 ## ВАЖНЫЕ ПРАВИЛА ДЛЯ CLAUDE CODE
 
 1. **СЛОГАН** — ВСЕГДА пишется с восклицательным знаком: `Τέλος στη ρουτίνα!`

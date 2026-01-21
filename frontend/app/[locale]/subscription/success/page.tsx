@@ -25,40 +25,33 @@ export default function SubscriptionSuccessPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleContinue = () => {
-    router.push(`/${locale}/page-pay`);
-  };
-
   if (isVerifying) {
     return (
       <BackgroundPage pageIndex={2}>
-        <div className="min-h-screen flex flex-col items-center justify-center gap-6" style={{ padding: '40px' }}>
-          <div
-            className="w-full p-8 rounded-2xl text-center"
-            style={{
-              backgroundColor: 'rgba(1, 49, 45, 0.9)',
-              border: '2px solid var(--polar)',
-            }}
-          >
-            <div className="animate-pulse mb-4">
-              <div
-                className="w-16 h-16 mx-auto rounded-full flex items-center justify-center"
-                style={{ backgroundColor: 'var(--polar)' }}
-              >
-                <span style={{ fontSize: '32px', color: 'var(--deep-teal)' }}>⏳</span>
-              </div>
+        <div
+          className="flex flex-col items-center gap-12"
+          style={{
+            paddingTop: '180px',
+            paddingBottom: '120px',
+            paddingLeft: '40px',
+            paddingRight: '40px',
+          }}
+        >
+          <div className="animate-pulse">
+            <div
+              className="rounded-full flex items-center justify-center"
+              style={{
+                width: '100px',
+                height: '100px',
+                backgroundColor: 'var(--polar)',
+              }}
+            >
+              <span style={{ fontSize: '50px' }}>⏳</span>
             </div>
-            <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--polar)' }}>
-              {t?.verifying || 'Проверка платежа...'}
-            </h1>
-            <p style={{ color: 'var(--polar)', opacity: 0.8 }}>
-              {locale === 'el' ? 'Παρακαλώ περιμένετε' :
-               locale === 'ru' ? 'Пожалуйста, подождите' :
-               locale === 'uk' ? 'Будь ласка, зачекайте' :
-               locale === 'ar' ? 'يرجى الانتظار' :
-               'Please wait'}
-            </p>
           </div>
+          <h1 className="text-3xl font-bold text-center" style={{ color: 'var(--polar)' }}>
+            {t?.verifying || 'Проверка платежа...'}
+          </h1>
         </div>
       </BackgroundPage>
     );
@@ -66,139 +59,56 @@ export default function SubscriptionSuccessPage() {
 
   return (
     <BackgroundPage pageIndex={2}>
-      <div className="min-h-screen flex flex-col items-center justify-center gap-6" style={{ padding: '40px' }}>
-
-        {/* Success Card */}
+      <div
+        className="flex flex-col items-center gap-12"
+        style={{
+          paddingTop: '180px',
+          paddingBottom: '120px',
+          paddingLeft: '40px',
+          paddingRight: '40px',
+        }}
+      >
+        {/* Success Icon */}
         <div
-          className="w-full p-8 rounded-2xl text-center"
+          className="rounded-full flex items-center justify-center"
           style={{
-            backgroundColor: 'rgba(1, 49, 45, 0.9)',
-            border: '2px solid var(--zanah)',
+            width: '100px',
+            height: '100px',
+            backgroundColor: '#25D366',
           }}
         >
-          {/* Success Icon */}
-          <div className="mb-6">
-            <div
-              className="w-20 h-20 mx-auto rounded-full flex items-center justify-center"
-              style={{ backgroundColor: 'var(--zanah)' }}
-            >
-              <span style={{ fontSize: '48px', color: 'var(--deep-teal)' }}>✓</span>
-            </div>
-          </div>
-
-          {/* Title */}
-          <h1 className="text-3xl font-bold mb-4" style={{ color: '#ff8f0a' }}>
-            {t?.title || 'Подписка активирована!'}
-          </h1>
-
-          {/* Message */}
-          <p className="text-lg mb-6" style={{ color: 'var(--polar)' }}>
-            {t?.description || 'Ваша подписка успешно активирована. Теперь у вас есть доступ ко всем функциям!'}
-          </p>
-
-          {/* Features List */}
-          <div
-            className="text-left p-4 rounded-lg mb-6"
-            style={{
-              backgroundColor: 'rgba(218, 243, 246, 0.1)',
-              border: '1px solid var(--polar)',
-            }}
-          >
-            <p className="font-bold mb-2" style={{ color: 'var(--polar)' }}>
-              {locale === 'el' ? 'Τι ακολουθεί:' :
-               locale === 'ru' ? 'Что дальше:' :
-               locale === 'uk' ? 'Що далі:' :
-               locale === 'ar' ? 'ما هو التالي:' :
-               locale === 'sq' ? 'Çfarë vijon:' :
-               locale === 'bg' ? 'Какво следва:' :
-               locale === 'ro' ? 'Ce urmează:' :
-               'What\'s next:'}
-            </p>
-            <ul className="space-y-2" style={{ color: 'var(--polar)', opacity: 0.9 }}>
-              <li>• {locale === 'el' ? 'Δημιουργήστε απεριόριστα έργα' :
-                      locale === 'ru' ? 'Создавайте неограниченное количество проектов' :
-                      locale === 'uk' ? 'Створюйте необмежену кількість проектів' :
-                      locale === 'ar' ? 'قم بإنشاء مشاريع غير محدودة' :
-                      locale === 'sq' ? 'Krijoni projekte të pakufizuara' :
-                      locale === 'bg' ? 'Създавайте неограничен брой проекти' :
-                      locale === 'ro' ? 'Creați proiecte nelimitate' :
-                      'Create unlimited projects'}</li>
-              <li>• {locale === 'el' ? 'Χρησιμοποιήστε όλες τις δυνατότητες' :
-                      locale === 'ru' ? 'Используйте все функции платформы' :
-                      locale === 'uk' ? 'Використовуйте всі функції платформи' :
-                      locale === 'ar' ? 'استخدم جميع ميزات المنصة' :
-                      locale === 'sq' ? 'Përdorni të gjitha funksionet' :
-                      locale === 'bg' ? 'Използвайте всички функции' :
-                      locale === 'ro' ? 'Utilizați toate funcțiile' :
-                      'Use all platform features'}</li>
-              <li>• {locale === 'el' ? 'Λάβετε προτεραιότητα υποστήριξης' :
-                      locale === 'ru' ? 'Получайте приоритетную поддержку' :
-                      locale === 'uk' ? 'Отримуйте пріоритетну підтримку' :
-                      locale === 'ar' ? 'احصل على دعم ذو أولوية' :
-                      locale === 'sq' ? 'Merrni mbështetje me prioritet' :
-                      locale === 'bg' ? 'Получавайте приоритетна поддръжка' :
-                      locale === 'ro' ? 'Primiți asistență prioritară' :
-                      'Get priority support'}</li>
-              <li>• {locale === 'el' ? 'Εξαγωγή δεδομένων σε PDF και Excel' :
-                      locale === 'ru' ? 'Экспортируйте данные в PDF и Excel' :
-                      locale === 'uk' ? 'Експортуйте дані в PDF та Excel' :
-                      locale === 'ar' ? 'تصدير البيانات إلى PDF و Excel' :
-                      locale === 'sq' ? 'Eksportoni të dhëna në PDF dhe Excel' :
-                      locale === 'bg' ? 'Експортирайте данни в PDF и Excel' :
-                      locale === 'ro' ? 'Exportați date în PDF și Excel' :
-                      'Export data to PDF and Excel'}</li>
-            </ul>
-          </div>
-
-          {/* Email Note */}
-          <p className="text-sm mb-6" style={{ color: 'var(--polar)', opacity: 0.7 }}>
-            {locale === 'el' ? 'Το παραστατικό εστάλη στο email σας' :
-             locale === 'ru' ? 'Чек отправлен на ваш email' :
-             locale === 'uk' ? 'Чек надіслано на ваш email' :
-             locale === 'ar' ? 'تم إرسال الإيصال إلى بريدك الإلكتروني' :
-             locale === 'sq' ? 'Fatura është dërguar në emailin tuaj' :
-             locale === 'bg' ? 'Фактурата е изпратена на вашия имейл' :
-             locale === 'ro' ? 'Chitanța a fost trimisă pe email' :
-             'Receipt sent to your email'}
-          </p>
-
-          {/* Continue Button */}
-          <button
-            onClick={handleContinue}
-            className="w-full text-button"
-            style={{
-              minHeight: '52px',
-              borderRadius: '1rem',
-              backgroundColor: 'var(--polar)',
-              color: 'var(--deep-teal)',
-              boxShadow: '0 4px 8px var(--deep-teal)',
-              fontWeight: 'bold',
-              transition: 'all 0.2s',
-            }}
-            onMouseDown={(e) => {
-              e.currentTarget.style.boxShadow = '0 2px 4px var(--deep-teal)';
-              e.currentTarget.style.transform = 'translateY(2px)';
-            }}
-            onMouseUp={(e) => {
-              e.currentTarget.style.boxShadow = '0 4px 8px var(--deep-teal)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            {t?.goToDashboard ||
-             (locale === 'el' ? 'Συνέχεια →' :
-              locale === 'ru' ? 'Продолжить →' :
-              locale === 'uk' ? 'Продовжити →' :
-              locale === 'ar' ? 'متابعة ←' :
-              locale === 'sq' ? 'Vazhdo →' :
-              locale === 'bg' ? 'Продължи →' :
-              locale === 'ro' ? 'Continuă →' :
-              'Continue →')}
-          </button>
+          <span style={{ fontSize: '50px' }}>✓</span>
         </div>
+
+        {/* Title */}
+        <h1 className="text-3xl font-bold text-center" style={{ color: 'var(--polar)' }}>
+          {t?.title || 'Подписка активирована!'}
+        </h1>
+
+        {/* Receipt sent */}
+        <p className="text-button text-center" style={{ color: 'var(--zanah)' }}>
+          {locale === 'el' ? 'Η απόδειξη επιβεβαίωσης πληρωμής στάλθηκε στο email σας. Τιμολόγιο/Απόδειξη θα σταλεί ξεχωριστά' :
+           locale === 'ru' ? 'Чек на подтверждение оплаты отправлен на ваш email. Τιμολόγιο/Απόδειξη будет отправлено отдельно' :
+           locale === 'uk' ? 'Чек на підтвердження оплати надіслано на ваш email. Τιμολόγιο/Απόδειξη буде надіслано окремо' :
+           locale === 'ar' ? 'تم إرسال إيصال تأكيد الدفع إلى email الخاص بك. Τιμολόγιο/Απόδειξη سيتم إرساله بشكل منفصل' :
+           locale === 'sq' ? 'Fatura e konfirmimit të pagesës është dërguar në email tuaj. Τιμολόγιο/Απόδειξη do të dërgohet veçmas' :
+           locale === 'bg' ? 'Чекът за потвърждение на плащането е изпратен на вашия email. Τιμολόγιο/Απόδειξη ще бъде изпратен отделно' :
+           locale === 'ro' ? 'Chitanța de confirmare a plății a fost trimisă pe email-ul dvs. Τιμολόγιο/Απόδειξη va fi trimis separat' :
+           'Payment confirmation receipt has been sent to your email. Τιμολόγιο/Απόδειξη will be sent separately'}
+        </p>
+
+        {/* Go to Dashboard - phrase, not a button */}
+        <p
+          onClick={() => router.push(`/${locale}/page-pay`)}
+          className="text-button cursor-pointer text-center"
+          style={{ color: 'var(--polar)' }}
+        >
+          {t?.goToDashboard || t?.goToMenu || 'Продолжить →'}
+        </p>
 
         {/* Session ID (for debugging) */}
         {sessionId && (
-          <p className="text-xs" style={{ color: 'var(--polar)', opacity: 0.5 }}>
+          <p className="text-xs text-center" style={{ color: 'var(--polar)', opacity: 0.4 }}>
             Session: {sessionId.substring(0, 20)}...
           </p>
         )}
