@@ -414,7 +414,7 @@ export default function DashboardPage() {
             </div>
 
             <p
-              className="text-heading text-center"
+              className="text-button text-center"
               style={{ color: '#ffffff', marginTop: '20px' }}
             >
               {(translations[locale] || translations.el).responseTime}
