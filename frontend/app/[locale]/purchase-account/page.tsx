@@ -28,12 +28,32 @@ export default function PurchaseAccountPage() {
             .eq('id', user.id)
             .single();
 
-          if (profile) {
+          if (profile?.account_number) {
             setAccountNumber(profile.account_number);
+            return;
+          }
+        }
+
+        // Fallback: try localStorage
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+          const userData = JSON.parse(userStr);
+          if (userData.accountNumber) {
+            setAccountNumber(userData.accountNumber);
           }
         }
       } catch (error) {
         console.error('Error fetching account number:', error);
+        // Fallback: try localStorage on error
+        try {
+          const userStr = localStorage.getItem('user');
+          if (userStr) {
+            const userData = JSON.parse(userStr);
+            if (userData.accountNumber) {
+              setAccountNumber(userData.accountNumber);
+            }
+          }
+        } catch {}
       } finally {
         setIsLoading(false);
       }
