@@ -166,7 +166,9 @@ export default function DashboardPage() {
 
   // Scroll to top on page load
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }, []);
 
   // Check authentication and fetch user data
@@ -312,56 +314,56 @@ export default function DashboardPage() {
             {(translations[locale] || translations.el).personalAccount}
           </h1>
 
-          {/* Profile Button */}
+          {/* Profile Button - gradient index 0/5 = #e7f4f1 */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/profile`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#e7f4f1', color: 'var(--deep-teal)' }}
+            style={{ minHeight: '52px', backgroundColor: 'var(--aqua-squeeze)', color: 'var(--blue-whale)' }}
           >
             {(translations[locale] || translations.el).profile}
           </button>
 
-          {/* My Subscription Button */}
+          {/* My Subscription Button - gradient index 1/5 */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/subscription`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#e2f0eb', color: 'var(--deep-teal)' }}
+            style={{ minHeight: '52px', backgroundColor: '#e0f0ed', color: 'var(--blue-whale)' }}
           >
             {(translations[locale] || translations.el).mySubscription}
           </button>
 
-          {/* Security Button */}
+          {/* Security Button - gradient index 2/5 */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/security`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#ddece5', color: 'var(--deep-teal)' }}
+            style={{ minHeight: '52px', backgroundColor: '#d9ede9', color: 'var(--blue-whale)' }}
           >
             {(translations[locale] || translations.el).security}
           </button>
 
-          {/* Referrals Button */}
+          {/* Referrals Button - gradient index 3/5 */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/referral`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#d8e8df', color: 'var(--deep-teal)' }}
+            style={{ minHeight: '52px', backgroundColor: '#d1e9e4', color: 'var(--blue-whale)' }}
           >
             {(translations[locale] || translations.el).referral}
           </button>
 
-          {/* Export Button */}
+          {/* Export Button - gradient index 4/5 */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/export`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#d3e4d9', color: 'var(--deep-teal)' }}
+            style={{ minHeight: '52px', backgroundColor: '#cae6e0', color: 'var(--blue-whale)' }}
           >
             {(translations[locale] || translations.el).export}
           </button>
 
-          {/* Go to Finances Button */}
+          {/* Go to Finances Button - gradient index 5/5 = #c3e2dc (skeptic) */}
           <button
             onClick={() => router.push(`/${locale}/page-pay`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
+            style={{ minHeight: '52px', backgroundColor: 'var(--skeptic)', color: 'var(--blue-whale)' }}
           >
             {(translations[locale] || translations.el).goToFinances}
           </button>
@@ -422,7 +424,7 @@ export default function DashboardPage() {
 
             <p
               className="text-body text-center"
-              style={{ color: 'var(--zanah)' }}
+              style={{ color: 'var(--polar)' }}
             >
               {(translations[locale] || translations.el).responseTime}
             </p>
