@@ -22,7 +22,8 @@ const translations = {
     logout: "Αποσύνδεση",
     deleteAccount: "Διαγραφή Λογαριασμού",
     deleteConfirmTitle: "Διαγραφή Λογαριασμού",
-    deleteConfirmMessage: "Είστε σίγουροι ότι θέλετε να διαγράψετε τον λογαριασμό σας; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
+    deleteConfirmMessage: "Είστε σίγουροι ότι θέλετε να διαγράψετε τον λογαριασμό σας;",
+    deleteConfirmMessage2: "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
     deleteConfirmYes: "Ναι, διαγραφή",
     deleteConfirmNo: "Άκυρο",
     needHelp: "Χρειάζεστε βοήθεια;",
@@ -40,7 +41,8 @@ const translations = {
     logout: "Выход из Аккаунта",
     deleteAccount: "Удалить Аккаунт",
     deleteConfirmTitle: "Удаление Аккаунта",
-    deleteConfirmMessage: "Вы уверены, что хотите удалить свой аккаунт? Это действие нельзя отменить.",
+    deleteConfirmMessage: "Вы уверены, что хотите удалить свой аккаунт?",
+    deleteConfirmMessage2: "Это действие нельзя отменить.",
     deleteConfirmYes: "Да, удалить",
     deleteConfirmNo: "Отмена",
     needHelp: "Нужна помощь?",
@@ -58,7 +60,8 @@ const translations = {
     logout: "Log Out",
     deleteAccount: "Delete Account",
     deleteConfirmTitle: "Delete Account",
-    deleteConfirmMessage: "Are you sure you want to delete your account? This action cannot be undone.",
+    deleteConfirmMessage: "Are you sure you want to delete your account?",
+    deleteConfirmMessage2: "This action cannot be undone.",
     deleteConfirmYes: "Yes, delete",
     deleteConfirmNo: "Cancel",
     needHelp: "Need help?",
@@ -76,7 +79,8 @@ const translations = {
     logout: "Вийти з Акаунту",
     deleteAccount: "Видалити Акаунт",
     deleteConfirmTitle: "Видалення Акаунту",
-    deleteConfirmMessage: "Ви впевнені, що хочете видалити свій акаунт? Цю дію неможливо скасувати.",
+    deleteConfirmMessage: "Ви впевнені, що хочете видалити свій акаунт?",
+    deleteConfirmMessage2: "Цю дію неможливо скасувати.",
     deleteConfirmYes: "Так, видалити",
     deleteConfirmNo: "Скасувати",
     needHelp: "Потрібна допомога?",
@@ -94,7 +98,8 @@ const translations = {
     logout: "Dilni nga Llogaria",
     deleteAccount: "Fshi Llogarinë",
     deleteConfirmTitle: "Fshi Llogarinë",
-    deleteConfirmMessage: "Jeni i sigurt që dëshironi të fshini llogarinë tuaj? Ky veprim nuk mund të zhbëhet.",
+    deleteConfirmMessage: "Jeni i sigurt që dëshironi të fshini llogarinë tuaj?",
+    deleteConfirmMessage2: "Ky veprim nuk mund të zhbëhet.",
     deleteConfirmYes: "Po, fshi",
     deleteConfirmNo: "Anulo",
     needHelp: "Keni nevojë për ndihmë?",
@@ -112,7 +117,8 @@ const translations = {
     logout: "Изход от Акаунта",
     deleteAccount: "Изтрий Акаунт",
     deleteConfirmTitle: "Изтриване на Акаунт",
-    deleteConfirmMessage: "Сигурни ли сте, че искате да изтриете акаунта си? Това действие не може да бъде отменено.",
+    deleteConfirmMessage: "Сигурни ли сте, че искате да изтриете акаунта си?",
+    deleteConfirmMessage2: "Това действие не може да бъде отменено.",
     deleteConfirmYes: "Да, изтрий",
     deleteConfirmNo: "Отказ",
     needHelp: "Нуждаете се от помощ?",
@@ -130,7 +136,8 @@ const translations = {
     logout: "Deconectare",
     deleteAccount: "Șterge Contul",
     deleteConfirmTitle: "Ștergere Cont",
-    deleteConfirmMessage: "Sunteți sigur că doriți să ștergeți contul? Această acțiune nu poate fi anulată.",
+    deleteConfirmMessage: "Sunteți sigur că doriți să ștergeți contul?",
+    deleteConfirmMessage2: "Această acțiune nu poate fi anulată.",
     deleteConfirmYes: "Da, șterge",
     deleteConfirmNo: "Anulează",
     needHelp: "Ai nevoie de ajutor?",
@@ -148,7 +155,8 @@ const translations = {
     logout: "تسجيل الخروج",
     deleteAccount: "حذف الحساب",
     deleteConfirmTitle: "حذف الحساب",
-    deleteConfirmMessage: "هل أنت متأكد أنك تريد حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء.",
+    deleteConfirmMessage: "هل أنت متأكد أنك تريد حذف حسابك؟",
+    deleteConfirmMessage2: "لا يمكن التراجع عن هذا الإجراء.",
     deleteConfirmYes: "نعم، احذف",
     deleteConfirmNo: "إلغاء",
     needHelp: "هل تحتاج إلى مساعدة؟",
@@ -377,49 +385,6 @@ export default function DashboardPage() {
             {(translations[locale] || translations.el).deleteAccount}
           </button>
 
-          {/* Support Section */}
-          <div className="w-full flex flex-col gap-12 items-center" style={{ marginBottom: '60px' }}>
-            <p
-              className="text-button text-center"
-              style={{ color: 'var(--orange)' }}
-            >
-              {(translations[locale] || translations.el).needHelp}
-            </p>
-
-            <div className="flex gap-4 w-full">
-              <a
-                href="viber://chat?number=%2B306983208844"
-                className="flex-1 btn-universal text-button flex items-center justify-center"
-                style={{
-                  minHeight: '52px',
-                  backgroundColor: '#7360f2',
-                  color: 'white',
-                }}
-              >
-                Viber
-              </a>
-              <a
-                href="https://wa.me/306983208844"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 btn-universal text-button flex items-center justify-center"
-                style={{
-                  minHeight: '52px',
-                  backgroundColor: '#25D366',
-                  color: 'white',
-                }}
-              >
-                WhatsApp
-              </a>
-            </div>
-
-            <p
-              className="text-button text-center"
-              style={{ color: '#ffffff', marginTop: '20px' }}
-            >
-              {(translations[locale] || translations.el).responseTime}
-            </p>
-          </div>
         </div>
       </div>
 
@@ -442,10 +407,16 @@ export default function DashboardPage() {
               {(translations[locale] || translations.el).deleteConfirmTitle}
             </h2>
             <p
-              className="text-body text-center mb-6"
+              className="text-body text-center"
               style={{ color: 'var(--deep-teal)' }}
             >
               {(translations[locale] || translations.el).deleteConfirmMessage}
+            </p>
+            <p
+              className="text-button text-center mb-6 font-semibold"
+              style={{ color: 'var(--orange)' }}
+            >
+              {(translations[locale] || translations.el).deleteConfirmMessage2}
             </p>
             <div className="flex gap-4">
               <button
@@ -453,8 +424,8 @@ export default function DashboardPage() {
                 className="flex-1 btn-primary text-button text-center"
                 style={{
                   minHeight: '52px',
-                  backgroundColor: 'var(--zanah)',
-                  color: 'var(--deep-teal)',
+                  backgroundColor: '#25D366',
+                  color: 'white',
                 }}
               >
                 {(translations[locale] || translations.el).deleteConfirmNo}

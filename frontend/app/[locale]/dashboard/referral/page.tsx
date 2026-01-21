@@ -45,7 +45,7 @@ export default function ReferralPage() {
       yourStats: "Η Στατιστική σας",
       totalReferrals: "Συνολικές Παραπομπές",
       purchased: "Αγόρασαν Λογαριασμό",
-      bonusEarned: "Bonus Μήνες που κερδίσατε",
+      bonusTotal: "Σύνολο Bonus Μήνες",
       bonusAvailable: "Διαθέσιμοι Bonus Μήνες",
       referralsList: "Οι Παραπομπές σας",
       name: "Όνομα",
@@ -54,7 +54,9 @@ export default function ReferralPage() {
       status: "Κατάσταση",
       registered: "Εγγράφηκε",
       accountPurchased: "Αγόρασε Λογαριασμό",
-      noReferrals: "Δεν έχετε παραπομπές ακόμα. Μοιραστείτε τον σύνδεσμό σας!",
+      noReferrals: "Δεν έχετε παραπομπές ακόμα",
+      noReferrals2: "Μοιραστείτε τον σύνδεσμό σας και κερδίστε Bonus!",
+      back: "Πίσω",
     },
     ru: {
       title: "Реферальная Программа",
@@ -71,7 +73,7 @@ export default function ReferralPage() {
       yourStats: "Ваша Статистика",
       totalReferrals: "Всего Рефералов",
       purchased: "Купили Аккаунт",
-      bonusEarned: "Bonus Месяцев заработано",
+      bonusTotal: "Всего Bonus Месяцев",
       bonusAvailable: "Доступно Bonus Месяцев",
       referralsList: "Ваши Рефералы",
       name: "Имя",
@@ -80,7 +82,9 @@ export default function ReferralPage() {
       status: "Статус",
       registered: "Зарегистрировался",
       accountPurchased: "Купил Аккаунт",
-      noReferrals: "У вас пока нет рефералов. Поделитесь своей ссылкой!",
+      noReferrals: "У вас пока нет рефералов",
+      noReferrals2: "Поделитесь своей ссылкой и получите Bonus!",
+      back: "Назад",
     },
     en: {
       title: "Referral Program",
@@ -97,7 +101,7 @@ export default function ReferralPage() {
       yourStats: "Your Statistics",
       totalReferrals: "Total Referrals",
       purchased: "Purchased Account",
-      bonusEarned: "Bonus Months Earned",
+      bonusTotal: "Total Bonus Months",
       bonusAvailable: "Available Bonus Months",
       referralsList: "Your Referrals",
       name: "Name",
@@ -106,7 +110,9 @@ export default function ReferralPage() {
       status: "Status",
       registered: "Registered",
       accountPurchased: "Purchased Account",
-      noReferrals: "You don't have any referrals yet. Share your link!",
+      noReferrals: "You don't have any referrals yet",
+      noReferrals2: "Share your link and get Bonus!",
+      back: "Back",
     },
   };
 
@@ -188,6 +194,11 @@ export default function ReferralPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const shareViber = () => {
+    const message = encodeURIComponent(`Δοκίμασε το ΑΠΑΛΛΑΚΤΗΣ! Εγγραφή εδώ: ${referralLink}`);
+    window.open(`viber://forward?text=${message}`, '_blank');
+  };
+
   const shareWhatsApp = () => {
     const message = encodeURIComponent(`Δοκίμασε το ΑΠΑΛΛΑΚΤΗΣ! Εγγραφή εδώ: ${referralLink}`);
     window.open(`https://wa.me/?text=${message}`, '_blank');
@@ -203,165 +214,162 @@ export default function ReferralPage() {
 
   return (
     <BackgroundPage pageIndex={1}>
-      <div className="flex min-h-screen flex-col items-center gap-8 pb-20" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px' }}>
-        <div className="w-full max-w-4xl space-y-8">
-          {/* Header */}
+      <div className="flex min-h-screen flex-col items-center" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}>
+        <div className="w-full max-w-sm flex flex-col gap-12">
+          {/* Back - phrase, not a button */}
+          <p
+            onClick={() => router.push(`/${locale}/dashboard`)}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)' }}
+          >
+            ← {t.back}
+          </p>
+
+          {/* Header - always English */}
           <h1
             className="text-slogan font-bold text-center"
             style={{ color: '#ff8f0a' }}
           >
-            {t.title}
+            Referral Program
           </h1>
 
-          {/* Referral Link Card */}
-          <div
-            className="w-full p-6 rounded-2xl"
-            style={{ backgroundColor: 'var(--polar)' }}
-          >
-            <h2 className="text-heading font-semibold mb-4" style={{ color: 'var(--deep-teal)' }}>
-              {t.yourLink}
-            </h2>
+          {/* Your Link - phrase, centered */}
+          <p className="text-heading font-semibold text-center" style={{ color: 'var(--zanah)' }}>
+            {t.yourLink}
+          </p>
 
-            <div className="flex flex-col gap-4">
-              {/* Link Display */}
-              <div className="p-4 rounded-xl" style={{ backgroundColor: 'rgba(1, 49, 45, 0.1)' }}>
-                <p className="text-body break-all" style={{ color: 'var(--deep-teal)' }}>
-                  {referralLink}
-                </p>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={copyToClipboard}
-                  className="px-6 py-3 rounded-xl text-button font-semibold transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: '#ff8f0a', color: 'white', minHeight: '52px', boxShadow: '0 4px 8px rgba(255, 255, 255, 0.3)' }}
-                >
-                  {copied ? t.copied : t.copyLink}
-                </button>
-                <button
-                  onClick={shareWhatsApp}
-                  className="px-6 py-3 rounded-xl text-button font-semibold transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: '#25D366', color: 'white', minHeight: '52px', boxShadow: '0 4px 8px rgba(255, 255, 255, 0.3)' }}
-                >
-                  {t.shareWhatsApp}
-                </button>
-                <button
-                  onClick={shareEmail}
-                  className="px-6 py-3 rounded-xl text-button font-semibold transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: 'var(--deep-teal)', color: 'white', minHeight: '52px', boxShadow: '0 4px 8px rgba(255, 255, 255, 0.3)' }}
-                >
-                  {t.shareEmail}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* How It Works */}
-          <div
-            className="w-full p-6 rounded-2xl"
-            style={{ backgroundColor: 'var(--polar)' }}
-          >
-            <h2 className="text-heading font-semibold mb-4" style={{ color: 'var(--deep-teal)' }}>
-              {t.howItWorks}
-            </h2>
-            <ol className="space-y-2 text-body" style={{ color: 'var(--deep-teal)' }}>
-              <li>1. {t.step1}</li>
-              <li>2. {t.step2}</li>
-              <li>3. {t.step3}</li>
-              <li>4. <strong>{t.step4}</strong></li>
-            </ol>
-          </div>
-
-          {/* Statistics */}
-          <div
-            className="w-full p-6 rounded-2xl"
-            style={{ backgroundColor: 'var(--polar)' }}
-          >
-            <h2 className="text-heading font-semibold mb-4" style={{ color: 'var(--deep-teal)' }}>
-              {t.yourStats}
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center">
-                <p className="text-3xl font-bold" style={{ color: '#ff8f0a' }}>{stats?.referrals_count || 0}</p>
-                <p className="text-sm mt-1" style={{ color: 'var(--deep-teal)' }}>{t.totalReferrals}</p>
-              </div>
-              <div className="text-center">
-                <p className="text-3xl font-bold" style={{ color: '#ff8f0a' }}>{purchasedCount}</p>
-                <p className="text-sm mt-1" style={{ color: 'var(--deep-teal)' }}>{t.purchased}</p>
-              </div>
-              <div className="text-center">
-                <p className="text-3xl font-bold" style={{ color: '#ff8f0a' }}>{purchasedCount}</p>
-                <p className="text-sm mt-1" style={{ color: 'var(--deep-teal)' }}>{t.bonusEarned}</p>
-              </div>
-              <div className="text-center">
-                <p className="text-3xl font-bold" style={{ color: '#ff8f0a' }}>{stats?.bonus_months || 0}</p>
-                <p className="text-sm mt-1" style={{ color: 'var(--deep-teal)' }}>{t.bonusAvailable}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Referrals List */}
-          <div
-            className="w-full p-6 rounded-2xl"
-            style={{ backgroundColor: 'var(--polar)' }}
-          >
-            <h2 className="text-heading font-semibold mb-4" style={{ color: 'var(--deep-teal)' }}>
-              {t.referralsList}
-            </h2>
-
-            {stats?.referrals && stats.referrals.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full text-body">
-                  <thead>
-                    <tr style={{ borderBottom: '2px solid rgba(1, 49, 45, 0.2)' }}>
-                      <th className="text-left py-2 px-2" style={{ color: 'var(--deep-teal)' }}>{t.name}</th>
-                      <th className="text-left py-2 px-2" style={{ color: 'var(--deep-teal)' }}>{t.email}</th>
-                      <th className="text-left py-2 px-2" style={{ color: 'var(--deep-teal)' }}>{t.dateRegistered}</th>
-                      <th className="text-left py-2 px-2" style={{ color: 'var(--deep-teal)' }}>{t.status}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {stats.referrals.map((referral) => (
-                      <tr key={referral.id} style={{ borderBottom: '1px solid rgba(1, 49, 45, 0.1)' }}>
-                        <td className="py-3 px-2" style={{ color: 'var(--deep-teal)' }}>{referral.name}</td>
-                        <td className="py-3 px-2" style={{ color: 'var(--deep-teal)' }}>{referral.email}</td>
-                        <td className="py-3 px-2" style={{ color: 'var(--deep-teal)' }}>
-                          {new Date(referral.created_at).toLocaleDateString(locale)}
-                        </td>
-                        <td className="py-3 px-2">
-                          <span
-                            className="px-3 py-1 rounded-full text-sm font-semibold"
-                            style={{
-                              backgroundColor: referral.account_purchased ? '#25D366' : '#ff8f0a',
-                              color: 'white'
-                            }}
-                          >
-                            {referral.account_purchased ? t.accountPurchased : t.registered}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <p className="text-center py-8 text-body" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                {t.noReferrals}
+          {/* Link Display with Copy button */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 p-4 rounded-xl" style={{ backgroundColor: 'var(--polar)' }}>
+              <p className="text-body break-all" style={{ color: 'var(--deep-teal)' }}>
+                {referralLink}
               </p>
-            )}
-          </div>
-
-          {/* Back Button */}
-          <div className="text-center">
+            </div>
             <button
-              onClick={() => router.push(`/${locale}/dashboard`)}
-              className="px-8 py-3 rounded-xl text-button font-semibold transition-opacity hover:opacity-80"
-              style={{ backgroundColor: 'var(--deep-teal)', color: 'white', minHeight: '52px', boxShadow: '0 4px 8px rgba(255, 255, 255, 0.3)' }}
+              onClick={copyToClipboard}
+              className="px-4 py-3 rounded-xl text-button font-semibold transition-opacity hover:opacity-80 whitespace-nowrap"
+              style={{ backgroundColor: '#ff8f0a', color: 'white', minHeight: '52px' }}
             >
-              ← Back to Dashboard
+              {copied ? 'Copied!' : 'Copy'}
             </button>
           </div>
+
+          {/* Share Buttons - equal width */}
+          <div className="flex gap-3">
+            <button
+              onClick={shareViber}
+              className="flex-1 py-3 rounded-xl text-button font-semibold transition-opacity hover:opacity-80"
+              style={{ backgroundColor: '#7360f2', color: 'white', minHeight: '52px' }}
+            >
+              Viber
+            </button>
+            <button
+              onClick={shareWhatsApp}
+              className="flex-1 py-3 rounded-xl text-button font-semibold transition-opacity hover:opacity-80"
+              style={{ backgroundColor: '#25D366', color: 'white', minHeight: '52px' }}
+            >
+              WhatsApp
+            </button>
+            <button
+              onClick={shareEmail}
+              className="flex-1 py-3 rounded-xl text-button font-semibold transition-opacity hover:opacity-80"
+              style={{ backgroundColor: '#3b82f6', color: 'white', minHeight: '52px' }}
+            >
+              Email
+            </button>
+          </div>
+
+          {/* How It Works - phrase, centered */}
+          <p className="text-heading font-semibold text-center" style={{ color: 'var(--zanah)' }}>
+            {t.howItWorks}
+          </p>
+
+          {/* Steps - text on background, larger font */}
+          <div className="flex flex-col gap-4">
+            <p className="text-button text-center" style={{ color: 'var(--zanah)' }}>1. {t.step1}</p>
+            <p className="text-button text-center" style={{ color: 'var(--zanah)' }}>2. {t.step2}</p>
+            <p className="text-button text-center" style={{ color: 'var(--zanah)' }}>3. {t.step3}</p>
+            <p className="text-button text-center font-bold" style={{ color: 'var(--orange)' }}>4. {t.step4}</p>
+          </div>
+
+          {/* Statistics - phrase, centered */}
+          <p className="text-heading font-semibold text-center" style={{ color: 'var(--zanah)' }}>
+            {t.yourStats}
+          </p>
+
+          {/* Statistics cards 2x2 */}
+          <div className="grid grid-cols-2 gap-12">
+            {/* Row 1 */}
+            <div
+              className="rounded-2xl p-4 text-center"
+              style={{ backgroundColor: 'var(--zanah)', minHeight: '100px' }}
+            >
+              <p className="text-3xl font-bold" style={{ color: 'var(--orange)' }}>{stats?.referrals_count || 0}</p>
+              <p className="text-button mt-2" style={{ color: 'var(--deep-teal)' }}>{t.totalReferrals}</p>
+            </div>
+            <div
+              className="rounded-2xl p-4 text-center"
+              style={{ backgroundColor: 'var(--zanah)', minHeight: '100px' }}
+            >
+              <p className="text-3xl font-bold" style={{ color: 'var(--orange)' }}>{purchasedCount}</p>
+              <p className="text-button mt-2" style={{ color: 'var(--deep-teal)' }}>{t.purchased}</p>
+            </div>
+            {/* Row 2 */}
+            <div
+              className="rounded-2xl p-4 text-center"
+              style={{ backgroundColor: 'var(--zanah)', minHeight: '100px' }}
+            >
+              <p className="text-3xl font-bold" style={{ color: 'var(--orange)' }}>{purchasedCount}</p>
+              <p className="text-button mt-2" style={{ color: 'var(--deep-teal)' }}>{t.bonusTotal}</p>
+            </div>
+            <div
+              className="rounded-2xl p-4 text-center"
+              style={{ backgroundColor: 'var(--zanah)', minHeight: '100px' }}
+            >
+              <p className="text-3xl font-bold" style={{ color: 'var(--orange)' }}>{stats?.bonus_months || 0}</p>
+              <p className="text-button mt-2" style={{ color: 'var(--deep-teal)' }}>{t.bonusAvailable}</p>
+            </div>
+          </div>
+
+          {/* Referrals List - phrase, centered */}
+          <p className="text-heading font-semibold text-center" style={{ color: 'var(--zanah)' }}>
+            {t.referralsList}
+          </p>
+
+          {stats?.referrals && stats.referrals.length > 0 ? (
+            <div className="flex flex-col gap-12 items-center">
+              {stats.referrals.map((referral) => (
+                <div
+                  key={referral.id}
+                  className="w-full rounded-2xl p-4 text-center"
+                  style={{ backgroundColor: 'var(--zanah)' }}
+                >
+                  <p className="text-button" style={{ color: 'var(--deep-teal)' }}>
+                    {t.name}: <span style={{ color: 'var(--orange)' }}>{referral.name}</span>
+                  </p>
+                  <p className="text-button mt-2" style={{ color: 'var(--deep-teal)' }}>
+                    Email: <span style={{ color: 'var(--orange)' }}>{referral.email}</span>
+                  </p>
+                  <p className="text-button mt-2" style={{ color: 'var(--deep-teal)' }}>
+                    {t.dateRegistered}: <span style={{ color: 'var(--orange)' }}>{new Date(referral.created_at).toLocaleDateString(locale)}</span>
+                  </p>
+                  <p className="text-button mt-2" style={{ color: 'var(--deep-teal)' }}>
+                    {t.status}: <span style={{ color: referral.account_purchased ? '#25D366' : 'var(--orange)' }}>{referral.account_purchased ? t.accountPurchased : t.registered}</span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4">
+              <p className="text-button text-center" style={{ color: 'var(--orange)' }}>
+                {t.noReferrals}
+              </p>
+              <p className="text-button text-center" style={{ color: 'var(--orange)' }}>
+                {t.noReferrals2}
+              </p>
+            </div>
+          )}
+
         </div>
       </div>
     </BackgroundPage>

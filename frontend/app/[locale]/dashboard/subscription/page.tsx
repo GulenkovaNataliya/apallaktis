@@ -473,80 +473,43 @@ export default function SubscriptionPage() {
             {t.title}
           </h1>
 
-          {/* Account Purchase Status - moved after title */}
-          <div
-            className="w-full p-4 rounded-2xl text-center"
-            style={{ backgroundColor: 'var(--zanah)' }}
-          >
-            <h2 className="text-heading font-semibold" style={{ color: 'var(--deep-teal)' }}>
-              💳 {t.accountPurchase}
-            </h2>
-          </div>
+          {/* Account Purchase */}
+          <p className="text-heading font-semibold text-center" style={{ color: 'var(--zanah)' }}>
+            💳 {t.accountPurchase}
+          </p>
 
           {/* Account Purchase - Status */}
-          <div
-            className="w-full p-4 rounded-2xl text-center"
-            style={{ backgroundColor: 'var(--zanah)' }}
-          >
-            <p className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
-              {t.status}
-            </p>
-            <p
-              className="text-heading font-bold mt-2"
-              style={{ color: subscription.accountPurchased ? '#25D366' : 'var(--orange)' }}
-            >
+          <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
+            {t.status}:{' '}
+            <span style={{ color: subscription.accountPurchased ? '#25D366' : 'var(--orange)', fontWeight: 'bold' }}>
               {subscription.accountPurchased ? `✓ ${t.paid}` : t.notPaid}
-            </p>
-          </div>
+            </span>
+          </p>
 
-          {/* Current Subscription */}
-          <div
-            className="w-full p-4 rounded-2xl text-center"
-            style={{ backgroundColor: 'var(--zanah)' }}
-          >
-            <h2 className="text-heading font-semibold" style={{ color: 'var(--deep-teal)' }}>
-              📋 {t.currentPlan}
-            </h2>
-          </div>
+          {/* Current Plan */}
+          <p className="text-heading font-semibold text-center" style={{ color: 'var(--zanah)' }}>
+            📋 {t.currentPlan}
+          </p>
 
           {/* Current Plan - Status */}
-          <div
-            className="w-full p-4 rounded-2xl text-center"
-            style={{ backgroundColor: 'var(--zanah)' }}
-          >
-            <p className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
-              {t.status}
-            </p>
-            <p
-              className="text-heading font-bold mt-2"
-              style={{ color: subscription.status === 'demo' ? 'var(--orange)' : (subscription.status === 'active' ? '#25D366' : 'var(--orange)') }}
-            >
+          <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
+            {t.status}:{' '}
+            <span style={{ color: subscription.status === 'active' ? '#25D366' : 'var(--orange)', fontWeight: 'bold' }}>
               {getStatusLabel(subscription.status)}
-            </p>
-            {/* Time Remaining */}
+            </span>
             {timeRemaining && (
-              <p className="text-body mt-2" style={{ color: 'var(--deep-teal)' }}>
-                {t.expiresAt}: {timeRemaining}
-              </p>
+              <span> — {t.expiresAt}: {timeRemaining}</span>
             )}
-          </div>
+          </p>
 
           {/* Bonus Months */}
           {subscription.bonusMonths > 0 && (
-            <div
-              className="w-full p-6 rounded-2xl"
-              style={{ backgroundColor: 'rgba(255, 143, 10, 0.1)' }}
-            >
-              <h2 className="text-heading font-semibold mb-2" style={{ color: '#ff8f0a' }}>
-                🎁 {t.bonusMonths}: {subscription.bonusMonths}
-              </h2>
-              <p className="text-body" style={{ color: 'var(--deep-teal)' }}>
-                {t.bonusNote}
-              </p>
-            </div>
+            <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
+              🎁 {t.bonusMonths}: <span style={{ color: 'var(--orange)', fontWeight: 'bold' }}>{subscription.bonusMonths}</span>
+            </p>
           )}
 
-          {/* Buy Account Button - no title, styled based on purchase status */}
+          {/* Buy Account Button - only button */}
           <button
             onClick={() => !subscription.accountPurchased && router.push(`/${locale}/purchase-account`)}
             disabled={subscription.accountPurchased}
@@ -561,43 +524,23 @@ export default function SubscriptionPage() {
             {t.buyAccount}
           </button>
 
-          {/* Choose/Upgrade Plan Button - only if account purchased */}
-          {subscription.accountPurchased && (
-            <button
-              onClick={() => router.push(`/${locale}/subscription`)}
-              className="w-full rounded-2xl text-button font-semibold transition-opacity hover:opacity-80"
-              style={{
-                backgroundColor: 'var(--zanah)',
-                color: 'var(--deep-teal)',
-                minHeight: '52px',
-              }}
-            >
-              {subscription.plan && subscription.plan !== 'demo' ? t.upgradePlan : t.choosePlan}
-            </button>
-          )}
+          {/* Payment History */}
+          <p className="text-heading font-semibold text-center" style={{ color: 'var(--zanah)' }}>
+            📜 {t.paymentHistory}
+          </p>
 
-          {/* Payment History - Title */}
-          <div
-            className="w-full p-4 rounded-2xl text-center"
-            style={{ backgroundColor: 'var(--zanah)' }}
-          >
-            <h2 className="text-heading font-semibold" style={{ color: 'var(--deep-teal)' }}>
-              📜 {t.paymentHistory}
-            </h2>
-          </div>
-
-          {/* Invoice notice - orange text, centered */}
+          {/* Invoice notice */}
           <p
             className="text-body text-center"
-            style={{ color: 'var(--orange)' }}
+            style={{ color: 'var(--zanah)' }}
           >
             {t.invoiceNote}
           </p>
 
-          {/* No Payments - orange, centered */}
+          {/* No Payments */}
           <p
             className="text-body text-center"
-            style={{ color: 'var(--orange)' }}
+            style={{ color: 'var(--zanah)' }}
           >
             {t.noPayments}
           </p>

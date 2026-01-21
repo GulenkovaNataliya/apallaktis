@@ -382,6 +382,7 @@ shadow-color == text-color
 - WhatsApp
 - Viber
 - Referral Program
+- Copy (кнопка копирования)
 
 ### Заголовки кнопок
 - Первая буква заглавная, остальные строчные
