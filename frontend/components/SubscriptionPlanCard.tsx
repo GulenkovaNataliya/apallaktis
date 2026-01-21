@@ -117,17 +117,17 @@ export default function SubscriptionPlanCard({
             ? '#cccccc'
             : isRecommended
             ? '#ff8f0a'
-            : 'var(--deep-teal)',
+            : 'var(--skeptic)',
           color: isCurrent
             ? '#666666'
             : isRecommended
             ? 'white'
-            : 'var(--zanah)',
+            : 'var(--deep-teal)',
           boxShadow: isCurrent
             ? 'none'
             : isRecommended
             ? '0 4px 0 #cc7208, 0 6px 12px rgba(255, 143, 10, 0.3)'
-            : '0 4px 0 #001a17, 0 6px 12px rgba(1, 49, 45, 0.4)',
+            : '0 4px 0 #8fb8b0, 0 6px 12px rgba(195, 226, 220, 0.4)',
           transform: 'translateY(0)',
           cursor: isCurrent ? 'not-allowed' : 'pointer',
         }}
@@ -136,7 +136,7 @@ export default function SubscriptionPlanCard({
             e.currentTarget.style.transform = 'translateY(3px)';
             e.currentTarget.style.boxShadow = isRecommended
               ? '0 1px 0 #cc7208, 0 3px 6px rgba(255, 143, 10, 0.2)'
-              : '0 1px 0 #001a17, 0 3px 6px rgba(1, 49, 45, 0.2)';
+              : '0 1px 0 #8fb8b0, 0 3px 6px rgba(195, 226, 220, 0.2)';
           }
         }}
         onMouseUp={(e) => {
@@ -144,7 +144,7 @@ export default function SubscriptionPlanCard({
             e.currentTarget.style.transform = 'translateY(0)';
             e.currentTarget.style.boxShadow = isRecommended
               ? '0 4px 0 #cc7208, 0 6px 12px rgba(255, 143, 10, 0.3)'
-              : '0 4px 0 #001a17, 0 6px 12px rgba(1, 49, 45, 0.4)';
+              : '0 4px 0 #8fb8b0, 0 6px 12px rgba(195, 226, 220, 0.4)';
           }
         }}
         onMouseLeave={(e) => {
@@ -152,7 +152,7 @@ export default function SubscriptionPlanCard({
             e.currentTarget.style.transform = 'translateY(0)';
             e.currentTarget.style.boxShadow = isRecommended
               ? '0 4px 0 #cc7208, 0 6px 12px rgba(255, 143, 10, 0.3)'
-              : '0 4px 0 #001a17, 0 6px 12px rgba(1, 49, 45, 0.4)';
+              : '0 4px 0 #8fb8b0, 0 6px 12px rgba(195, 226, 220, 0.4)';
           }
         }}
         onMouseEnter={(e) => {
@@ -160,7 +160,7 @@ export default function SubscriptionPlanCard({
             e.currentTarget.style.transform = 'translateY(-2px)';
             e.currentTarget.style.boxShadow = isRecommended
               ? '0 6px 0 #cc7208, 0 8px 16px rgba(255, 143, 10, 0.4)'
-              : '0 6px 0 #001a17, 0 8px 16px rgba(1, 49, 45, 0.5)';
+              : '0 6px 0 #8fb8b0, 0 8px 16px rgba(195, 226, 220, 0.5)';
           }
         }}
       >

@@ -244,7 +244,6 @@ export const messages = {
       basic: {
         name: "Basic",
         price: "24,80€ με ΦΠΑ",
-        description: "Ιδανικό για ατομική χρήση",
         features: [
           "Έως 10 έργα",
           "1 χρήστης",
@@ -255,7 +254,6 @@ export const messages = {
       standard: {
         name: "Standard",
         price: "49,60€ με ΦΠΑ",
-        description: "Για επαγγελματίες",
         features: [
           "Έως 50 έργα",
           "Έως 2 χρήστες",
@@ -272,7 +270,6 @@ export const messages = {
       premium: {
         name: "Premium",
         price: "93,00€ με ΦΠΑ",
-        description: "Για ομάδες και επιχειρήσεις",
         features: [
           "Απεριόριστα έργα",
           "Απεριόριστοι χρήστες",
@@ -568,7 +565,6 @@ export const messages = {
       basic: {
         name: "Basic",
         price: "24,80€ με ΦΠΑ",
-        description: "Идеально для личного использования",
         features: [
           "До 10 объектов",
           "1 пользователь",
@@ -579,7 +575,6 @@ export const messages = {
       standard: {
         name: "Standard",
         price: "49,60€ με ΦΠΑ",
-        description: "Для профессионалов",
         features: [
           "До 50 объектов",
           "До 2 пользователей",
@@ -596,7 +591,6 @@ export const messages = {
       premium: {
         name: "Premium",
         price: "93,00€ με ΦΠΑ",
-        description: "Для команд и бизнеса",
         features: [
           "Неограниченные объекты",
           "Неограниченные пользователи",

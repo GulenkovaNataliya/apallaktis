@@ -28,7 +28,6 @@ export default function SubscriptionPage() {
       name: t.basic.name,
       price: t.basic.price,
       priceMonthly: 24.80,
-      description: t.basic.description,
       features: t.basic.features,
       maxProjects: 10,
       maxTeamMembers: 1,
@@ -39,7 +38,6 @@ export default function SubscriptionPage() {
       name: t.standard.name,
       price: t.standard.price,
       priceMonthly: 49.60,
-      description: t.standard.description,
       features: t.standard.features,
       maxProjects: 50,
       maxTeamMembers: 2,
@@ -50,7 +48,6 @@ export default function SubscriptionPage() {
       name: t.premium.name,
       price: t.premium.price,
       priceMonthly: 93.00,
-      description: t.premium.description,
       features: t.premium.features,
       maxProjects: null,
       maxTeamMembers: -1, // unlimited

@@ -8,7 +8,6 @@ export interface PlanDetails {
   name: string;
   price: string; // "24,80€ με ΦΠΑ"
   priceMonthly: number; // 20 (для сравнения)
-  description: string;
   features: string[];
   maxProjects: number | null; // null = unlimited
   maxTeamMembers: number; // 1 = только владелец, 3 = владелец + 2 member
@@ -103,7 +102,6 @@ export const SUBSCRIPTION_PLANS: Record<SubscriptionPlanKey, PlanDetails> = {
     name: 'DEMO',
     price: '0€',
     priceMonthly: 0,
-    description: '48 часов бесплатного тестирования',
     features: [
       'До 3 проектов',
       'OCR сканирование',
@@ -119,7 +117,6 @@ export const SUBSCRIPTION_PLANS: Record<SubscriptionPlanKey, PlanDetails> = {
     name: 'Basic',
     price: '24,80€ με ΦΠΑ',
     priceMonthly: 24.80,
-    description: 'Для личного использования',
     features: [
       'До 10 объектов',
       '1 пользователь',
@@ -135,7 +132,6 @@ export const SUBSCRIPTION_PLANS: Record<SubscriptionPlanKey, PlanDetails> = {
     name: 'Standard',
     price: '49,60€ με ΦΠΑ',
     priceMonthly: 49.60,
-    description: 'Для профессионалов',
     features: [
       'До 50 объектов',
       'До 2 пользователей',
@@ -158,7 +154,6 @@ export const SUBSCRIPTION_PLANS: Record<SubscriptionPlanKey, PlanDetails> = {
     name: 'Premium',
     price: '93,00€ με ΦΠΑ',
     priceMonthly: 93.00,
-    description: 'Для команд и бизнеса',
     features: [
       'Неограниченные объекты',
       'Неограниченные пользователи',
@@ -180,7 +175,6 @@ export const SUBSCRIPTION_PLANS: Record<SubscriptionPlanKey, PlanDetails> = {
     name: 'VIP',
     price: 'Бесплатно',
     priceMonthly: 0,
-    description: 'Специальный доступ',
     features: [
       'Все возможности Premium',
       'Персональный менеджер',

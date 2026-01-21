@@ -231,16 +231,17 @@ export default function ObjectsPage() {
               </p>
             )}
 
-            {/* Hint phrase - always visible, two lines centered */}
-            <div className="text-center text-button" style={{ color: 'var(--zanah)' }}>
-              <p>{t.clickToAnalyzeLine1}</p>
-              <p>{t.clickToAnalyzeLine2}</p>
-            </div>
-
           </div>
 
           {/* Objects Carousel */}
           <div className="flex-1" style={{ marginTop: '48px' }}>
+            {/* Hint phrase - only visible when objects exist */}
+            {filteredObjects.length > 0 && (
+              <div className="text-center text-button" style={{ color: 'var(--zanah)', marginBottom: '24px' }}>
+                <p>{t.clickToAnalyzeLine1}</p>
+                <p>{t.clickToAnalyzeLine2}</p>
+              </div>
+            )}
             {filteredObjects.length > 0 && (
               <ObjectCarousel
                 objects={filteredObjects}
