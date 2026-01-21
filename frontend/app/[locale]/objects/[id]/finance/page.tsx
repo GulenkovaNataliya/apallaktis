@@ -437,7 +437,7 @@ export default function ObjectFinancePage() {
           </h1>
 
           {/* Contract Price Section */}
-          <div className="rounded-xl mb-6" style={{ backgroundColor: 'var(--polar)', padding: '24px 24px 24px 32px' }}>
+          <div className="rounded-xl mb-4" style={{ backgroundColor: 'var(--polar)', padding: '24px 24px 24px 32px' }}>
             <h2 className="text-lg font-semibold mb-2" style={{ color: 'var(--deep-teal)' }}>
               {t.contractPrice}
             </h2>
@@ -447,7 +447,7 @@ export default function ObjectFinancePage() {
           </div>
 
           {/* Additional Works Section */}
-          <div className="rounded-xl mb-6" style={{ backgroundColor: 'var(--polar)', padding: '24px 24px 24px 32px' }}>
+          <div className="rounded-xl mb-4" style={{ backgroundColor: 'var(--polar)', padding: '24px 24px 24px 32px' }}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
                 {tObjects.additionalWorks}
@@ -466,7 +466,7 @@ export default function ObjectFinancePage() {
                 {t.noAdditionalWorks}
               </p>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {finance.additionalWorks.map((work) => (
                   <div key={work.id} className="flex justify-between items-start rounded-lg" style={{ backgroundColor: 'rgba(0,0,0,0.05)', padding: '12px 12px 12px 20px' }}>
                     <div className="flex-1">
@@ -505,7 +505,7 @@ export default function ObjectFinancePage() {
           </div>
 
           {/* Payments Section */}
-          <div className="rounded-xl mb-6" style={{ backgroundColor: 'var(--polar)', padding: '24px 24px 24px 32px' }}>
+          <div className="rounded-xl mb-4" style={{ backgroundColor: 'var(--polar)', padding: '24px 24px 24px 32px' }}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
                 {t.payment}
@@ -524,7 +524,7 @@ export default function ObjectFinancePage() {
                 {t.noPayments}
               </p>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {finance.payments.map((payment) => {
                   const method = paymentMethods.find(m => m.id === payment.paymentMethodId);
                   const methodName = method ? method.name : payment.paymentMethodId;
@@ -608,7 +608,7 @@ export default function ObjectFinancePage() {
             ) : (
               <>
                 {/* Grouped by Category */}
-                <div className="space-y-3 mb-6">
+                <div className="space-y-4 mb-4">
                   {Object.entries(groupByCategory()).map(([categoryId, categoryExpenses]) => {
                     const category = categories.find(c => c.id === categoryId);
                     const categoryName = category?.name || 'Unknown';
@@ -709,11 +709,11 @@ export default function ObjectFinancePage() {
                 </div>
 
                 {/* Grouped by Payment Method */}
-                <div className="mb-6">
+                <div className="mb-4">
                   <h3 className="text-lg font-semibold mb-3" style={{ color: 'var(--polar)' }}>
                     {t.byPaymentMethod}
                   </h3>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {Object.entries(groupByPaymentMethod()).map(([methodId, methodExpenses]) => {
                       const method = paymentMethods.find(pm => pm.id === methodId);
                       const methodName = method?.name || 'Unknown';
@@ -769,7 +769,7 @@ export default function ObjectFinancePage() {
             {/* Add Expense Button */}
             <button
               onClick={() => setView('add-expense')}
-              className="btn-universal w-full text-button mb-6"
+              className="btn-universal w-full text-button mb-4"
               style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
             >
               + {t.addExpense}
@@ -777,7 +777,7 @@ export default function ObjectFinancePage() {
 
             {/* Total Expenses */}
             {expenses.length > 0 && (
-              <div className="rounded-xl mb-6" style={{ backgroundColor: 'var(--polar)', padding: '20px 24px' }}>
+              <div className="rounded-xl mb-4" style={{ backgroundColor: 'var(--polar)', padding: '20px 24px' }}>
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
                     Έξοδα Έργου
@@ -796,7 +796,7 @@ export default function ObjectFinancePage() {
                   // TODO: Link to personal cabinet analytics page
                   alert(t.detailedAnalytics);
                 }}
-                className="btn-universal w-full text-button mb-6"
+                className="btn-universal w-full text-button mb-4"
                 style={{ minHeight: '52px', backgroundColor: 'var(--polar)', color: 'var(--deep-teal)', fontSize: '16px', fontWeight: 600 }}
               >
                 📊 {t.detailedAnalytics}
