@@ -451,11 +451,20 @@ export default function SubscriptionPage() {
   return (
     <BackgroundPage pageIndex={1}>
       <div
-        className="flex min-h-screen flex-col items-center gap-8 pb-20"
-        style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px' }}
+        className="flex min-h-screen flex-col items-center"
+        style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}
         dir={isRTL ? 'rtl' : 'ltr'}
       >
-        <div className="w-full max-w-2xl space-y-6">
+        <div className="w-full max-w-sm flex flex-col gap-12">
+          {/* Back - phrase, not a button */}
+          <p
+            onClick={() => router.push(`/${locale}/dashboard`)}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)' }}
+          >
+            {t.back}
+          </p>
+
           {/* Header */}
           <h1
             className="text-slogan font-bold text-center"
@@ -464,114 +473,62 @@ export default function SubscriptionPage() {
             {t.title}
           </h1>
 
-          {/* Current Subscription */}
+          {/* Account Purchase Status - moved after title */}
           <div
-            className="w-full p-6 rounded-2xl"
-            style={{ backgroundColor: 'var(--polar)' }}
+            className="w-full p-4 rounded-2xl text-center"
+            style={{ backgroundColor: 'var(--zanah)' }}
           >
-            <h2 className="text-heading font-semibold mb-4" style={{ color: 'var(--deep-teal)' }}>
-              📋 {t.currentPlan}
+            <h2 className="text-heading font-semibold" style={{ color: 'var(--deep-teal)' }}>
+              💳 {t.accountPurchase}
             </h2>
-
-            <div className="space-y-4">
-              {/* Status Badge */}
-              <div className="flex items-center justify-between">
-                <span className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
-                  {t.status}
-                </span>
-                <span
-                  className="px-4 py-2 rounded-full text-button font-bold"
-                  style={{
-                    backgroundColor: getStatusColor(subscription.status),
-                    color: 'white',
-                  }}
-                >
-                  {getStatusLabel(subscription.status)}
-                </span>
-              </div>
-
-              {/* Plan */}
-              {subscription.plan && subscription.plan !== 'demo' && (
-                <div className="flex items-center justify-between">
-                  <span className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
-                    {t.currentPlan}
-                  </span>
-                  <span className="text-body font-bold" style={{ color: '#ff8f0a' }}>
-                    {subscription.plan.toUpperCase()}
-                  </span>
-                </div>
-              )}
-
-              {/* Time Remaining */}
-              {timeRemaining && (
-                <div className="flex items-center justify-between">
-                  <span className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
-                    {t.expiresAt}
-                  </span>
-                  <span className="text-body font-bold" style={{ color: getStatusColor(subscription.status) }}>
-                    {timeRemaining}
-                  </span>
-                </div>
-              )}
-
-              {/* Auto Renewal */}
-              {subscription.status === 'active' && (
-                <div className="flex items-center justify-between">
-                  <span className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
-                    {t.autoRenewal}
-                  </span>
-                  <span className="text-body" style={{ color: '#25D366' }}>
-                    {t.enabled}
-                  </span>
-                </div>
-              )}
-            </div>
           </div>
 
-          {/* Account Purchase Status */}
+          {/* Account Purchase - Status */}
           <div
-            className="w-full p-6 rounded-2xl"
-            style={{ backgroundColor: 'var(--polar)' }}
+            className="w-full p-4 rounded-2xl text-center"
+            style={{ backgroundColor: 'var(--zanah)' }}
           >
-            <h2 className="text-heading font-semibold mb-4" style={{ color: 'var(--deep-teal)' }}>
-              💳 {t.accountPurchase} (62€ με ΦΠΑ)
+            <p className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
+              {t.status}
+            </p>
+            <p
+              className="text-heading font-bold mt-2"
+              style={{ color: subscription.accountPurchased ? '#25D366' : 'var(--orange)' }}
+            >
+              {subscription.accountPurchased ? `✓ ${t.paid}` : t.notPaid}
+            </p>
+          </div>
+
+          {/* Current Subscription */}
+          <div
+            className="w-full p-4 rounded-2xl text-center"
+            style={{ backgroundColor: 'var(--zanah)' }}
+          >
+            <h2 className="text-heading font-semibold" style={{ color: 'var(--deep-teal)' }}>
+              📋 {t.currentPlan}
             </h2>
+          </div>
 
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
-                  {t.status}
-                </span>
-                <span
-                  className="text-body font-bold"
-                  style={{ color: subscription.accountPurchased ? '#25D366' : '#ff6a1a' }}
-                >
-                  {subscription.accountPurchased ? `✅ ${t.paid}` : `❌ ${t.notPaid}`}
-                </span>
-              </div>
-
-              {subscription.accountPurchasedAt && (
-                <div className="flex items-center justify-between">
-                  <span className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
-                    {t.date}
-                  </span>
-                  <span className="text-body" style={{ color: 'var(--deep-teal)' }}>
-                    {new Date(subscription.accountPurchasedAt).toLocaleDateString(locale)}
-                  </span>
-                </div>
-              )}
-
-              {subscription.firstMonthFreeExpiresAt && (
-                <div className="flex items-center justify-between">
-                  <span className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
-                    {t.firstMonthFree}
-                  </span>
-                  <span className="text-body" style={{ color: 'var(--deep-teal)' }}>
-                    {new Date(subscription.firstMonthFreeExpiresAt).toLocaleDateString(locale)}
-                  </span>
-                </div>
-              )}
-            </div>
+          {/* Current Plan - Status */}
+          <div
+            className="w-full p-4 rounded-2xl text-center"
+            style={{ backgroundColor: 'var(--zanah)' }}
+          >
+            <p className="text-body font-medium" style={{ color: 'var(--deep-teal)' }}>
+              {t.status}
+            </p>
+            <p
+              className="text-heading font-bold mt-2"
+              style={{ color: subscription.status === 'demo' ? 'var(--orange)' : (subscription.status === 'active' ? '#25D366' : 'var(--orange)') }}
+            >
+              {getStatusLabel(subscription.status)}
+            </p>
+            {/* Time Remaining */}
+            {timeRemaining && (
+              <p className="text-body mt-2" style={{ color: 'var(--deep-teal)' }}>
+                {t.expiresAt}: {timeRemaining}
+              </p>
+            )}
           </div>
 
           {/* Bonus Months */}
@@ -589,108 +546,62 @@ export default function SubscriptionPage() {
             </div>
           )}
 
-          {/* Actions */}
-          <div
-            className="w-full p-6 rounded-2xl"
-            style={{ backgroundColor: 'var(--polar)' }}
-          >
-            <h2 className="text-heading font-semibold mb-4" style={{ color: 'var(--deep-teal)' }}>
-              ⚡ {t.actions}
-            </h2>
-
-            <div className="space-y-3">
-              {!subscription.accountPurchased && (
-                <button
-                  onClick={() => router.push(`/${locale}/purchase-account`)}
-                  className="w-full px-6 py-3 rounded-xl text-button font-semibold transition-opacity hover:opacity-80"
-                  style={{
-                    backgroundColor: '#ff8f0a',
-                    color: 'white',
-                    minHeight: '52px',
-                  }}
-                >
-                  {t.buyAccount}
-                </button>
-              )}
-
-              {subscription.accountPurchased && (!subscription.plan || subscription.plan === 'demo') && (
-                <button
-                  onClick={() => router.push(`/${locale}/subscription`)}
-                  className="w-full px-6 py-3 rounded-xl text-button font-semibold transition-opacity hover:opacity-80"
-                  style={{
-                    backgroundColor: '#ff8f0a',
-                    color: 'white',
-                    minHeight: '52px',
-                  }}
-                >
-                  {t.choosePlan}
-                </button>
-              )}
-
-              {subscription.plan && subscription.plan !== 'demo' && subscription.plan !== 'VIP' && (
-                <>
-                  <button
-                    onClick={() => router.push(`/${locale}/subscription`)}
-                    className="w-full px-6 py-3 rounded-xl text-button font-semibold transition-opacity hover:opacity-80"
-                    style={{
-                      backgroundColor: '#25D366',
-                      color: 'white',
-                      minHeight: '52px',
-                    }}
-                  >
-                    {t.upgradePlan}
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* Payment History */}
-          <div
-            className="w-full p-6 rounded-2xl"
-            style={{ backgroundColor: 'var(--polar)' }}
-          >
-            <h2 className="text-heading font-semibold mb-4" style={{ color: 'var(--deep-teal)' }}>
-              📜 {t.paymentHistory}
-            </h2>
-
-            {/* Payment history note */}
-            <p className="text-sm mb-4" style={{ color: 'var(--deep-teal)', opacity: 0.8 }}>
-              {t.paymentHistoryNote}
-            </p>
-
-            {/* Invoice notice - Important! */}
-            <div
-              className="p-4 rounded-xl mb-4"
-              style={{
-                backgroundColor: '#fff3e0',
-                border: '1px solid #ff8f0a',
-              }}
-            >
-              <p className="text-sm" style={{ color: '#01312d' }}>
-                <strong style={{ color: '#ff8f0a' }}>⚠️</strong> {t.invoiceNote}
-              </p>
-            </div>
-
-            {/* Payments list placeholder */}
-            <p className="text-center py-6 text-body opacity-50" style={{ color: 'var(--deep-teal)' }}>
-              {t.noPayments}
-            </p>
-          </div>
-
-          {/* Back Button */}
+          {/* Buy Account Button - no title, styled based on purchase status */}
           <button
-            onClick={() => router.push(`/${locale}/dashboard`)}
-            className="w-full px-6 py-3 rounded-xl text-button font-semibold transition-opacity hover:opacity-80"
+            onClick={() => !subscription.accountPurchased && router.push(`/${locale}/purchase-account`)}
+            disabled={subscription.accountPurchased}
+            className="w-full rounded-2xl text-slogan font-bold transition-opacity hover:opacity-80 disabled:cursor-not-allowed"
             style={{
-              backgroundColor: 'var(--deep-teal)',
+              backgroundColor: subscription.accountPurchased ? '#6b7280' : 'var(--orange)',
               color: 'white',
               minHeight: '52px',
-              boxShadow: '0 4px 8px rgba(255, 255, 255, 0.3)',
+              opacity: subscription.accountPurchased ? 0.6 : 1,
             }}
           >
-            {t.back}
+            {t.buyAccount}
           </button>
+
+          {/* Choose/Upgrade Plan Button - only if account purchased */}
+          {subscription.accountPurchased && (
+            <button
+              onClick={() => router.push(`/${locale}/subscription`)}
+              className="w-full rounded-2xl text-button font-semibold transition-opacity hover:opacity-80"
+              style={{
+                backgroundColor: 'var(--zanah)',
+                color: 'var(--deep-teal)',
+                minHeight: '52px',
+              }}
+            >
+              {subscription.plan && subscription.plan !== 'demo' ? t.upgradePlan : t.choosePlan}
+            </button>
+          )}
+
+          {/* Payment History - Title */}
+          <div
+            className="w-full p-4 rounded-2xl text-center"
+            style={{ backgroundColor: 'var(--zanah)' }}
+          >
+            <h2 className="text-heading font-semibold" style={{ color: 'var(--deep-teal)' }}>
+              📜 {t.paymentHistory}
+            </h2>
+          </div>
+
+          {/* Invoice notice - orange text, centered */}
+          <p
+            className="text-body text-center"
+            style={{ color: 'var(--orange)' }}
+          >
+            {t.invoiceNote}
+          </p>
+
+          {/* No Payments - orange, centered */}
+          <p
+            className="text-body text-center"
+            style={{ color: 'var(--orange)' }}
+          >
+            {t.noPayments}
+          </p>
+
         </div>
       </div>
     </BackgroundPage>
