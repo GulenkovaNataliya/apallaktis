@@ -24,45 +24,55 @@ export default function DemoExpiredPage() {
 
   return (
     <BackgroundPage pageIndex={1}>
-      <div className="min-h-screen flex flex-col items-center justify-center py-20" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
+      <div
+        className="min-h-screen flex flex-col items-center"
+        style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}
+      >
+        <div className="w-full max-w-sm flex flex-col gap-12">
+          {/* Warning Icon */}
+          <div
+            className="mx-auto flex h-24 w-24 items-center justify-center rounded-full"
+            style={{ backgroundColor: 'var(--orange)' }}
+          >
+            <span className="text-4xl">⏰</span>
+          </div>
 
-        {/* Title */}
-        <h1 className="text-3xl font-bold text-center mb-4" style={{ color: '#ff6a1a' }}>
-          {t.title}
-        </h1>
+          {/* Title */}
+          <h1 className="text-slogan font-bold text-center" style={{ color: 'var(--orange)' }}>
+            {t.title}
+          </h1>
 
-        {/* Subtitle */}
-        <p className="text-lg text-center mb-8 max-w-sm" style={{ color: 'var(--polar)' }}>
-          {t.subtitle}
-        </p>
-
-        {/* Free Month Notice */}
-        <p className="text-md text-center mb-12 max-w-sm font-semibold" style={{ color: '#ff8f0a' }}>
-          {t.freeMonth}
-        </p>
-
-        {/* Buy Online Button */}
-        <button
-          onClick={() => {
-            router.push(`/${locale}/purchase-account`);
-          }}
-          className="w-full max-w-sm mb-6 rounded-lg flex items-center justify-center text-button"
-          style={{
-            minHeight: '52px',
-            backgroundColor: 'var(--zanah)',
-            color: 'var(--deep-teal)',
-            cursor: 'pointer',
-          }}
-        >
-          {t.buyOnline}
-        </button>
-
-        {/* Account Number */}
-        {accountNumber && (
-          <p className="text-sm text-center mt-8" style={{ color: 'var(--orange)' }}>
-            {t.accountNumber}: #{accountNumber}
+          {/* Subtitle */}
+          <p className="text-heading text-center" style={{ color: 'var(--polar)' }}>
+            {t.subtitle}
           </p>
-        )}
+
+          {/* Free Month Notice */}
+          <p className="text-body text-center font-semibold" style={{ color: 'var(--orange)' }}>
+            {t.freeMonth}
+          </p>
+
+          {/* Buy Online Button */}
+          <button
+            onClick={() => router.push(`/${locale}/purchase-account`)}
+            className="w-full rounded-2xl flex items-center justify-center text-button font-semibold"
+            style={{
+              minHeight: '52px',
+              backgroundColor: 'var(--zanah)',
+              color: 'var(--deep-teal)',
+              boxShadow: '0 4px 8px var(--deep-teal)',
+            }}
+          >
+            {t.buyOnline}
+          </button>
+
+          {/* Account Number */}
+          {accountNumber && (
+            <p className="text-body text-center" style={{ color: 'var(--orange)' }}>
+              {t.accountNumber}: #{accountNumber}
+            </p>
+          )}
+        </div>
       </div>
     </BackgroundPage>
   );

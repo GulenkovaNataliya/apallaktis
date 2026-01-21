@@ -158,33 +158,21 @@ export default function EmailNotConfirmedPage() {
   return (
     <BackgroundPage pageIndex={1}>
       <div
-        className="flex min-h-screen flex-col items-center gap-8"
-        style={{ direction: isRTL ? "rtl" : "ltr", paddingTop: "160px", paddingLeft: "40px", paddingRight: "40px" }}
+        className="flex min-h-screen flex-col items-center"
+        style={{ direction: isRTL ? "rtl" : "ltr", paddingTop: "180px", paddingBottom: "120px", paddingLeft: "40px", paddingRight: "40px" }}
       >
-        <div className="w-full max-w-sm space-y-6 text-center">
-          {/* Warning Icon */}
+        <div className="w-full max-w-sm flex flex-col gap-12 items-center">
+          {/* Email Icon - centered */}
           <div
-            className="mx-auto flex h-24 w-24 items-center justify-center rounded-full"
+            className="flex h-24 w-24 items-center justify-center rounded-full"
             style={{ backgroundColor: "var(--orange)" }}
           >
-            <svg
-              className="h-12 w-12 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={3}
-                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-              />
-            </svg>
+            <span className="text-4xl">📧</span>
           </div>
 
           {/* Title */}
           <h1
-            className="text-slogan font-bold"
+            className="text-slogan font-bold text-center"
             style={{ color: "var(--orange)" }}
           >
             {t.title}
@@ -192,23 +180,23 @@ export default function EmailNotConfirmedPage() {
 
           {/* Subtitle */}
           <p
-            className="text-heading"
-            style={{ color: "var(--zanah)", marginTop: "40px" }}
+            className="text-heading text-center"
+            style={{ color: "var(--polar)" }}
           >
             {t.subtitle}
           </p>
 
           {/* Message */}
           <p
-            className="text-body"
-            style={{ color: "var(--zanah)" }}
+            className="text-body text-center"
+            style={{ color: "var(--polar)" }}
           >
             {t.message}
           </p>
 
           {/* Check Spam Note */}
           <div
-            className="p-4 rounded-xl"
+            className="w-full p-4 rounded-2xl text-center"
             style={{ backgroundColor: "var(--orange)" }}
           >
             <p className="text-body" style={{ color: "var(--deep-teal)" }}>
@@ -219,7 +207,7 @@ export default function EmailNotConfirmedPage() {
           {/* Resend Status */}
           {resendStatus === "sent" && (
             <div
-              className="p-4 rounded-xl"
+              className="w-full p-4 rounded-2xl text-center"
               style={{ backgroundColor: "#25D366", color: "white" }}
             >
               <p className="font-semibold">{t.sent}</p>
@@ -229,46 +217,41 @@ export default function EmailNotConfirmedPage() {
 
           {resendStatus === "error" && (
             <div
-              className="p-4 rounded-xl"
+              className="w-full p-4 rounded-2xl text-center"
               style={{ backgroundColor: "#ff6a1a", color: "white" }}
             >
               <p className="font-semibold">{t.error}</p>
             </div>
           )}
 
-          {/* Buttons */}
-          <div className="flex flex-col gap-12 items-center" style={{ marginTop: "40px" }}>
-            <div className="btn-single-wrapper">
-              <button
-                onClick={handleResend}
-                disabled={isResending}
-                className="btn-primary text-button btn-single"
-                style={{
-                  minHeight: "52px",
-                  backgroundColor: "var(--zanah)",
-                  color: "var(--deep-teal)",
-                  boxShadow: "0 4px 8px var(--deep-teal)",
-                  opacity: isResending ? 0.7 : 1,
-                }}
-              >
-                {isResending ? t.resending : t.resend}
-              </button>
-            </div>
+          {/* Resend Button */}
+          <button
+            onClick={handleResend}
+            disabled={isResending}
+            className="w-full rounded-2xl text-button font-semibold"
+            style={{
+              minHeight: "52px",
+              backgroundColor: "var(--zanah)",
+              color: "var(--deep-teal)",
+              boxShadow: "0 4px 8px var(--deep-teal)",
+              opacity: isResending ? 0.7 : 1,
+            }}
+          >
+            {isResending ? t.resending : t.resend}
+          </button>
 
-            <div className="btn-single-wrapper">
-              <button
-                onClick={handleLogout}
-                className="btn-primary text-button btn-single"
-                style={{
-                  minHeight: "52px",
-                  backgroundColor: "rgba(1, 49, 45, 0.1)",
-                  color: "var(--zanah)",
-                }}
-              >
-                {t.logout}
-              </button>
-            </div>
-          </div>
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="w-full rounded-2xl text-button font-semibold"
+            style={{
+              minHeight: "52px",
+              backgroundColor: "var(--deep-teal)",
+              color: "var(--polar)",
+            }}
+          >
+            {t.logout}
+          </button>
         </div>
       </div>
     </BackgroundPage>
