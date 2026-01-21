@@ -493,34 +493,33 @@ export default function ProfilePage() {
             {t.title}
           </h1>
 
-          {/* Read-only Info */}
-          <div className="flex flex-col gap-3">
-            <input
-              type="text"
-              value={email}
-              readOnly
-              className="w-full rounded-2xl text-body border border-gray-300"
-              style={{ minHeight: '52px', padding: '12px', backgroundColor: '#f3f4f6', color: 'var(--deep-teal)' }}
-            />
-            <input
-              type="text"
-              value={`#${accountNumber}`}
-              readOnly
-              className="w-full rounded-2xl text-body border border-gray-300"
-              style={{ minHeight: '52px', padding: '12px', backgroundColor: '#f3f4f6', color: 'var(--deep-teal)' }}
-            />
-            <input
-              type="text"
-              value={registeredAt ? new Date(registeredAt).toLocaleDateString(locale) : '-'}
-              readOnly
-              className="w-full rounded-2xl text-body border border-gray-300"
-              style={{ minHeight: '52px', padding: '12px', backgroundColor: '#f3f4f6', color: 'var(--deep-teal)' }}
-            />
-            <p className="text-sm text-center" style={{ color: 'var(--polar)', opacity: 0.7 }}>({t.readOnly})</p>
-          </div>
+          {/* Read-only Info - with labels */}
+          <input
+            type="text"
+            value={`${t.email}: ${email}`}
+            readOnly
+            className="w-full rounded-2xl text-body border border-gray-300"
+            style={{ minHeight: '52px', padding: '12px', backgroundColor: '#f3f4f6', color: 'var(--deep-teal)' }}
+          />
+
+          <input
+            type="text"
+            value={`${t.accountNumber}: #${accountNumber}`}
+            readOnly
+            className="w-full rounded-2xl text-body border border-gray-300"
+            style={{ minHeight: '52px', padding: '12px', backgroundColor: '#f3f4f6', color: 'var(--deep-teal)' }}
+          />
+
+          <input
+            type="text"
+            value={`${t.registeredAt}: ${registeredAt ? new Date(registeredAt).toLocaleDateString(locale) : '-'}`}
+            readOnly
+            className="w-full rounded-2xl text-body border border-gray-300"
+            style={{ minHeight: '52px', padding: '12px', backgroundColor: '#f3f4f6', color: 'var(--deep-teal)' }}
+          />
 
           {/* Editable Form */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-12">
             {/* Name */}
             <div>
               <input
@@ -595,7 +594,7 @@ export default function ProfilePage() {
 
             {/* Business Fields */}
             {formData.isBusiness && (
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-12">
                 {/* Company Name */}
                 <div>
                   <input
@@ -650,8 +649,36 @@ export default function ProfilePage() {
             )}
           </div>
 
+          {/* Save Status */}
+          {saveStatus !== 'idle' && (
+            <div
+              className="text-center p-3 rounded-2xl text-button font-semibold"
+              style={{
+                backgroundColor: saveStatus === 'saved' ? '#25D366' : '#ff6a1a',
+                color: 'white',
+              }}
+            >
+              {saveStatus === 'saved' ? t.saved : t.error}
+            </div>
+          )}
+
+          {/* Save Button - moved before Change Password */}
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="w-full rounded-2xl text-button font-semibold transition-opacity hover:opacity-80 disabled:opacity-50"
+            style={{
+              backgroundColor: 'var(--zanah)',
+              color: 'var(--deep-teal)',
+              boxShadow: '0 4px 8px var(--deep-teal)',
+              minHeight: '52px',
+            }}
+          >
+            {isSaving ? t.saving : t.save}
+          </button>
+
           {/* Change Password Section */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-12">
             <h2
               className="text-button font-bold text-center"
               style={{ color: 'var(--polar)' }}
@@ -734,7 +761,7 @@ export default function ProfilePage() {
               </div>
             )}
 
-            {/* Change Password Button - polar/deep-teal по закону кнопок */}
+            {/* Change Password Button */}
             <button
               onClick={handleChangePassword}
               disabled={isChangingPassword || !passwordData.newPassword || !passwordData.confirmNewPassword}
@@ -749,34 +776,6 @@ export default function ProfilePage() {
               {isChangingPassword ? '...' : t.changePassword}
             </button>
           </div>
-
-          {/* Save Status */}
-          {saveStatus !== 'idle' && (
-            <div
-              className="text-center p-3 rounded-xl text-button font-semibold"
-              style={{
-                backgroundColor: saveStatus === 'saved' ? '#25D366' : '#ff6a1a',
-                color: 'white',
-              }}
-            >
-              {saveStatus === 'saved' ? t.saved : t.error}
-            </div>
-          )}
-
-          {/* Save Button - zanah/deep-teal по закону кнопок */}
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="w-full rounded-2xl text-button font-semibold transition-opacity hover:opacity-80 disabled:opacity-50"
-            style={{
-              backgroundColor: 'var(--zanah)',
-              color: 'var(--deep-teal)',
-              boxShadow: '0 4px 8px var(--deep-teal)',
-              minHeight: '52px',
-            }}
-          >
-            {isSaving ? t.saving : t.save}
-          </button>
         </div>
       </div>
     </BackgroundPage>
