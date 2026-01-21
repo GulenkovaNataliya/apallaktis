@@ -17,8 +17,7 @@ const translations = {
     mySubscription: "Η Συνδρομή Μου",
     security: "Ασφάλεια",
     referral: "Παραπομπές",
-    export: "Εξαγωγή",
-    goToFinances: "Μετάβαση στα Οικονομικά",
+    goToHome: "Μετάβαση στην Αρχική",
     logout: "Αποσύνδεση",
     deleteAccount: "Διαγραφή Λογαριασμού",
     deleteConfirmTitle: "Διαγραφή Λογαριασμού",
@@ -36,8 +35,7 @@ const translations = {
     mySubscription: "Моя Подписка",
     security: "Безопасность",
     referral: "Рефералы",
-    export: "Экспорт",
-    goToFinances: "Перейти к Финансам",
+    goToHome: "Перейти на Главную",
     logout: "Выход из Аккаунта",
     deleteAccount: "Удалить Аккаунт",
     deleteConfirmTitle: "Удаление Аккаунта",
@@ -55,8 +53,7 @@ const translations = {
     mySubscription: "My Subscription",
     security: "Security",
     referral: "Referrals",
-    export: "Export",
-    goToFinances: "Go to Finances",
+    goToHome: "Go to Home",
     logout: "Log Out",
     deleteAccount: "Delete Account",
     deleteConfirmTitle: "Delete Account",
@@ -74,8 +71,7 @@ const translations = {
     mySubscription: "Моя Підписка",
     security: "Безпека",
     referral: "Реферали",
-    export: "Експорт",
-    goToFinances: "Перейти до Фінансів",
+    goToHome: "Перейти на Головну",
     logout: "Вийти з Акаунту",
     deleteAccount: "Видалити Акаунт",
     deleteConfirmTitle: "Видалення Акаунту",
@@ -93,8 +89,7 @@ const translations = {
     mySubscription: "Abonamenti Im",
     security: "Siguria",
     referral: "Referime",
-    export: "Eksporto",
-    goToFinances: "Shko te Financat",
+    goToHome: "Shko në Kryefaqe",
     logout: "Dilni nga Llogaria",
     deleteAccount: "Fshi Llogarinë",
     deleteConfirmTitle: "Fshi Llogarinë",
@@ -112,8 +107,7 @@ const translations = {
     mySubscription: "Моят Абонамент",
     security: "Сигурност",
     referral: "Препоръки",
-    export: "Експорт",
-    goToFinances: "Към Финансите",
+    goToHome: "Към Началната Страница",
     logout: "Изход от Акаунта",
     deleteAccount: "Изтрий Акаунт",
     deleteConfirmTitle: "Изтриване на Акаунт",
@@ -131,8 +125,7 @@ const translations = {
     mySubscription: "Abonamentul Meu",
     security: "Securitate",
     referral: "Recomandări",
-    export: "Export",
-    goToFinances: "Mergi la Finanțe",
+    goToHome: "Mergi la Pagina Principală",
     logout: "Deconectare",
     deleteAccount: "Șterge Contul",
     deleteConfirmTitle: "Ștergere Cont",
@@ -150,8 +143,7 @@ const translations = {
     mySubscription: "اشتراكي",
     security: "الأمان",
     referral: "الإحالات",
-    export: "تصدير",
-    goToFinances: "الذهاب إلى المالية",
+    goToHome: "الذهاب إلى الرئيسية",
     logout: "تسجيل الخروج",
     deleteAccount: "حذف الحساب",
     deleteConfirmTitle: "حذف الحساب",
@@ -340,7 +332,7 @@ export default function DashboardPage() {
             {(translations[locale] || translations.el).mySubscription}
           </button>
 
-          {/* Referrals Button - 3/5 */}
+          {/* Referrals Button - 3/4 */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/referral`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
@@ -349,22 +341,13 @@ export default function DashboardPage() {
             {(translations[locale] || translations.el).referral}
           </button>
 
-          {/* Export Button - 4/5 */}
-          <button
-            onClick={() => router.push(`/${locale}/dashboard/export`)}
-            className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#35a593', color: '#ffffff' }}
-          >
-            {(translations[locale] || translations.el).export}
-          </button>
-
-          {/* Go to Finances Button - 5/5 darkest */}
+          {/* Go to Home Button - 4/4 darkest */}
           <button
             onClick={() => router.push(`/${locale}/page-pay`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
             style={{ minHeight: '52px', backgroundColor: '#01756a', color: '#ffffff' }}
           >
-            {(translations[locale] || translations.el).goToFinances}
+            {(translations[locale] || translations.el).goToHome}
           </button>
 
           {/* Logout Button */}
