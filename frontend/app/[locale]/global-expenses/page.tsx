@@ -212,7 +212,7 @@ export default function GlobalExpensesPage() {
           </button>
 
           {/* Expenses List */}
-          <div className="flex flex-col gap-4 flex-1">
+          <div className="flex flex-col gap-12 flex-1">
             {expenses.length === 0 ? (
               <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
                 {t.noExpenses}
@@ -337,7 +337,7 @@ export default function GlobalExpensesPage() {
           </button>
 
           {/* Categories List */}
-          <div className="flex flex-col gap-4 flex-1">
+          <div className="flex flex-col gap-12 flex-1">
             {categories.length === 0 ? (
               <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
                 {t.noCategories}
