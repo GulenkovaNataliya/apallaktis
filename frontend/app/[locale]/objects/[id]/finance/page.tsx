@@ -789,20 +789,6 @@ export default function ObjectFinancePage() {
               </div>
             )}
 
-            {/* Detailed Analytics Button */}
-            {expenses.length > 0 && (
-              <button
-                onClick={() => {
-                  // TODO: Link to personal cabinet analytics page
-                  alert(t.detailedAnalytics);
-                }}
-                className="btn-universal w-full text-button mb-4"
-                style={{ minHeight: '52px', backgroundColor: 'var(--polar)', color: 'var(--deep-teal)', fontSize: '16px', fontWeight: 600 }}
-              >
-                📊 {t.detailedAnalytics}
-              </button>
-            )}
-
             {/* Calculate Profit Button */}
             {expenses.length > 0 && (
               <button
