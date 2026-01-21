@@ -200,11 +200,14 @@ export default function SecurityPage() {
   useEffect(() => {
     async function checkAuth() {
       const supabase = createClient();
-      const { data: { session } } = await supabase.auth.getSession();
+      let { data: { session } } = await supabase.auth.getSession();
 
       if (!session) {
-        router.push(`/${locale}/login`);
-        return;
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          router.push(`/${locale}/login`);
+          return;
+        }
       }
 
       setIsLoading(false);

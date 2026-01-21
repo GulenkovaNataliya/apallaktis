@@ -185,10 +185,38 @@ export default function SettingsPage() {
   useEffect(() => {
     async function loadSettings() {
       const supabase = createClient();
-      const { data: { session } } = await supabase.auth.getSession();
 
+      // First try getSession
+      let { data: { session } } = await supabase.auth.getSession();
+
+      // If no session, wait a moment and try getUser (more reliable)
       if (!session) {
-        router.push(`/${locale}/login`);
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          router.push(`/${locale}/login`);
+          return;
+        }
+        // Use user.id if session is not available
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('id, notification_settings, preferred_language')
+          .eq('id', user.id)
+          .single();
+
+        if (error || !profile) {
+          console.error('Profile error:', error);
+          setIsLoading(false);
+          return;
+        }
+
+        setUserId(profile.id);
+        if (profile.notification_settings) {
+          setSettings({ ...defaultSettings, ...profile.notification_settings });
+        }
+        if (profile.preferred_language) {
+          setSelectedLanguage(profile.preferred_language);
+        }
+        setIsLoading(false);
         return;
       }
 
@@ -199,7 +227,8 @@ export default function SettingsPage() {
         .single();
 
       if (error || !profile) {
-        router.push(`/${locale}/login`);
+        console.error('Profile error:', error);
+        setIsLoading(false);
         return;
       }
 

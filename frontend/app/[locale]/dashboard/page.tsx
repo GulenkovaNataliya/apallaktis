@@ -161,19 +161,25 @@ export default function DashboardPage() {
       try {
         const supabase = createClient();
 
-        // Check if user is logged in
-        const { data: { session } } = await supabase.auth.getSession();
+        // Check if user is logged in - try getSession first, then getUser as fallback
+        let { data: { session } } = await supabase.auth.getSession();
+        let userId = session?.user?.id;
 
-        if (!session) {
-          router.push(`/${locale}/login`);
-          return;
+        if (!userId) {
+          // Fallback to getUser (more reliable)
+          const { data: { user } } = await supabase.auth.getUser();
+          if (!user) {
+            router.push(`/${locale}/login`);
+            return;
+          }
+          userId = user.id;
         }
 
         // Fetch user profile
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('*')
-          .eq('id', session.user.id)
+          .eq('id', userId)
           .single();
 
         if (error || !profile) {

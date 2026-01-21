@@ -158,8 +158,8 @@ export default function EmailNotConfirmedPage() {
   return (
     <BackgroundPage pageIndex={1}>
       <div
-        className="flex min-h-screen flex-col items-center gap-8 px-4"
-        style={{ direction: isRTL ? "rtl" : "ltr", paddingTop: "160px" }}
+        className="flex min-h-screen flex-col items-center gap-8"
+        style={{ direction: isRTL ? "rtl" : "ltr", paddingTop: "160px", paddingLeft: "40px", paddingRight: "40px" }}
       >
         <div className="w-full max-w-sm space-y-6 text-center">
           {/* Warning Icon */}
@@ -237,7 +237,7 @@ export default function EmailNotConfirmedPage() {
           )}
 
           {/* Buttons */}
-          <div className="flex flex-col gap-3 items-center" style={{ marginTop: "40px" }}>
+          <div className="flex flex-col gap-12 items-center" style={{ marginTop: "40px" }}>
             <div className="btn-single-wrapper">
               <button
                 onClick={handleResend}
