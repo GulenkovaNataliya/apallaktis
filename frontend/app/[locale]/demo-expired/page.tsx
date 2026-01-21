@@ -22,21 +22,6 @@ export default function DemoExpiredPage() {
     }
   }, []);
 
-  // WhatsApp message
-  const whatsappMessage = encodeURIComponent(
-    `${t.contactMessage} ${accountNumber ? `#${accountNumber}` : ''}`
-  );
-  const whatsappUrl = `https://wa.me/306983208844?text=${whatsappMessage}`;
-
-  // Viber message
-  const viberMessage = encodeURIComponent(
-    `${t.contactMessage} ${accountNumber ? `#${accountNumber}` : ''}`
-  );
-  const viberUrl = `viber://chat?number=306983208844&text=${viberMessage}`;
-
-  // Purchase is always available
-  const isPurchaseAvailable = true;
-
   return (
     <BackgroundPage pageIndex={1}>
       <div className="min-h-screen flex flex-col items-center justify-center py-20" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
@@ -72,57 +57,9 @@ export default function DemoExpiredPage() {
           {t.buyOnline}
         </button>
 
-        {/* OR Divider */}
-        <div className="flex items-center w-full max-w-sm mb-6">
-          <div className="flex-1 h-px" style={{ backgroundColor: 'var(--polar)', opacity: 0.3 }} />
-          <span className="px-4 text-sm" style={{ color: 'var(--polar)', opacity: 0.7 }}>
-            {t.or}
-          </span>
-          <div className="flex-1 h-px" style={{ backgroundColor: 'var(--polar)', opacity: 0.3 }} />
-        </div>
-
-        {/* Contact Admin Text */}
-        <p className="text-sm text-center mb-4 max-w-sm" style={{ color: 'var(--polar)', opacity: 0.9 }}>
-          {t.contactAdmin}
-        </p>
-
-        {/* WhatsApp Button */}
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full max-w-sm mb-4 rounded-lg flex items-center justify-center text-button"
-          style={{
-            minHeight: '52px',
-            backgroundColor: '#25D366',
-            color: 'white',
-            textDecoration: 'none',
-          }}
-        >
-          <span className="mr-2 text-xl">📱</span>
-          {t.whatsapp}
-        </a>
-
-        {/* Viber Button */}
-        <a
-          href={viberUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full max-w-sm rounded-lg flex items-center justify-center text-button"
-          style={{
-            minHeight: '52px',
-            backgroundColor: '#7360F2',
-            color: 'white',
-            textDecoration: 'none',
-          }}
-        >
-          <span className="mr-2 text-xl">📞</span>
-          {t.viber}
-        </a>
-
         {/* Account Number */}
         {accountNumber && (
-          <p className="text-sm text-center mt-8" style={{ color: 'var(--polar)', opacity: 0.6 }}>
+          <p className="text-sm text-center mt-8" style={{ color: 'var(--orange)' }}>
             {t.accountNumber}: #{accountNumber}
           </p>
         )}

@@ -179,7 +179,7 @@ export default function PurchaseAccountPage() {
 
         {/* Account Number */}
         {accountNumber && (
-          <p className="text-sm text-center mt-8" style={{ color: 'var(--polar)', opacity: 0.6 }}>
+          <p className="text-sm text-center mt-8" style={{ color: 'var(--orange)' }}>
             {messages[locale]?.demoExpired?.accountNumber || 'Номер аккаунта'}: #{accountNumber}
           </p>
         )}
