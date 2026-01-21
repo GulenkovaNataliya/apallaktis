@@ -4,147 +4,155 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { type Locale } from "@/lib/messages";
-import RewardsSection from "@/components/RewardsSection";
+// RewardsSection removed - VIP button deleted per step 2
 import BackgroundPage from "@/components/BackgroundPage";
 import { type User } from "@/types/user";
 
-// Translations for quick actions
+// Translations for dashboard
 const translations = {
   el: {
-    quickActions: "Γρήγορες Ενέργειες",
+    personalAccount: "Προσωπικός Λογαριασμός",
+    back: "← Πίσω",
     profile: "Προφίλ",
-    profileDesc: "Επεξεργασία προσωπικών στοιχείων",
-    subscription: "Συνδρομή",
-    subscriptionDesc: "Διαχείριση πλάνου",
-    settings: "Ρυθμίσεις",
-    settingsDesc: "Ειδοποιήσεις & γλώσσα",
+    mySubscription: "Η Συνδρομή Μου",
     security: "Ασφάλεια",
-    securityDesc: "Κωδικός & συνεδρίες",
     referral: "Παραπομπές",
-    referralDesc: "Κερδίστε δωρεάν μήνες",
     export: "Εξαγωγή",
-    exportDesc: "Λήψη δεδομένων",
-    goToDashboard: "Μετάβαση στον Πίνακα",
+    goToFinances: "Μετάβαση στα Οικονομικά",
     logout: "Αποσύνδεση",
+    deleteAccount: "Διαγραφή Λογαριασμού",
+    deleteConfirmTitle: "Διαγραφή Λογαριασμού",
+    deleteConfirmMessage: "Είστε σίγουροι ότι θέλετε να διαγράψετε τον λογαριασμό σας; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
+    deleteConfirmYes: "Ναι, διαγραφή",
+    deleteConfirmNo: "Άκυρο",
+    needHelp: "Χρειάζεστε βοήθεια;",
+    responseTime: "Χρόνος απόκρισης έως 48 ώρες",
   },
   ru: {
-    quickActions: "Быстрые Действия",
+    personalAccount: "Личный Кабинет",
+    back: "← Назад",
     profile: "Профиль",
-    profileDesc: "Редактировать личные данные",
-    subscription: "Подписка",
-    subscriptionDesc: "Управление планом",
-    settings: "Настройки",
-    settingsDesc: "Уведомления и язык",
+    mySubscription: "Моя Подписка",
     security: "Безопасность",
-    securityDesc: "Пароль и сессии",
     referral: "Рефералы",
-    referralDesc: "Заработайте бесплатные месяцы",
     export: "Экспорт",
-    exportDesc: "Скачать данные",
-    goToDashboard: "Перейти к Панели",
-    logout: "Выход",
+    goToFinances: "Перейти к Финансам",
+    logout: "Выход из Аккаунта",
+    deleteAccount: "Удалить Аккаунт",
+    deleteConfirmTitle: "Удаление Аккаунта",
+    deleteConfirmMessage: "Вы уверены, что хотите удалить свой аккаунт? Это действие нельзя отменить.",
+    deleteConfirmYes: "Да, удалить",
+    deleteConfirmNo: "Отмена",
+    needHelp: "Нужна помощь?",
+    responseTime: "Время ответа до 48 часов",
   },
   en: {
-    quickActions: "Quick Actions",
+    personalAccount: "Personal Account",
+    back: "← Back",
     profile: "Profile",
-    profileDesc: "Edit personal information",
-    subscription: "Subscription",
-    subscriptionDesc: "Manage your plan",
-    settings: "Settings",
-    settingsDesc: "Notifications & language",
+    mySubscription: "My Subscription",
     security: "Security",
-    securityDesc: "Password & sessions",
     referral: "Referrals",
-    referralDesc: "Earn free months",
     export: "Export",
-    exportDesc: "Download your data",
-    goToDashboard: "Go to Dashboard",
-    logout: "Logout",
+    goToFinances: "Go to Finances",
+    logout: "Log Out",
+    deleteAccount: "Delete Account",
+    deleteConfirmTitle: "Delete Account",
+    deleteConfirmMessage: "Are you sure you want to delete your account? This action cannot be undone.",
+    deleteConfirmYes: "Yes, delete",
+    deleteConfirmNo: "Cancel",
+    needHelp: "Need help?",
+    responseTime: "Response time up to 48 hours",
   },
   uk: {
-    quickActions: "Швидкі Дії",
+    personalAccount: "Особистий Кабінет",
+    back: "← Назад",
     profile: "Профіль",
-    profileDesc: "Редагувати особисті дані",
-    subscription: "Підписка",
-    subscriptionDesc: "Керування планом",
-    settings: "Налаштування",
-    settingsDesc: "Сповіщення та мова",
+    mySubscription: "Моя Підписка",
     security: "Безпека",
-    securityDesc: "Пароль та сесії",
     referral: "Реферали",
-    referralDesc: "Заробіть безкоштовні місяці",
     export: "Експорт",
-    exportDesc: "Завантажити дані",
-    goToDashboard: "Перейти до Панелі",
-    logout: "Вихід",
+    goToFinances: "Перейти до Фінансів",
+    logout: "Вийти з Акаунту",
+    deleteAccount: "Видалити Акаунт",
+    deleteConfirmTitle: "Видалення Акаунту",
+    deleteConfirmMessage: "Ви впевнені, що хочете видалити свій акаунт? Цю дію неможливо скасувати.",
+    deleteConfirmYes: "Так, видалити",
+    deleteConfirmNo: "Скасувати",
+    needHelp: "Потрібна допомога?",
+    responseTime: "Час відповіді до 48 годин",
   },
   sq: {
-    quickActions: "Veprime të Shpejta",
+    personalAccount: "Llogaria Personale",
+    back: "← Kthehu",
     profile: "Profili",
-    profileDesc: "Modifiko të dhënat personale",
-    subscription: "Abonamenti",
-    subscriptionDesc: "Menaxho planin",
-    settings: "Cilësimet",
-    settingsDesc: "Njoftimet dhe gjuha",
+    mySubscription: "Abonamenti Im",
     security: "Siguria",
-    securityDesc: "Fjalëkalimi dhe sesionet",
     referral: "Referime",
-    referralDesc: "Fitoni muaj falas",
     export: "Eksporto",
-    exportDesc: "Shkarko të dhënat",
-    goToDashboard: "Shko te Paneli",
-    logout: "Dilni",
+    goToFinances: "Shko te Financat",
+    logout: "Dilni nga Llogaria",
+    deleteAccount: "Fshi Llogarinë",
+    deleteConfirmTitle: "Fshi Llogarinë",
+    deleteConfirmMessage: "Jeni i sigurt që dëshironi të fshini llogarinë tuaj? Ky veprim nuk mund të zhbëhet.",
+    deleteConfirmYes: "Po, fshi",
+    deleteConfirmNo: "Anulo",
+    needHelp: "Keni nevojë për ndihmë?",
+    responseTime: "Koha e përgjigjes deri në 48 orë",
   },
   bg: {
-    quickActions: "Бързи Действия",
+    personalAccount: "Личен Кабинет",
+    back: "← Назад",
     profile: "Профил",
-    profileDesc: "Редактиране на лични данни",
-    subscription: "Абонамент",
-    subscriptionDesc: "Управление на план",
-    settings: "Настройки",
-    settingsDesc: "Известия и език",
+    mySubscription: "Моят Абонамент",
     security: "Сигурност",
-    securityDesc: "Парола и сесии",
     referral: "Препоръки",
-    referralDesc: "Спечелете безплатни месеци",
     export: "Експорт",
-    exportDesc: "Изтегляне на данни",
-    goToDashboard: "Към Таблото",
-    logout: "Изход",
+    goToFinances: "Към Финансите",
+    logout: "Изход от Акаунта",
+    deleteAccount: "Изтрий Акаунт",
+    deleteConfirmTitle: "Изтриване на Акаунт",
+    deleteConfirmMessage: "Сигурни ли сте, че искате да изтриете акаунта си? Това действие не може да бъде отменено.",
+    deleteConfirmYes: "Да, изтрий",
+    deleteConfirmNo: "Отказ",
+    needHelp: "Нуждаете се от помощ?",
+    responseTime: "Време за отговор до 48 часа",
   },
   ro: {
-    quickActions: "Acțiuni Rapide",
+    personalAccount: "Cont Personal",
+    back: "← Înapoi",
     profile: "Profil",
-    profileDesc: "Editează informațiile personale",
-    subscription: "Abonament",
-    subscriptionDesc: "Gestionează planul",
-    settings: "Setări",
-    settingsDesc: "Notificări și limbă",
+    mySubscription: "Abonamentul Meu",
     security: "Securitate",
-    securityDesc: "Parolă și sesiuni",
     referral: "Recomandări",
-    referralDesc: "Câștigă luni gratuite",
     export: "Export",
-    exportDesc: "Descarcă datele",
-    goToDashboard: "Mergi la Panou",
+    goToFinances: "Mergi la Finanțe",
     logout: "Deconectare",
+    deleteAccount: "Șterge Contul",
+    deleteConfirmTitle: "Ștergere Cont",
+    deleteConfirmMessage: "Sunteți sigur că doriți să ștergeți contul? Această acțiune nu poate fi anulată.",
+    deleteConfirmYes: "Da, șterge",
+    deleteConfirmNo: "Anulează",
+    needHelp: "Ai nevoie de ajutor?",
+    responseTime: "Timp de răspuns până la 48 ore",
   },
   ar: {
-    quickActions: "إجراءات سريعة",
+    personalAccount: "الحساب الشخصي",
+    back: "← رجوع",
     profile: "الملف الشخصي",
-    profileDesc: "تعديل البيانات الشخصية",
-    subscription: "الاشتراك",
-    subscriptionDesc: "إدارة الخطة",
-    settings: "الإعدادات",
-    settingsDesc: "الإشعارات واللغة",
+    mySubscription: "اشتراكي",
     security: "الأمان",
-    securityDesc: "كلمة المرور والجلسات",
     referral: "الإحالات",
-    referralDesc: "اكسب أشهراً مجانية",
     export: "تصدير",
-    exportDesc: "تحميل البيانات",
-    goToDashboard: "الذهاب إلى لوحة التحكم",
+    goToFinances: "الذهاب إلى المالية",
     logout: "تسجيل الخروج",
+    deleteAccount: "حذف الحساب",
+    deleteConfirmTitle: "حذف الحساب",
+    deleteConfirmMessage: "هل أنت متأكد أنك تريد حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء.",
+    deleteConfirmYes: "نعم، احذف",
+    deleteConfirmNo: "إلغاء",
+    needHelp: "هل تحتاج إلى مساعدة؟",
+    responseTime: "وقت الاستجابة حتى 48 ساعة",
   },
 };
 
@@ -154,6 +162,12 @@ export default function DashboardPage() {
   const locale = (params.locale as Locale) || "el";
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  // Scroll to top on page load
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // Check authentication and fetch user data
   useEffect(() => {
@@ -232,6 +246,24 @@ export default function DashboardPage() {
     router.push(`/${locale}`);
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      const supabase = createClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+
+      if (authUser) {
+        // Delete user profile first
+        await supabase.from('profiles').delete().eq('id', authUser.id);
+        // Sign out
+        await supabase.auth.signOut();
+      }
+
+      router.push(`/${locale}`);
+    } catch (error) {
+      console.error('Error deleting account:', error);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -262,297 +294,193 @@ export default function DashboardPage() {
   return (
     <BackgroundPage pageIndex={1}>
       <div className="flex min-h-screen flex-col items-center gap-12 pb-20" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px' }}>
-        <div className="w-full max-w-sm space-y-6">
+        <div className="w-full max-w-sm flex flex-col gap-12">
+          {/* Back - phrase, not a button */}
+          <p
+            onClick={() => router.push(`/${locale}/page-pay`)}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)' }}
+          >
+            {(translations[locale] || translations.el).back}
+          </p>
+
           {/* Header */}
           <h1
             className="text-slogan font-bold text-center"
             style={{ color: '#ff8f0a' }}
           >
-            Dashboard
+            {(translations[locale] || translations.el).personalAccount}
           </h1>
 
-          {/* User Info Card */}
-          <div
-            className="w-full p-6 rounded-2xl"
-            style={{ backgroundColor: 'var(--polar)' }}
+          {/* Profile Button */}
+          <button
+            onClick={() => router.push(`/${locale}/dashboard/profile`)}
+            className="btn-universal w-full text-button flex items-center justify-center text-center"
+            style={{ minHeight: '52px', backgroundColor: '#e7f4f1', color: 'var(--deep-teal)' }}
           >
-            <h2 className="text-heading font-semibold mb-4" style={{ color: 'var(--deep-teal)' }}>
-              {user.name}
-            </h2>
+            {(translations[locale] || translations.el).profile}
+          </button>
 
-            <div className="space-y-2 text-body" style={{ color: 'var(--deep-teal)' }}>
-              <p>
-                <strong>Email:</strong> {user.email}
-              </p>
-              {user.phone && (
-                <p>
-                  <strong>Phone:</strong> {user.phone}
-                </p>
-              )}
-              <p>
-                <strong>Account:</strong> #{user.accountNumber}
-              </p>
-              {user.createdAt && (
-                <p>
-                  <strong>Registered:</strong> {new Date(user.createdAt).toLocaleDateString()}
-                </p>
-              )}
-              <p>
-                <strong>Status:</strong> {user.subscriptionStatus.toUpperCase()}
-              </p>
-              {user.subscriptionStatus === 'demo' && demoTime && (
-                <p style={{ color: demoTime === 'EXPIRED' ? '#ff6a1a' : 'inherit' }}>
-                  <strong>DEMO expires:</strong> {demoTime === 'EXPIRED' ? 'EXPIRED' : `in ${demoTime}`}
-                </p>
-              )}
-              {user.isBusiness && (
-                <>
-                  <p>
-                    <strong>Company:</strong> {user.companyName}
-                  </p>
-                  <p>
-                    <strong>ΑΦΜ:</strong> {user.afm}
-                  </p>
-                  {user.doy && (
-                    <p>
-                      <strong>ΔΟΥ:</strong> {user.doy}
-                    </p>
-                  )}
-                  {user.address && (
-                    <p>
-                      <strong>Address:</strong> {user.address}
-                    </p>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* Payment History Card */}
-          <div
-            className="w-full p-6 rounded-2xl"
-            style={{ backgroundColor: 'var(--polar)' }}
+          {/* My Subscription Button */}
+          <button
+            onClick={() => router.push(`/${locale}/dashboard/subscription`)}
+            className="btn-universal w-full text-button flex items-center justify-center text-center"
+            style={{ minHeight: '52px', backgroundColor: '#e2f0eb', color: 'var(--deep-teal)' }}
           >
-            <h2 className="text-heading font-semibold mb-4" style={{ color: 'var(--deep-teal)' }}>
-              💳 Payment Information
-            </h2>
+            {(translations[locale] || translations.el).mySubscription}
+          </button>
 
-            <div className="space-y-3 text-body" style={{ color: 'var(--deep-teal)' }}>
-              {/* Account Purchase Status */}
-              <div className="p-4 rounded-xl" style={{ backgroundColor: 'rgba(1, 49, 45, 0.05)' }}>
-                <p className="font-semibold mb-2">Account Purchase (62€ με ΦΠΑ)</p>
-                {user.accountPurchased ? (
-                  <>
-                    <p style={{ color: '#25D366' }}>
-                      ✅ <strong>Paid</strong>
-                    </p>
-                    {user.accountPurchasedAt && (
-                      <p className="text-small mt-1">
-                        Date: {new Date(user.accountPurchasedAt).toLocaleDateString()}
-                      </p>
-                    )}
-                    {user.firstMonthFreeExpiresAt && (
-                      <p className="text-small">
-                        First free month expires: {new Date(user.firstMonthFreeExpiresAt).toLocaleDateString()}
-                      </p>
-                    )}
-                  </>
-                ) : (
-                  <p style={{ color: '#ff6a1a' }}>
-                    ❌ <strong>Not paid</strong>
-                  </p>
-                )}
-              </div>
-
-              {/* Subscription Status */}
-              <div className="p-4 rounded-xl" style={{ backgroundColor: 'rgba(1, 49, 45, 0.05)' }}>
-                <p className="font-semibold mb-2">Monthly Subscription</p>
-                {user.subscriptionPlan && user.subscriptionPlan !== 'demo' ? (
-                  <>
-                    <p>
-                      <strong>Plan:</strong> {user.subscriptionPlan.toUpperCase()}
-                    </p>
-                    {user.subscriptionExpiresAt && (
-                      <p className="text-small">
-                        Next payment: {new Date(user.subscriptionExpiresAt).toLocaleDateString()}
-                      </p>
-                    )}
-                  </>
-                ) : (
-                  <p style={{ color: '#ff6a1a' }}>No active subscription</p>
-                )}
-              </div>
-
-              {/* Bonus Months */}
-              {(user.bonusMonths ?? 0) > 0 && (
-                <div className="p-4 rounded-xl" style={{ backgroundColor: 'rgba(255, 143, 10, 0.1)' }}>
-                  <p className="font-semibold" style={{ color: '#ff8f0a' }}>
-                    🎁 Bonus Months: {user.bonusMonths ?? 0}
-                  </p>
-                  <p className="text-small mt-1">
-                    Will be used automatically before next payment
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Rewards Section */}
-          <RewardsSection user={user} locale={locale} />
-
-          {/* Quick Actions Section */}
-          <div
-            className="w-full p-6 rounded-2xl"
-            style={{ backgroundColor: 'var(--polar)' }}
+          {/* Security Button */}
+          <button
+            onClick={() => router.push(`/${locale}/dashboard/security`)}
+            className="btn-universal w-full text-button flex items-center justify-center text-center"
+            style={{ minHeight: '52px', backgroundColor: '#ddece5', color: 'var(--deep-teal)' }}
           >
-            <h2 className="text-heading font-semibold mb-4" style={{ color: 'var(--deep-teal)' }}>
-              {(translations[locale] || translations.el).quickActions}
-            </h2>
+            {(translations[locale] || translations.el).security}
+          </button>
 
-            <div
-              className="grid grid-cols-2 gap-3"
-              style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}
+          {/* Referrals Button */}
+          <button
+            onClick={() => router.push(`/${locale}/dashboard/referral`)}
+            className="btn-universal w-full text-button flex items-center justify-center text-center"
+            style={{ minHeight: '52px', backgroundColor: '#d8e8df', color: 'var(--deep-teal)' }}
+          >
+            {(translations[locale] || translations.el).referral}
+          </button>
+
+          {/* Export Button */}
+          <button
+            onClick={() => router.push(`/${locale}/dashboard/export`)}
+            className="btn-universal w-full text-button flex items-center justify-center text-center"
+            style={{ minHeight: '52px', backgroundColor: '#d3e4d9', color: 'var(--deep-teal)' }}
+          >
+            {(translations[locale] || translations.el).export}
+          </button>
+
+          {/* Go to Finances Button */}
+          <button
+            onClick={() => router.push(`/${locale}/page-pay`)}
+            className="btn-universal w-full text-button flex items-center justify-center text-center"
+            style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
+          >
+            {(translations[locale] || translations.el).goToFinances}
+          </button>
+
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="btn-universal w-full text-button flex items-center justify-center text-center"
+            style={{ minHeight: '52px', backgroundColor: 'var(--deep-teal)', color: 'var(--polar)' }}
+          >
+            {(translations[locale] || translations.el).logout}
+          </button>
+
+          {/* Delete Account Button */}
+          <button
+            onClick={() => setShowDeleteModal(true)}
+            className="btn-universal w-full text-button flex items-center justify-center text-center"
+            style={{ minHeight: '52px', backgroundColor: 'var(--orange)', color: '#ffffff' }}
+          >
+            {(translations[locale] || translations.el).deleteAccount}
+          </button>
+
+          {/* Support Section */}
+          <div className="w-full flex flex-col gap-12 items-center">
+            <p
+              className="text-button text-center"
+              style={{ color: 'var(--orange)' }}
             >
-              {/* Profile */}
-              <button
-                onClick={() => router.push(`/${locale}/dashboard/profile`)}
-                className="p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
-                style={{
-                  backgroundColor: 'rgba(1, 49, 45, 0.05)',
-                  textAlign: locale === 'ar' ? 'right' : 'left',
-                }}
-              >
-                <span className="text-2xl block mb-1">👤</span>
-                <span className="font-semibold block" style={{ color: 'var(--deep-teal)' }}>
-                  {(translations[locale] || translations.el).profile}
-                </span>
-                <span className="text-small block" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                  {(translations[locale] || translations.el).profileDesc}
-                </span>
-              </button>
+              {(translations[locale] || translations.el).needHelp}
+            </p>
 
-              {/* Subscription */}
-              <button
-                onClick={() => router.push(`/${locale}/dashboard/subscription`)}
-                className="p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
+            <div className="flex gap-4 w-full">
+              <a
+                href="viber://chat?number=%2B306983208844"
+                className="flex-1 btn-universal text-button flex items-center justify-center"
                 style={{
-                  backgroundColor: 'rgba(1, 49, 45, 0.05)',
-                  textAlign: locale === 'ar' ? 'right' : 'left',
+                  minHeight: '52px',
+                  backgroundColor: '#7360f2',
+                  color: 'white',
                 }}
               >
-                <span className="text-2xl block mb-1">💳</span>
-                <span className="font-semibold block" style={{ color: 'var(--deep-teal)' }}>
-                  {(translations[locale] || translations.el).subscription}
-                </span>
-                <span className="text-small block" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                  {(translations[locale] || translations.el).subscriptionDesc}
-                </span>
-              </button>
-
-              {/* Settings */}
-              <button
-                onClick={() => router.push(`/${locale}/dashboard/settings`)}
-                className="p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
+                Viber
+              </a>
+              <a
+                href="https://wa.me/306983208844"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 btn-universal text-button flex items-center justify-center"
                 style={{
-                  backgroundColor: 'rgba(1, 49, 45, 0.05)',
-                  textAlign: locale === 'ar' ? 'right' : 'left',
+                  minHeight: '52px',
+                  backgroundColor: '#25D366',
+                  color: 'white',
                 }}
               >
-                <span className="text-2xl block mb-1">⚙️</span>
-                <span className="font-semibold block" style={{ color: 'var(--deep-teal)' }}>
-                  {(translations[locale] || translations.el).settings}
-                </span>
-                <span className="text-small block" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                  {(translations[locale] || translations.el).settingsDesc}
-                </span>
-              </button>
-
-              {/* Security */}
-              <button
-                onClick={() => router.push(`/${locale}/dashboard/security`)}
-                className="p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
-                style={{
-                  backgroundColor: 'rgba(1, 49, 45, 0.05)',
-                  textAlign: locale === 'ar' ? 'right' : 'left',
-                }}
-              >
-                <span className="text-2xl block mb-1">🔒</span>
-                <span className="font-semibold block" style={{ color: 'var(--deep-teal)' }}>
-                  {(translations[locale] || translations.el).security}
-                </span>
-                <span className="text-small block" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                  {(translations[locale] || translations.el).securityDesc}
-                </span>
-              </button>
-
-              {/* Referral */}
-              <button
-                onClick={() => router.push(`/${locale}/dashboard/referral`)}
-                className="p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
-                style={{
-                  backgroundColor: 'rgba(255, 143, 10, 0.1)',
-                  textAlign: locale === 'ar' ? 'right' : 'left',
-                }}
-              >
-                <span className="text-2xl block mb-1">🎁</span>
-                <span className="font-semibold block" style={{ color: '#ff8f0a' }}>
-                  {(translations[locale] || translations.el).referral}
-                </span>
-                <span className="text-small block" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                  {(translations[locale] || translations.el).referralDesc}
-                </span>
-              </button>
-
-              {/* Export */}
-              <button
-                onClick={() => router.push(`/${locale}/dashboard/export`)}
-                className="p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
-                style={{
-                  backgroundColor: 'rgba(1, 49, 45, 0.05)',
-                  textAlign: locale === 'ar' ? 'right' : 'left',
-                }}
-              >
-                <span className="text-2xl block mb-1">📥</span>
-                <span className="font-semibold block" style={{ color: 'var(--deep-teal)' }}>
-                  {(translations[locale] || translations.el).export}
-                </span>
-                <span className="text-small block" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                  {(translations[locale] || translations.el).exportDesc}
-                </span>
-              </button>
+                WhatsApp
+              </a>
             </div>
-          </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex flex-col gap-12 w-full">
-            <button
-              onClick={() => router.push(`/${locale}/page-pay`)}
-              className="btn-primary text-button w-full text-center"
-              style={{
-                minHeight: '52px',
-                backgroundColor: 'var(--zanah)',
-                color: 'var(--deep-teal)',
-                boxShadow: '0 4px 8px var(--deep-teal)',
-              }}
+            <p
+              className="text-body text-center"
+              style={{ color: 'var(--zanah)' }}
             >
-              📊 {(translations[locale] || translations.el).goToDashboard}
-            </button>
-
-            <button
-              onClick={handleLogout}
-              className="btn-primary text-button w-full text-center"
-              style={{
-                minHeight: '52px',
-                backgroundColor: '#ff6a1a',
-                color: '#ffffff',
-                boxShadow: '0 4px 8px rgba(255, 255, 255, 0.3)',
-              }}
-            >
-              🚪 {(translations[locale] || translations.el).logout}
-            </button>
+              {(translations[locale] || translations.el).responseTime}
+            </p>
           </div>
         </div>
       </div>
+
+      {/* Delete Account Confirmation Modal */}
+      {showDeleteModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
+          onClick={() => setShowDeleteModal(false)}
+        >
+          <div
+            className="w-full max-w-sm mx-4 p-6 rounded-2xl"
+            style={{ backgroundColor: 'var(--polar)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2
+              className="text-heading font-bold text-center mb-4"
+              style={{ color: 'var(--orange)' }}
+            >
+              {(translations[locale] || translations.el).deleteConfirmTitle}
+            </h2>
+            <p
+              className="text-body text-center mb-6"
+              style={{ color: 'var(--deep-teal)' }}
+            >
+              {(translations[locale] || translations.el).deleteConfirmMessage}
+            </p>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="flex-1 btn-primary text-button text-center"
+                style={{
+                  minHeight: '52px',
+                  backgroundColor: 'var(--zanah)',
+                  color: 'var(--deep-teal)',
+                }}
+              >
+                {(translations[locale] || translations.el).deleteConfirmNo}
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                className="flex-1 btn-primary text-button text-center"
+                style={{
+                  minHeight: '52px',
+                  backgroundColor: 'var(--orange)',
+                  color: '#ffffff',
+                }}
+              >
+                {(translations[locale] || translations.el).deleteConfirmYes}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </BackgroundPage>
   );
 }
