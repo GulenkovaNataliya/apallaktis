@@ -1,4 +1,4 @@
-# TODOLIST — APALLAKTIS Mobile-First SaaS
+# TODOLIST — ΑΠΑΛΛΑΚΤΗΣ Mobile-First SaaS
 
 ## Легенда
 - **Оценка**: максимум 4 человекочаса на задачу
@@ -61,7 +61,7 @@ frontend/
 - [ ] Не добавлено ни одного цвета кроме указанных в палитре
 
 **Файлы в контексте**:
-- `APALLAKTIS .txt`
+- `ΑΠΑΛΛΑΚΤΗΣ .txt`
 - `src/styles/variables.scss`
 - `src/styles/typography.scss`
 - `src/styles/mixins.scss`
@@ -282,7 +282,7 @@ frontend/
 **Файлы в контексте**:
 - `src/app/[locale]/thank-you/page.tsx`
 - `src/lib/messages.ts` (thankYou секция)
-- `APALLAKTIS .txt` (slogan-color)
+- `ΑΠΑΛΛΑΚΤΗΣ .txt` (slogan-color)
 
 **Переводы слогана 2**:
 - el: "Πάρε τον έλεγχο στα χέρια σου!"

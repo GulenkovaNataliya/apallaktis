@@ -74,7 +74,7 @@ export const privacyPolicy: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. Data Controller",
-        content: "The APALLAKTIS platform acts as the Data Controller of personal data processed in the context of providing the service."
+        content: "The ΑΠΑΛΛΑΚΤΗΣ platform acts as the Data Controller of personal data processed in the context of providing the service."
       },
       {
         heading: "2. Data We Collect",
@@ -131,7 +131,7 @@ export const privacyPolicy: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. Оператор данных",
-        content: "Платформа АПАЛЛАКТИС является оператором персональных данных пользователей."
+        content: "Платформа ΑΠΑΛΛΑΚΤΗΣ является оператором персональных данных пользователей."
       },
       {
         heading: "2. Какие данные мы собираем",
@@ -188,7 +188,7 @@ export const privacyPolicy: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. Контролер даних",
-        content: "Платформа APALLAKTIS виступає контролером персональних даних, які обробляються в межах надання сервісу."
+        content: "Платформа ΑΠΑΛΛΑΚΤΗΣ виступає контролером персональних даних, які обробляються в межах надання сервісу."
       },
       {
         heading: "2. Які дані ми збираємо",
@@ -245,7 +245,7 @@ export const privacyPolicy: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. Kontrolluesi i të Dhënave",
-        content: "Platforma APALLAKTIS vepron si kontrollues i të dhënave personale që përpunohen në kuadër të ofrimit të shërbimit."
+        content: "Platforma ΑΠΑΛΛΑΚΤΗΣ vepron si kontrollues i të dhënave personale që përpunohen në kuadër të ofrimit të shërbimit."
       },
       {
         heading: "2. Çfarë të dhënash mbledhim",
@@ -302,7 +302,7 @@ export const privacyPolicy: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. Администратор на данни",
-        content: "Платформата APALLAKTIS действа като администратор на личните данни."
+        content: "Платформата ΑΠΑΛΛΑΚΤΗΣ действа като администратор на личните данни."
       },
       {
         heading: "2. Какви данни събираме",
@@ -359,7 +359,7 @@ export const privacyPolicy: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. Operator de date",
-        content: "Platforma APALLAKTIS acționează ca operator de date."
+        content: "Platforma ΑΠΑΛΛΑΚΤΗΣ acționează ca operator de date."
       },
       {
         heading: "2. Date colectate",
@@ -416,7 +416,7 @@ export const privacyPolicy: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. مسؤول معالجة البيانات",
-        content: "تعمل منصة APALLAKTIS كمسؤول عن معالجة البيانات الشخصية."
+        content: "تعمل منصة ΑΠΑΛΛΑΚΤΗΣ كمسؤول عن معالجة البيانات الشخصية."
       },
       {
         heading: "2. البيانات التي نجمعها",
@@ -522,7 +522,7 @@ export const termsOfUse: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. Service Description",
-        content: "APALLAKTIS provides a digital tool for organizing and tracking financial data, projects, payments, and expenses. The service does not provide accounting, tax, or legal advice."
+        content: "ΑΠΑΛΛΑΚΤΗΣ provides a digital tool for organizing and tracking financial data, projects, payments, and expenses. The service does not provide accounting, tax, or legal advice."
       },
       {
         heading: "2. Acceptance of Terms",
@@ -538,11 +538,11 @@ export const termsOfUse: Record<string, LegalContent> = {
       },
       {
         heading: "5. Financial Data",
-        content: "All financial data is entered by the user. APALLAKTIS is not responsible for decisions based on such data."
+        content: "All financial data is entered by the user. ΑΠΑΛΛΑΚΤΗΣ is not responsible for decisions based on such data."
       },
       {
         heading: "6. Disclaimer",
-        content: "APALLAKTIS is not liable for errors, losses, or consequences arising from use of the service."
+        content: "ΑΠΑΛΛΑΚΤΗΣ is not liable for errors, losses, or consequences arising from use of the service."
       },
       {
         heading: "7. Availability",
@@ -550,7 +550,7 @@ export const termsOfUse: Record<string, LegalContent> = {
       },
       {
         heading: "8. Intellectual Property",
-        content: "All content is the intellectual property of APALLAKTIS."
+        content: "All content is the intellectual property of ΑΠΑΛΛΑΚΤΗΣ."
       },
       {
         heading: "9. Modifications",
@@ -567,7 +567,7 @@ export const termsOfUse: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. Описание сервиса",
-        content: "АПАЛЛАКТИС — это инструмент для учёта и организации финансовых данных. Сервис не является бухгалтерской или налоговой консультацией."
+        content: "ΑΠΑΛΛΑΚΤΗΣ — это инструмент для учёта и организации финансовых данных. Сервис не является бухгалтерской или налоговой консультацией."
       },
       {
         heading: "2. Принятие условий",
@@ -595,7 +595,7 @@ export const termsOfUse: Record<string, LegalContent> = {
       },
       {
         heading: "8. Авторские права",
-        content: "Все материалы принадлежат APALLAKTIS."
+        content: "Все материалы принадлежат ΑΠΑΛΛΑΚΤΗΣ."
       },
       {
         heading: "9. Изменения",
@@ -612,7 +612,7 @@ export const termsOfUse: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. Опис сервісу",
-        content: "Платформа APALLAKTIS надає цифровий інструмент для організації, обліку та відстеження фінансових даних, проєктів, платежів і витрат. Сервіс не є бухгалтерською, податковою або юридичною консультацією."
+        content: "Платформа ΑΠΑΛΛΑΚΤΗΣ надає цифровий інструмент для організації, обліку та відстеження фінансових даних, проєктів, платежів і витрат. Сервіс не є бухгалтерською, податковою або юридичною консультацією."
       },
       {
         heading: "2. Прийняття умов",
@@ -628,11 +628,11 @@ export const termsOfUse: Record<string, LegalContent> = {
       },
       {
         heading: "5. Фінансові дані",
-        content: "Усі фінансові дані вводяться користувачем. APALLAKTIS не гарантує точність результатів і не несе відповідальності за рішення, прийняті на їх основі."
+        content: "Усі фінансові дані вводяться користувачем. ΑΠΑΛΛΑΚΤΗΣ не гарантує точність результатів і не несе відповідальності за рішення, прийняті на їх основі."
       },
       {
         heading: "6. Обмеження відповідальності",
-        content: "APALLAKTIS не несе відповідальності за: помилки введення даних, фінансові або інші збитки, податкові чи бухгалтерські наслідки."
+        content: "ΑΠΑΛΛΑΚΤΗΣ не несе відповідальності за: помилки введення даних, фінансові або інші збитки, податкові чи бухгалтерські наслідки."
       },
       {
         heading: "7. Доступність сервісу",
@@ -640,11 +640,11 @@ export const termsOfUse: Record<string, LegalContent> = {
       },
       {
         heading: "8. Інтелектуальна власність",
-        content: "Увесь контент платформи є інтелектуальною власністю APALLAKTIS."
+        content: "Увесь контент платформи є інтелектуальною власністю ΑΠΑΛΛΑΚΤΗΣ."
       },
       {
         heading: "9. Зміни",
-        content: "APALLAKTIS залишає за собою право змінювати ці Умови у будь-який час."
+        content: "ΑΠΑΛΛΑΚΤΗΣ залишає за собою право змінювати ці Умови у будь-який час."
       },
       {
         heading: "10. Застосовне право",
@@ -657,7 +657,7 @@ export const termsOfUse: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. Përshkrimi i Shërbimit",
-        content: "Platforma APALLAKTIS ofron një mjet dixhital për organizimin dhe ndjekjen e të dhënave financiare, projekteve, pagesave dhe shpenzimeve. Shërbimi nuk përbën këshillë kontabël, tatimore ose ligjore."
+        content: "Platforma ΑΠΑΛΛΑΚΤΗΣ ofron një mjet dixhital për organizimin dhe ndjekjen e të dhënave financiare, projekteve, pagesave dhe shpenzimeve. Shërbimi nuk përbën këshillë kontabël, tatimore ose ligjore."
       },
       {
         heading: "2. Pranimi i Kushteve",
@@ -673,7 +673,7 @@ export const termsOfUse: Record<string, LegalContent> = {
       },
       {
         heading: "5. Të Dhënat Financiare",
-        content: "Të gjitha të dhënat futen nga përdoruesi. APALLAKTIS nuk mban përgjegjësi për vendime të marra mbi bazën e tyre."
+        content: "Të gjitha të dhënat futen nga përdoruesi. ΑΠΑΛΛΑΚΤΗΣ nuk mban përgjegjësi për vendime të marra mbi bazën e tyre."
       },
       {
         heading: "6. Mohim Përgjegjësie",
@@ -685,7 +685,7 @@ export const termsOfUse: Record<string, LegalContent> = {
       },
       {
         heading: "8. Pronësia Intelektuale",
-        content: "I gjithë përmbajtja i përket APALLAKTIS."
+        content: "I gjithë përmbajtja i përket ΑΠΑΛΛΑΚΤΗΣ."
       },
       {
         heading: "9. Ndryshime",
@@ -702,7 +702,7 @@ export const termsOfUse: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. Описание на услугата",
-        content: "Платформата APALLAKTIS предоставя дигитален инструмент за управление и проследяване на финансови данни, проекти, плащания и разходи. Услугата не представлява счетоводна, данъчна или правна консултация."
+        content: "Платформата ΑΠΑΛΛΑΚΤΗΣ предоставя дигитален инструмент за управление и проследяване на финансови данни, проекти, плащания и разходи. Услугата не представлява счетоводна, данъчна или правна консултация."
       },
       {
         heading: "2. Приемане на условията",
@@ -718,7 +718,7 @@ export const termsOfUse: Record<string, LegalContent> = {
       },
       {
         heading: "5. Финансови данни",
-        content: "Данните се въвеждат от потребителя. APALLAKTIS не носи отговорност за взети решения."
+        content: "Данните се въвеждат от потребителя. ΑΠΑΛΛΑΚΤΗΣ не носи отговорност за взети решения."
       },
       {
         heading: "6. Ограничаване на отговорността",
@@ -730,7 +730,7 @@ export const termsOfUse: Record<string, LegalContent> = {
       },
       {
         heading: "8. Авторски права",
-        content: "Съдържанието принадлежи на APALLAKTIS."
+        content: "Съдържанието принадлежи на ΑΠΑΛΛΑΚΤΗΣ."
       },
       {
         heading: "9. Промени",
@@ -747,7 +747,7 @@ export const termsOfUse: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. Descrierea serviciului",
-        content: "APALLAKTIS oferă un instrument digital pentru organizarea și urmărirea datelor financiare, proiectelor, plăților și cheltuielilor. Serviciul nu reprezintă consultanță contabilă, fiscală sau juridică."
+        content: "ΑΠΑΛΛΑΚΤΗΣ oferă un instrument digital pentru organizarea și urmărirea datelor financiare, proiectelor, plăților și cheltuielilor. Serviciul nu reprezintă consultanță contabilă, fiscală sau juridică."
       },
       {
         heading: "2. Acceptarea termenilor",
@@ -763,7 +763,7 @@ export const termsOfUse: Record<string, LegalContent> = {
       },
       {
         heading: "5. Date financiare",
-        content: "Datele sunt introduse de utilizator. APALLAKTIS nu răspunde pentru deciziile luate."
+        content: "Datele sunt introduse de utilizator. ΑΠΑΛΛΑΚΤΗΣ nu răspunde pentru deciziile luate."
       },
       {
         heading: "6. Limitarea răspunderii",
@@ -775,7 +775,7 @@ export const termsOfUse: Record<string, LegalContent> = {
       },
       {
         heading: "8. Proprietate intelectuală",
-        content: "Conținutul aparține APALLAKTIS."
+        content: "Conținutul aparține ΑΠΑΛΛΑΚΤΗΣ."
       },
       {
         heading: "9. Modificări",
@@ -792,7 +792,7 @@ export const termsOfUse: Record<string, LegalContent> = {
     sections: [
       {
         heading: "1. وصف الخدمة",
-        content: "توفر منصة APALLAKTIS أداة رقمية لتنظيم وتتبع البيانات المالية والمشاريع والمدفوعات والمصروفات. لا تمثل الخدمة استشارة محاسبية أو ضريبية أو قانونية."
+        content: "توفر منصة ΑΠΑΛΛΑΚΤΗΣ أداة رقمية لتنظيم وتتبع البيانات المالية والمشاريع والمدفوعات والمصروفات. لا تمثل الخدمة استشارة محاسبية أو ضريبية أو قانونية."
       },
       {
         heading: "2. قبول الشروط",
@@ -808,7 +808,7 @@ export const termsOfUse: Record<string, LegalContent> = {
       },
       {
         heading: "5. البيانات المالية",
-        content: "يتم إدخال جميع البيانات من قبل المستخدم. لا تتحمل APALLAKTIS مسؤولية القرارات المتخذة."
+        content: "يتم إدخال جميع البيانات من قبل المستخدم. لا تتحمل ΑΠΑΛΛΑΚΤΗΣ مسؤولية القرارات المتخذة."
       },
       {
         heading: "6. إخلاء المسؤولية",
@@ -820,7 +820,7 @@ export const termsOfUse: Record<string, LegalContent> = {
       },
       {
         heading: "8. الملكية الفكرية",
-        content: "جميع المحتويات مملوكة لـ APALLAKTIS."
+        content: "جميع المحتويات مملوكة لـ ΑΠΑΛΛΑΚΤΗΣ."
       },
       {
         heading: "9. التعديلات",

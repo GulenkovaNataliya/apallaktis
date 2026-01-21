@@ -1,6 +1,6 @@
 /**
- * Property Object Types
- * Типы объектов недвижимости
+ * Project Object Types
+ * Типы проектов/объектов
  */
 
 export type ObjectStatus = 'open' | 'closed';

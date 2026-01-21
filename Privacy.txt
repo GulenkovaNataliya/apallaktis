@@ -54,7 +54,7 @@
 ## 🇬🇧 English — Privacy Policy (informational translation)
 
 ### 1. Data Controller
-The APALLAKTIS platform acts as the Data Controller of personal data processed in the context of providing the service.
+The ΑΠΑΛΛΑΚΤΗΣ platform acts as the Data Controller of personal data processed in the context of providing the service.
 
 ### 2. Data We Collect
 We collect only data necessary for the operation of the service, such as:
@@ -102,7 +102,7 @@ For privacy-related matters, users may contact the platform through its contact 
 ## 🇷🇺 Русский — Политика конфиденциальности (информационный перевод)
 
 ### 1. Оператор данных
-Платформа АПАЛЛАКТИС является оператором персональных данных пользователей.
+Платформа ΑΠΑΛΛΑΚΤΗΣ является оператором персональных данных пользователей.
 
 ### 2. Какие данные мы собираем
 Мы собираем только данные, необходимые для работы сервиса: регистрационные данные, данные аккаунта, финансовые данные, вводимые пользователем, технические данные и журналы безопасности.
@@ -145,7 +145,7 @@ For privacy-related matters, users may contact the platform through its contact 
 #🇺🇦 Українська — Політика конфіденційності
 (інформаційний переклад)
 1. Контролер даних
-Платформа APALLAKTIS виступає контролером персональних даних, які обробляються в межах надання сервісу.
+Платформа ΑΠΑΛΛΑΚΤΗΣ виступає контролером персональних даних, які обробляються в межах надання сервісу.
 2. Які дані ми збираємо
 Ми збираємо лише ті дані, які є необхідними для функціонування сервісу, зокрема:
 
@@ -246,7 +246,7 @@ For privacy-related matters, users may contact the platform through its contact 
 
 1. Kontrolluesi i të Dhënave
 
-Platforma APALLAKTIS vepron si kontrollues i të dhënave personale që përpunohen në kuadër të ofrimit të shërbimit.
+Platforma ΑΠΑΛΛΑΚΤΗΣ vepron si kontrollues i të dhënave personale që përpunohen në kuadër të ofrimit të shërbimit.
 
 2. Çfarë të dhënash mbledhim
 
@@ -342,7 +342,7 @@ Për çështje privatësie, përdoruesi mund të kontaktojë përmes të dhënav
 
 1. Администратор на данни
 
-Платформата APALLAKTIS действа като администратор на личните данни.
+Платформата ΑΠΑΛΛΑΚΤΗΣ действа като администратор на личните данни.
 
 2. Какви данни събираме
 
@@ -408,7 +408,7 @@ Për çështje privatësie, përdoruesi mund të kontaktojë përmes të dhënav
 
 1. Operator de date
 
-Platforma APALLAKTIS acționează ca operator de date.
+Platforma ΑΠΑΛΛΑΚΤΗΣ acționează ca operator de date.
 
 2. Date colectate
 
@@ -474,7 +474,7 @@ Prin datele platformei.
 
 1. مسؤول معالجة البيانات
 
-تعمل منصة APALLAKTIS كمسؤول عن معالجة البيانات الشخصية.
+تعمل منصة ΑΠΑΛΛΑΚΤΗΣ كمسؤول عن معالجة البيانات الشخصية.
 
 2. البيانات التي نجمعها
 

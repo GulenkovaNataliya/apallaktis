@@ -7,7 +7,7 @@
   --safe-area-inset-left: env(safe-area-inset-left);
   --safe-area-inset-right: env(safe-area-inset-right);
 
-  /* APALLAKTIS Color Palette */
+  /* ΑΠΑΛΛΑΚΤΗΣ Color Palette */
   --blue-whale: #033a45;
   --polar: #daf3f6;
   --deep-teal: #01312d;
@@ -24,6 +24,32 @@
   --shadow-md: 0 4px 8px var(--deep-teal);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
   --shadow-pressed: 0 2px 4px var(--deep-teal);
+}
+
+/* Input placeholder styling for dark backgrounds */
+.input-dark-bg::placeholder {
+  color: var(--polar);
+  opacity: 0.7;
+}
+
+.input-dark-bg::-webkit-input-placeholder {
+  color: var(--polar);
+  opacity: 0.7;
+}
+
+.input-dark-bg::-moz-placeholder {
+  color: var(--polar);
+  opacity: 0.7;
+}
+
+.input-dark-bg:-ms-input-placeholder {
+  color: var(--polar);
+  opacity: 0.7;
+}
+
+/* Select placeholder styling for dark backgrounds */
+.select-dark-bg {
+  color: var(--deep-teal);
 }
 
 * {

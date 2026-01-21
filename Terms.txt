@@ -67,7 +67,7 @@
 ## 🇬🇧 English — Terms of Use (informational translation)
 
 ### 1. Service Description
-APALLAKTIS provides a digital tool for organizing and tracking financial data, projects, payments, and expenses.
+ΑΠΑΛΛΑΚΤΗΣ provides a digital tool for organizing and tracking financial data, projects, payments, and expenses.
 The service does not provide accounting, tax, or legal advice.
 
 ### 2. Acceptance of Terms
@@ -80,16 +80,16 @@ The user is fully responsible for data accuracy, account security, and all actio
 A limited trial period may be offered. Continued use requires an active subscription.
 
 ### 5. Financial Data
-All financial data is entered by the user. APALLAKTIS is not responsible for decisions based on such data.
+All financial data is entered by the user. ΑΠΑΛΛΑΚΤΗΣ is not responsible for decisions based on such data.
 
 ### 6. Disclaimer
-APALLAKTIS is not liable for errors, losses, or consequences arising from use of the service.
+ΑΠΑΛΛΑΚΤΗΣ is not liable for errors, losses, or consequences arising from use of the service.
 
 ### 7. Availability
 The service is provided “as is”, without guarantees of uninterrupted operation.
 
 ### 8. Intellectual Property
-All content is the intellectual property of APALLAKTIS.
+All content is the intellectual property of ΑΠΑΛΛΑΚΤΗΣ.
 
 ### 9. Modifications
 Terms may be updated at any time.
@@ -116,7 +116,7 @@ Greek law applies.
 ## 🇷🇺 Русский — Условия использования (информационный перевод)
 
 ### 1. Описание сервиса
-АПАЛЛАКТИС — это инструмент для учёта и организации финансовых данных.
+ΑΠΑΛΛΑΚΤΗΣ — это инструмент для учёта и организации финансовых данных.
 Сервис не является бухгалтерской или налоговой консультацией.
 
 ### 2. Принятие условий
@@ -139,7 +139,7 @@ Greek law applies.
 Сервис предоставляется «как есть».
 
 ### 8. Авторские права
-Все материалы принадлежат APALLAKTIS.
+Все материалы принадлежат ΑΠΑΛΛΑΚΤΗΣ.
 
 ### 9. Изменения
 Условия могут изменяться.
@@ -168,7 +168,7 @@ Greek law applies.
 
 1. Опис сервісу
 
-Платформа APALLAKTIS надає цифровий інструмент для організації, обліку та відстеження фінансових даних, проєктів, платежів і витрат.
+Платформа ΑΠΑΛΛΑΚΤΗΣ надає цифровий інструмент для організації, обліку та відстеження фінансових даних, проєктів, платежів і витрат.
 Сервіс не є бухгалтерською, податковою або юридичною консультацією.
 
 2. Прийняття умов
@@ -193,11 +193,11 @@ Greek law applies.
 5. Фінансові дані
 
 Усі фінансові дані вводяться користувачем.
-APALLAKTIS не гарантує точність результатів і не несе відповідальності за рішення, прийняті на їх основі.
+ΑΠΑΛΛΑΚΤΗΣ не гарантує точність результатів і не несе відповідальності за рішення, прийняті на їх основі.
 
 6. Обмеження відповідальності
 
-APALLAKTIS не несе відповідальності за:
+ΑΠΑΛΛΑΚΤΗΣ не несе відповідальності за:
 
 помилки введення даних,
 
@@ -211,11 +211,11 @@ APALLAKTIS не несе відповідальності за:
 
 8. Інтелектуальна власність
 
-Увесь контент платформи є інтелектуальною власністю APALLAKTIS.
+Увесь контент платформи є інтелектуальною власністю ΑΠΑΛΛΑΚΤΗΣ.
 
 9. Зміни
 
-APALLAKTIS залишає за собою право змінювати ці Умови у будь-який час.
+ΑΠΑΛΛΑΚΤΗΣ залишає за собою право змінювати ці Умови у будь-який час.
 
 10. Застосовне право
 
@@ -243,7 +243,7 @@ APALLAKTIS залишає за собою право змінювати ці У�
 
 1. Përshkrimi i Shërbimit
 
-Platforma APALLAKTIS ofron një mjet dixhital për organizimin dhe ndjekjen e të dhënave financiare, projekteve, pagesave dhe shpenzimeve.
+Platforma ΑΠΑΛΛΑΚΤΗΣ ofron një mjet dixhital për organizimin dhe ndjekjen e të dhënave financiare, projekteve, pagesave dhe shpenzimeve.
 Shërbimi nuk përbën këshillë kontabël, tatimore ose ligjore.
 
 2. Pranimi i Kushteve
@@ -268,7 +268,7 @@ Përdorimi i mëtejshëm kërkon abonim aktiv.
 5. Të Dhënat Financiare
 
 Të gjitha të dhënat futen nga përdoruesi.
-APALLAKTIS nuk mban përgjegjësi për vendime të marra mbi bazën e tyre.
+ΑΠΑΛΛΑΚΤΗΣ nuk mban përgjegjësi për vendime të marra mbi bazën e tyre.
 
 6. Mohim Përgjegjësie
 
@@ -280,7 +280,7 @@ Shërbimi ofrohet “siç është”, pa garanci.
 
 8. Pronësia Intelektuale
 
-I gjithë përmbajtja i përket APALLAKTIS.
+I gjithë përmbajtja i përket ΑΠΑΛΛΑΚΤΗΣ.
 
 9. Ndryshime
 
@@ -311,7 +311,7 @@ Zbatohet ligji grek.
 
 1. Описание на услугата
 
-Платформата APALLAKTIS предоставя дигитален инструмент за управление и проследяване на финансови данни, проекти, плащания и разходи.
+Платформата ΑΠΑΛΛΑΚΤΗΣ предоставя дигитален инструмент за управление и проследяване на финансови данни, проекти, плащания и разходи.
 Услугата не представлява счетоводна, данъчна или правна консултация.
 
 2. Приемане на условията
@@ -330,7 +330,7 @@ Zbatohet ligji grek.
 5. Финансови данни
 
 Данните се въвеждат от потребителя.
-APALLAKTIS не носи отговорност за взети решения.
+ΑΠΑΛΛΑΚΤΗΣ не носи отговорност за взети решения.
 
 6. Ограничаване на отговорността
 
@@ -342,7 +342,7 @@ APALLAKTIS не носи отговорност за взети решения.
 
 8. Авторски права
 
-Съдържанието принадлежи на APALLAKTIS.
+Съдържанието принадлежи на ΑΠΑΛΛΑΚΤΗΣ.
 
 9. Промени
 
@@ -373,7 +373,7 @@ APALLAKTIS не носи отговорност за взети решения.
 
 1. Descrierea serviciului
 
-APALLAKTIS oferă un instrument digital pentru organizarea și urmărirea datelor financiare, proiectelor, plăților și cheltuielilor.
+ΑΠΑΛΛΑΚΤΗΣ oferă un instrument digital pentru organizarea și urmărirea datelor financiare, proiectelor, plăților și cheltuielilor.
 Serviciul nu reprezintă consultanță contabilă, fiscală sau juridică.
 
 2. Acceptarea termenilor
@@ -392,7 +392,7 @@ Utilizarea ulterioară necesită abonament activ.
 5. Date financiare
 
 Datele sunt introduse de utilizator.
-APALLAKTIS nu răspunde pentru deciziile luate.
+ΑΠΑΛΛΑΚΤΗΣ nu răspunde pentru deciziile luate.
 
 6. Limitarea răspunderii
 
@@ -404,7 +404,7 @@ Serviciul este oferit „ca atare”.
 
 8. Proprietate intelectuală
 
-Conținutul aparține APALLAKTIS.
+Conținutul aparține ΑΠΑΛΛΑΚΤΗΣ.
 
 9. Modificări
 
@@ -435,7 +435,7 @@ Se aplică legea Greciei.
 
 1. وصف الخدمة
 
-توفر منصة APALLAKTIS أداة رقمية لتنظيم وتتبع البيانات المالية والمشاريع والمدفوعات والمصروفات.
+توفر منصة ΑΠΑΛΛΑΚΤΗΣ أداة رقمية لتنظيم وتتبع البيانات المالية والمشاريع والمدفوعات والمصروفات.
 لا تمثل الخدمة استشارة محاسبية أو ضريبية أو قانونية.
 
 2. قبول الشروط
@@ -454,7 +454,7 @@ Se aplică legea Greciei.
 5. البيانات المالية
 
 يتم إدخال جميع البيانات من قبل المستخدم.
-لا تتحمل APALLAKTIS مسؤولية القرارات المتخذة.
+لا تتحمل ΑΠΑΛΛΑΚΤΗΣ مسؤولية القرارات المتخذة.
 
 6. إخلاء المسؤولية
 
@@ -466,7 +466,7 @@ Se aplică legea Greciei.
 
 8. الملكية الفكرية
 
-جميع المحتويات مملوكة لـ APALLAKTIS.
+جميع المحتويات مملوكة لـ ΑΠΑΛΛΑΚΤΗΣ.
 
 9. التعديلات
 

@@ -1,4 +1,4 @@
--- APALLAKTIS Database Schema
+-- ΑΠΑΛΛΑΚΤΗΣ Database Schema
 -- PostgreSQL 14+
 
 -- Users table

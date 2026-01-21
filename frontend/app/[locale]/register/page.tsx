@@ -274,8 +274,8 @@ export default function RegisterPage() {
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
-              style={{ minHeight: '52px', padding: '12px' }}
+              className="input-dark-bg text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+              style={{ minHeight: '52px', padding: '12px', backgroundColor: 'white' }}
             />
 
             <div>
@@ -288,10 +288,10 @@ export default function RegisterPage() {
                   setErrors({ ...errors, email: "" });
                 }}
                 required
-                className={`text-body w-full rounded-2xl border focus:outline-none ${
+                className={`input-dark-bg text-body w-full rounded-2xl border focus:outline-none ${
                   errors.email ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                 }`}
-                style={{ minHeight: '52px', padding: '12px' }}
+                style={{ minHeight: '52px', padding: '12px', backgroundColor: 'white' }}
               />
               {errors.email && (
                 <p className="text-sm mt-1 px-2" style={{ color: "#ff6a1a" }}>
@@ -311,10 +311,10 @@ export default function RegisterPage() {
                     setErrors({ ...errors, password: "" });
                   }}
                   required
-                  className={`text-body w-full rounded-2xl border focus:outline-none ${
+                  className={`input-dark-bg text-body w-full rounded-2xl border focus:outline-none ${
                     errors.password ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                   }`}
-                  style={{ minHeight: '52px', padding: '12px 50px 12px 12px' }}
+                  style={{ minHeight: '52px', padding: '12px 50px 12px 12px', backgroundColor: 'white' }}
                 />
                 <button
                   type="button"
@@ -343,10 +343,10 @@ export default function RegisterPage() {
                     setErrors({ ...errors, confirmPassword: "" });
                   }}
                   required
-                  className={`text-body w-full rounded-2xl border focus:outline-none ${
+                  className={`input-dark-bg text-body w-full rounded-2xl border focus:outline-none ${
                     errors.confirmPassword ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                   }`}
-                  style={{ minHeight: '52px', padding: '12px 50px 12px 12px' }}
+                  style={{ minHeight: '52px', padding: '12px 50px 12px 12px', backgroundColor: 'white' }}
                 />
                 <button
                   type="button"
@@ -369,8 +369,8 @@ export default function RegisterPage() {
                 <select
                   value={formData.countryCode}
                   onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
-                  className="text-body rounded-2xl px-3 border border-gray-300 focus:outline-none focus:border-blue-500"
-                  style={{ minWidth: "110px", minHeight: '52px' }}
+                  className="select-dark-bg text-body rounded-2xl px-3 border border-gray-300 focus:outline-none focus:border-blue-500"
+                  style={{ minWidth: "110px", minHeight: '52px', backgroundColor: 'white' }}
                 >
                   {countryCodes.map((item) => (
                     <option key={item.code} value={item.code} style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>
@@ -387,10 +387,10 @@ export default function RegisterPage() {
                     setErrors({ ...errors, phone: "" });
                   }}
                   required
-                  className={`text-body rounded-2xl border flex-1 focus:outline-none ${
+                  className={`input-dark-bg text-body rounded-2xl border flex-1 focus:outline-none ${
                     errors.phone ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                   }`}
-                  style={{ minHeight: '52px', padding: '12px' }}
+                  style={{ minHeight: '52px', padding: '12px', backgroundColor: 'white' }}
                 />
               </div>
               {errors.phone && (
@@ -416,23 +416,24 @@ export default function RegisterPage() {
                         setAfmResult(null);
                       }}
                       required
-                      className={`text-body rounded-2xl border focus:outline-none ${
+                      className={`input-dark-bg text-body rounded-2xl border focus:outline-none ${
                         errors.afm ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                       }`}
-                      style={{ minHeight: '52px', padding: '12px', width: '60%' }}
+                      style={{ minHeight: '52px', padding: '12px', width: '60%', backgroundColor: 'white' }}
                     />
                     <button
                       type="button"
                       onClick={handleAfmLookup}
                       disabled={isAfmLoading || formData.afm.length !== 9}
-                      className="btn-primary text-button text-center"
+                      className="btn-primary text-button text-center rounded-2xl"
                       style={{
-                        backgroundColor: "var(--polar)",
+                        backgroundColor: "white",
                         color: "var(--deep-teal)",
-                        boxShadow: "0 4px 8px var(--deep-teal)",
+                        border: "1px solid #d1d5db",
                         opacity: isAfmLoading || formData.afm.length !== 9 ? 0.6 : 1,
                         cursor: isAfmLoading || formData.afm.length !== 9 ? "not-allowed" : "pointer",
                         width: '40%',
+                        minHeight: '52px',
                       }}
                     >
                       {isAfmLoading ? "..." : "TaxisNet"}
@@ -454,8 +455,8 @@ export default function RegisterPage() {
                       value={afmResult.companyName || ''}
                       readOnly
                       placeholder="Επωνυμία"
-                      className="text-body w-full rounded-2xl border border-gray-300 bg-gray-100"
-                      style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)' }}
+                      className="input-dark-bg text-body w-full rounded-2xl border border-gray-300"
+                      style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: '#f3f4f6' }}
                     />
                     {/* Διεύθυνση (Address) - read-only from VIES */}
                     <input
@@ -463,8 +464,8 @@ export default function RegisterPage() {
                       value={afmResult.address || ''}
                       readOnly
                       placeholder="Διεύθυνση"
-                      className="text-body w-full rounded-2xl border border-gray-300 bg-gray-100"
-                      style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)' }}
+                      className="input-dark-bg text-body w-full rounded-2xl border border-gray-300"
+                      style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: '#f3f4f6' }}
                     />
                     {/* Δραστηριότητα (Activity) - EDITABLE by user */}
                     <input
@@ -472,8 +473,8 @@ export default function RegisterPage() {
                       value={afmResult.activity || ''}
                       onChange={(e) => setAfmResult({ ...afmResult, activity: e.target.value })}
                       placeholder="Δραστηριότητα (συμπληρώστε)"
-                      className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
-                      style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)' }}
+                      className="input-dark-bg text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+                      style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: 'white' }}
                     />
                     {/* ΔΟΥ - EDITABLE by user */}
                     <input
@@ -481,8 +482,8 @@ export default function RegisterPage() {
                       value={afmResult.doy || ''}
                       onChange={(e) => setAfmResult({ ...afmResult, doy: e.target.value })}
                       placeholder="ΔΟΥ (συμπληρώστε)"
-                      className="text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
-                      style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)' }}
+                      className="input-dark-bg text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+                      style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: 'white' }}
                     />
                   </div>
                 )}

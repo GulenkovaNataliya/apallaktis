@@ -3,12 +3,12 @@ import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "ΑΠΑΛΛΑΚΤΗΣ - Τέλος στη ρουτίνα!",
-  description: "Σύστημα διαχείρισης εξόδων και εσόδων για ακίνητα",
+  description: "Όχι λογιστικό πρόγραμμα — εργαλείο προσωπικού οικονομικού ελέγχου για έργα",
   applicationName: "ΑΠΑΛΛΑΚΤΗΣ",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Apallaktis",
+    title: "ΑΠΑΛΛΑΚΤΗΣ",
   },
   formatDetection: {
     telephone: false,
@@ -37,7 +37,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Apallaktis" />
+        <meta name="apple-mobile-web-app-title" content="ΑΠΑΛΛΑΚΤΗΣ" />
         <meta name="mobile-web-app-capable" content="yes" />
 
         {/* Service Worker Registration */}

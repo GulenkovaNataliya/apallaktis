@@ -371,7 +371,7 @@ export default function RewardsSection({ user, locale }: RewardsSectionProps) {
   const shareLink = () => {
     if (navigator.share) {
       navigator.share({
-        title: 'APALLAKTIS',
+        title: 'ΑΠΑΛΛΑΚΤΗΣ',
         text: t.referral.description,
         url: referralLink,
       });
