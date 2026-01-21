@@ -185,7 +185,7 @@ export default function PaymentMethodsPage() {
         </button>
 
         {/* Methods List */}
-        <div className="flex flex-col gap-4 flex-1">
+        <div className="flex flex-col gap-12 flex-1">
           {methods.length === 0 ? (
             <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
               {t.noMethods}
