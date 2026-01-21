@@ -314,7 +314,7 @@ export default function DashboardPage() {
             {(translations[locale] || translations.el).personalAccount}
           </h1>
 
-          {/* Profile Button - lightest */}
+          {/* Profile Button - 1/5 lightest */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/profile`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
@@ -323,43 +323,34 @@ export default function DashboardPage() {
             {(translations[locale] || translations.el).profile}
           </button>
 
-          {/* My Subscription Button - 3x darker */}
+          {/* My Subscription Button - 2/5 */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/subscription`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#b5ddd4', color: '#01312d' }}
+            style={{ minHeight: '52px', backgroundColor: '#b0d9cf', color: '#01312d' }}
           >
             {(translations[locale] || translations.el).mySubscription}
           </button>
 
-          {/* Security Button - 3x darker */}
-          <button
-            onClick={() => router.push(`/${locale}/dashboard/security`)}
-            className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#7fc4b8', color: '#01312d' }}
-          >
-            {(translations[locale] || translations.el).security}
-          </button>
-
-          {/* Referrals Button - 3x darker */}
+          {/* Referrals Button - 3/5 */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/referral`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#4aab9c', color: '#ffffff' }}
+            style={{ minHeight: '52px', backgroundColor: '#6bbfae', color: '#01312d' }}
           >
             {(translations[locale] || translations.el).referral}
           </button>
 
-          {/* Export Button - 3x darker */}
+          {/* Export Button - 4/5 */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/export`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: '#208d7d', color: '#ffffff' }}
+            style={{ minHeight: '52px', backgroundColor: '#35a593', color: '#ffffff' }}
           >
             {(translations[locale] || translations.el).export}
           </button>
 
-          {/* Go to Finances Button - darkest */}
+          {/* Go to Finances Button - 5/5 darkest */}
           <button
             onClick={() => router.push(`/${locale}/page-pay`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
