@@ -1434,6 +1434,25 @@ POST /api/clients/lookup-afm
 - `src/components/*`
 
 ---
+
+### Задача: /[locale]/payment-success — Успех оплаты ✅ ГОТОВО
+
+**Описание**:
+Обновлён дизайн страницы успешной оплаты согласно design.md.
+
+**Выполненные изменения**:
+- [x] Удалён ключ accountActivated из всех 8 языков (был неиспользуемый)
+- [x] Номер аккаунта (#...) перемещён после subtitle, цвет var(--orange)
+- [x] "30 дней бесплатно" — убрана рамка, сделана фраза с text-button
+- [x] receiptSent — новый текст: "Чек на подтверждение оплаты отправлен на email. Τιμολόγιο/Απόδειξη будет отправлено отдельно" (email и Τιμολόγιο/Απόδειξη не переводятся)
+- [x] Кнопка "перейти в dashboard" → фраза `<p>` с cursor-pointer, цвет var(--polar)
+- [x] Layout по закону кнопок: paddingTop 180px, paddingLeft/Right 40px, paddingBottom 120px, gap-12
+
+**Файлы**:
+- `frontend/app/[locale]/payment-success/page.tsx` ✅
+- `frontend/lib/messages.ts` ✅ (receiptSent обновлён на 8 языках)
+
+---
 ## ВАЖНЫЕ ПРАВИЛА ДЛЯ CLAUDE CODE
 
 1. **СЛОГАН** — ВСЕГДА пишется с восклицательным знаком: `Τέλος στη ρουτίνα!`

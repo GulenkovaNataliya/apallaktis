@@ -55,11 +55,18 @@ export default function PaymentSuccessPage() {
 
   return (
     <BackgroundPage pageIndex={1}>
-      <div className="min-h-screen flex flex-col items-center justify-center px-10 py-20">
-
+      <div
+        className="flex flex-col items-center gap-12"
+        style={{
+          paddingTop: '180px',
+          paddingBottom: '120px',
+          paddingLeft: '40px',
+          paddingRight: '40px',
+        }}
+      >
         {/* Success Icon */}
         <div
-          className="mb-6 rounded-full flex items-center justify-center"
+          className="rounded-full flex items-center justify-center"
           style={{
             width: '100px',
             height: '100px',
@@ -70,54 +77,44 @@ export default function PaymentSuccessPage() {
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl font-bold text-center mb-4" style={{ color: 'var(--polar)' }}>
+        <h1 className="text-3xl font-bold text-center" style={{ color: 'var(--polar)' }}>
           {t.title}
         </h1>
 
+        {/* Subtitle */}
+        <p className="text-lg text-center" style={{ color: 'var(--polar)', opacity: 0.9 }}>
+          {t.subtitle}
+        </p>
+
         {/* Account Number */}
         {accountNumber && (
-          <p className="text-md text-center mb-4" style={{ color: 'var(--orange)' }}>
+          <p className="text-button text-center" style={{ color: 'var(--orange)' }}>
             {t.accountNumber}: <span className="font-bold">#{accountNumber}</span>
           </p>
         )}
 
-        {/* Subtitle */}
-        <p className="text-lg text-center mb-8 max-w-sm" style={{ color: 'var(--polar)', opacity: 0.9 }}>
-          {t.subtitle}
+        {/* 30 days free */}
+        <p className="text-button text-center" style={{ color: 'var(--orange)' }}>
+          {t.freeMonthStarted}
         </p>
 
-        {/* Success Messages */}
-        <div className="w-full max-w-sm mb-8 space-y-4">
-          <p className="font-semibold text-center" style={{ color: '#ff8f0a' }}>
-            {t.freeMonthStarted}
-          </p>
+        {/* Receipt sent */}
+        <p className="text-button text-center" style={{ color: 'var(--zanah)' }}>
+          {t.receiptSent}
+        </p>
 
-          <div
-            className="p-4 rounded-lg text-center"
-            style={{ backgroundColor: 'rgba(1, 49, 45, 0.1)', border: '2px solid var(--deep-teal)' }}
-          >
-            <p className="text-sm" style={{ color: 'var(--deep-teal)' }}>
-              {t.receiptSent}
-            </p>
-          </div>
-        </div>
-
-        {/* Go to Dashboard Button */}
-        <button
+        {/* Go to Dashboard - phrase, not a button */}
+        <p
           onClick={() => router.push(`/${locale}/page-pay`)}
-          className="w-full max-w-sm rounded-lg flex items-center justify-center text-button"
-          style={{
-            minHeight: '52px',
-            backgroundColor: 'var(--zanah)',
-            color: 'var(--deep-teal)',
-          }}
+          className="text-button cursor-pointer text-center"
+          style={{ color: 'var(--polar)' }}
         >
           {t.goToDashboard}
-        </button>
+        </p>
 
         {/* Session ID (for debugging) */}
         {sessionId && (
-          <p className="text-xs text-center mt-8" style={{ color: 'var(--polar)', opacity: 0.4 }}>
+          <p className="text-xs text-center" style={{ color: 'var(--polar)', opacity: 0.4 }}>
             Session: {sessionId.substring(0, 20)}...
           </p>
         )}
