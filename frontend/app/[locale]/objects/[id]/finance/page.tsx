@@ -421,24 +421,32 @@ export default function ObjectFinancePage() {
   if (view === 'main') {
     return (
       <BackgroundPage specialPage="objekt">
-        <div className="min-h-screen flex flex-col" style={{ paddingLeft: '38px', paddingRight: '38px', paddingTop: '40px', paddingBottom: '120px' }}>
+        <div className="min-h-screen flex flex-col gap-12" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}>
 
           {/* Back - phrase, not a button */}
           <p
             onClick={() => router.push(`/${locale}/objects`)}
             className="text-button cursor-pointer"
-            style={{ color: 'var(--polar)', marginTop: '120px', marginBottom: '48px' }}
+            style={{ color: 'var(--polar)' }}
           >
             {t.backToObject}
           </p>
 
+          {/* Title */}
           <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
-            {t.title}
+            {t.objectFinanceTitle}
           </h1>
 
+          {/* Object Name */}
+          <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: 'var(--polar)' }}>
+            <p className="text-xl font-bold" style={{ color: 'var(--deep-teal)' }}>
+              {object?.name || '—'}
+            </p>
+          </div>
+
           {/* Contract Price Section */}
-          <div className="rounded-xl mb-4" style={{ backgroundColor: 'var(--polar)', padding: '24px 24px 24px 32px' }}>
-            <h2 className="text-lg font-semibold mb-2" style={{ color: 'var(--deep-teal)' }}>
+          <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: 'var(--polar)' }}>
+            <h2 className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
               {t.contractPrice}
             </h2>
             <p className="text-2xl font-bold" style={{ color: 'var(--deep-teal)' }}>
@@ -447,7 +455,7 @@ export default function ObjectFinancePage() {
           </div>
 
           {/* Additional Works Section */}
-          <div className="rounded-xl mb-4" style={{ backgroundColor: 'var(--polar)', padding: '24px 24px 24px 32px' }}>
+          <div className="rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
                 {tObjects.additionalWorks}
@@ -466,9 +474,9 @@ export default function ObjectFinancePage() {
                 {t.noAdditionalWorks}
               </p>
             ) : (
-              <div className="space-y-4">
+              <div className="flex flex-col gap-4">
                 {finance.additionalWorks.map((work) => (
-                  <div key={work.id} className="flex justify-between items-start rounded-lg" style={{ backgroundColor: 'rgba(0,0,0,0.05)', padding: '12px 12px 12px 20px' }}>
+                  <div key={work.id} className="flex justify-between items-center rounded-2xl p-4" style={{ backgroundColor: 'var(--zanah)' }}>
                     <div className="flex-1">
                       <p className="font-semibold" style={{ color: 'var(--deep-teal)' }}>
                         {work.description}
@@ -482,8 +490,8 @@ export default function ObjectFinancePage() {
                     </div>
                     <button
                       onClick={() => handleDeleteWork(work.id)}
-                      className="text-button px-4 py-2 rounded-lg font-semibold"
-                      style={{ backgroundColor: '#ff6a1a', color: 'white', minHeight: '52px', boxShadow: '0 4px 8px rgba(255, 255, 255, 0.3)' }}
+                      className="text-button px-4 py-2 rounded-2xl font-semibold"
+                      style={{ backgroundColor: '#ff6a1a', color: 'white', minHeight: '52px' }}
                     >
                       {t.delete}
                     </button>
@@ -505,7 +513,7 @@ export default function ObjectFinancePage() {
           </div>
 
           {/* Payments Section */}
-          <div className="rounded-xl mb-4" style={{ backgroundColor: 'var(--polar)', padding: '24px 24px 24px 32px' }}>
+          <div className="rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
                 {t.payment}
@@ -524,13 +532,13 @@ export default function ObjectFinancePage() {
                 {t.noPayments}
               </p>
             ) : (
-              <div className="space-y-4">
+              <div className="flex flex-col gap-4">
                 {finance.payments.map((payment) => {
                   const method = paymentMethods.find(m => m.id === payment.paymentMethodId);
                   const methodName = method ? method.name : payment.paymentMethodId;
 
                   return (
-                    <div key={payment.id} className="flex justify-between items-start rounded-lg" style={{ backgroundColor: 'rgba(0,0,0,0.05)', padding: '12px 12px 12px 20px' }}>
+                    <div key={payment.id} className="flex justify-between items-center rounded-2xl p-4" style={{ backgroundColor: 'var(--zanah)' }}>
                       <div className="flex-1">
                         <p className="font-semibold" style={{ color: 'var(--deep-teal)' }}>
                           {methodName}
@@ -549,8 +557,8 @@ export default function ObjectFinancePage() {
                       </div>
                       <button
                         onClick={() => handleDeletePayment(payment.id)}
-                        className="text-sm px-3 py-1 rounded-lg"
-                        style={{ backgroundColor: '#ff6a1a', color: 'white' }}
+                        className="text-button px-4 py-2 rounded-2xl font-semibold"
+                        style={{ backgroundColor: '#ff6a1a', color: 'white', minHeight: '52px' }}
                       >
                         {t.delete}
                       </button>
@@ -573,13 +581,12 @@ export default function ObjectFinancePage() {
           </div>
 
           {/* Balance Section */}
-          <div className="rounded-xl" style={{
+          <div className="rounded-2xl p-4 text-center" style={{
             backgroundColor: finance.balanceStatus === 'debt' ? '#ff6a1a' :
                            finance.balanceStatus === 'overpaid' ? 'var(--zanah)' :
-                           'var(--polar)',
-            padding: '24px 24px 24px 32px'
+                           'var(--polar)'
           }}>
-            <h2 className="text-lg font-semibold mb-2" style={{ color: finance.balanceStatus === 'debt' ? 'white' : 'var(--deep-teal)' }}>
+            <h2 className="text-lg font-semibold" style={{ color: finance.balanceStatus === 'debt' ? 'white' : 'var(--deep-teal)' }}>
               {t.balance}
             </h2>
             <p className="text-3xl font-bold" style={{ color: finance.balanceStatus === 'debt' ? 'white' : 'var(--deep-teal)' }}>
@@ -592,14 +599,20 @@ export default function ObjectFinancePage() {
             </p>
           </div>
 
-          {/* Divider */}
-          <div className="my-8" style={{ height: '2px', backgroundColor: 'var(--polar)', opacity: 0.3 }} />
-
           {/* Object Expenses Section */}
-          <div>
-            <h2 className="text-xl font-bold mb-4 text-center" style={{ color: 'var(--polar)' }}>
+          <div className="flex flex-col gap-12">
+            <h2 className="text-xl font-bold text-center" style={{ color: 'var(--polar)' }}>
               {t.expenses}
             </h2>
+
+            {/* Add Expense Button - moved up */}
+            <button
+              onClick={() => setView('add-expense')}
+              className="btn-universal w-full text-button"
+              style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
+            >
+              + {t.addExpense}
+            </button>
 
             {expenses.length === 0 ? (
               <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
@@ -608,7 +621,7 @@ export default function ObjectFinancePage() {
             ) : (
               <>
                 {/* Grouped by Category */}
-                <div className="space-y-4 mb-4">
+                <div className="flex flex-col gap-4">
                   {Object.entries(groupByCategory()).map(([categoryId, categoryExpenses]) => {
                     const category = categories.find(c => c.id === categoryId);
                     const categoryName = category?.name || 'Unknown';
@@ -709,11 +722,11 @@ export default function ObjectFinancePage() {
                 </div>
 
                 {/* Grouped by Payment Method */}
-                <div className="mb-4">
-                  <h3 className="text-lg font-semibold mb-3" style={{ color: 'var(--polar)' }}>
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 text-center" style={{ color: 'var(--polar)' }}>
                     {t.byPaymentMethod}
                   </h3>
-                  <div className="space-y-4">
+                  <div className="flex flex-col gap-4">
                     {Object.entries(groupByPaymentMethod()).map(([methodId, methodExpenses]) => {
                       const method = paymentMethods.find(pm => pm.id === methodId);
                       const methodName = method?.name || 'Unknown';
@@ -766,26 +779,15 @@ export default function ObjectFinancePage() {
               </>
             )}
 
-            {/* Add Expense Button */}
-            <button
-              onClick={() => setView('add-expense')}
-              className="btn-universal w-full text-button mb-4"
-              style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
-            >
-              + {t.addExpense}
-            </button>
-
             {/* Total Expenses */}
             {expenses.length > 0 && (
-              <div className="rounded-xl mb-4" style={{ backgroundColor: 'var(--polar)', padding: '20px 24px' }}>
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
-                    Έξοδα Έργου
-                  </span>
-                  <span className="text-2xl font-bold" style={{ color: 'var(--deep-teal)' }}>
-                    {formatEuro(expenses.reduce((sum, exp) => sum + exp.amount, 0))}
-                  </span>
-                </div>
+              <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: 'var(--polar)' }}>
+                <span className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
+                  {t.totalObjectExpenses}
+                </span>
+                <p className="text-2xl font-bold" style={{ color: 'var(--deep-teal)' }}>
+                  {formatEuro(expenses.reduce((sum, exp) => sum + exp.amount, 0))}
+                </p>
               </div>
             )}
 
@@ -796,22 +798,21 @@ export default function ObjectFinancePage() {
                   const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0);
                   const profit = finance.contractPrice - totalExpenses;
                   const profitMessage = `
-Τιμή Σύμβασης: ${formatEuro(finance.contractPrice)}
-Έξοδα Έργου: ${formatEuro(totalExpenses)}
-Κέρδος: ${formatEuro(profit)}
+${t.profitContractPrice}: ${formatEuro(finance.contractPrice)}
+${t.profitExpenses}: ${formatEuro(totalExpenses)}
+${t.profitResult}: ${formatEuro(profit)}
 
-Θέλετε να κλείσετε το έργο;
+${t.closeProjectQuestion}
                   `.trim();
 
                   if (confirm(profitMessage)) {
-                    // Close object logic here
-                    alert('Η λειτουργία κλεισίματος έργου θα προστεθεί σύντομα.');
+                    alert(t.closingNotReady);
                   }
                 }}
                 className="btn-universal w-full text-button"
                 style={{ minHeight: '64px', backgroundColor: '#ff6a1a', color: 'white', fontSize: '20px', fontWeight: 600 }}
               >
-                Υπολογισμός Κέρδους
+                {t.calculateProfit}
               </button>
             )}
           </div>
