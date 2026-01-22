@@ -593,7 +593,7 @@ export default function ObjectFinancePage() {
             <p className="text-3xl font-bold" style={{ color: finance.balanceStatus === 'debt' ? 'white' : 'var(--deep-teal)' }}>
               {formatEuro(finance.balance)}
             </p>
-            <p className="text-sm mt-2" style={{ color: finance.balanceStatus === 'debt' ? 'white' : 'var(--deep-teal)', opacity: 0.9 }}>
+            <p className="text-2xl font-bold mt-2" style={{ color: finance.balanceStatus === 'debt' ? 'white' : 'var(--deep-teal)' }}>
               {finance.balanceStatus === 'debt' && t.debt}
               {finance.balanceStatus === 'closed' && t.closed}
               {finance.balanceStatus === 'overpaid' && t.overpaid}
