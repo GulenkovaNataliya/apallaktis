@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://apallaktis.com"),
   title: "ΑΠΑΛΛΑΚΤΗΣ - Τέλος στη ρουτίνα!",
   description: "Όχι λογιστικό πρόγραμμα — εργαλείο προσωπικού οικονομικού ελέγχου για έργα",
   applicationName: "ΑΠΑΛΛΑΚΤΗΣ",

@@ -46,8 +46,8 @@ export async function GET(request: Request) {
     // TODO: Implement real revenue calculation from payments table
     const monthlyRevenue =
       subscriptionBreakdown.basic * 20 +
-      subscriptionBreakdown.standard * 45 +
-      subscriptionBreakdown.premium * 90;
+      subscriptionBreakdown.standard * 40 +
+      subscriptionBreakdown.premium * 75;
 
     // Get registrations for last 30 days
     const thirtyDaysAgo = new Date();

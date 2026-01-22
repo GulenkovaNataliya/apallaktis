@@ -7,14 +7,14 @@
 ## 1. ДОМЕН
 
 ### После покупки домена:
-- [ ] Записать название домена: `________________`
-- [ ] Настроить DNS у регистратора:
+- [x] Записать название домена: `apallaktis.com`
+- [x] Настроить DNS у регистратора:
   ```
   Type    Name    Value
   A       @       76.76.21.21 (Vercel IP)
   CNAME   www     cname.vercel-dns.com
   ```
-- [ ] Добавить домен в Vercel: Project Settings → Domains
+- [x] Добавить домен в Vercel: Project Settings → Domains
 - [ ] Проверить HTTPS (автоматически от Vercel)
 - [ ] Настроить редирект www → non-www (или наоборот)
 
@@ -35,7 +35,7 @@
 | `STRIPE_PRICE_BASIC_MONTHLY` | price_... | [ ] |
 | `STRIPE_PRICE_STANDARD_MONTHLY` | price_... | [ ] |
 | `STRIPE_PRICE_PREMIUM_MONTHLY` | price_... | [ ] |
-| `NEXT_PUBLIC_APP_URL` | https://ВАШ_ДОМЕН | [ ] |
+| `NEXT_PUBLIC_APP_URL` | https://apallaktis.com | [x] |
 | `RESEND_API_KEY` | re_... | [ ] |
 | `CRON_SECRET` | любой секретный ключ | [ ] |
 | `ANTHROPIC_API_KEY` | sk-ant-api03-... | [ ] |
@@ -57,12 +57,12 @@
 
 ### 3.2 Создать продукты и цены:
 
-| Продукт | Цена | Price ID |
-|---------|------|----------|
-| Account Activation | 97€ + ΦΠΑ (разово) | price_... |
-| Basic Monthly | 20€/мес | price_... |
-| Standard Monthly | 45€/мес | price_... |
-| Premium Monthly | 90€/мес | price_... |
+| Продукт | Цена БЕЗ НДС (в Stripe) | Клиент платит (με ΦΠΑ) | Price ID |
+|---------|------------------------|------------------------|----------|
+| Account Activation | 50€ (разово) | 62€ | price_... |
+| Basic Monthly | 20€/мес | 24,80€ | price_... |
+| Standard Monthly | 40€/мес | 49,60€ | price_... |
+| Premium Monthly | 75€/мес | 93,00€ | price_... |
 
 - [ ] Создать продукт "Account Activation" (one-time)
 - [ ] Создать продукт "Basic Subscription" (recurring monthly)
@@ -134,20 +134,20 @@
 ## 7. PWA — MANIFEST
 
 ### Файл: `frontend/public/manifest.json`
-- [ ] Обновить `start_url`: `https://ВАШ_ДОМЕН`
-- [ ] Обновить `scope`: `https://ВАШ_ДОМЕН/`
-- [ ] Обновить `id`: `https://ВАШ_ДОМЕН/`
+- [x] Обновить `start_url`: `https://apallaktis.com`
+- [x] Обновить `scope`: `https://apallaktis.com/`
+- [x] Обновить `id`: `https://apallaktis.com/`
 
 ---
 
 ## 8. SEO — META TAGS
 
 ### Файл: `frontend/app/layout.tsx`
-- [ ] Обновить `metadataBase`: `new URL('https://ВАШ_ДОМЕН')`
-- [ ] Проверить og:url, og:image
+- [x] Обновить `metadataBase`: `new URL('https://apallaktis.com')`
+- [x] Проверить og:url, og:image
 
 ### Файл: `frontend/public/robots.txt`
-- [ ] Обновить Sitemap URL: `https://ВАШ_ДОМЕН/sitemap.xml`
+- [x] Обновить Sitemap URL: `https://apallaktis.com/sitemap.xml`
 
 ---
 

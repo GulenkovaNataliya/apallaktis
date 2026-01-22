@@ -343,7 +343,7 @@ function generateDemoExpiringHTML(accountNumber: number, expiresAt: Date, locale
           <p style="margin: 0; color: #ff8f0a; font-size: 16px;">${t.info}</p>
         </div>
         <div style="text-align: center; margin: 30px 0;">
-          <a href="https://apallaktis.gr/${locale}/page-pay" style="display: inline-block; background-color: #ff8f0a; color: #ffffff; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+          <a href="https://apallaktis.com/${locale}/page-pay" style="display: inline-block; background-color: #ff8f0a; color: #ffffff; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
             ${t.button}
           </a>
         </div>
@@ -401,7 +401,7 @@ function generateDemoExpiredHTML(accountNumber: number, locale: string): string 
           <p style="margin: 0; color: #dc2626; font-size: 16px;">${t.info}</p>
         </div>
         <div style="text-align: center; margin: 30px 0;">
-          <a href="https://apallaktis.gr/${locale}/page-pay" style="display: inline-block; background-color: #dc2626; color: #ffffff; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+          <a href="https://apallaktis.com/${locale}/page-pay" style="display: inline-block; background-color: #dc2626; color: #ffffff; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
             ${t.button}
           </a>
         </div>
@@ -562,7 +562,7 @@ function generateVIPActivatedHTML(accountNumber: number, expiresAt: Date | null,
         </ul>
 
         <div style="text-align: center; margin: 30px 0;">
-          <a href="https://apallaktis.gr/${locale}/dashboard" style="display: inline-block; background-color: #ffd700; color: #000000; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+          <a href="https://apallaktis.com/${locale}/dashboard" style="display: inline-block; background-color: #ffd700; color: #000000; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
             Dashboard
           </a>
         </div>
@@ -675,7 +675,7 @@ function generateVIPCancelledHTML(userName: string, locale: string): string {
         <p style="font-size: 16px; color: #333; margin-top: 20px;">${t.action}</p>
 
         <div style="text-align: center; margin: 30px 0;">
-          <a href="mailto:support@apallaktis.gr" style="display: inline-block; background-color: #6b7280; color: #ffffff; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+          <a href="mailto:support@apallaktis.com" style="display: inline-block; background-color: #6b7280; color: #ffffff; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
             ${t.button}
           </a>
         </div>

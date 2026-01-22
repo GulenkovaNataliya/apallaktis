@@ -81,7 +81,7 @@ export default function AdminPayments() {
             account_number: user.account_number,
             user_email: user.email || 'N/A',
             user_name: user.name,
-            amount: user.subscription_plan === 'Basic' ? 20 : user.subscription_plan === 'Standard' ? 30 : user.subscription_plan === 'Premium' ? 45 : 0,
+            amount: user.subscription_plan === 'Basic' ? 20 : user.subscription_plan === 'Standard' ? 40 : user.subscription_plan === 'Premium' ? 75 : 0,
             currency: 'EUR',
             payment_method: 'stripe' as const,
             status: user.subscription_status === 'active' || user.subscription_status === 'vip' ? 'succeeded' as const : 'pending' as const,

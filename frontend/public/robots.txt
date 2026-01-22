@@ -1,5 +1,5 @@
 # Robots.txt for ΑΠΑΛΛΑΚΤΗΣ
-# https://apallaktis.gr
+# https://apallaktis.com
 
 User-agent: *
 Allow: /
@@ -18,4 +18,4 @@ Allow: /icon-*.png
 Allow: /manifest.json
 
 # Sitemap location
-Sitemap: https://apallaktis.gr/sitemap.xml
+Sitemap: https://apallaktis.com/sitemap.xml
