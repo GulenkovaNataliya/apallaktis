@@ -466,7 +466,7 @@ export default function ObjectFinancePage() {
                 {t.noAdditionalWorks}
               </p>
             ) : (
-              <div className="flex flex-col gap-4 ml-4">
+              <div className="flex flex-col gap-4 mx-4">
                 {finance.additionalWorks.map((work) => (
                   <div key={work.id} className="flex justify-between items-center rounded-2xl p-4" style={{ backgroundColor: 'var(--zanah)' }}>
                     <div className="flex-1">
@@ -492,7 +492,7 @@ export default function ObjectFinancePage() {
               </div>
             )}
 
-            <div className="mt-4 pt-4 border-t" style={{ borderColor: 'var(--deep-teal)' }}>
+            <div className="mt-4 pt-4 border-t mx-4" style={{ borderColor: 'var(--deep-teal)' }}>
               <div className="flex justify-between">
                 <span className="font-semibold" style={{ color: 'var(--deep-teal)' }}>
                   {t.total}
@@ -502,16 +502,16 @@ export default function ObjectFinancePage() {
                 </span>
               </div>
             </div>
-
-            {/* Add Button */}
-            <button
-              onClick={() => setView('add-work')}
-              className="btn-universal w-full text-button mt-4"
-              style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
-            >
-              + {t.addButton}
-            </button>
           </div>
+
+          {/* Add Additional Work Button */}
+          <button
+            onClick={() => setView('add-work')}
+            className="btn-universal w-full text-button"
+            style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
+          >
+            + {t.addButton}
+          </button>
 
           {/* Payments Section */}
           <div className="rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
@@ -726,11 +726,11 @@ export default function ObjectFinancePage() {
 
             {/* Total Expenses */}
             {expenses.length > 0 && (
-              <div className="rounded-2xl p-4 flex justify-between items-center" style={{ backgroundColor: 'var(--polar)' }}>
-                <span className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
+              <div className="btn-universal w-full text-button flex justify-between items-center px-4" style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}>
+                <span className="font-semibold">
                   {t.totalExpensesTitle}
                 </span>
-                <span className="text-xl font-bold" style={{ color: 'var(--deep-teal)' }}>
+                <span className="font-bold">
                   {formatEuro(expenses.reduce((sum, exp) => sum + exp.amount, 0))}
                 </span>
               </div>
@@ -738,7 +738,7 @@ export default function ObjectFinancePage() {
 
             {/* Payment Analysis Section */}
             {(finance.payments.length > 0 || expenses.length > 0) && (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-12">
                 <h3 className="text-lg font-semibold text-center" style={{ color: 'var(--polar)' }}>
                   {t.paymentAnalysis}
                 </h3>
