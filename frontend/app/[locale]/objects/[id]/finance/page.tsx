@@ -1026,8 +1026,16 @@ function AddWorkForm({
     description: '',
   });
   const [isRecording, setIsRecording] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const transcriptRef = useRef<string>('');
 
   const handleVoiceInput = () => {
+    // Если уже записываем - останавливаем
+    if (isRecording && recognitionRef.current) {
+      recognitionRef.current.stop();
+      return;
+    }
+
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
       alert(t.voiceInputNotSupported);
       return;
@@ -1035,6 +1043,8 @@ function AddWorkForm({
 
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
+    transcriptRef.current = '';
 
     recognition.lang = locale === 'el' ? 'el-GR' :
                       locale === 'ru' ? 'ru-RU' :
@@ -1044,30 +1054,57 @@ function AddWorkForm({
                       locale === 'ro' ? 'ro-RO' :
                       locale === 'ar' ? 'ar-SA' : 'en-US';
 
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    recognition.continuous = true;
+    recognition.interimResults = true;
 
     recognition.onstart = () => {
       setIsRecording(true);
     };
 
     recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      setFormData({ ...formData, description: transcript });
-      setIsRecording(false);
+      // Используем event.resultIndex чтобы не дублировать результаты
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const result = event.results[i];
+        if (result.isFinal) {
+          transcriptRef.current += result[0].transcript + ' ';
+        }
+      }
+
+      // Собираем текущий interim для отображения
+      let interimTranscript = '';
+      for (let i = 0; i < event.results.length; i++) {
+        if (!event.results[i].isFinal) {
+          interimTranscript += event.results[i][0].transcript;
+        }
+      }
+
+      // Показываем финальный + промежуточный текст
+      setFormData(prev => ({
+        ...prev,
+        description: (transcriptRef.current + interimTranscript).trim() || prev.description
+      }));
     };
 
     recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error);
-      setIsRecording(false);
-      alert(t.voiceInputFailed);
+      if (event.error !== 'no-speech') {
+        setIsRecording(false);
+      }
     };
 
     recognition.onend = () => {
       setIsRecording(false);
+      recognitionRef.current = null;
     };
 
     recognition.start();
+
+    // Автоматическая остановка через 30 секунд
+    setTimeout(() => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    }, 30000);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -1233,8 +1270,16 @@ function AddPaymentForm({
     description: '',
   });
   const [isRecording, setIsRecording] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const transcriptRef = useRef<string>('');
 
   const handleVoiceInput = () => {
+    // Если уже записываем - останавливаем
+    if (isRecording && recognitionRef.current) {
+      recognitionRef.current.stop();
+      return;
+    }
+
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
       alert(t.voiceInputNotSupported);
       return;
@@ -1242,6 +1287,8 @@ function AddPaymentForm({
 
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
+    transcriptRef.current = '';
 
     recognition.lang = locale === 'el' ? 'el-GR' :
                       locale === 'ru' ? 'ru-RU' :
@@ -1251,30 +1298,57 @@ function AddPaymentForm({
                       locale === 'ro' ? 'ro-RO' :
                       locale === 'ar' ? 'ar-SA' : 'en-US';
 
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    recognition.continuous = true;
+    recognition.interimResults = true;
 
     recognition.onstart = () => {
       setIsRecording(true);
     };
 
     recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      setFormData({ ...formData, description: transcript });
-      setIsRecording(false);
+      // Используем event.resultIndex чтобы не дублировать результаты
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const result = event.results[i];
+        if (result.isFinal) {
+          transcriptRef.current += result[0].transcript + ' ';
+        }
+      }
+
+      // Собираем текущий interim для отображения
+      let interimTranscript = '';
+      for (let i = 0; i < event.results.length; i++) {
+        if (!event.results[i].isFinal) {
+          interimTranscript += event.results[i][0].transcript;
+        }
+      }
+
+      // Показываем финальный + промежуточный текст
+      setFormData(prev => ({
+        ...prev,
+        description: (transcriptRef.current + interimTranscript).trim() || prev.description
+      }));
     };
 
     recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error);
-      setIsRecording(false);
-      alert(t.voiceInputFailed);
+      if (event.error !== 'no-speech') {
+        setIsRecording(false);
+      }
     };
 
     recognition.onend = () => {
       setIsRecording(false);
+      recognitionRef.current = null;
     };
 
     recognition.start();
+
+    // Автоматическая остановка через 30 секунд
+    setTimeout(() => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    }, 30000);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
