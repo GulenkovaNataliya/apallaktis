@@ -513,6 +513,16 @@ export default function ObjectFinancePage() {
             + {t.addButton}
           </button>
 
+          {/* Actual Price Section */}
+          <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: 'var(--polar)' }}>
+            <h2 className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
+              {t.actualPrice}
+            </h2>
+            <p className="text-2xl font-bold" style={{ color: 'var(--orange)' }}>
+              {formatEuro(finance.contractPrice + finance.totalAdditionalWorks)}
+            </p>
+          </div>
+
           {/* Payments Section */}
           <div className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
             <h2 className="text-lg font-semibold text-center mb-4" style={{ color: 'var(--deep-teal)' }}>
@@ -862,10 +872,11 @@ export default function ObjectFinancePage() {
             {expenses.length > 0 && (
               <button
                 onClick={async () => {
+                  const actualPrice = finance.contractPrice + finance.totalAdditionalWorks;
                   const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0);
-                  const profit = finance.contractPrice - totalExpenses;
+                  const profit = actualPrice - totalExpenses;
                   const profitMessage = `
-${t.profitContractPrice}: ${formatEuro(finance.contractPrice)}
+${t.actualPrice}: ${formatEuro(actualPrice)}
 ${t.profitExpenses}: ${formatEuro(totalExpenses)}
 ${t.profitResult}: ${formatEuro(profit)}
 
