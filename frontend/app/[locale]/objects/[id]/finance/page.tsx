@@ -17,6 +17,7 @@ import {
   createExpenseCategory,
   getPaymentMethods,
   getObjectById,
+  updateObject,
   getObjectExpenses,
   createObjectExpense,
   deleteObjectExpense as deleteObjectExpenseApi,
@@ -139,6 +140,8 @@ export default function ObjectFinancePage() {
   const [categories, setCategories] = useState<ExpenseCategory[]>([]);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [expandedPaymentMethods, setExpandedPaymentMethods] = useState<Set<string>>(new Set());
+  const [expandedPaymentReceived, setExpandedPaymentReceived] = useState(false);
+  const [expandedExpensesPaid, setExpandedExpensesPaid] = useState(false);
 
   // Load data from Supabase
   useEffect(() => {
@@ -630,7 +633,7 @@ export default function ObjectFinancePage() {
                     const isExpanded = expandedCategories.has(categoryId);
 
                     return (
-                      <div key={categoryId} className="rounded-xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
+                      <div key={categoryId} className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
                         {/* Category Header */}
                         <button
                           onClick={() => toggleCategory(categoryId)}
@@ -735,14 +738,14 @@ export default function ObjectFinancePage() {
                       const isExpanded = expandedPaymentMethods.has(methodId);
 
                       return (
-                        <div key={methodId} className="rounded-xl" style={{ backgroundColor: 'var(--polar)', padding: '12px 20px' }}>
+                        <div key={methodId} className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
                           <button
                             onClick={() => togglePaymentMethod(methodId)}
                             className="w-full flex justify-between items-center text-left"
                           >
                             <div className="flex items-center gap-2">
                               <span style={{ fontSize: '16px' }}>💳</span>
-                              <span className="font-semibold" style={{ color: 'var(--deep-teal)', fontSize: '14px' }}>
+                              <span className="font-semibold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
                                 {methodName}
                               </span>
                             </div>
@@ -783,7 +786,7 @@ export default function ObjectFinancePage() {
             {expenses.length > 0 && (
               <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: 'var(--polar)' }}>
                 <span className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
-                  {t.totalObjectExpenses}
+                  {t.totalExpensesTitle}
                 </span>
                 <p className="text-2xl font-bold" style={{ color: 'var(--deep-teal)' }}>
                   {formatEuro(expenses.reduce((sum, exp) => sum + exp.amount, 0))}
@@ -791,10 +794,127 @@ export default function ObjectFinancePage() {
               </div>
             )}
 
+            {/* Payment Analysis Section */}
+            {(finance.payments.length > 0 || expenses.length > 0) && (
+              <div className="flex flex-col gap-4">
+                <h3 className="text-lg font-semibold text-center" style={{ color: 'var(--polar)' }}>
+                  {t.paymentAnalysis}
+                </h3>
+
+                {/* Payment Received Block */}
+                {finance.payments.length > 0 && (
+                  <div className="rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
+                    <button
+                      onClick={() => setExpandedPaymentReceived(!expandedPaymentReceived)}
+                      className="w-full flex justify-between items-center text-left"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span style={{ fontSize: '20px' }}>💰</span>
+                        <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
+                          {t.paymentReceived}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg font-bold" style={{ color: 'var(--deep-teal)' }}>
+                          {formatEuro(finance.totalPayments)}
+                        </span>
+                        <span style={{ color: 'var(--deep-teal)', fontSize: '18px' }}>
+                          {expandedPaymentReceived ? '▲' : '▼'}
+                        </span>
+                      </div>
+                    </button>
+
+                    {expandedPaymentReceived && (
+                      <div className="mt-4 space-y-3 pl-8 border-l-2" style={{ borderColor: 'rgba(1, 49, 45, 0.2)' }}>
+                        {/* Group payments by payment method */}
+                        {Object.entries(
+                          finance.payments.reduce((acc, payment) => {
+                            const methodId = payment.paymentMethodId || 'unknown';
+                            if (!acc[methodId]) acc[methodId] = { total: 0, count: 0 };
+                            acc[methodId].total += payment.amount;
+                            acc[methodId].count += 1;
+                            return acc;
+                          }, {} as Record<string, { total: number; count: number }>)
+                        ).map(([methodId, data]) => {
+                          const method = paymentMethods.find(pm => pm.id === methodId);
+                          const methodName = method?.name || 'Unknown';
+                          return (
+                            <div key={methodId} className="flex justify-between items-center py-2">
+                              <div className="flex items-center gap-2">
+                                <span style={{ fontSize: '16px' }}>💳</span>
+                                <span style={{ color: 'var(--deep-teal)' }}>{methodName}</span>
+                                <span className="text-sm" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
+                                  ({data.count}x)
+                                </span>
+                              </div>
+                              <span className="font-bold" style={{ color: 'var(--deep-teal)' }}>
+                                {formatEuro(data.total)}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Expenses Paid Block */}
+                {expenses.length > 0 && (
+                  <div className="rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
+                    <button
+                      onClick={() => setExpandedExpensesPaid(!expandedExpensesPaid)}
+                      className="w-full flex justify-between items-center text-left"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span style={{ fontSize: '20px' }}>📤</span>
+                        <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
+                          {t.expensesPaid}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg font-bold" style={{ color: 'var(--deep-teal)' }}>
+                          {formatEuro(expenses.reduce((sum, exp) => sum + exp.amount, 0))}
+                        </span>
+                        <span style={{ color: 'var(--deep-teal)', fontSize: '18px' }}>
+                          {expandedExpensesPaid ? '▲' : '▼'}
+                        </span>
+                      </div>
+                    </button>
+
+                    {expandedExpensesPaid && (
+                      <div className="mt-4 space-y-3 pl-8 border-l-2" style={{ borderColor: 'rgba(1, 49, 45, 0.2)' }}>
+                        {/* Group expenses by payment method */}
+                        {Object.entries(groupByPaymentMethod()).map(([methodId, methodExpenses]) => {
+                          const method = paymentMethods.find(pm => pm.id === methodId);
+                          const methodName = method?.name || 'Unknown';
+                          const totalAmount = methodExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+                          const count = methodExpenses.length;
+                          return (
+                            <div key={methodId} className="flex justify-between items-center py-2">
+                              <div className="flex items-center gap-2">
+                                <span style={{ fontSize: '16px' }}>💳</span>
+                                <span style={{ color: 'var(--deep-teal)' }}>{methodName}</span>
+                                <span className="text-sm" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
+                                  ({count}x)
+                                </span>
+                              </div>
+                              <span className="font-bold" style={{ color: 'var(--deep-teal)' }}>
+                                {formatEuro(totalAmount)}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Calculate Profit Button */}
             {expenses.length > 0 && (
               <button
-                onClick={() => {
+                onClick={async () => {
                   const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0);
                   const profit = finance.contractPrice - totalExpenses;
                   const profitMessage = `
@@ -806,11 +926,20 @@ ${t.closeProjectQuestion}
                   `.trim();
 
                   if (confirm(profitMessage)) {
-                    alert(t.closingNotReady);
+                    try {
+                      if (user?.id && object) {
+                        await updateObject(object.id, user.id, { status: 'closed' });
+                        alert(t.objectClosed);
+                        router.push(`/${locale}/objects`);
+                      }
+                    } catch (error) {
+                      console.error('Error closing object:', error);
+                      alert('Error closing object');
+                    }
                   }
                 }}
                 className="btn-universal w-full text-button"
-                style={{ minHeight: '64px', backgroundColor: '#ff6a1a', color: 'white', fontSize: '20px', fontWeight: 600 }}
+                style={{ minHeight: '52px', backgroundColor: '#ff6a1a', color: 'white' }}
               >
                 {t.calculateProfit}
               </button>
