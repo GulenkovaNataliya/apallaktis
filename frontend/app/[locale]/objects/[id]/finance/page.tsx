@@ -509,7 +509,7 @@ export default function ObjectFinancePage() {
               className="btn-universal w-full text-button mt-4"
               style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
             >
-              + {t.addAdditionalWork}
+              + {t.addButton}
             </button>
           </div>
 
