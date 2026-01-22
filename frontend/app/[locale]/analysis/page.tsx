@@ -39,6 +39,11 @@ const translations = {
     totalDebt: "Οφειλή",
     allPaid: "Όλα πληρώθηκαν",
     totalOverpaid: "Υπερπληρωμή",
+    globalExpensesTotal: "Γενικά Έξοδα",
+    objectExpensesTotal: "Έξοδα ανά Έργο",
+    totalProfit: "Συνολικό Κέρδος",
+    profitStatus: "Κέρδος",
+    lossStatus: "Ζημία",
     income: "ΕΣΟΔΑ",
     receivedFromClients: "Λήφθηκαν από πελάτες",
     byPaymentMethod: "Ανά Τρόπο Πληρωμής",
@@ -82,6 +87,11 @@ const translations = {
     totalDebt: "Долг",
     allPaid: "Всё оплачено",
     totalOverpaid: "Переплата",
+    globalExpensesTotal: "Общие Расходы",
+    objectExpensesTotal: "Расходы по Объектам",
+    totalProfit: "Общая Прибыль",
+    profitStatus: "Прибыль",
+    lossStatus: "Убыток",
     income: "ДОХОДЫ",
     receivedFromClients: "Получено от клиентов",
     byPaymentMethod: "По способу оплаты",
@@ -125,6 +135,11 @@ const translations = {
     totalDebt: "Debt",
     allPaid: "All paid",
     totalOverpaid: "Overpaid",
+    globalExpensesTotal: "Global Expenses",
+    objectExpensesTotal: "Object Expenses",
+    totalProfit: "Total Profit",
+    profitStatus: "Profit",
+    lossStatus: "Loss",
     income: "INCOME",
     receivedFromClients: "Received from clients",
     byPaymentMethod: "By Payment Method",
@@ -191,6 +206,11 @@ const translations = {
     back: "← Назад",
     emailSent: "Звіт надіслано на вашу пошту!",
     emailError: "Помилка надсилання email",
+    globalExpensesTotal: "Загальні Витрати",
+    objectExpensesTotal: "Витрати по Об'єктах",
+    totalProfit: "Загальний Прибуток",
+    profitStatus: "Прибуток",
+    lossStatus: "Збиток",
   },
   sq: {
     title: "Analiza Financiare",
@@ -234,6 +254,11 @@ const translations = {
     back: "← Prapa",
     emailSent: "Raporti u dërgua në email tuaj!",
     emailError: "Gabim në dërgimin e email",
+    globalExpensesTotal: "Shpenzimet Globale",
+    objectExpensesTotal: "Shpenzimet e Projekteve",
+    totalProfit: "Fitimi Total",
+    profitStatus: "Fitim",
+    lossStatus: "Humbje",
   },
   bg: {
     title: "Финансов Анализ",
@@ -277,6 +302,11 @@ const translations = {
     back: "← Назад",
     emailSent: "Докладът е изпратен на вашия имейл!",
     emailError: "Грешка при изпращане на имейл",
+    globalExpensesTotal: "Общи Разходи",
+    objectExpensesTotal: "Разходи по Обекти",
+    totalProfit: "Обща Печалба",
+    profitStatus: "Печалба",
+    lossStatus: "Загуба",
   },
   ro: {
     title: "Analiză Financiară",
@@ -320,6 +350,11 @@ const translations = {
     back: "← Înapoi",
     emailSent: "Raportul a fost trimis pe email!",
     emailError: "Eroare la trimiterea email-ului",
+    globalExpensesTotal: "Cheltuieli Globale",
+    objectExpensesTotal: "Cheltuieli Proiecte",
+    totalProfit: "Profit Total",
+    profitStatus: "Profit",
+    lossStatus: "Pierdere",
   },
   ar: {
     title: "التحليل المالي",
@@ -363,6 +398,11 @@ const translations = {
     back: "← رجوع",
     emailSent: "تم إرسال التقرير إلى بريدك الإلكتروني!",
     emailError: "خطأ في إرسال البريد الإلكتروني",
+    globalExpensesTotal: "المصاريف العامة",
+    objectExpensesTotal: "مصاريف المشاريع",
+    totalProfit: "إجمالي الربح",
+    profitStatus: "ربح",
+    lossStatus: "خسارة",
   },
 };
 
@@ -444,6 +484,10 @@ export default function AnalysisPage() {
 
   // Expanded state for summary
   const [expandedSummary, setExpandedSummary] = useState(false);
+
+  // Expanded state for expenses blocks (blocks 9-10)
+  const [expandedGlobalExpenses, setExpandedGlobalExpenses] = useState(false);
+  const [expandedObjectExpenses, setExpandedObjectExpenses] = useState(false);
 
   // Check subscription and load data
   useEffect(() => {
@@ -1167,6 +1211,133 @@ export default function AnalysisPage() {
               >
                 {getBalanceStatus(analysisData.totalBalance) === 'debt' ? t.totalDebt :
                  getBalanceStatus(analysisData.totalBalance) === 'closed' ? t.allPaid : t.totalOverpaid}
+              </p>
+            </div>
+
+            {/* 9. Global Expenses Block - Expandable by Category */}
+            <div className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
+              {/* Header */}
+              <button
+                onClick={() => setExpandedGlobalExpenses(!expandedGlobalExpenses)}
+                className="w-full flex flex-col items-center gap-2"
+              >
+                <div className="flex items-center gap-2">
+                  <span style={{ fontSize: '20px' }}>💸</span>
+                  <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
+                    {t.globalExpensesTotal}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl font-bold" style={{ color: 'var(--orange)' }}>
+                    {formatEuro(analysisData.totalGlobalExpenses)}
+                  </span>
+                  <span style={{ color: 'var(--deep-teal)', fontSize: '18px' }}>
+                    {expandedGlobalExpenses ? '▲' : '▼'}
+                  </span>
+                </div>
+              </button>
+
+              {/* Expanded Categories List */}
+              {expandedGlobalExpenses && Object.keys(analysisData.globalExpensesByCategory).length > 0 && (
+                <div className="mt-4 pt-4 border-t space-y-3" style={{ borderColor: 'var(--deep-teal)' }}>
+                  {Object.entries(analysisData.globalExpensesByCategory).map(([catId, amount]) => (
+                    <div
+                      key={catId}
+                      className="rounded-2xl flex justify-between items-center"
+                      style={{ backgroundColor: 'var(--zanah)', padding: '12px 16px' }}
+                    >
+                      <span style={{ color: 'var(--deep-teal)', fontWeight: 600 }}>
+                        {getCategoryName(catId)}
+                      </span>
+                      <span style={{ color: 'var(--orange)', fontWeight: 700 }}>
+                        {formatEuro(amount)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {expandedGlobalExpenses && Object.keys(analysisData.globalExpensesByCategory).length === 0 && (
+                <p className="text-center mt-4 pt-4 border-t" style={{ borderColor: 'var(--deep-teal)', color: 'var(--orange)' }}>
+                  {t.noData}
+                </p>
+              )}
+            </div>
+
+            {/* 10. Object Expenses Block - Expandable by Category */}
+            <div className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
+              {/* Header */}
+              <button
+                onClick={() => setExpandedObjectExpenses(!expandedObjectExpenses)}
+                className="w-full flex flex-col items-center gap-2"
+              >
+                <div className="flex items-center gap-2">
+                  <span style={{ fontSize: '20px' }}>💸</span>
+                  <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
+                    {t.objectExpensesTotal}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl font-bold" style={{ color: 'var(--orange)' }}>
+                    {formatEuro(analysisData.totalObjectExpenses)}
+                  </span>
+                  <span style={{ color: 'var(--deep-teal)', fontSize: '18px' }}>
+                    {expandedObjectExpenses ? '▲' : '▼'}
+                  </span>
+                </div>
+              </button>
+
+              {/* Expanded Categories List */}
+              {expandedObjectExpenses && Object.keys(analysisData.objectExpensesByCategory).length > 0 && (
+                <div className="mt-4 pt-4 border-t space-y-3" style={{ borderColor: 'var(--deep-teal)' }}>
+                  {Object.entries(analysisData.objectExpensesByCategory).map(([catId, amount]) => (
+                    <div
+                      key={catId}
+                      className="rounded-2xl flex justify-between items-center"
+                      style={{ backgroundColor: 'var(--zanah)', padding: '12px 16px' }}
+                    >
+                      <span style={{ color: 'var(--deep-teal)', fontWeight: 600 }}>
+                        {getCategoryName(catId)}
+                      </span>
+                      <span style={{ color: 'var(--orange)', fontWeight: 700 }}>
+                        {formatEuro(amount)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {expandedObjectExpenses && Object.keys(analysisData.objectExpensesByCategory).length === 0 && (
+                <p className="text-center mt-4 pt-4 border-t" style={{ borderColor: 'var(--deep-teal)', color: 'var(--orange)' }}>
+                  {t.noData}
+                </p>
+              )}
+            </div>
+
+            {/* 11. Total Profit Block - Balance Style */}
+            <div
+              className="rounded-2xl p-4 text-center"
+              style={{
+                backgroundColor: analysisData.netProfit >= 0 ? '#25D366' : '#ff6a1a'
+              }}
+            >
+              <h2
+                className="text-lg font-semibold"
+                style={{ color: 'white' }}
+              >
+                {t.totalProfit}
+              </h2>
+              <p
+                className="text-3xl font-bold"
+                style={{ color: 'white' }}
+              >
+                {formatEuro(analysisData.netProfit)}
+              </p>
+              <p
+                className="text-2xl font-bold mt-2"
+                style={{ color: 'white' }}
+              >
+                {analysisData.netProfit >= 0 ? t.profitStatus : t.lossStatus}
               </p>
             </div>
 
