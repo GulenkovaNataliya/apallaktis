@@ -514,19 +514,10 @@ export default function ObjectFinancePage() {
           </button>
 
           {/* Payments Section */}
-          <div className="rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
-                {t.payment}
-              </h2>
-              <button
-                onClick={() => setView('add-payment')}
-                className="w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: '#ff6a1a', color: 'white' }}
-              >
-                <span className="text-2xl font-bold">-</span>
-              </button>
-            </div>
+          <div className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
+            <h2 className="text-lg font-semibold text-center mb-4" style={{ color: 'var(--deep-teal)' }}>
+              {t.payment}
+            </h2>
 
             {finance.payments.length === 0 ? (
               <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
@@ -539,7 +530,7 @@ export default function ObjectFinancePage() {
                   const methodName = method ? method.name : payment.paymentMethodId;
 
                   return (
-                    <div key={payment.id} className="flex justify-between items-center rounded-2xl p-4" style={{ backgroundColor: 'var(--zanah)' }}>
+                    <div key={payment.id} className="flex justify-between items-center rounded-2xl" style={{ backgroundColor: 'var(--zanah)', padding: '16px 20px' }}>
                       <div className="flex-1">
                         <p className="font-semibold" style={{ color: 'var(--deep-teal)' }}>
                           {methodName}
@@ -581,6 +572,15 @@ export default function ObjectFinancePage() {
             </div>
           </div>
 
+          {/* Add Payment Button */}
+          <button
+            onClick={() => setView('add-payment')}
+            className="btn-universal w-full text-button"
+            style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
+          >
+            + {t.addButton}
+          </button>
+
           {/* Balance Section */}
           <div className="rounded-2xl p-4 text-center" style={{
             backgroundColor: finance.balanceStatus === 'debt' ? '#ff6a1a' :
@@ -612,7 +612,7 @@ export default function ObjectFinancePage() {
               className="btn-universal w-full text-button"
               style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
             >
-              + {t.addExpense}
+              + {t.addButton}
             </button>
 
             {expenses.length === 0 ? (
@@ -621,8 +621,13 @@ export default function ObjectFinancePage() {
               </p>
             ) : (
               <>
+                {/* Expense Analysis by Category Title */}
+                <h3 className="text-lg font-semibold text-center" style={{ color: 'var(--polar)' }}>
+                  {t.expenseAnalysisByCategory}
+                </h3>
+
                 {/* Grouped by Category */}
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-12">
                   {Object.entries(groupByCategory()).map(([categoryId, categoryExpenses]) => {
                     const category = categories.find(c => c.id === categoryId);
                     const categoryName = category?.name || 'Unknown';
@@ -1066,6 +1071,7 @@ function AddWorkForm({
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
         if (result.isFinal) {
+          // Добавляем только НОВЫЕ финальные результаты
           transcriptRef.current += result[0].transcript + ' ';
         }
       }
@@ -1310,6 +1316,7 @@ function AddPaymentForm({
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
         if (result.isFinal) {
+          // Добавляем только НОВЫЕ финальные результаты
           transcriptRef.current += result[0].transcript + ' ';
         }
       }
@@ -1777,6 +1784,15 @@ function AddExpenseForm({
             );
           }
 
+          // Если не нашли, ищем по имени из data.name
+          if (!matchedCategory && data.name) {
+            matchedCategory = categories.find(cat =>
+              cat.name.toLowerCase().includes(data.name.toLowerCase()) ||
+              data.name.toLowerCase().includes(cat.name.toLowerCase())
+            );
+          }
+
+          // Если всё ещё не нашли, берем первую категорию
           if (!matchedCategory) {
             matchedCategory = categories[0];
           }
@@ -1843,10 +1859,14 @@ function AddExpenseForm({
 
         setInputMethod('voice');
       } else {
-        setAnalyzeError(result.error || 'Не удалось распознать голос');
+        // Если AI не смог распознать, просто записываем текст в описание
+        setFormData(prev => ({ ...prev, description: transcript }));
+        setAnalyzeError(result.error || 'Не удалось распознать данные');
       }
     } catch (error) {
-      console.error('Analyze error:', error);
+      console.error('Voice analyze error:', error);
+      // Если ошибка, просто записываем текст в описание
+      setFormData(prev => ({ ...prev, description: transcript }));
       setAnalyzeError('Ошибка при анализе голоса');
     } finally {
       setIsAnalyzing(false);
@@ -1915,6 +1935,7 @@ function AddExpenseForm({
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
         if (result.isFinal) {
+          // Добавляем только НОВЫЕ финальные результаты
           transcriptRef.current += result[0].transcript + ' ';
         }
       }
