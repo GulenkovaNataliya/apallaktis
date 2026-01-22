@@ -728,13 +728,13 @@ export default function ObjectFinancePage() {
 
             {/* Total Expenses */}
             {expenses.length > 0 && (
-              <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: 'var(--polar)' }}>
+              <div className="rounded-2xl p-4 flex justify-between items-center" style={{ backgroundColor: 'var(--polar)' }}>
                 <span className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
                   {t.totalExpensesTitle}
                 </span>
-                <p className="text-2xl font-bold" style={{ color: 'var(--deep-teal)' }}>
+                <span className="text-xl font-bold" style={{ color: 'var(--deep-teal)' }}>
                   {formatEuro(expenses.reduce((sum, exp) => sum + exp.amount, 0))}
-                </p>
+                </span>
               </div>
             )}
 
