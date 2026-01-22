@@ -441,8 +441,9 @@ export default function ObjectFinancePage() {
           </h1>
 
           {/* Object Name */}
-          <div className="btn-universal w-full text-2xl font-bold flex items-center justify-center" style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--orange)' }}>
-            {t.objectLabel} {object?.name || '—'}
+          <div className="btn-universal w-full text-2xl font-bold flex items-center justify-center gap-2" style={{ minHeight: '52px', backgroundColor: 'var(--zanah)' }}>
+            <span style={{ color: 'var(--deep-teal)' }}>{t.objectLabel}</span>
+            <span style={{ color: 'var(--orange)' }}>{object?.name || '—'}</span>
           </div>
 
           {/* Contract Price Section */}
