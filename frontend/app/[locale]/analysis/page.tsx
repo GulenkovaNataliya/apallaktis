@@ -26,6 +26,19 @@ const translations = {
     upgradeButton: "Αναβάθμιση πλάνου",
     dateFrom: "Από",
     dateTo: "Έως",
+    period: "Περίοδος",
+    objectsSummary: "Συνολική Περίληψη Όλων των Έργων",
+    totalContractPrices: "Συνολικό Ποσό Συμβατικών Τιμών",
+    totalAdditionalWorks: "Συνολικό Ποσό Πρόσθετων Εργασιών",
+    totalActualPrices: "Συνολικό Ποσό Πραγματικών Τιμών",
+    totalBalance: "Συνολικό Υπόλοιπο",
+    balance: "Υπόλοιπο",
+    profit: "Κέρδος",
+    statusOpen: "Ανοιχτό",
+    statusClosed: "Κλειστό",
+    totalDebt: "Οφειλή",
+    allPaid: "Όλα πληρώθηκαν",
+    totalOverpaid: "Υπερπληρωμή",
     income: "ΕΣΟΔΑ",
     receivedFromClients: "Λήφθηκαν από πελάτες",
     byPaymentMethod: "Ανά Τρόπο Πληρωμής",
@@ -39,6 +52,7 @@ const translations = {
     objects: "ΕΡΓΑ",
     totalObjects: "Σύνολο",
     openObjects: "Ανοιχτά",
+    closedObjects: "Κλειστά",
     closedInPeriod: "Κλεισμένα στην περίοδο",
     exportExcel: "Excel",
     exportPdf: "PDF",
@@ -50,11 +64,24 @@ const translations = {
     emailError: "Σφάλμα αποστολής email",
   },
   ru: {
-    title: "Финансовый анализ",
+    title: "Финансовый Анализ",
     accessDenied: "Доступно в Standard или Premium",
     upgradeButton: "Улучшить план",
     dateFrom: "От",
     dateTo: "До",
+    period: "Период",
+    objectsSummary: "Общая Сводка по Всем Объектам",
+    totalContractPrices: "Общая Сумма Договорных Цен",
+    totalAdditionalWorks: "Общая Сумма Дополнительных Работ",
+    totalActualPrices: "Общая Сумма Фактических Цен",
+    totalBalance: "Общий Баланс",
+    balance: "Баланс",
+    profit: "Прибыль",
+    statusOpen: "Открыт",
+    statusClosed: "Закрыт",
+    totalDebt: "Долг",
+    allPaid: "Всё оплачено",
+    totalOverpaid: "Переплата",
     income: "ДОХОДЫ",
     receivedFromClients: "Получено от клиентов",
     byPaymentMethod: "По способу оплаты",
@@ -66,8 +93,9 @@ const translations = {
     clientDebts: "ДОЛГИ КЛИЕНТОВ",
     totalOwed: "Всего должны",
     objects: "ОБЪЕКТЫ",
-    totalObjects: "Всего",
+    totalObjects: "Всего объектов",
     openObjects: "Открытых",
+    closedObjects: "Закрытых",
     closedInPeriod: "Закрыто за период",
     exportExcel: "Excel",
     exportPdf: "PDF",
@@ -84,6 +112,19 @@ const translations = {
     upgradeButton: "Upgrade plan",
     dateFrom: "From",
     dateTo: "To",
+    period: "Period",
+    objectsSummary: "Overall Summary of All Objects",
+    totalContractPrices: "Total Contract Prices",
+    totalAdditionalWorks: "Total Additional Works",
+    totalActualPrices: "Total Actual Prices",
+    totalBalance: "Total Balance",
+    balance: "Balance",
+    profit: "Profit",
+    statusOpen: "Open",
+    statusClosed: "Closed",
+    totalDebt: "Debt",
+    allPaid: "All paid",
+    totalOverpaid: "Overpaid",
     income: "INCOME",
     receivedFromClients: "Received from clients",
     byPaymentMethod: "By Payment Method",
@@ -95,8 +136,9 @@ const translations = {
     clientDebts: "CLIENT DEBTS",
     totalOwed: "Total owed",
     objects: "PROJECTS",
-    totalObjects: "Total",
+    totalObjects: "Total objects",
     openObjects: "Open",
+    closedObjects: "Closed",
     closedInPeriod: "Closed in period",
     exportExcel: "Excel",
     exportPdf: "PDF",
@@ -108,11 +150,24 @@ const translations = {
     emailError: "Email sending error",
   },
   uk: {
-    title: "Фінансовий аналіз",
+    title: "Фінансовий Аналіз",
     accessDenied: "Доступно в Standard або Premium",
     upgradeButton: "Покращити план",
     dateFrom: "Від",
     dateTo: "До",
+    period: "Період",
+    objectsSummary: "Загальна Зведення по Всіх Об'єктах",
+    totalContractPrices: "Загальна Сума Договірних Цін",
+    totalAdditionalWorks: "Загальна Сума Додаткових Робіт",
+    totalActualPrices: "Загальна Сума Фактичних Цін",
+    totalBalance: "Загальний Баланс",
+    balance: "Баланс",
+    profit: "Прибуток",
+    statusOpen: "Відкрито",
+    statusClosed: "Закрито",
+    totalDebt: "Борг",
+    allPaid: "Все сплачено",
+    totalOverpaid: "Переплата",
     income: "ДОХОДИ",
     receivedFromClients: "Отримано від клієнтів",
     byPaymentMethod: "За способом оплати",
@@ -124,8 +179,9 @@ const translations = {
     clientDebts: "БОРГИ КЛІЄНТІВ",
     totalOwed: "Всього боргу",
     objects: "ОБ'ЄКТИ",
-    totalObjects: "Всього",
+    totalObjects: "Всього об'єктів",
     openObjects: "Відкритих",
+    closedObjects: "Закритих",
     closedInPeriod: "Закрито за період",
     exportExcel: "Excel",
     exportPdf: "PDF",
@@ -142,6 +198,19 @@ const translations = {
     upgradeButton: "Përmirëso planin",
     dateFrom: "Nga",
     dateTo: "Deri",
+    period: "Periudha",
+    objectsSummary: "Përmbledhje e Përgjithshme e të Gjitha Projekteve",
+    totalContractPrices: "Shuma Totale e Çmimeve të Kontratës",
+    totalAdditionalWorks: "Shuma Totale e Punëve Shtesë",
+    totalActualPrices: "Shuma Totale e Çmimeve Aktuale",
+    totalBalance: "Bilanci Total",
+    balance: "Bilanci",
+    profit: "Fitimi",
+    statusOpen: "Hapur",
+    statusClosed: "Mbyllur",
+    totalDebt: "Borxhi",
+    allPaid: "Të gjitha paguar",
+    totalOverpaid: "Mbipagesë",
     income: "TË ARDHURAT",
     receivedFromClients: "Marrë nga klientët",
     byPaymentMethod: "Sipas metodës së pagesës",
@@ -153,8 +222,9 @@ const translations = {
     clientDebts: "BORXHET E KLIENTËVE",
     totalOwed: "Totali i borxhit",
     objects: "PROJEKTET",
-    totalObjects: "Totali",
+    totalObjects: "Totali i projekteve",
     openObjects: "Të hapura",
+    closedObjects: "Të mbyllura",
     closedInPeriod: "Të mbyllura në periudhë",
     exportExcel: "Excel",
     exportPdf: "PDF",
@@ -166,11 +236,24 @@ const translations = {
     emailError: "Gabim në dërgimin e email",
   },
   bg: {
-    title: "Финансов анализ",
+    title: "Финансов Анализ",
     accessDenied: "Налично в Standard или Premium",
     upgradeButton: "Подобри плана",
     dateFrom: "От",
     dateTo: "До",
+    period: "Период",
+    objectsSummary: "Обща Сводка по Всички Обекти",
+    totalContractPrices: "Обща Сума на Договорните Цени",
+    totalAdditionalWorks: "Обща Сума на Допълнителните Работи",
+    totalActualPrices: "Обща Сума на Фактическите Цени",
+    totalBalance: "Общ Баланс",
+    balance: "Баланс",
+    profit: "Печалба",
+    statusOpen: "Отворен",
+    statusClosed: "Затворен",
+    totalDebt: "Дълг",
+    allPaid: "Всичко платено",
+    totalOverpaid: "Надплащане",
     income: "ПРИХОДИ",
     receivedFromClients: "Получени от клиенти",
     byPaymentMethod: "По метод на плащане",
@@ -182,8 +265,9 @@ const translations = {
     clientDebts: "ДЪЛГОВЕ НА КЛИЕНТИ",
     totalOwed: "Общо дълг",
     objects: "ОБЕКТИ",
-    totalObjects: "Общо",
+    totalObjects: "Общо обекти",
     openObjects: "Отворени",
+    closedObjects: "Затворени",
     closedInPeriod: "Затворени за периода",
     exportExcel: "Excel",
     exportPdf: "PDF",
@@ -200,6 +284,19 @@ const translations = {
     upgradeButton: "Îmbunătățește planul",
     dateFrom: "De la",
     dateTo: "Până la",
+    period: "Perioada",
+    objectsSummary: "Rezumat General al Tuturor Proiectelor",
+    totalContractPrices: "Suma Totală a Prețurilor Contractuale",
+    totalAdditionalWorks: "Suma Totală a Lucrărilor Suplimentare",
+    totalActualPrices: "Suma Totală a Prețurilor Actuale",
+    totalBalance: "Balanța Totală",
+    balance: "Balanță",
+    profit: "Profit",
+    statusOpen: "Deschis",
+    statusClosed: "Închis",
+    totalDebt: "Datorie",
+    allPaid: "Totul plătit",
+    totalOverpaid: "Supraplată",
     income: "VENITURI",
     receivedFromClients: "Primite de la clienți",
     byPaymentMethod: "După metoda de plată",
@@ -211,8 +308,9 @@ const translations = {
     clientDebts: "DATORII CLIENȚI",
     totalOwed: "Total datorie",
     objects: "PROIECTE",
-    totalObjects: "Total",
+    totalObjects: "Total proiecte",
     openObjects: "Deschise",
+    closedObjects: "Închise",
     closedInPeriod: "Închise în perioadă",
     exportExcel: "Excel",
     exportPdf: "PDF",
@@ -229,6 +327,19 @@ const translations = {
     upgradeButton: "ترقية الخطة",
     dateFrom: "من",
     dateTo: "إلى",
+    period: "الفترة",
+    objectsSummary: "ملخص عام لجميع المشاريع",
+    totalContractPrices: "إجمالي أسعار العقود",
+    totalAdditionalWorks: "إجمالي الأعمال الإضافية",
+    totalActualPrices: "إجمالي الأسعار الفعلية",
+    totalBalance: "الرصيد الإجمالي",
+    balance: "الرصيد",
+    profit: "الربح",
+    statusOpen: "مفتوح",
+    statusClosed: "مغلق",
+    totalDebt: "الدين",
+    allPaid: "تم الدفع بالكامل",
+    totalOverpaid: "دفع زائد",
     income: "الدخل",
     receivedFromClients: "المستلم من العملاء",
     byPaymentMethod: "حسب طريقة الدفع",
@@ -240,8 +351,9 @@ const translations = {
     clientDebts: "ديون العملاء",
     totalOwed: "إجمالي المستحق",
     objects: "المشاريع",
-    totalObjects: "الإجمالي",
+    totalObjects: "إجمالي المشاريع",
     openObjects: "مفتوحة",
+    closedObjects: "مغلقة",
     closedInPeriod: "مغلقة في الفترة",
     exportExcel: "Excel",
     exportPdf: "PDF",
@@ -255,7 +367,22 @@ const translations = {
 };
 
 // Types for analysis data
+interface ObjectDetail {
+  id: string;
+  name: string;
+  status: string;
+  balance: number;
+  profit: number;
+}
+
 interface AnalysisData {
+  // New fields for design
+  totalContractPrices: number;
+  totalAdditionalWorks: number;
+  totalActualPrices: number;
+  totalBalance: number;
+  objectsWithDetails: ObjectDetail[];
+
   // Income
   totalIncome: number;
   incomeByPaymentMethod: { [key: string]: number };
@@ -282,6 +409,7 @@ interface AnalysisData {
   // Objects
   totalObjects: number;
   openObjects: number;
+  closedObjects: number;
   closedInPeriod: number;
 }
 
@@ -313,6 +441,9 @@ export default function AnalysisPage() {
 
   // Export state
   const [isExporting, setIsExporting] = useState(false);
+
+  // Expanded state for summary
+  const [expandedSummary, setExpandedSummary] = useState(false);
 
   // Check subscription and load data
   useEffect(() => {
@@ -453,12 +584,20 @@ export default function AnalysisPage() {
       const totalExpenses = totalObjectExpenses + totalGlobalExpenses;
       const netProfit = totalIncome - totalExpenses;
 
-      // Calculate debts (contract + extras - payments > 0)
+      // Calculate new design fields
+      let totalContractPrices = 0;
+      let totalAdditionalWorks = 0;
       let totalDebts = 0;
       const debtsByObject: { objectName: string; debt: number }[] = [];
+      const objectsWithDetails: ObjectDetail[] = [];
+
+      // Sum all extras
+      totalAdditionalWorks = (objectExtrasData || [])
+        .reduce((sum: number, e: any) => sum + (Number(e.amount) || 0), 0);
 
       for (const obj of objectsData) {
         const contractPrice = Number(obj.contract_price) || 0;
+        totalContractPrices += contractPrice;
 
         // Sum extras for this object
         const objExtras = (objectExtrasData || [])
@@ -474,17 +613,46 @@ export default function AnalysisPage() {
         const objPayments = (allPayments || [])
           .reduce((sum: number, p: any) => sum + (Number(p.amount) || 0), 0);
 
-        const debt = contractPrice + objExtras - objPayments;
+        // Sum all expenses for this object
+        const { data: allObjExpenses } = await supabase
+          .from('object_expenses')
+          .select('amount')
+          .eq('object_id', obj.id);
 
-        if (debt > 0.01) {
-          totalDebts += debt;
-          debtsByObject.push({ objectName: obj.name, debt });
+        const objExpensesTotal = (allObjExpenses || [])
+          .reduce((sum: number, e: any) => sum + (Number(e.amount) || 0), 0);
+
+        // Calculate object balance (remaining to pay)
+        const objActualPrice = contractPrice + objExtras;
+        const objBalance = objActualPrice - objPayments;
+
+        // Calculate object profit
+        const objProfit = objActualPrice - objExpensesTotal;
+
+        // Add to objects with details
+        objectsWithDetails.push({
+          id: obj.id,
+          name: obj.name,
+          status: obj.status,
+          balance: objBalance,
+          profit: objProfit,
+        });
+
+        // Track debts
+        if (objBalance > 0.01) {
+          totalDebts += objBalance;
+          debtsByObject.push({ objectName: obj.name, debt: objBalance });
         }
       }
+
+      // Calculate totals
+      const totalActualPrices = totalContractPrices + totalAdditionalWorks;
+      const totalBalance = totalActualPrices - totalIncome;
 
       // Calculate objects stats
       const totalObjects = objectsData.length;
       const openObjects = objectsData.filter(obj => obj.status === 'open').length;
+      const closedObjects = objectsData.filter(obj => obj.status === 'closed').length;
 
       // Closed in period
       const closedInPeriod = objectsData.filter(obj => {
@@ -494,6 +662,13 @@ export default function AnalysisPage() {
       }).length;
 
       setAnalysisData({
+        // New design fields
+        totalContractPrices,
+        totalAdditionalWorks,
+        totalActualPrices,
+        totalBalance,
+        objectsWithDetails,
+        // Original fields
         totalIncome,
         incomeByPaymentMethod,
         totalObjectExpenses,
@@ -507,6 +682,7 @@ export default function AnalysisPage() {
         debtsByObject,
         totalObjects,
         openObjects,
+        closedObjects,
         closedInPeriod,
       });
 
@@ -790,58 +966,212 @@ export default function AnalysisPage() {
     );
   }
 
+  // Format date for display (DD.MM.YYYY)
+  const formatDisplayDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString(locale === 'el' ? 'el-GR' : locale === 'ru' ? 'ru-RU' : 'en-GB');
+  };
+
+  // Get balance status
+  const getBalanceStatus = (balance: number) => {
+    if (balance > 0.01) return 'debt';
+    if (balance < -0.01) return 'overpaid';
+    return 'closed';
+  };
+
   return (
-    <BackgroundPage pageIndex={1}>
-      <div className="flex flex-col items-center gap-6" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}>
-        {/* Back */}
+    <BackgroundPage specialPage="objekt">
+      <div className="min-h-screen flex flex-col gap-12" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}>
+        {/* 1. Back */}
         <p
-          onClick={() => router.push(`/${locale}/page-pay`)}
-          className="text-button cursor-pointer w-full"
+          onClick={() => router.push(`/${locale}/dashboard`)}
+          className="text-button cursor-pointer"
           style={{ color: 'var(--polar)' }}
         >
           {t.back}
         </p>
 
-        {/* Title */}
-        <div
-          className="w-full text-button flex items-center justify-center text-center"
-          style={{
-            minHeight: '52px',
-            borderRadius: '1rem',
-            backgroundColor: 'var(--deep-teal)',
-            color: 'var(--zanah)',
-            boxShadow: '0 4px 8px var(--zanah)',
-          }}
-        >
-          📊 {t.title}
-        </div>
+        {/* 2. Title */}
+        <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
+          {t.title}
+        </h1>
 
-        {/* Date Range Selector */}
-        <div className="w-full flex gap-4">
-          <div className="flex-1">
-            <label className="block text-sm mb-2" style={{ color: 'var(--polar)' }}>{t.dateFrom}</label>
-            <input
-              type="date"
-              value={dateFrom}
-              onChange={(e) => setDateFrom(e.target.value)}
-              className="w-full rounded-xl p-3"
-              style={{ backgroundColor: 'var(--polar)', color: 'var(--deep-teal)', border: 'none' }}
-            />
-          </div>
-          <div className="flex-1">
-            <label className="block text-sm mb-2" style={{ color: 'var(--polar)' }}>{t.dateTo}</label>
-            <input
-              type="date"
-              value={dateTo}
-              onChange={(e) => setDateTo(e.target.value)}
-              className="w-full rounded-xl p-3"
-              style={{ backgroundColor: 'var(--polar)', color: 'var(--deep-teal)', border: 'none' }}
-            />
-          </div>
+        {/* 3. Period Selector */}
+        <div
+          className="btn-universal w-full flex items-center justify-center gap-3 flex-wrap"
+          style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', padding: '12px 16px' }}
+        >
+          <span style={{ fontSize: '20px' }}>📅</span>
+          <span style={{ color: 'var(--deep-teal)', fontWeight: 600 }}>{t.period}:</span>
+          <input
+            type="date"
+            value={dateFrom}
+            onChange={(e) => setDateFrom(e.target.value)}
+            className="px-3 py-1 rounded-xl text-center"
+            style={{ backgroundColor: 'var(--polar)', color: 'var(--orange)', fontWeight: 700, border: 'none', minWidth: '130px' }}
+          />
+          <span style={{ color: 'var(--deep-teal)', fontWeight: 600 }}>—</span>
+          <input
+            type="date"
+            value={dateTo}
+            onChange={(e) => setDateTo(e.target.value)}
+            className="px-3 py-1 rounded-xl text-center"
+            style={{ backgroundColor: 'var(--polar)', color: 'var(--orange)', fontWeight: 700, border: 'none', minWidth: '130px' }}
+          />
         </div>
 
         {analysisData && (
           <>
+            {/* 4. Objects Summary Block */}
+            <div className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
+              {/* Header */}
+              <button
+                onClick={() => setExpandedSummary(!expandedSummary)}
+                className="w-full flex flex-col items-center gap-2"
+              >
+                <div className="flex items-center gap-2">
+                  <span style={{ fontSize: '20px' }}>📊</span>
+                  <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
+                    {t.objectsSummary}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
+                    {t.totalObjects}: {analysisData.totalObjects}
+                  </span>
+                  <span style={{ color: 'var(--deep-teal)', fontSize: '18px' }}>
+                    {expandedSummary ? '▲' : '▼'}
+                  </span>
+                </div>
+              </button>
+
+              {/* Counters */}
+              <div className="flex justify-center gap-6 mt-4">
+                <span className="text-sm" style={{ color: 'var(--deep-teal)' }}>
+                  {t.openObjects}: <span style={{ color: 'var(--orange)', fontWeight: 700 }}>{analysisData.openObjects}</span>
+                </span>
+                <span className="text-sm" style={{ color: 'var(--deep-teal)' }}>
+                  {t.closedObjects}: <span style={{ color: '#25D366', fontWeight: 700 }}>{analysisData.closedObjects}</span>
+                </span>
+              </div>
+
+              {/* Expanded Objects List */}
+              {expandedSummary && analysisData.objectsWithDetails.length > 0 && (
+                <div className="mt-4 pt-4 border-t space-y-3" style={{ borderColor: 'var(--deep-teal)' }}>
+                  {analysisData.objectsWithDetails.map((obj, index) => (
+                    <div
+                      key={obj.id}
+                      className="rounded-2xl"
+                      style={{ backgroundColor: 'var(--zanah)', padding: '16px 20px' }}
+                    >
+                      {/* First row: №, Name, Status */}
+                      <div className="flex items-center justify-between flex-wrap gap-2">
+                        <div className="flex items-center gap-2">
+                          <span style={{ color: 'var(--deep-teal)', fontWeight: 600 }}>
+                            №{index + 1}
+                          </span>
+                          <span style={{ color: 'var(--orange)', fontWeight: 700 }}>
+                            {obj.name}
+                          </span>
+                        </div>
+                        <span
+                          className="text-sm font-semibold px-2 py-1 rounded-lg"
+                          style={{
+                            backgroundColor: obj.status === 'closed' ? '#25D366' : 'var(--orange)',
+                            color: 'white'
+                          }}
+                        >
+                          {obj.status === 'closed' ? t.statusClosed : t.statusOpen}
+                        </span>
+                      </div>
+                      {/* Second row: Balance, Profit */}
+                      <div className="flex justify-between mt-2 flex-wrap gap-2">
+                        <span style={{ color: 'var(--deep-teal)' }}>
+                          {t.balance}: <span style={{ fontWeight: 700 }}>{formatEuro(obj.balance)}</span>
+                        </span>
+                        <span style={{ color: 'var(--deep-teal)' }}>
+                          {t.profit}: <span style={{ fontWeight: 700 }}>{formatEuro(obj.profit)}</span>
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {expandedSummary && analysisData.objectsWithDetails.length === 0 && (
+                <p className="text-center mt-4 pt-4 border-t" style={{ borderColor: 'var(--deep-teal)', color: 'var(--orange)' }}>
+                  {t.noData}
+                </p>
+              )}
+            </div>
+
+            {/* 5. Total Contract Prices */}
+            <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: 'var(--polar)' }}>
+              <h2 className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
+                {t.totalContractPrices}
+              </h2>
+              <p className="text-2xl font-bold" style={{ color: 'var(--orange)' }}>
+                {formatEuro(analysisData.totalContractPrices)}
+              </p>
+            </div>
+
+            {/* 6. Total Additional Works */}
+            <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: 'var(--polar)' }}>
+              <h2 className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
+                {t.totalAdditionalWorks}
+              </h2>
+              <p className="text-2xl font-bold" style={{ color: 'var(--orange)' }}>
+                {formatEuro(analysisData.totalAdditionalWorks)}
+              </p>
+            </div>
+
+            {/* 7. Total Actual Prices */}
+            <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: 'var(--polar)' }}>
+              <h2 className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
+                {t.totalActualPrices}
+              </h2>
+              <p className="text-2xl font-bold" style={{ color: 'var(--orange)' }}>
+                {formatEuro(analysisData.totalActualPrices)}
+              </p>
+            </div>
+
+            {/* 8. Total Balance */}
+            <div
+              className="rounded-2xl p-4 text-center"
+              style={{
+                backgroundColor: getBalanceStatus(analysisData.totalBalance) === 'debt' ? '#ff6a1a' :
+                                 getBalanceStatus(analysisData.totalBalance) === 'closed' ? '#25D366' : 'var(--zanah)'
+              }}
+            >
+              <h2
+                className="text-lg font-semibold"
+                style={{
+                  color: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'white'
+                }}
+              >
+                {t.totalBalance}
+              </h2>
+              <p
+                className="text-3xl font-bold"
+                style={{
+                  color: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'white'
+                }}
+              >
+                {formatEuro(analysisData.totalBalance)}
+              </p>
+              <p
+                className="text-2xl font-bold mt-2"
+                style={{
+                  color: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'white'
+                }}
+              >
+                {getBalanceStatus(analysisData.totalBalance) === 'debt' ? t.totalDebt :
+                 getBalanceStatus(analysisData.totalBalance) === 'closed' ? t.allPaid : t.totalOverpaid}
+              </p>
+            </div>
+
+            {/* Original blocks below - keeping for additional info */}
+
             {/* Income Block */}
             <div className="w-full rounded-2xl p-4" style={{ backgroundColor: 'var(--zanah)' }}>
               <h3 className="text-lg font-bold mb-3" style={{ color: 'var(--deep-teal)' }}>
