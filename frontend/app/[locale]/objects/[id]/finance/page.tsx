@@ -723,62 +723,6 @@ export default function ObjectFinancePage() {
                     );
                   })}
                 </div>
-
-                {/* Grouped by Payment Method */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-4 text-center" style={{ color: 'var(--polar)' }}>
-                    {t.byPaymentMethod}
-                  </h3>
-                  <div className="flex flex-col gap-4">
-                    {Object.entries(groupByPaymentMethod()).map(([methodId, methodExpenses]) => {
-                      const method = paymentMethods.find(pm => pm.id === methodId);
-                      const methodName = method?.name || 'Unknown';
-                      const totalAmount = methodExpenses.reduce((sum, exp) => sum + exp.amount, 0);
-                      const count = methodExpenses.length;
-                      const isExpanded = expandedPaymentMethods.has(methodId);
-
-                      return (
-                        <div key={methodId} className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
-                          <button
-                            onClick={() => togglePaymentMethod(methodId)}
-                            className="w-full flex justify-between items-center text-left"
-                          >
-                            <div className="flex items-center gap-2">
-                              <span style={{ fontSize: '16px' }}>💳</span>
-                              <span className="font-semibold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
-                                {methodName}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <span className="text-sm" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                                ({count}x)
-                              </span>
-                              <span className="text-md font-bold" style={{ color: 'var(--deep-teal)' }}>
-                                {formatEuro(totalAmount)}
-                              </span>
-                              <span style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
-                                {isExpanded ? '▲' : '▼'}
-                              </span>
-                            </div>
-                          </button>
-
-                          {isExpanded && (
-                            <div className="mt-3 pl-6 text-sm" style={{ color: 'var(--deep-teal)', opacity: 0.8 }}>
-                              {methodExpenses.map((exp, idx) => {
-                                const cat = categories.find(c => c.id === exp.categoryId);
-                                return (
-                                  <div key={exp.id} className="py-1">
-                                    • {cat?.name || 'Unknown'}: {formatEuro(exp.amount)}
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
               </>
             )}
 
