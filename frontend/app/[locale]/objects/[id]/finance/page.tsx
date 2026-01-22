@@ -726,7 +726,7 @@ export default function ObjectFinancePage() {
 
             {/* Total Expenses */}
             {expenses.length > 0 && (
-              <div className="btn-universal w-full text-button flex justify-between items-center px-4" style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}>
+              <div className="btn-universal w-full text-lg flex justify-between items-center px-4" style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}>
                 <span className="font-semibold">
                   {t.totalExpensesTitle}
                 </span>
@@ -880,7 +880,7 @@ ${t.closeProjectQuestion}
                     }
                   }
                 }}
-                className="btn-universal w-full text-button"
+                className="btn-universal w-full text-lg font-semibold"
                 style={{ minHeight: '52px', backgroundColor: '#ff6a1a', color: 'white' }}
               >
                 {t.calculateProfit}
