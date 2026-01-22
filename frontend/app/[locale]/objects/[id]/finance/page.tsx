@@ -441,10 +441,8 @@ export default function ObjectFinancePage() {
           </h1>
 
           {/* Object Name */}
-          <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: 'var(--polar)' }}>
-            <p className="text-xl font-bold" style={{ color: 'var(--deep-teal)' }}>
-              {object?.name || '—'}
-            </p>
+          <div className="btn-universal w-full text-button flex items-center justify-center" style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--orange)' }}>
+            {t.objectLabel} {object?.name || '—'}
           </div>
 
           {/* Contract Price Section */}
@@ -459,25 +457,16 @@ export default function ObjectFinancePage() {
 
           {/* Additional Works Section */}
           <div className="rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
-                {tObjects.additionalWorks}
-              </h2>
-              <button
-                onClick={() => setView('add-work')}
-                className="w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
-              >
-                <span className="text-2xl font-bold">+</span>
-              </button>
-            </div>
+            <h2 className="text-lg font-semibold text-center mb-4" style={{ color: 'var(--deep-teal)' }}>
+              {tObjects.additionalWorks}
+            </h2>
 
             {finance.additionalWorks.length === 0 ? (
               <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
                 {t.noAdditionalWorks}
               </p>
             ) : (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 ml-4">
                 {finance.additionalWorks.map((work) => (
                   <div key={work.id} className="flex justify-between items-center rounded-2xl p-4" style={{ backgroundColor: 'var(--zanah)' }}>
                     <div className="flex-1">
@@ -513,6 +502,15 @@ export default function ObjectFinancePage() {
                 </span>
               </div>
             </div>
+
+            {/* Add Button */}
+            <button
+              onClick={() => setView('add-work')}
+              className="btn-universal w-full text-button mt-4"
+              style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}
+            >
+              + {t.addAdditionalWork}
+            </button>
           </div>
 
           {/* Payments Section */}

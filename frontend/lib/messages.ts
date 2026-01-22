@@ -189,6 +189,7 @@ export const messages = {
     },
     finance: {
       title: "Οικονομικά",
+      objectLabel: "Έργο:",
       contractPrice: "Τιμή Σύμβασης",
       additionalWork: "Πρόσθετη Εργασία",
       addAdditionalWork: "Προσθήκη Πρόσθετης Εργασίας",
@@ -522,6 +523,7 @@ export const messages = {
     },
     finance: {
       title: "Финансы",
+      objectLabel: "Объект:",
       contractPrice: "Договорная цена",
       additionalWork: "Дополнительная работа",
       addAdditionalWork: "Добавить доп. работу",
@@ -855,6 +857,7 @@ export const messages = {
     },
     finance: {
       title: "Фінанси",
+      objectLabel: "Об'єкт:",
       contractPrice: "Договірна ціна",
       additionalWork: "Додаткова робота",
       addAdditionalWork: "Додати дод. роботу",
@@ -1188,6 +1191,7 @@ export const messages = {
     },
     finance: {
       title: "Financat",
+      objectLabel: "Projekti:",
       contractPrice: "Çmimi i Kontratës",
       additionalWork: "Punë Shtesë",
       addAdditionalWork: "Shto Punë Shtesë",
@@ -1521,6 +1525,7 @@ export const messages = {
     },
     finance: {
       title: "Финанси",
+      objectLabel: "Обект:",
       contractPrice: "Договорна цена",
       additionalWork: "Допълнителна работа",
       addAdditionalWork: "Добави доп. работа",
@@ -1854,6 +1859,7 @@ export const messages = {
     },
     finance: {
       title: "Finanțe",
+      objectLabel: "Proiect:",
       contractPrice: "Preț contractual",
       additionalWork: "Lucrare suplimentară",
       addAdditionalWork: "Adaugă lucrare supl.",
@@ -2187,6 +2193,7 @@ export const messages = {
     },
     finance: {
       title: "Finance",
+      objectLabel: "Project:",
       contractPrice: "Contract Price",
       additionalWork: "Additional Work",
       addAdditionalWork: "Add Additional Work",
@@ -2520,6 +2527,7 @@ export const messages = {
     },
     finance: {
       title: "المالية",
+      objectLabel: "المشروع:",
       contractPrice: "سعر العقد",
       additionalWork: "عمل إضافي",
       addAdditionalWork: "إضافة عمل إضافي",
