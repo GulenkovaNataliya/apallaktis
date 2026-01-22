@@ -450,7 +450,7 @@ export default function ObjectFinancePage() {
             <h2 className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
               {t.contractPrice}
             </h2>
-            <p className="text-2xl font-bold" style={{ color: 'var(--deep-teal)' }}>
+            <p className="text-2xl font-bold" style={{ color: 'var(--orange)' }}>
               {formatEuro(finance.contractPrice)}
             </p>
           </div>
@@ -584,16 +584,16 @@ export default function ObjectFinancePage() {
           {/* Balance Section */}
           <div className="rounded-2xl p-4 text-center" style={{
             backgroundColor: finance.balanceStatus === 'debt' ? '#ff6a1a' :
-                           finance.balanceStatus === 'overpaid' ? 'var(--zanah)' :
-                           'var(--polar)'
+                           finance.balanceStatus === 'closed' ? '#25D366' :
+                           'var(--zanah)'
           }}>
-            <h2 className="text-lg font-semibold" style={{ color: finance.balanceStatus === 'debt' ? 'white' : 'var(--deep-teal)' }}>
+            <h2 className="text-lg font-semibold" style={{ color: finance.balanceStatus === 'overpaid' ? 'var(--deep-teal)' : 'white' }}>
               {t.balance}
             </h2>
-            <p className="text-3xl font-bold" style={{ color: finance.balanceStatus === 'debt' ? 'white' : 'var(--deep-teal)' }}>
+            <p className="text-3xl font-bold" style={{ color: finance.balanceStatus === 'overpaid' ? 'var(--deep-teal)' : 'white' }}>
               {formatEuro(finance.balance)}
             </p>
-            <p className="text-2xl font-bold mt-2" style={{ color: finance.balanceStatus === 'debt' ? 'white' : 'var(--deep-teal)' }}>
+            <p className="text-2xl font-bold mt-2" style={{ color: finance.balanceStatus === 'overpaid' ? 'var(--deep-teal)' : 'white' }}>
               {finance.balanceStatus === 'debt' && t.debt}
               {finance.balanceStatus === 'closed' && t.closed}
               {finance.balanceStatus === 'overpaid' && t.overpaid}
