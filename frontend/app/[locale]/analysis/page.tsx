@@ -557,6 +557,9 @@ export default function AnalysisPage() {
   const [expandedReceivedPayments, setExpandedReceivedPayments] = useState(false);
   const [expandedExpensePayments, setExpandedExpensePayments] = useState(false);
 
+  // Expanded state for total balance block (block 8)
+  const [expandedTotalBalance, setExpandedTotalBalance] = useState(false);
+
   // Email modal state
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [emailTo, setEmailTo] = useState('');
@@ -1285,39 +1288,97 @@ export default function AnalysisPage() {
               </p>
             </div>
 
-            {/* 8. Total Balance */}
+            {/* 8. Total Balance - Expandable with Debtors */}
             <div
-              className="rounded-2xl p-4 text-center"
+              className="rounded-2xl"
               style={{
                 backgroundColor: getBalanceStatus(analysisData.totalBalance) === 'debt' ? '#ff6a1a' :
-                                 getBalanceStatus(analysisData.totalBalance) === 'closed' ? '#25D366' : 'var(--zanah)'
+                                 getBalanceStatus(analysisData.totalBalance) === 'closed' ? '#25D366' : 'var(--zanah)',
+                padding: '16px 20px'
               }}
             >
-              <h2
-                className="text-lg font-semibold"
-                style={{
-                  color: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'white'
-                }}
+              {/* Header */}
+              <button
+                onClick={() => setExpandedTotalBalance(!expandedTotalBalance)}
+                className="w-full flex flex-col items-center gap-2"
               >
-                {t.totalBalance}
-              </h2>
-              <p
-                className="text-3xl font-bold"
-                style={{
-                  color: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'white'
-                }}
-              >
-                {formatEuro(analysisData.totalBalance)}
-              </p>
-              <p
-                className="text-2xl font-bold mt-2"
-                style={{
-                  color: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'white'
-                }}
-              >
-                {getBalanceStatus(analysisData.totalBalance) === 'debt' ? t.totalDebt :
-                 getBalanceStatus(analysisData.totalBalance) === 'closed' ? t.allPaid : t.totalOverpaid}
-              </p>
+                <div className="flex items-center gap-2">
+                  <span style={{ fontSize: '20px' }}>💰</span>
+                  <span
+                    className="font-bold"
+                    style={{
+                      color: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'white',
+                      fontSize: '16px'
+                    }}
+                  >
+                    {t.totalBalance}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span
+                    className="text-2xl font-bold"
+                    style={{
+                      color: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'white'
+                    }}
+                  >
+                    {formatEuro(analysisData.totalBalance)}
+                  </span>
+                  <span
+                    style={{
+                      color: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'white',
+                      fontSize: '18px'
+                    }}
+                  >
+                    {expandedTotalBalance ? '▲' : '▼'}
+                  </span>
+                </div>
+                <span
+                  className="text-lg font-bold"
+                  style={{
+                    color: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'white'
+                  }}
+                >
+                  {getBalanceStatus(analysisData.totalBalance) === 'debt' ? t.totalDebt :
+                   getBalanceStatus(analysisData.totalBalance) === 'closed' ? t.allPaid : t.totalOverpaid}
+                </span>
+              </button>
+
+              {/* Expanded Debtors List */}
+              {expandedTotalBalance && analysisData.debtsByObject.length > 0 && (
+                <div
+                  className="mt-4 pt-4 border-t space-y-3"
+                  style={{
+                    borderColor: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'rgba(255,255,255,0.3)'
+                  }}
+                >
+                  {analysisData.debtsByObject.map((debtor, index) => (
+                    <div
+                      key={index}
+                      className="rounded-2xl flex justify-between items-center"
+                      style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: '12px 16px' }}
+                    >
+                      <span style={{ color: 'white', fontWeight: 600 }}>
+                        {debtor.objectName}
+                      </span>
+                      <span style={{ color: 'white', fontWeight: 700 }}>
+                        {formatEuro(debtor.debt)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {expandedTotalBalance && analysisData.debtsByObject.length === 0 && (
+                <p
+                  className="text-center mt-4 pt-4 border-t"
+                  style={{
+                    borderColor: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'rgba(255,255,255,0.3)',
+                    color: 'white'
+                  }}
+                >
+                  {t.allPaid}
+                </p>
+              )}
             </div>
 
             {/* 9. Global Expenses Block - Expandable by Category */}

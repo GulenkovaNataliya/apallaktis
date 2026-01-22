@@ -24,7 +24,7 @@ export default function AdminVIP() {
   const locale = (params.locale as Locale) || "el";
   const [isLoading, setIsLoading] = useState(true);
   const [email, setEmail] = useState(searchParams.get('email') || "");
-  const [duration, setDuration] = useState<string>("1month");
+  const [duration, setDuration] = useState<string>("forever");
   const [customDate, setCustomDate] = useState("");
   const [reason, setReason] = useState("");
   const [vipUsers, setVIPUsers] = useState<VIPUser[]>([]);
@@ -110,23 +110,6 @@ export default function AdminVIP() {
           return;
         }
         expiresAt = new Date(customDate).toISOString();
-      } else {
-        const now = new Date();
-        switch (duration) {
-          case '1month':
-            now.setMonth(now.getMonth() + 1);
-            break;
-          case '3months':
-            now.setMonth(now.getMonth() + 3);
-            break;
-          case '6months':
-            now.setMonth(now.getMonth() + 6);
-            break;
-          case '1year':
-            now.setFullYear(now.getFullYear() + 1);
-            break;
-        }
-        expiresAt = now.toISOString();
       }
 
       // Получаем ID текущего админа
@@ -307,10 +290,6 @@ export default function AdminVIP() {
                     color: 'var(--deep-teal)',
                   }}
                 >
-                  <option value="1month">1 месяц</option>
-                  <option value="3months">3 месяца</option>
-                  <option value="6months">6 месяцев</option>
-                  <option value="1year">1 год</option>
                   <option value="forever">Навсегда</option>
                   <option value="custom">Своя дата</option>
                 </select>

@@ -1,171 +1,225 @@
-# DOMAIN TODOLIST — После покупки домена
+# DOMAIN & DEPLOYMENT CHECKLIST
 
-> **Временный файл** — удалить после выполнения всех задач
-
-## Предположим домен: `apallaktis.gr` (заменить на реальный)
+> **Используй после покупки домена и регистрации на Stripe**
 
 ---
 
-## 1. ENVIRONMENT VARIABLES
+## 1. ДОМЕН
 
-### Frontend (.env.local / .env.production)
-```env
-NEXT_PUBLIC_APP_URL=https://apallaktis.gr
-NEXT_PUBLIC_API_URL=https://apallaktis.gr/api
-```
-
-### Файлы для изменения:
-- [ ] `frontend/.env.local`
-- [ ] `frontend/.env.production`
-- [ ] Vercel Environment Variables (если деплой на Vercel)
+### После покупки домена:
+- [ ] Записать название домена: `________________`
+- [ ] Настроить DNS у регистратора:
+  ```
+  Type    Name    Value
+  A       @       76.76.21.21 (Vercel IP)
+  CNAME   www     cname.vercel-dns.com
+  ```
+- [ ] Добавить домен в Vercel: Project Settings → Domains
+- [ ] Проверить HTTPS (автоматически от Vercel)
+- [ ] Настроить редирект www → non-www (или наоборот)
 
 ---
 
-## 2. SUPABASE
+## 2. ENVIRONMENT VARIABLES — ПОЛНЫЙ СПИСОК
 
-### Dashboard → Authentication → URL Configuration
-- [ ] Site URL: `https://apallaktis.gr`
+### Vercel Dashboard → Settings → Environment Variables
+
+| Переменная | Значение | Статус |
+|------------|----------|--------|
+| `NEXT_PUBLIC_SUPABASE_URL` | https://gnuivvrpdibgwmhbfqxv.supabase.co | [ ] |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... | [ ] |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | pk_test_... или pk_live_... | [ ] |
+| `STRIPE_SECRET_KEY` | sk_test_... или sk_live_... | [ ] |
+| `STRIPE_WEBHOOK_SECRET` | whsec_... | [ ] |
+| `STRIPE_ACCOUNT_PRICE_ID` | price_... | [ ] |
+| `STRIPE_PRICE_BASIC_MONTHLY` | price_... | [ ] |
+| `STRIPE_PRICE_STANDARD_MONTHLY` | price_... | [ ] |
+| `STRIPE_PRICE_PREMIUM_MONTHLY` | price_... | [ ] |
+| `NEXT_PUBLIC_APP_URL` | https://ВАШ_ДОМЕН | [ ] |
+| `RESEND_API_KEY` | re_... | [ ] |
+| `CRON_SECRET` | любой секретный ключ | [ ] |
+| `ANTHROPIC_API_KEY` | sk-ant-api03-... | [ ] |
+
+### Проверка ключей:
+- [ ] Все 13 переменных добавлены в Vercel
+- [ ] Выбраны окружения: Production, Preview, Development
+- [ ] NEXT_PUBLIC_APP_URL указывает на реальный домен (не localhost)
+
+---
+
+## 3. STRIPE — НАСТРОЙКА
+
+### 3.1 После регистрации на Stripe:
+
+- [ ] Получить API ключи: https://dashboard.stripe.com/apikeys
+  - [ ] Publishable key (pk_live_...)
+  - [ ] Secret key (sk_live_...)
+
+### 3.2 Создать продукты и цены:
+
+| Продукт | Цена | Price ID |
+|---------|------|----------|
+| Account Activation | 97€ + ΦΠΑ (разово) | price_... |
+| Basic Monthly | 20€/мес | price_... |
+| Standard Monthly | 45€/мес | price_... |
+| Premium Monthly | 90€/мес | price_... |
+
+- [ ] Создать продукт "Account Activation" (one-time)
+- [ ] Создать продукт "Basic Subscription" (recurring monthly)
+- [ ] Создать продукт "Standard Subscription" (recurring monthly)
+- [ ] Создать продукт "Premium Subscription" (recurring monthly)
+- [ ] Записать все Price ID и добавить в Vercel
+
+### 3.3 Настроить Webhook:
+
+- [ ] Создать webhook: https://dashboard.stripe.com/webhooks
+- [ ] Endpoint URL: `https://ВАШ_ДОМЕН/api/stripe/webhook`
+- [ ] События для подписки:
+  - `checkout.session.completed`
+  - `customer.subscription.created`
+  - `customer.subscription.updated`
+  - `customer.subscription.deleted`
+  - `invoice.paid`
+  - `invoice.payment_failed`
+- [ ] Скопировать Webhook Secret (whsec_...) и добавить в Vercel
+
+### 3.4 Branding:
+
+- [ ] Dashboard → Settings → Branding
+- [ ] Загрузить логотип
+- [ ] Указать Business URL: https://ВАШ_ДОМЕН
+
+---
+
+## 4. SUPABASE — НАСТРОЙКА
+
+### 4.1 URL Configuration:
+- [ ] Dashboard → Authentication → URL Configuration
+- [ ] Site URL: `https://ВАШ_ДОМЕН`
 - [ ] Redirect URLs добавить:
-  - `https://apallaktis.gr/**`
-  - `https://www.apallaktis.gr/**`
+  - `https://ВАШ_ДОМЕН/**`
+  - `https://www.ВАШ_ДОМЕН/**`
 
-### Dashboard → Settings → API
-- [ ] Проверить CORS origins
+### 4.2 Email Templates:
+- [ ] Dashboard → Authentication → Email Templates
+- [ ] Заменить `localhost:3000` на `https://ВАШ_ДОМЕН` в:
+  - [ ] Confirm signup
+  - [ ] Reset password
+  - [ ] Magic link
+  - [ ] Change email
 
----
-
-## 3. EMAIL TEMPLATES (Supabase)
-
-### Dashboard → Authentication → Email Templates
-Заменить `localhost:3000` на `apallaktis.gr` в:
-- [ ] Confirm signup
-- [ ] Reset password
-- [ ] Magic link
-- [ ] Change email
+### 4.3 CORS:
+- [ ] Dashboard → Settings → API
+- [ ] Проверить/добавить домен в CORS origins
 
 ---
 
-## 4. PWA MANIFEST
+## 5. RESEND (EMAIL) — ПРОВЕРКА
+
+- [ ] Домен верифицирован в Resend: https://resend.com/domains
+- [ ] DNS записи добавлены (SPF, DKIM, DMARC)
+- [ ] Тестовое письмо отправляется успешно
+
+---
+
+## 6. VERCEL — ДЕПЛОЙ
+
+### После добавления всех переменных:
+- [ ] Нажать "Redeploy" на последнем деплое
+- [ ] Дождаться успешного билда (зелёная галочка)
+- [ ] Проверить домен в браузере
+
+---
+
+## 7. PWA — MANIFEST
 
 ### Файл: `frontend/public/manifest.json`
-```json
-{
-  "start_url": "https://apallaktis.gr",
-  "scope": "https://apallaktis.gr/",
-  "id": "https://apallaktis.gr/"
-}
-```
+- [ ] Обновить `start_url`: `https://ВАШ_ДОМЕН`
+- [ ] Обновить `scope`: `https://ВАШ_ДОМЕН/`
+- [ ] Обновить `id`: `https://ВАШ_ДОМЕН/`
 
 ---
 
-## 5. SEO & META
+## 8. SEO — META TAGS
 
-### Файл: `frontend/app/layout.tsx` или `metadata.ts`
-```ts
-export const metadata = {
-  metadataBase: new URL('https://apallaktis.gr'),
-  // ...
-}
-```
-
-### Open Graph
-- [ ] og:url
-- [ ] og:image (абсолютный URL)
-
----
-
-## 6. ROBOTS.TXT
+### Файл: `frontend/app/layout.tsx`
+- [ ] Обновить `metadataBase`: `new URL('https://ВАШ_ДОМЕН')`
+- [ ] Проверить og:url, og:image
 
 ### Файл: `frontend/public/robots.txt`
-```txt
-User-agent: *
-Allow: /
-
-Sitemap: https://apallaktis.gr/sitemap.xml
-```
+- [ ] Обновить Sitemap URL: `https://ВАШ_ДОМЕН/sitemap.xml`
 
 ---
 
-## 7. SITEMAP
+## 9. LEGAL PAGES
 
-### Создать или обновить: `frontend/app/sitemap.ts`
-```ts
-export default function sitemap() {
-  return [
-    { url: 'https://apallaktis.gr', lastModified: new Date() },
-    { url: 'https://apallaktis.gr/el', lastModified: new Date() },
-    // ... все языки
-  ]
-}
-```
+- [ ] Terms of Service — проверить URL сайта
+- [ ] Privacy Policy — проверить URL сайта
+- [ ] Контактные данные актуальны
 
 ---
 
-## 8. HOSTING / DEPLOYMENT
+## 10. ФИНАЛЬНЫЙ ЧЕКЛИСТ
 
-### Vercel (если используется)
-- [ ] Добавить домен в Project Settings → Domains
-- [ ] Настроить DNS (A record или CNAME)
-- [ ] Включить HTTPS (автоматически)
-- [ ] Настроить www → non-www редирект (или наоборот)
+### Перед запуском:
+- [ ] `npm run build` без ошибок (локально)
+- [ ] Vercel деплой успешен (зелёная галочка)
+- [ ] Домен открывается в браузере
+- [ ] HTTPS работает (замочек в адресной строке)
 
-### DNS Records (у регистратора)
-```
-Type    Name    Value
-A       @       76.76.21.21 (Vercel IP)
-CNAME   www     cname.vercel-dns.com
-```
+### Тестирование функционала:
+- [ ] Регистрация нового пользователя работает
+- [ ] Email подтверждения приходит
+- [ ] Вход в систему работает
+- [ ] Сброс пароля работает
+- [ ] Stripe checkout открывается
+- [ ] Webhook от Stripe обрабатывается
+- [ ] PWA устанавливается на телефон
 
----
+### Тестирование на всех языках:
+- [ ] Греческий (el)
+- [ ] Русский (ru)
+- [ ] Украинский (uk)
+- [ ] Албанский (sq)
+- [ ] Болгарский (bg)
+- [ ] Румынский (ro)
+- [ ] Английский (en)
+- [ ] Арабский (ar) + RTL
 
-## 9. N8N WEBHOOKS (если используются)
-
-### Обновить URL в workflows:
-- [ ] Registration webhook
-- [ ] Login webhook
-- [ ] Payment webhooks
-
----
-
-## 10. STRIPE (если используется)
-
-### Dashboard → Developers → Webhooks
-- [ ] Обновить endpoint URL: `https://apallaktis.gr/api/webhooks/stripe`
-
-### Dashboard → Settings → Branding
-- [ ] Обновить Business URL
+### Админ-панель:
+- [ ] /admin доступна только админу
+- [ ] VIP активация работает
+- [ ] Email уведомление VIP отправляется
 
 ---
 
-## 11. LEGAL PAGES
+## БЫСТРЫЕ КОМАНДЫ
 
-### Проверить ссылки в:
-- [ ] Terms of Service — контактные данные, URL сайта
-- [ ] Privacy Policy — контактные данные, URL сайта
-
----
-
-## 12. FINAL CHECKLIST
-
-После всех изменений:
-- [ ] `npm run build` без ошибок
-- [ ] Проверить все страницы на production
-- [ ] Проверить email templates (отправить тестовое письмо)
-- [ ] Проверить OAuth редиректы
-- [ ] Проверить PWA установку
-- [ ] Google Search Console — добавить домен
-- [ ] Google Analytics — обновить домен (если есть)
-
----
-
-## БЫСТРЫЙ ПОИСК ПО ПРОЕКТУ
-
-Найти все упоминания localhost:
+### Найти все упоминания localhost:
 ```bash
 grep -r "localhost" frontend/
 grep -r "127.0.0.1" frontend/
 ```
 
+### Проверить билд локально:
+```bash
+cd frontend && npm run build
+```
+
+### Проверить переменные в Vercel:
+```bash
+vercel env ls
+```
+
 ---
 
-**После выполнения всех задач — удалить этот файл.**
+## КОНТАКТЫ ДЛЯ ПОДДЕРЖКИ
+
+- **Vercel**: https://vercel.com/support
+- **Stripe**: https://support.stripe.com
+- **Supabase**: https://supabase.com/support
+- **Resend**: https://resend.com/support
+
+---
+
+**После выполнения всех пунктов — приложение готово к запуску!**
