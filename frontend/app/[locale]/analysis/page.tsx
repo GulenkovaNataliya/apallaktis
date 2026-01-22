@@ -44,6 +44,9 @@ const translations = {
     totalProfit: "Συνολικό Κέρδος",
     profitStatus: "Κέρδος",
     lossStatus: "Ζημία",
+    summaryPaymentAnalysis: "Συνολική Ανάλυση Πληρωμών",
+    totalReceivedPayments: "Συνολικό Ποσό Εισπραχθεισών Πληρωμών",
+    totalExpensePayments: "Συνολικό Ποσό Πληρωμών Εξόδων",
     income: "ΕΣΟΔΑ",
     receivedFromClients: "Λήφθηκαν από πελάτες",
     byPaymentMethod: "Ανά Τρόπο Πληρωμής",
@@ -92,6 +95,9 @@ const translations = {
     totalProfit: "Общая Прибыль",
     profitStatus: "Прибыль",
     lossStatus: "Убыток",
+    summaryPaymentAnalysis: "Суммарный Платежный Анализ",
+    totalReceivedPayments: "Общая Сумма Поступивших Оплат",
+    totalExpensePayments: "Общая Сумма Платежей по Расходам",
     income: "ДОХОДЫ",
     receivedFromClients: "Получено от клиентов",
     byPaymentMethod: "По способу оплаты",
@@ -140,6 +146,9 @@ const translations = {
     totalProfit: "Total Profit",
     profitStatus: "Profit",
     lossStatus: "Loss",
+    summaryPaymentAnalysis: "Summary Payment Analysis",
+    totalReceivedPayments: "Total Received Payments",
+    totalExpensePayments: "Total Expense Payments",
     income: "INCOME",
     receivedFromClients: "Received from clients",
     byPaymentMethod: "By Payment Method",
@@ -211,6 +220,9 @@ const translations = {
     totalProfit: "Загальний Прибуток",
     profitStatus: "Прибуток",
     lossStatus: "Збиток",
+    summaryPaymentAnalysis: "Сумарний Платіжний Аналіз",
+    totalReceivedPayments: "Загальна Сума Отриманих Оплат",
+    totalExpensePayments: "Загальна Сума Платежів по Витратах",
   },
   sq: {
     title: "Analiza Financiare",
@@ -259,6 +271,9 @@ const translations = {
     totalProfit: "Fitimi Total",
     profitStatus: "Fitim",
     lossStatus: "Humbje",
+    summaryPaymentAnalysis: "Analiza Përmbledhëse e Pagesave",
+    totalReceivedPayments: "Shuma Totale e Pagesave të Marra",
+    totalExpensePayments: "Shuma Totale e Pagesave të Shpenzimeve",
   },
   bg: {
     title: "Финансов Анализ",
@@ -307,6 +322,9 @@ const translations = {
     totalProfit: "Обща Печалба",
     profitStatus: "Печалба",
     lossStatus: "Загуба",
+    summaryPaymentAnalysis: "Обобщен Анализ на Плащанията",
+    totalReceivedPayments: "Обща Сума на Получени Плащания",
+    totalExpensePayments: "Обща Сума на Плащания по Разходи",
   },
   ro: {
     title: "Analiză Financiară",
@@ -355,6 +373,9 @@ const translations = {
     totalProfit: "Profit Total",
     profitStatus: "Profit",
     lossStatus: "Pierdere",
+    summaryPaymentAnalysis: "Analiza Sumară a Plăților",
+    totalReceivedPayments: "Suma Totală a Plăților Primite",
+    totalExpensePayments: "Suma Totală a Plăților pentru Cheltuieli",
   },
   ar: {
     title: "التحليل المالي",
@@ -403,6 +424,9 @@ const translations = {
     totalProfit: "إجمالي الربح",
     profitStatus: "ربح",
     lossStatus: "خسارة",
+    summaryPaymentAnalysis: "تحليل المدفوعات الإجمالي",
+    totalReceivedPayments: "إجمالي المدفوعات المستلمة",
+    totalExpensePayments: "إجمالي مدفوعات المصروفات",
   },
 };
 
@@ -488,6 +512,10 @@ export default function AnalysisPage() {
   // Expanded state for expenses blocks (blocks 9-10)
   const [expandedGlobalExpenses, setExpandedGlobalExpenses] = useState(false);
   const [expandedObjectExpenses, setExpandedObjectExpenses] = useState(false);
+
+  // Expanded state for payment analysis blocks (blocks 13-14)
+  const [expandedReceivedPayments, setExpandedReceivedPayments] = useState(false);
+  const [expandedExpensePayments, setExpandedExpensePayments] = useState(false);
 
   // Check subscription and load data
   useEffect(() => {
@@ -1339,6 +1367,114 @@ export default function AnalysisPage() {
               >
                 {analysisData.netProfit >= 0 ? t.profitStatus : t.lossStatus}
               </p>
+            </div>
+
+            {/* 12. Summary Payment Analysis - Section Title */}
+            <h2
+              className="text-xl font-bold text-center"
+              style={{ color: 'var(--polar)' }}
+            >
+              {t.summaryPaymentAnalysis}
+            </h2>
+
+            {/* 13. Total Received Payments Block - Expandable by Payment Method */}
+            <div className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
+              {/* Header */}
+              <button
+                onClick={() => setExpandedReceivedPayments(!expandedReceivedPayments)}
+                className="w-full flex flex-col items-center gap-2"
+              >
+                <div className="flex items-center gap-2">
+                  <span style={{ fontSize: '20px' }}>💰</span>
+                  <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
+                    {t.totalReceivedPayments}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl font-bold" style={{ color: 'var(--deep-teal)' }}>
+                    {formatEuro(analysisData.totalIncome)}
+                  </span>
+                  <span style={{ color: 'var(--deep-teal)', fontSize: '18px' }}>
+                    {expandedReceivedPayments ? '▲' : '▼'}
+                  </span>
+                </div>
+              </button>
+
+              {/* Expanded Payment Methods List */}
+              {expandedReceivedPayments && Object.keys(analysisData.incomeByPaymentMethod).length > 0 && (
+                <div className="mt-4 pt-4 border-t space-y-3" style={{ borderColor: 'var(--deep-teal)' }}>
+                  {Object.entries(analysisData.incomeByPaymentMethod).map(([pmId, amount]) => (
+                    <div
+                      key={pmId}
+                      className="rounded-2xl flex justify-between items-center"
+                      style={{ backgroundColor: 'var(--zanah)', padding: '12px 16px' }}
+                    >
+                      <span style={{ color: 'var(--deep-teal)', fontWeight: 600 }}>
+                        {getPaymentMethodName(pmId)}
+                      </span>
+                      <span style={{ color: 'var(--deep-teal)', fontWeight: 700 }}>
+                        {formatEuro(amount)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {expandedReceivedPayments && Object.keys(analysisData.incomeByPaymentMethod).length === 0 && (
+                <p className="text-center mt-4 pt-4 border-t" style={{ borderColor: 'var(--deep-teal)', color: 'var(--orange)' }}>
+                  {t.noData}
+                </p>
+              )}
+            </div>
+
+            {/* 14. Total Expense Payments Block - Expandable by Payment Method */}
+            <div className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
+              {/* Header */}
+              <button
+                onClick={() => setExpandedExpensePayments(!expandedExpensePayments)}
+                className="w-full flex flex-col items-center gap-2"
+              >
+                <div className="flex items-center gap-2">
+                  <span style={{ fontSize: '20px' }}>💸</span>
+                  <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
+                    {t.totalExpensePayments}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl font-bold" style={{ color: 'var(--orange)' }}>
+                    {formatEuro(analysisData.totalExpenses)}
+                  </span>
+                  <span style={{ color: 'var(--deep-teal)', fontSize: '18px' }}>
+                    {expandedExpensePayments ? '▲' : '▼'}
+                  </span>
+                </div>
+              </button>
+
+              {/* Expanded Payment Methods List */}
+              {expandedExpensePayments && Object.keys(analysisData.expensesByPaymentMethod).length > 0 && (
+                <div className="mt-4 pt-4 border-t space-y-3" style={{ borderColor: 'var(--deep-teal)' }}>
+                  {Object.entries(analysisData.expensesByPaymentMethod).map(([pmId, amount]) => (
+                    <div
+                      key={pmId}
+                      className="rounded-2xl flex justify-between items-center"
+                      style={{ backgroundColor: 'var(--zanah)', padding: '12px 16px' }}
+                    >
+                      <span style={{ color: 'var(--deep-teal)', fontWeight: 600 }}>
+                        {getPaymentMethodName(pmId)}
+                      </span>
+                      <span style={{ color: 'var(--orange)', fontWeight: 700 }}>
+                        {formatEuro(amount)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {expandedExpensePayments && Object.keys(analysisData.expensesByPaymentMethod).length === 0 && (
+                <p className="text-center mt-4 pt-4 border-t" style={{ borderColor: 'var(--deep-teal)', color: 'var(--orange)' }}>
+                  {t.noData}
+                </p>
+              )}
             </div>
 
             {/* Original blocks below - keeping for additional info */}
