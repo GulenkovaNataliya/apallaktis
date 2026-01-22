@@ -745,7 +745,7 @@ export default function ObjectFinancePage() {
 
                 {/* Payment Received Block */}
                 {finance.payments.length > 0 && (
-                  <div className="rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
+                  <div className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
                     <button
                       onClick={() => setExpandedPaymentReceived(!expandedPaymentReceived)}
                       className="w-full flex justify-between items-center text-left"
@@ -802,7 +802,7 @@ export default function ObjectFinancePage() {
 
                 {/* Expenses Paid Block */}
                 {expenses.length > 0 && (
-                  <div className="rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
+                  <div className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
                     <button
                       onClick={() => setExpandedExpensesPaid(!expandedExpensesPaid)}
                       className="w-full flex justify-between items-center text-left"
