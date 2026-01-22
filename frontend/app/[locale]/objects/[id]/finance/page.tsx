@@ -456,7 +456,7 @@ export default function ObjectFinancePage() {
           </div>
 
           {/* Additional Works Section */}
-          <div className="rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
+          <div className="rounded-2xl py-4 px-6" style={{ backgroundColor: 'var(--polar)' }}>
             <h2 className="text-lg font-semibold text-center mb-4" style={{ color: 'var(--deep-teal)' }}>
               {tObjects.additionalWorks}
             </h2>
@@ -466,7 +466,7 @@ export default function ObjectFinancePage() {
                 {t.noAdditionalWorks}
               </p>
             ) : (
-              <div className="flex flex-col gap-4 mx-4">
+              <div className="flex flex-col gap-4">
                 {finance.additionalWorks.map((work) => (
                   <div key={work.id} className="flex justify-between items-center rounded-2xl p-4" style={{ backgroundColor: 'var(--zanah)' }}>
                     <div className="flex-1">
@@ -492,7 +492,7 @@ export default function ObjectFinancePage() {
               </div>
             )}
 
-            <div className="mt-4 pt-4 border-t mx-4" style={{ borderColor: 'var(--deep-teal)' }}>
+            <div className="mt-4 pt-4 border-t" style={{ borderColor: 'var(--deep-teal)' }}>
               <div className="flex justify-between">
                 <span className="font-semibold" style={{ color: 'var(--deep-teal)' }}>
                   {t.total}
