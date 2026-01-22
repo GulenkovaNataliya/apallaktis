@@ -753,15 +753,15 @@ export default function ObjectFinancePage() {
                   <div className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
                     <button
                       onClick={() => setExpandedPaymentReceived(!expandedPaymentReceived)}
-                      className="w-full flex justify-between items-center text-left"
+                      className="w-full flex flex-wrap justify-between items-center text-left gap-2"
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
                         <span style={{ fontSize: '20px' }}>💰</span>
                         <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
                           {t.paymentReceived}
                         </span>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 flex-shrink-0">
                         <span className="text-lg font-bold" style={{ color: 'var(--deep-teal)' }}>
                           {formatEuro(finance.totalPayments)}
                         </span>
@@ -810,15 +810,15 @@ export default function ObjectFinancePage() {
                   <div className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
                     <button
                       onClick={() => setExpandedExpensesPaid(!expandedExpensesPaid)}
-                      className="w-full flex justify-between items-center text-left"
+                      className="w-full flex flex-wrap justify-between items-center text-left gap-2"
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
                         <span style={{ fontSize: '20px' }}>📤</span>
                         <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
                           {t.expensesPaid}
                         </span>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 flex-shrink-0">
                         <span className="text-lg font-bold" style={{ color: 'var(--deep-teal)' }}>
                           {formatEuro(expenses.reduce((sum, exp) => sum + exp.amount, 0))}
                         </span>
