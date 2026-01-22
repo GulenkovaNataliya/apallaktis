@@ -143,6 +143,12 @@ export default function ObjectFinancePage() {
   const [expandedPaymentReceived, setExpandedPaymentReceived] = useState(false);
   const [expandedExpensesPaid, setExpandedExpensesPaid] = useState(false);
 
+  // Email modal state
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [emailTo, setEmailTo] = useState('');
+  const [reportFormat, setReportFormat] = useState<'pdf' | 'excel'>('pdf');
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+
   // Load data from Supabase
   useEffect(() => {
     async function loadData() {
@@ -405,6 +411,47 @@ export default function ObjectFinancePage() {
   if (!mounted || !object || !finance) {
     return null;
   }
+
+  // Send object finance report email
+  const handleSendReportEmail = async () => {
+    if (!object || !finance || !emailTo) return;
+    setIsSendingEmail(true);
+
+    try {
+      const actualPrice = object.contractPrice + finance.totalAdditionalWorks;
+      const response = await fetch('/api/send-object-finance-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: emailTo,
+          objectName: object.name,
+          contractPrice: object.contractPrice,
+          additionalWorks: finance.additionalWorks,
+          totalAdditionalWorks: finance.totalAdditionalWorks,
+          actualPrice: actualPrice,
+          payments: finance.payments,
+          totalPayments: finance.totalPayments,
+          balance: finance.balance,
+          expenses: expenses,
+          totalExpenses: expenses.reduce((sum, e) => sum + e.amount, 0),
+          locale,
+          format: reportFormat,
+        }),
+      });
+
+      if (response.ok) {
+        setShowEmailModal(false);
+        alert(t.emailSent);
+      } else {
+        alert(t.emailError);
+      }
+    } catch (error) {
+      console.error('Send email error:', error);
+      alert(t.emailError);
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
 
   // MAIN VIEW
   // Loading state
@@ -903,8 +950,123 @@ ${t.closeProjectQuestion}
                 {t.calculateProfit}
               </button>
             )}
+
+            {/* Send Report Button */}
+            <button
+              onClick={() => {
+                setEmailTo(object?.clientContact || '');
+                setShowEmailModal(true);
+              }}
+              className="btn-universal w-full text-button"
+              style={{
+                minHeight: '52px',
+                backgroundColor: 'var(--zanah)',
+                color: 'var(--deep-teal)'
+              }}
+            >
+              📧 {t.sendReport}
+            </button>
           </div>
         </div>
+
+        {/* Email Modal */}
+        {showEmailModal && (
+          <div
+            className="fixed inset-0 flex items-center justify-center z-50"
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+            onClick={() => setShowEmailModal(false)}
+          >
+            <div
+              className="rounded-2xl p-6 w-full max-w-sm mx-4"
+              style={{ backgroundColor: 'var(--polar)' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Title */}
+              <h3 className="text-lg font-bold text-center mb-6" style={{ color: 'var(--deep-teal)' }}>
+                📧 {t.sendReport}
+              </h3>
+
+              {/* Email Input */}
+              <label className="text-button mb-2 block" style={{ color: 'var(--deep-teal)' }}>
+                {t.emailRecipient}
+              </label>
+              <input
+                type="email"
+                value={emailTo}
+                onChange={(e) => setEmailTo(e.target.value)}
+                placeholder="email@example.com"
+                className="w-full rounded-2xl text-button mb-6"
+                style={{
+                  border: '2px solid var(--deep-teal)',
+                  color: 'var(--deep-teal)',
+                  backgroundColor: 'white',
+                  minHeight: '52px',
+                  padding: '12px'
+                }}
+              />
+
+              {/* Format Selection */}
+              <label className="text-button mb-2 block" style={{ color: 'var(--deep-teal)' }}>
+                {t.selectFormat}
+              </label>
+              <div className="flex gap-4 mb-6">
+                <button
+                  onClick={() => setReportFormat('pdf')}
+                  className="flex-1 rounded-2xl text-button"
+                  style={{
+                    minHeight: '52px',
+                    backgroundColor: reportFormat === 'pdf' ? 'var(--zanah)' : 'transparent',
+                    border: reportFormat === 'pdf' ? 'none' : '2px solid var(--deep-teal)',
+                    color: 'var(--deep-teal)'
+                  }}
+                >
+                  📄 PDF
+                </button>
+                <button
+                  onClick={() => setReportFormat('excel')}
+                  className="flex-1 rounded-2xl text-button"
+                  style={{
+                    minHeight: '52px',
+                    backgroundColor: reportFormat === 'excel' ? 'var(--zanah)' : 'transparent',
+                    border: reportFormat === 'excel' ? 'none' : '2px solid var(--deep-teal)',
+                    color: 'var(--deep-teal)'
+                  }}
+                >
+                  📥 Excel
+                </button>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setShowEmailModal(false)}
+                  className="flex-1 rounded-2xl text-button"
+                  style={{
+                    minHeight: '52px',
+                    backgroundColor: 'transparent',
+                    border: '2px solid var(--deep-teal)',
+                    color: 'var(--deep-teal)'
+                  }}
+                >
+                  {t.cancel}
+                </button>
+                <button
+                  onClick={handleSendReportEmail}
+                  disabled={isSendingEmail || !emailTo}
+                  className="flex-1 rounded-2xl text-button"
+                  style={{
+                    minHeight: '52px',
+                    backgroundColor: 'var(--zanah)',
+                    color: 'var(--deep-teal)',
+                    opacity: (!emailTo || isSendingEmail) ? 0.5 : 1
+                  }}
+                >
+                  {isSendingEmail ? '...' : t.sendButton}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </BackgroundPage>
     );
   }

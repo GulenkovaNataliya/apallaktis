@@ -70,6 +70,11 @@ const translations = {
     back: "← Πίσω",
     emailSent: "Η αναφορά εστάλη στο email σας!",
     emailError: "Σφάλμα αποστολής email",
+    sendReport: "Αποστολή αναφοράς",
+    emailRecipient: "Email παραλήπτη",
+    selectFormat: "Επιλέξτε μορφή",
+    send: "Αποστολή",
+    cancel: "Ακύρωση",
   },
   ru: {
     title: "Финансовый Анализ",
@@ -121,6 +126,11 @@ const translations = {
     back: "← Назад",
     emailSent: "Отчёт отправлен на ваш email!",
     emailError: "Ошибка отправки email",
+    sendReport: "Отправить отчёт",
+    emailRecipient: "Email получателя",
+    selectFormat: "Выберите формат",
+    send: "Отправить",
+    cancel: "Отмена",
   },
   en: {
     title: "Financial Analysis",
@@ -172,6 +182,11 @@ const translations = {
     back: "← Back",
     emailSent: "Report sent to your email!",
     emailError: "Email sending error",
+    sendReport: "Send Report",
+    emailRecipient: "Recipient Email",
+    selectFormat: "Select Format",
+    send: "Send",
+    cancel: "Cancel",
   },
   uk: {
     title: "Фінансовий Аналіз",
@@ -223,6 +238,11 @@ const translations = {
     summaryPaymentAnalysis: "Сумарний Платіжний Аналіз",
     totalReceivedPayments: "Загальна Сума Отриманих Оплат",
     totalExpensePayments: "Загальна Сума Платежів по Витратах",
+    sendReport: "Надіслати звіт",
+    emailRecipient: "Email отримувача",
+    selectFormat: "Виберіть формат",
+    send: "Надіслати",
+    cancel: "Скасувати",
   },
   sq: {
     title: "Analiza Financiare",
@@ -274,6 +294,11 @@ const translations = {
     summaryPaymentAnalysis: "Analiza Përmbledhëse e Pagesave",
     totalReceivedPayments: "Shuma Totale e Pagesave të Marra",
     totalExpensePayments: "Shuma Totale e Pagesave të Shpenzimeve",
+    sendReport: "Dërgo raportin",
+    emailRecipient: "Email i marrësit",
+    selectFormat: "Zgjidhni formatin",
+    send: "Dërgo",
+    cancel: "Anulo",
   },
   bg: {
     title: "Финансов Анализ",
@@ -325,6 +350,11 @@ const translations = {
     summaryPaymentAnalysis: "Обобщен Анализ на Плащанията",
     totalReceivedPayments: "Обща Сума на Получени Плащания",
     totalExpensePayments: "Обща Сума на Плащания по Разходи",
+    sendReport: "Изпрати доклад",
+    emailRecipient: "Email на получателя",
+    selectFormat: "Изберете формат",
+    send: "Изпрати",
+    cancel: "Отказ",
   },
   ro: {
     title: "Analiză Financiară",
@@ -376,6 +406,11 @@ const translations = {
     summaryPaymentAnalysis: "Analiza Sumară a Plăților",
     totalReceivedPayments: "Suma Totală a Plăților Primite",
     totalExpensePayments: "Suma Totală a Plăților pentru Cheltuieli",
+    sendReport: "Trimite raportul",
+    emailRecipient: "Email destinatar",
+    selectFormat: "Selectați formatul",
+    send: "Trimite",
+    cancel: "Anulare",
   },
   ar: {
     title: "التحليل المالي",
@@ -427,6 +462,11 @@ const translations = {
     summaryPaymentAnalysis: "تحليل المدفوعات الإجمالي",
     totalReceivedPayments: "إجمالي المدفوعات المستلمة",
     totalExpensePayments: "إجمالي مدفوعات المصروفات",
+    sendReport: "إرسال التقرير",
+    emailRecipient: "بريد المستلم",
+    selectFormat: "اختر الصيغة",
+    send: "إرسال",
+    cancel: "إلغاء",
   },
 };
 
@@ -516,6 +556,11 @@ export default function AnalysisPage() {
   // Expanded state for payment analysis blocks (blocks 13-14)
   const [expandedReceivedPayments, setExpandedReceivedPayments] = useState(false);
   const [expandedExpensePayments, setExpandedExpensePayments] = useState(false);
+
+  // Email modal state
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [emailTo, setEmailTo] = useState('');
+  const [reportFormat, setReportFormat] = useState<'pdf' | 'excel'>('pdf');
 
   // Check subscription and load data
   useEffect(() => {
@@ -958,6 +1003,39 @@ export default function AnalysisPage() {
       });
 
       if (response.ok) {
+        alert(t.emailSent);
+      } else {
+        alert(t.emailError);
+      }
+    } catch (error) {
+      console.error('Send email error:', error);
+      alert(t.emailError);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  // Send report email with format selection
+  const handleSendReportEmail = async () => {
+    if (!analysisData || !emailTo) return;
+    setIsExporting(true);
+
+    try {
+      const response = await fetch('/api/send-analysis-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: emailTo,
+          dateFrom,
+          dateTo,
+          data: analysisData,
+          locale,
+          format: reportFormat,
+        }),
+      });
+
+      if (response.ok) {
+        setShowEmailModal(false);
         alert(t.emailSent);
       } else {
         alert(t.emailError);
@@ -1642,36 +1720,124 @@ export default function AnalysisPage() {
               </div>
             </div>
 
-            {/* Export Buttons */}
-            <div className="w-full flex gap-3">
-              <button
-                onClick={handleExportExcel}
-                disabled={isExporting}
-                className="flex-1 py-3 rounded-xl font-semibold"
-                style={{ backgroundColor: '#25D366', color: 'white' }}
-              >
-                📥 {t.exportExcel}
-              </button>
-              <button
-                onClick={handleExportPdf}
-                disabled={isExporting}
-                className="flex-1 py-3 rounded-xl font-semibold"
-                style={{ backgroundColor: '#ef4444', color: 'white' }}
-              >
-                📄 {t.exportPdf}
-              </button>
-              <button
-                onClick={handleSendEmail}
-                disabled={isExporting || !userEmail}
-                className="flex-1 py-3 rounded-xl font-semibold"
-                style={{ backgroundColor: '#3b82f6', color: 'white' }}
-              >
-                📧 {t.exportEmail}
-              </button>
-            </div>
+            {/* Send Report Button */}
+            <button
+              onClick={() => {
+                setEmailTo(userEmail);
+                setShowEmailModal(true);
+              }}
+              disabled={isExporting}
+              className="btn-universal w-full text-button"
+              style={{
+                minHeight: '52px',
+                backgroundColor: 'var(--zanah)',
+                color: 'var(--deep-teal)'
+              }}
+            >
+              📧 {t.sendReport}
+            </button>
           </>
         )}
       </div>
+
+      {/* Email Modal */}
+      {showEmailModal && (
+        <div
+          className="fixed inset-0 flex items-center justify-center z-50"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+          onClick={() => setShowEmailModal(false)}
+        >
+          <div
+            className="rounded-2xl p-6 w-full max-w-sm mx-4"
+            style={{ backgroundColor: 'var(--polar)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Title */}
+            <h3 className="text-lg font-bold text-center mb-6" style={{ color: 'var(--deep-teal)' }}>
+              📧 {t.sendReport}
+            </h3>
+
+            {/* Email Input */}
+            <label className="text-button mb-2 block" style={{ color: 'var(--deep-teal)' }}>
+              {t.emailRecipient}
+            </label>
+            <input
+              type="email"
+              value={emailTo}
+              onChange={(e) => setEmailTo(e.target.value)}
+              placeholder="email@example.com"
+              className="w-full rounded-2xl text-button mb-6"
+              style={{
+                border: '2px solid var(--deep-teal)',
+                color: 'var(--deep-teal)',
+                backgroundColor: 'white',
+                minHeight: '52px',
+                padding: '12px'
+              }}
+            />
+
+            {/* Format Selection */}
+            <label className="text-button mb-2 block" style={{ color: 'var(--deep-teal)' }}>
+              {t.selectFormat}
+            </label>
+            <div className="flex gap-4 mb-6">
+              <button
+                onClick={() => setReportFormat('pdf')}
+                className="flex-1 rounded-2xl text-button"
+                style={{
+                  minHeight: '52px',
+                  backgroundColor: reportFormat === 'pdf' ? 'var(--zanah)' : 'transparent',
+                  border: reportFormat === 'pdf' ? 'none' : '2px solid var(--deep-teal)',
+                  color: 'var(--deep-teal)'
+                }}
+              >
+                📄 PDF
+              </button>
+              <button
+                onClick={() => setReportFormat('excel')}
+                className="flex-1 rounded-2xl text-button"
+                style={{
+                  minHeight: '52px',
+                  backgroundColor: reportFormat === 'excel' ? 'var(--zanah)' : 'transparent',
+                  border: reportFormat === 'excel' ? 'none' : '2px solid var(--deep-teal)',
+                  color: 'var(--deep-teal)'
+                }}
+              >
+                📥 Excel
+              </button>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-4">
+              <button
+                onClick={() => setShowEmailModal(false)}
+                className="flex-1 rounded-2xl text-button"
+                style={{
+                  minHeight: '52px',
+                  backgroundColor: 'transparent',
+                  border: '2px solid var(--deep-teal)',
+                  color: 'var(--deep-teal)'
+                }}
+              >
+                {t.cancel}
+              </button>
+              <button
+                onClick={handleSendReportEmail}
+                disabled={isExporting || !emailTo}
+                className="flex-1 rounded-2xl text-button"
+                style={{
+                  minHeight: '52px',
+                  backgroundColor: 'var(--zanah)',
+                  color: 'var(--deep-teal)',
+                  opacity: (!emailTo || isExporting) ? 0.5 : 1
+                }}
+              >
+                {isExporting ? '...' : t.send}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </BackgroundPage>
   );
 }
