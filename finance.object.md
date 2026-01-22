@@ -75,6 +75,8 @@
 | Секционные заголовки | `var(--polar)` |
 | Кнопки "+ Добавить" | `var(--deep-teal)` |
 | Кнопка "Расчёт Прибыли" | `white` |
+| Итого Расходов (метка) | `var(--deep-teal)` |
+| Итого Расходов (сумма) | `var(--orange)` |
 
 ### Шрифты:
 
@@ -397,7 +399,7 @@ const groupByPaymentMethod = () => {
       <div className="btn-universal w-full text-lg flex justify-between items-center px-4"
            style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}>
         <span className="font-semibold">{t.totalExpensesTitle}</span>
-        <span className="font-bold">{formatEuro(...)}</span>
+        <span className="font-bold" style={{ color: 'var(--orange)' }}>{formatEuro(...)}</span>
       </div>
 
       {/* Платёжный Анализ */}

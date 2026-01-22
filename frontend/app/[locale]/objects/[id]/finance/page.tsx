@@ -746,7 +746,7 @@ export default function ObjectFinancePage() {
                 <span className="font-semibold">
                   {t.totalExpensesTitle}
                 </span>
-                <span className="font-bold">
+                <span className="font-bold" style={{ color: 'var(--orange)' }}>
                   {formatEuro(expenses.reduce((sum, exp) => sum + exp.amount, 0))}
                 </span>
               </div>
@@ -1713,7 +1713,7 @@ function AddExpenseForm({
       const response = await fetch('/api/analyze-receipt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: base64Image, locale }),
+        body: JSON.stringify({ imageBase64: base64Image, locale }),
       });
 
       const result = await response.json();
