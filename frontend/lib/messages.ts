@@ -89,6 +89,13 @@ export const messages = {
       invalidAfmInactive: "Το ΑΦΜ είναι για ιδιώτη. Παρακαλώ επιλέξτε 'Με απόδειξη'",
       countryCode: "Κωδικός χώρας",
       backToHome: "← Πίσω",
+      // Referral validation messages
+      selfReferralError: "Δεν μπορείτε να χρησιμοποιήσετε τον δικό σας κωδικό παραπομπής",
+      invalidReferralError: "Μη έγκυρος κωδικός παραπομπής",
+      referrerNotActiveError: "Ο λογαριασμός του συστάτη δεν είναι ενεργός",
+      validatingReferral: "Επαλήθευση κωδικού παραπομπής...",
+      referralApplied: "Ο κωδικός παραπομπής εφαρμόστηκε!",
+      enterEmailForReferral: "Εισάγετε το email σας για να επαληθεύσετε τον κωδικό παραπομπής",
     },
     thankYou: {
       title: "Ευχαριστούμε για την εγγραφή!",
@@ -467,6 +474,13 @@ export const messages = {
       invalidAfmInactive: "ΑΦΜ для частного лица. Пожалуйста, выберите 'С чеком'",
       countryCode: "Код страны",
       backToHome: "← Назад",
+      // Referral validation messages
+      selfReferralError: "Вы не можете использовать свой собственный реферальный код",
+      invalidReferralError: "Недействительный реферальный код",
+      referrerNotActiveError: "Аккаунт реферера не активен",
+      validatingReferral: "Проверка реферального кода...",
+      referralApplied: "Реферальный код применен!",
+      enterEmailForReferral: "Введите email для проверки реферального кода",
     },
     thankYou: {
       title: "Спасибо за регистрацию!",
@@ -845,6 +859,13 @@ export const messages = {
       invalidAfmInactive: "ΑΦΜ для приватної особи. Будь ласка, оберіть 'З чеком'",
       countryCode: "Код країни",
       backToHome: "← Назад",
+      // Referral validation messages
+      selfReferralError: "Ви не можете використовувати власний реферальний код",
+      invalidReferralError: "Недійсний реферальний код",
+      referrerNotActiveError: "Акаунт реферера не активний",
+      validatingReferral: "Перевірка реферального коду...",
+      referralApplied: "Реферальний код застосовано!",
+      enterEmailForReferral: "Введіть email для перевірки реферального коду",
     },
     thankYou: {
       title: "Дякуємо за реєстрацію!",
@@ -1223,6 +1244,13 @@ export const messages = {
       invalidAfmInactive: "ΑΦΜ për individ privat. Ju lutemi zgjidhni 'Me kupon'",
       countryCode: "Kodi i vendit",
       backToHome: "← Kthehu",
+      // Referral validation messages
+      selfReferralError: "Nuk mund të përdorni kodin tuaj të referimit",
+      invalidReferralError: "Kod referimi i pavlefshëm",
+      referrerNotActiveError: "Llogaria e referuesit nuk është aktive",
+      validatingReferral: "Duke verifikuar kodin e referimit...",
+      referralApplied: "Kodi i referimit u aplikua!",
+      enterEmailForReferral: "Vendosni email-in tuaj për të verifikuar kodin e referimit",
     },
     thankYou: {
       title: "Faleminderit për regjistrimin!",
@@ -1601,6 +1629,13 @@ export const messages = {
       invalidAfmInactive: "ΑΦΜ е за частно лице. Моля изберете 'С касова бележка'",
       countryCode: "Код на държава",
       backToHome: "← Назад",
+      // Referral validation messages
+      selfReferralError: "Не можете да използвате собствения си реферален код",
+      invalidReferralError: "Невалиден реферален код",
+      referrerNotActiveError: "Акаунтът на реферера не е активен",
+      validatingReferral: "Проверка на реферален код...",
+      referralApplied: "Рефералният код е приложен!",
+      enterEmailForReferral: "Въведете имейл за проверка на реферален код",
     },
     thankYou: {
       title: "Благодарим за регистрацията!",
@@ -1979,6 +2014,13 @@ export const messages = {
       invalidAfmInactive: "ΑΦΜ pentru persoană fizică. Vă rugăm selectați 'Cu chitanță'",
       countryCode: "Cod țară",
       backToHome: "← Înapoi",
+      // Referral validation messages
+      selfReferralError: "Nu puteți utiliza propriul cod de recomandare",
+      invalidReferralError: "Cod de recomandare invalid",
+      referrerNotActiveError: "Contul referentului nu este activ",
+      validatingReferral: "Verificare cod de recomandare...",
+      referralApplied: "Codul de recomandare a fost aplicat!",
+      enterEmailForReferral: "Introduceți emailul pentru a verifica codul de recomandare",
     },
     thankYou: {
       title: "Vă mulțumim pentru înregistrare!",
@@ -2357,6 +2399,13 @@ export const messages = {
       invalidAfmInactive: "ΑΦΜ is for private individual. Please select 'With receipt'",
       countryCode: "Country code",
       backToHome: "← Back",
+      // Referral validation messages
+      selfReferralError: "You cannot use your own referral code",
+      invalidReferralError: "Invalid referral code",
+      referrerNotActiveError: "Referrer account is not active",
+      validatingReferral: "Validating referral code...",
+      referralApplied: "Referral code applied!",
+      enterEmailForReferral: "Enter your email to validate referral code",
     },
     thankYou: {
       title: "Thank you for registering!",
@@ -2735,6 +2784,13 @@ export const messages = {
       invalidAfmInactive: "ΑΦΜ للفرد الخاص. الرجاء اختيار 'مع إيصال'",
       countryCode: "رمز البلد",
       backToHome: "← رجوع",
+      // Referral validation messages
+      selfReferralError: "لا يمكنك استخدام رمز الإحالة الخاص بك",
+      invalidReferralError: "رمز الإحالة غير صالح",
+      referrerNotActiveError: "حساب المُحيل غير نشط",
+      validatingReferral: "...جاري التحقق من رمز الإحالة",
+      referralApplied: "!تم تطبيق رمز الإحالة",
+      enterEmailForReferral: "أدخل بريدك الإلكتروني للتحقق من رمز الإحالة",
     },
     thankYou: {
       title: "!شكراً لتسجيلك",

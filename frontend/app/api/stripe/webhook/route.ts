@@ -155,9 +155,13 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
 
     // 🎁 РЕФЕРАЛЬНАЯ ПРОГРАММА: Начисление bonus month
     // Если пользователь пришел по реферальной ссылке - начислить +1 месяц рефереру
+    // ТОЛЬКО за реальный платеж (не $0 / trial)
+    const paymentAmount = (session.amount_total || 0) / 100;
+
     if (profile.referred_by) {
       console.log(`🎁 WEBHOOK: Пользователь пришел по реферальной ссылке: ${profile.referred_by}`);
-      await rewardReferrer(userId, profile.referred_by, profile.email);
+      console.log(`   Сумма платежа: ${paymentAmount}€`);
+      await rewardReferrer(userId, profile.referred_by, profile.email, paymentAmount);
     } else {
       console.log('ℹ️ WEBHOOK: Пользователь не использовал реферальную ссылку');
     }
@@ -306,17 +310,33 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
 
 /**
  * Начисление bonus month рефереру
+ *
+ * ОГРАНИЧЕНИЯ ANTI-FRAUD:
+ * 1. Нельзя приглашать самого себя (проверка на этапе регистрации)
+ * 2. Бонус только за реального платящего клиента (проверка payment_status)
+ * 3. Защита от цепочек фейков (проверки ниже)
  */
-async function rewardReferrer(newUserId: string, referralCode: string, newUserEmail: string) {
+async function rewardReferrer(
+  newUserId: string,
+  referralCode: string,
+  newUserEmail: string,
+  paymentAmount: number
+) {
   console.log('🎁 WEBHOOK: Начисление bonus month рефереру...', referralCode);
 
   const supabase = await createClient();
 
   try {
+    // ⚠️ ANTI-FRAUD ПРОВЕРКА 1: Платеж должен быть реальным (не $0)
+    if (paymentAmount <= 0) {
+      console.error('❌ WEBHOOK: Отклонено - платеж $0 (trial/free):', newUserEmail);
+      return;
+    }
+
     // Находим реферера по его referral_code
     const { data: referrer, error: referrerError } = await supabase
       .from('profiles')
-      .select('id, bonus_months, referrals_count, email, name, preferred_language')
+      .select('id, email, bonus_months, referrals_count, name, preferred_language, account_purchased')
       .eq('referral_code', referralCode)
       .single();
 
@@ -325,7 +345,52 @@ async function rewardReferrer(newUserId: string, referralCode: string, newUserEm
       return;
     }
 
-    // Начисляем +1 bonus month рефереру
+    // ⚠️ ANTI-FRAUD ПРОВЕРКА 2: Нельзя приглашать самого себя
+    if (referrer.email?.toLowerCase() === newUserEmail.toLowerCase()) {
+      console.error('❌ WEBHOOK: Отклонено - попытка self-referral:', newUserEmail);
+      return;
+    }
+
+    // ⚠️ ANTI-FRAUD ПРОВЕРКА 3: Реферер должен сам иметь оплаченный аккаунт
+    if (!referrer.account_purchased) {
+      console.error('❌ WEBHOOK: Отклонено - реферер без оплаченного аккаунта:', referralCode);
+      return;
+    }
+
+    // ⚠️ ANTI-FRAUD ПРОВЕРКА 4: Проверка на цепочки фейков
+    // Получаем всех рефералов этого реферера за последние 24 часа
+    const oneDayAgo = new Date();
+    oneDayAgo.setHours(oneDayAgo.getHours() - 24);
+
+    const { data: recentReferrals, error: recentError } = await supabase
+      .from('profiles')
+      .select('id, email, created_at')
+      .eq('referred_by', referralCode)
+      .gte('created_at', oneDayAgo.toISOString());
+
+    if (!recentError && recentReferrals && recentReferrals.length >= 5) {
+      // Более 5 рефералов за 24 часа - подозрительная активность
+      console.error('⚠️ WEBHOOK: Подозрительная активность - слишком много рефералов за 24ч:', {
+        referralCode,
+        count: recentReferrals.length,
+        referrerEmail: referrer.email,
+      });
+      // Продолжаем начисление, но логируем для ручной проверки
+    }
+
+    // ⚠️ ANTI-FRAUD ПРОВЕРКА 5: Проверка на одинаковый email domain
+    const newUserDomain = newUserEmail.split('@')[1]?.toLowerCase();
+    const referrerDomain = referrer.email?.split('@')[1]?.toLowerCase();
+
+    if (newUserDomain && referrerDomain && newUserDomain === referrerDomain) {
+      // Одинаковый домен email - может быть легитимно (корпоративный), логируем
+      console.log('⚠️ WEBHOOK: Внимание - одинаковый email domain:', {
+        referralCode,
+        domain: newUserDomain,
+      });
+    }
+
+    // ✅ Все проверки пройдены - начисляем бонус
     const newBonusMonths = (referrer.bonus_months || 0) + 1;
 
     const { error: updateError } = await supabase

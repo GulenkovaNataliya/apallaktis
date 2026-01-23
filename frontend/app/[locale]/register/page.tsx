@@ -46,7 +46,12 @@ export default function RegisterPage() {
   const tLanding = messages[locale]?.landing || messages.el.landing;
 
   // Get referral code from URL (?ref=ABC123)
-  const referralCode = searchParams.get('ref');
+  const referralCodeFromUrl = searchParams.get('ref');
+
+  // Referral validation state
+  const [validatedReferralCode, setValidatedReferralCode] = useState<string | null>(null);
+  const [referralError, setReferralError] = useState<string | null>(null);
+  const [isValidatingReferral, setIsValidatingReferral] = useState(false);
 
   const [invoiceType, setInvoiceType] = useState<"invoice" | "receipt">("receipt");
   const [formData, setFormData] = useState({
@@ -78,6 +83,57 @@ export default function RegisterPage() {
   } | null>(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Validate referral code when email changes or on initial load
+  const validateReferralCode = async (email: string) => {
+    if (!referralCodeFromUrl) return;
+
+    setIsValidatingReferral(true);
+    setReferralError(null);
+
+    try {
+      const response = await fetch('/api/referral/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          referralCode: referralCodeFromUrl,
+          userEmail: email,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.valid) {
+        setValidatedReferralCode(data.referralCode);
+        setReferralError(null);
+      } else {
+        setValidatedReferralCode(null);
+        // Set error message based on error type
+        if (data.error === 'SELF_REFERRAL') {
+          setReferralError(t.selfReferralError || 'You cannot use your own referral code');
+        } else if (data.error === 'INVALID_CODE') {
+          setReferralError(t.invalidReferralError || 'Invalid referral code');
+        } else if (data.error === 'REFERRER_NOT_ACTIVE') {
+          setReferralError(t.referrerNotActiveError || 'Referrer account is not active');
+        }
+      }
+    } catch (error) {
+      console.error('Referral validation error:', error);
+      setValidatedReferralCode(null);
+    } finally {
+      setIsValidatingReferral(false);
+    }
+  };
+
+  // Validate referral code when email is entered and valid
+  useEffect(() => {
+    if (referralCodeFromUrl && isValidEmail(formData.email)) {
+      const timeoutId = setTimeout(() => {
+        validateReferralCode(formData.email);
+      }, 500); // Debounce
+      return () => clearTimeout(timeoutId);
+    }
+  }, [formData.email, referralCodeFromUrl]);
 
   // AFM lookup function (TaxisNet/VIES)
   const handleAfmLookup = async () => {
@@ -182,6 +238,18 @@ export default function RegisterPage() {
         password: formData.password,
         options: {
           emailRedirectTo: `${window.location.origin}/${locale}/email-confirmed`,
+          data: {
+            name: formData.name,
+            phone: `${formData.countryCode}${formData.phone}`,
+            invoice_type: invoiceType,
+            company_name: invoiceType === 'invoice' ? formData.companyName : null,
+            afm: invoiceType === 'invoice' ? formData.afm : null,
+            doy: invoiceType === 'invoice' && afmResult ? afmResult.doy : null,
+            address: invoiceType === 'invoice' && afmResult ? afmResult.address : null,
+            preferred_language: locale,
+            // Referral code - only if validated
+            referred_by: validatedReferralCode || null,
+          },
         },
       });
 
@@ -233,6 +301,45 @@ export default function RegisterPage() {
           >
             {t.title}
           </h1>
+
+          {/* Referral Code Status */}
+          {referralCodeFromUrl && (
+            <div
+              className="rounded-2xl p-4 text-center"
+              style={{
+                backgroundColor: referralError
+                  ? 'rgba(255, 106, 26, 0.1)'
+                  : validatedReferralCode
+                  ? 'rgba(37, 211, 102, 0.1)'
+                  : 'rgba(255, 255, 255, 0.1)',
+                border: `1px solid ${
+                  referralError
+                    ? '#ff6a1a'
+                    : validatedReferralCode
+                    ? '#25D366'
+                    : '#ccc'
+                }`,
+              }}
+            >
+              {isValidatingReferral ? (
+                <p className="text-body" style={{ color: 'var(--polar)' }}>
+                  {t.validatingReferral || 'Validating referral code...'}
+                </p>
+              ) : referralError ? (
+                <p className="text-body" style={{ color: '#ff6a1a' }}>
+                  {referralError}
+                </p>
+              ) : validatedReferralCode ? (
+                <p className="text-body" style={{ color: '#25D366' }}>
+                  {t.referralApplied || `Referral code ${validatedReferralCode} applied!`}
+                </p>
+              ) : (
+                <p className="text-body" style={{ color: 'var(--polar)' }}>
+                  {t.enterEmailForReferral || 'Enter your email to validate referral code'}
+                </p>
+              )}
+            </div>
+          )}
 
               <form onSubmit={handleSubmit} className="flex flex-col flex-1 gap-6">
             {/* Invoice Type Toggle */}
