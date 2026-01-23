@@ -6,6 +6,7 @@ export const messages = {
       register: "Δημιουργία λογαριασμού",
       terms: "Όροι χρήσης",
       privacy: "Πολιτική Απορρήτου",
+      backToLanguageSelection: "Επιστροφή στην επιλογή γλώσσας",
     },
     login: {
       title: "Είσοδος",
@@ -350,6 +351,7 @@ export const messages = {
       register: "Создать аккаунт",
       terms: "Условия использования",
       privacy: "Политика конфиденциальности",
+      backToLanguageSelection: "Вернуться к выбору языка",
     },
     login: {
       title: "Вход",
@@ -693,6 +695,7 @@ export const messages = {
       register: "Створити акаунт",
       terms: "Умови користування",
       privacy: "Політика конфіденційності",
+      backToLanguageSelection: "Повернутися до вибору мови",
     },
     login: {
       title: "Вхід",
@@ -1036,6 +1039,7 @@ export const messages = {
       register: "Krijoni llogari",
       terms: "Kushtet",
       privacy: "Privatësia",
+      backToLanguageSelection: "Kthehu te zgjedhja e gjuhës",
     },
     login: {
       title: "Hyrje",
@@ -1379,6 +1383,7 @@ export const messages = {
       register: "Създаване на акаунт",
       terms: "Условия за ползване",
       privacy: "Политика за поверителност",
+      backToLanguageSelection: "Обратно към избор на език",
     },
     login: {
       title: "Вход",
@@ -1722,6 +1727,7 @@ export const messages = {
       register: "Creare cont",
       terms: "Termeni de utilizare",
       privacy: "Politica de confidențialitate",
+      backToLanguageSelection: "Înapoi la selectarea limbii",
     },
     login: {
       title: "Autentificare",
@@ -2065,6 +2071,7 @@ export const messages = {
       register: "Create account",
       terms: "Terms of use",
       privacy: "Privacy policy",
+      backToLanguageSelection: "Back to language selection",
     },
     login: {
       title: "Login",
@@ -2408,6 +2415,7 @@ export const messages = {
       register: "إنشاء حساب",
       terms: "الشروط والأحكام",
       privacy: "سياسة الخصوصية",
+      backToLanguageSelection: "العودة إلى اختيار اللغة",
     },
     login: {
       title: "تسجيل الدخول",

@@ -16,9 +16,16 @@ export default function LandingPage() {
       <VideoBackground videoSrc="/video/video1.mp4" posterSrc="/pages/page-01.webp" />
 
       {/* Content overlay */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 safe-area-top safe-area-bottom">
-        {/* Main content - centered vertically */}
-        <div className="flex w-full max-w-sm flex-col items-center gap-12">
+      <div className="relative z-10 flex min-h-screen flex-col items-center px-4 safe-area-top safe-area-bottom" style={{ paddingTop: '180px', paddingLeft: '40px', paddingRight: '40px' }}>
+        <div className="w-full max-w-sm flex flex-col gap-12">
+          {/* Back button */}
+          <Link
+            href="/language-select"
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)' }}
+          >
+            {t.backToLanguageSelection}
+          </Link>
           <h1
             className="text-center text-slogan font-semibold"
             style={{ color: "#ff8f0a", width: "75%" }}

@@ -6,6 +6,7 @@ import { messages } from "./lib/messages";
 export const locales = ["el", "ru", "uk", "sq", "bg", "ro", "en", "ar"] as const;
 export type Locale = (typeof locales)[number];
 
+// Default locale is set to "el", but users must explicitly choose it via /language-select
 export const defaultLocale: Locale = "el";
 
 // RTL languages
