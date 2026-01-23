@@ -587,8 +587,8 @@ export default function AnalysisPage() {
           setSubscriptionPlan(profile.subscription_plan);
           setUserEmail(profile.email || '');
 
-          // Check if user has Standard or Premium
-          const hasAccess = ['standard', 'premium', 'vip'].includes(profile.subscription_plan || '');
+          // Check if user has Basic, Standard, Premium or VIP
+          const hasAccess = ['basic', 'standard', 'premium', 'vip'].includes(profile.subscription_plan || '');
           setHasAccess(hasAccess);
 
           if (hasAccess) {
