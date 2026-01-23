@@ -128,6 +128,11 @@ export default function ObjectFinancePage() {
   const tObjects = messages[locale]?.objects || messages.el.objects;
   const { user } = useAuth();
 
+  // Check if user has access to voice input and photo receipt (Standard/Premium/VIP only)
+  const hasVoiceAndPhoto = user?.subscriptionPlan === 'standard' ||
+                           user?.subscriptionPlan === 'premium' ||
+                           user?.subscriptionPlan === 'vip';
+
   const [mounted, setMounted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [object, setObject] = useState<PropertyObject | null>(null);
@@ -2354,19 +2359,21 @@ function AddExpenseForm({
           <label className="text-button" style={{ color: 'var(--polar)' }}>
             {t.description}
           </label>
-          <button
-            type="button"
-            onClick={handleVoiceInput}
-            disabled={isAnalyzing}
-            className="px-4 py-2 rounded-2xl text-button font-semibold flex items-center gap-2"
-            style={{
-              backgroundColor: isRecording ? '#ff6a1a' : isAnalyzing ? 'var(--polar)' : 'var(--zanah)',
-              color: isRecording ? 'white' : 'var(--deep-teal)',
-              minHeight: '52px',
-            }}
-          >
-            {isRecording ? '⏹️ STOP' : isAnalyzing ? '🤖 ...' : `🎤 ${t.voiceButton || 'Voice'}`}
-          </button>
+          {hasVoiceAndPhoto && (
+            <button
+              type="button"
+              onClick={handleVoiceInput}
+              disabled={isAnalyzing}
+              className="px-4 py-2 rounded-2xl text-button font-semibold flex items-center gap-2"
+              style={{
+                backgroundColor: isRecording ? '#ff6a1a' : isAnalyzing ? 'var(--polar)' : 'var(--zanah)',
+                color: isRecording ? 'white' : 'var(--deep-teal)',
+                minHeight: '52px',
+              }}
+            >
+              {isRecording ? '⏹️ STOP' : isAnalyzing ? '🤖 ...' : `🎤 ${t.voiceButton || 'Voice'}`}
+            </button>
+          )}
         </div>
         {(isRecording || isAnalyzing) && (
           <div
@@ -2390,57 +2397,59 @@ function AddExpenseForm({
       </div>
 
       {/* Receipt Photo */}
-      <div>
-        <label className="block mb-3 text-button" style={{ color: 'var(--polar)' }}>
-          {t.receiptPhoto} {isAnalyzing && '🔄'}
-        </label>
-        {!photoPreview ? (
-          <label className="w-full rounded-2xl text-center cursor-pointer flex items-center justify-center"
-            style={{ border: '2px dashed var(--polar)', color: 'var(--polar)', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}>
-            <span>{t.uploadPhoto}</span>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handlePhotoChange}
-              className="hidden"
-            />
+      {hasVoiceAndPhoto && (
+        <div>
+          <label className="block mb-3 text-button" style={{ color: 'var(--polar)' }}>
+            {t.receiptPhoto} {isAnalyzing && '🔄'}
           </label>
-        ) : (
-          <div className="relative">
-            <img
-              src={photoPreview}
-              alt="Receipt preview"
-              className="rounded-2xl w-full"
-              style={{ maxHeight: '300px', objectFit: 'cover', opacity: isAnalyzing ? 0.5 : 1 }}
-            />
-            {isAnalyzing && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-4xl animate-pulse">🔄</div>
-              </div>
-            )}
-            <button
-              type="button"
-              onClick={handleRemovePhoto}
-              disabled={isAnalyzing}
-              className="absolute top-2 right-2 px-4 py-2 rounded-2xl text-button font-semibold"
-              style={{ backgroundColor: '#ff6a1a', color: 'white', minHeight: '44px' }}
-            >
-              {t.removePhoto}
-            </button>
-            {!isAnalyzing && (
-              <p className="absolute bottom-0 left-0 right-0 text-center py-2 rounded-b-2xl"
-                style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: 'var(--orange)', fontSize: '18px', fontWeight: 600 }}>
-                {tGlobal.deletePhotoToSave || 'Удалите фото, чтобы сохранить'}
-              </p>
-            )}
-          </div>
-        )}
-        {analyzeError && (
-          <p className="mt-2 text-center" style={{ color: 'var(--orange)' }}>
-            {analyzeError}
-          </p>
-        )}
-      </div>
+          {!photoPreview ? (
+            <label className="w-full rounded-2xl text-center cursor-pointer flex items-center justify-center"
+              style={{ border: '2px dashed var(--polar)', color: 'var(--polar)', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}>
+              <span>{t.uploadPhoto}</span>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                className="hidden"
+              />
+            </label>
+          ) : (
+            <div className="relative">
+              <img
+                src={photoPreview}
+                alt="Receipt preview"
+                className="rounded-2xl w-full"
+                style={{ maxHeight: '300px', objectFit: 'cover', opacity: isAnalyzing ? 0.5 : 1 }}
+              />
+              {isAnalyzing && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-4xl animate-pulse">🔄</div>
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={handleRemovePhoto}
+                disabled={isAnalyzing}
+                className="absolute top-2 right-2 px-4 py-2 rounded-2xl text-button font-semibold"
+                style={{ backgroundColor: '#ff6a1a', color: 'white', minHeight: '44px' }}
+              >
+                {t.removePhoto}
+              </button>
+              {!isAnalyzing && (
+                <p className="absolute bottom-0 left-0 right-0 text-center py-2 rounded-b-2xl"
+                  style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: 'var(--orange)', fontSize: '18px', fontWeight: 600 }}>
+                  {tGlobal.deletePhotoToSave || 'Удалите фото, чтобы сохранить'}
+                </p>
+              )}
+            </div>
+          )}
+          {analyzeError && (
+            <p className="mt-2 text-center" style={{ color: 'var(--orange)' }}>
+              {analyzeError}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Submit Buttons */}
       <div className="flex gap-4 mt-4">

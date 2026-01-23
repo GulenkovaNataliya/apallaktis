@@ -33,34 +33,79 @@ export default function LandingPage() {
             {t.slogan}
           </h1>
 
-          {/* Action buttons */}
+          {/* Action buttons - 4 buttons with gradient from object color deck */}
           <div className="flex w-full flex-col gap-12 items-center">
-            <div className="btn-single-wrapper">
-              <Link
-                href={`/${locale}/login`}
-                className="btn-primary text-button btn-single text-center"
-                style={{
-                  backgroundColor: "var(--polar)",
-                  color: "var(--deep-teal)",
-                  boxShadow: "0 4px 8px var(--deep-teal)",
-                }}
-              >
-                {t.login}
-              </Link>
-            </div>
-            <div className="btn-single-wrapper">
-              <Link
-                href={`/${locale}/register`}
-                className="btn-primary text-button btn-single text-center"
-                style={{
-                  backgroundColor: "var(--polar)",
-                  color: "var(--deep-teal)",
-                  boxShadow: "0 4px 8px var(--deep-teal)",
-                }}
-              >
-                {t.register}
-              </Link>
-            </div>
+            {/* Button 1: Login */}
+            <Link
+              href={`/${locale}/login`}
+              className="btn-primary text-button text-center w-full"
+              style={{
+                minHeight: "52px",
+                backgroundColor: "#e7f4f1",
+                color: "#033a45",
+                boxShadow: "0 4px 8px #033a45",
+                borderRadius: "1rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {t.login}
+            </Link>
+
+            {/* Button 2: Register */}
+            <Link
+              href={`/${locale}/register`}
+              className="btn-primary text-button text-center w-full"
+              style={{
+                minHeight: "52px",
+                backgroundColor: "#dbeee8",
+                color: "#033a45",
+                boxShadow: "0 4px 8px #033a45",
+                borderRadius: "1rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {t.register}
+            </Link>
+
+            {/* Button 3: View Pricing */}
+            <Link
+              href={`/${locale}/pricing`}
+              className="btn-primary text-button text-center w-full"
+              style={{
+                minHeight: "52px",
+                backgroundColor: "#cfe8e3",
+                color: "#033a45",
+                boxShadow: "0 4px 8px #033a45",
+                borderRadius: "1rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {t.viewPricing}
+            </Link>
+
+            {/* Button 4: How to Use */}
+            <Link
+              href={`/${locale}/help`}
+              className="btn-primary text-button text-center w-full"
+              style={{
+                minHeight: "52px",
+                backgroundColor: "#c3e2dc",
+                color: "#033a45",
+                boxShadow: "0 4px 8px #033a45",
+                borderRadius: "1rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {t.howToUse}
+            </Link>
           </div>
         </div>
       </div>

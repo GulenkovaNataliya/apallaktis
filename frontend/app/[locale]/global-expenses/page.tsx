@@ -78,6 +78,11 @@ export default function GlobalExpensesPage() {
   const t = messages[locale]?.globalExpenses || messages.el.globalExpenses;
   const { user } = useAuth();
 
+  // Check if user has access to voice input and photo receipt (Standard/Premium/VIP only)
+  const hasVoiceAndPhoto = user?.subscriptionPlan === 'standard' ||
+                           user?.subscriptionPlan === 'premium' ||
+                           user?.subscriptionPlan === 'vip';
+
   // Categories state
   const [categories, setCategories] = useState<ExpenseCategory[]>([]);
 
@@ -1282,21 +1287,23 @@ function ExpenseForm({
           <label className="text-button" style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}>
             {t.description}
           </label>
-          <button
-            type="button"
-            onClick={handleVoiceInput}
-            disabled={isAnalyzing}
-            className="px-4 rounded-2xl flex items-center justify-center gap-2"
-            style={{
-              backgroundColor: isRecording ? '#ff6a1a' : isAnalyzing ? 'var(--polar)' : 'var(--zanah)',
-              color: isRecording ? 'white' : 'var(--deep-teal)',
-              minHeight: '40px',
-              fontSize: '16px',
-              fontWeight: 600
-            }}
-          >
-            {isRecording ? '⏹️ STOP' : isAnalyzing ? '🤖 ...' : `🎤 ${t.voiceButton}`}
-          </button>
+          {hasVoiceAndPhoto && (
+            <button
+              type="button"
+              onClick={handleVoiceInput}
+              disabled={isAnalyzing}
+              className="px-4 rounded-2xl flex items-center justify-center gap-2"
+              style={{
+                backgroundColor: isRecording ? '#ff6a1a' : isAnalyzing ? 'var(--polar)' : 'var(--zanah)',
+                color: isRecording ? 'white' : 'var(--deep-teal)',
+                minHeight: '40px',
+                fontSize: '16px',
+                fontWeight: 600
+              }}
+            >
+              {isRecording ? '⏹️ STOP' : isAnalyzing ? '🤖 ...' : `🎤 ${t.voiceButton}`}
+            </button>
+          )}
         </div>
         {(isRecording || isAnalyzing) && (
           <div
@@ -1320,63 +1327,65 @@ function ExpenseForm({
       </div>
 
       {/* Receipt Photo */}
-      <div>
-        <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
-          {t.receiptPhoto} {isAnalyzing && '🔄'}
-        </label>
-        {!photoPreview ? (
-          <label className="w-full rounded-2xl text-center cursor-pointer flex items-center justify-center"
-            style={{ border: '2px dashed var(--polar)', color: 'var(--polar)', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}>
-            <span>{t.uploadPhoto}</span>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handlePhotoChange}
-              className="hidden"
-            />
+      {hasVoiceAndPhoto && (
+        <div>
+          <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+            {t.receiptPhoto} {isAnalyzing && '🔄'}
           </label>
-        ) : (
-          <div className="relative">
-            <img
-              src={photoPreview}
-              alt="Receipt preview"
-              className="rounded-2xl w-full"
-              style={{ maxHeight: '300px', objectFit: 'cover', opacity: isAnalyzing ? 0.5 : 1 }}
-            />
-            {isAnalyzing && (
-              <div
-                className="absolute inset-0 flex items-center justify-center rounded-2xl"
-                style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
-              >
-                <div className="text-center" style={{ color: 'white' }}>
-                  <div className="text-2xl mb-2">🤖</div>
-                  <p style={{ fontSize: '16px', fontWeight: 600 }}>{t.analyzing || 'Анализируем чек...'}</p>
+          {!photoPreview ? (
+            <label className="w-full rounded-2xl text-center cursor-pointer flex items-center justify-center"
+              style={{ border: '2px dashed var(--polar)', color: 'var(--polar)', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}>
+              <span>{t.uploadPhoto}</span>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                className="hidden"
+              />
+            </label>
+          ) : (
+            <div className="relative">
+              <img
+                src={photoPreview}
+                alt="Receipt preview"
+                className="rounded-2xl w-full"
+                style={{ maxHeight: '300px', objectFit: 'cover', opacity: isAnalyzing ? 0.5 : 1 }}
+              />
+              {isAnalyzing && (
+                <div
+                  className="absolute inset-0 flex items-center justify-center rounded-2xl"
+                  style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+                >
+                  <div className="text-center" style={{ color: 'white' }}>
+                    <div className="text-2xl mb-2">🤖</div>
+                    <p style={{ fontSize: '16px', fontWeight: 600 }}>{t.analyzing || 'Анализируем чек...'}</p>
+                  </div>
                 </div>
-              </div>
-            )}
-            <button
-              type="button"
-              onClick={handleRemovePhoto}
-              disabled={isAnalyzing}
-              className="absolute top-2 right-2 px-4 rounded-2xl flex items-center justify-center"
-              style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '40px', fontSize: '16px', fontWeight: 600 }}
-            >
-              {t.removePhoto}
-            </button>
-            {!isAnalyzing && (
-              <p className="absolute bottom-0 left-0 right-0 text-center py-2 rounded-b-2xl"
-                style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: 'var(--orange)', fontSize: '18px', fontWeight: 600 }}>
-                {t.deletePhotoToSave}
-              </p>
-            )}
-          </div>
-        )}
-        {analyzeError && (
-          <p className="mt-2 text-center" style={{ color: 'var(--orange)', fontSize: '14px' }}>
-            {analyzeError}
-          </p>
-        )}
-      </div>
+              )}
+              <button
+                type="button"
+                onClick={handleRemovePhoto}
+                disabled={isAnalyzing}
+                className="absolute top-2 right-2 px-4 rounded-2xl flex items-center justify-center"
+                style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '40px', fontSize: '16px', fontWeight: 600 }}
+              >
+                {t.removePhoto}
+              </button>
+              {!isAnalyzing && (
+                <p className="absolute bottom-0 left-0 right-0 text-center py-2 rounded-b-2xl"
+                  style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: 'var(--orange)', fontSize: '18px', fontWeight: 600 }}>
+                  {t.deletePhotoToSave}
+                </p>
+              )}
+            </div>
+          )}
+          {analyzeError && (
+            <p className="mt-2 text-center" style={{ color: 'var(--orange)', fontSize: '14px' }}>
+              {analyzeError}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Buttons */}
       <div className="flex gap-4">
