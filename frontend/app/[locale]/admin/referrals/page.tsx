@@ -52,28 +52,6 @@ export default function AdminReferrals() {
   const [topReferrers, setTopReferrers] = useState<TopReferrer[]>([]);
   const [dailyRegistrations, setDailyRegistrations] = useState<DailyRegistration[]>([]);
 
-  async function checkAuth() {
-    const supabase = createClient();
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (!session) {
-      router.push(`/${locale}/login`);
-      return;
-    }
-
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', session.user.id)
-      .single();
-
-    if (!profile || profile.role !== 'admin') {
-      router.push(`/${locale}`);
-      return;
-    }
-
-    setIsLoading(false);
-  }
 
   async function loadReferralStats() {
     const supabase = createClient();
@@ -174,10 +152,42 @@ export default function AdminReferrals() {
   }
 
   useEffect(() => {
-    checkAuth();
-    loadReferralStats();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const supabase = createClient();
+
+    async function checkAdminAndLoad(userId: string) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .single();
+
+      if (!profile || profile.role !== 'admin') {
+        router.push(`/${locale}`);
+        return;
+      }
+
+      setIsLoading(false);
+      loadReferralStats();
+    }
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        checkAdminAndLoad(session.user.id);
+      } else if (event === 'SIGNED_OUT' || !session) {
+        router.push(`/${locale}/login`);
+      }
+    });
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        checkAdminAndLoad(session.user.id);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [locale, router]);
 
   async function exportToExcel() {
     // Simple CSV export

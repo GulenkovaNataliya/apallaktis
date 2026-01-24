@@ -34,28 +34,26 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function loadStats() {
-      const supabase = createClient();
+    const supabase = createClient();
 
-      // Проверяем авторизацию и роль
-      const { data: { session } } = await supabase.auth.getSession();
-
-      if (!session) {
-        router.push(`/${locale}/login`);
-        return;
-      }
-
+    async function checkAdminAndLoadStats(userId: string) {
       // Проверяем что пользователь - админ
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
-        .eq('id', session.user.id)
+        .eq('id', userId)
         .single();
 
       if (!profile || profile.role !== 'admin') {
         router.push(`/${locale}`);
         return;
       }
+
+      // Загружаем статистику - код ниже
+      loadStatsData();
+    }
+
+    async function loadStatsData() {
 
       // Загружаем статистику
       try {
@@ -115,7 +113,25 @@ export default function AdminDashboard() {
       }
     }
 
-    loadStats();
+    // Слушаем изменения auth state
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        checkAdminAndLoadStats(session.user.id);
+      } else if (event === 'SIGNED_OUT' || !session) {
+        router.push(`/${locale}/login`);
+      }
+    });
+
+    // Проверяем текущую сессию
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        checkAdminAndLoadStats(session.user.id);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [locale, router]);
 
   if (isLoading) {

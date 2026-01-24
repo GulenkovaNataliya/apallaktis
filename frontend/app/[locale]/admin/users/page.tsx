@@ -28,28 +28,18 @@ export default function AdminUsers() {
   const locale = (params.locale as Locale) || "el";
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
   useEffect(() => {
-    loadUsers();
-  }, []);
-
-  async function loadUsers() {
     const supabase = createClient();
 
-    try {
-      // Проверяем авторизацию и роль
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        router.push(`/${locale}/login`);
-        return;
-      }
-
+    async function checkAdminAndLoad(userId: string) {
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
-        .eq('id', session.user.id)
+        .eq('id', userId)
         .single();
 
       if (!profile || profile.role !== 'admin') {
@@ -57,7 +47,59 @@ export default function AdminUsers() {
         return;
       }
 
-      // Загружаем пользователей
+      setIsAdmin(true);
+      loadUsersData();
+    }
+
+    async function loadUsersData() {
+      try {
+        let query = supabase
+          .from('profiles')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (statusFilter !== 'all') {
+          query = query.eq('subscription_status', statusFilter);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+          console.error('Error loading users:', error);
+        } else {
+          setUsers(data || []);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        checkAdminAndLoad(session.user.id);
+      } else if (event === 'SIGNED_OUT' || !session) {
+        router.push(`/${locale}/login`);
+      }
+    });
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        checkAdminAndLoad(session.user.id);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [locale, router, statusFilter]);
+
+  async function loadUsers() {
+    const supabase = createClient();
+    setIsLoading(true);
+
+    try {
       let query = supabase
         .from('profiles')
         .select('*')

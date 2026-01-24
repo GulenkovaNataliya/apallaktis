@@ -29,29 +29,6 @@ export default function AdminVIP() {
   const [reason, setReason] = useState("");
   const [vipUsers, setVIPUsers] = useState<VIPUser[]>([]);
 
-  async function checkAuth() {
-    const supabase = createClient();
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (!session) {
-      router.push(`/${locale}/login`);
-      return;
-    }
-
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', session.user.id)
-      .single();
-
-    if (!profile || profile.role !== 'admin') {
-      router.push(`/${locale}`);
-      return;
-    }
-
-    setIsLoading(false);
-  }
-
   async function loadVIPUsers() {
     const supabase = createClient();
     const { data } = await supabase
@@ -64,10 +41,42 @@ export default function AdminVIP() {
   }
 
   useEffect(() => {
-    checkAuth();
-    loadVIPUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const supabase = createClient();
+
+    async function checkAdminAndLoad(userId: string) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .single();
+
+      if (!profile || profile.role !== 'admin') {
+        router.push(`/${locale}`);
+        return;
+      }
+
+      setIsLoading(false);
+      loadVIPUsers();
+    }
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        checkAdminAndLoad(session.user.id);
+      } else if (event === 'SIGNED_OUT' || !session) {
+        router.push(`/${locale}/login`);
+      }
+    });
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        checkAdminAndLoad(session.user.id);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [locale, router]);
 
   async function activateVIP() {
     if (!email.trim()) {
