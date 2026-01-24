@@ -28,7 +28,7 @@ export default function LandingPage() {
           </Link>
           <h1
             className="text-center text-slogan font-semibold"
-            style={{ color: "#ff8f0a", width: "75%" }}
+            style={{ color: "#ff8f0a", width: "75%", margin: "0 auto" }}
           >
             {t.slogan}
           </h1>
