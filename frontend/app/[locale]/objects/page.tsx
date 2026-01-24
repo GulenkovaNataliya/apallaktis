@@ -16,6 +16,7 @@ import {
   deleteObject as deleteObjectApi,
   type PropertyObject as SupabasePropertyObject,
 } from '@/lib/supabase/services';
+import { getUserTier, canCreateObject, type SubscriptionTier } from '@/lib/subscription';
 
 type ViewType = 'list' | 'add-object' | 'edit-object';
 
@@ -60,8 +61,10 @@ export default function ObjectsPage() {
   const [editingObject, setEditingObject] = useState<PropertyObject | null>(null);
 
   // User subscription state
-  const [isDemo, setIsDemo] = useState(false);
+  const [userTier, setUserTier] = useState<SubscriptionTier>('demo');
   const [isLoading, setIsLoading] = useState(true);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [upgradeMessage, setUpgradeMessage] = useState('');
 
   // Load objects from Supabase
   useEffect(() => {
@@ -96,12 +99,13 @@ export default function ObjectsPage() {
         if (supabaseUser) {
           const { data: profile } = await supabase
             .from('profiles')
-            .select('subscription_status, account_purchased')
+            .select('subscription_status, subscription_tier, account_purchased, demo_expires_at, subscription_expires_at, vip_expires_at')
             .eq('id', supabaseUser.id)
             .single();
 
           if (profile) {
-            setIsDemo(profile.subscription_status === 'demo' && !profile.account_purchased);
+            const tier = getUserTier(profile);
+            setUserTier(tier);
           }
         }
       } catch (error) {
@@ -112,26 +116,63 @@ export default function ObjectsPage() {
     checkSubscription();
   }, []);
 
-  const handleAddObjectClick = () => {
-    // Check DEMO limit (3 objects max)
-    if (isDemo && objects.length >= 3) {
-      const demoLimitMessage = locale === 'el'
-        ? 'Στο DEMO μπορείτε να δημιουργήσετε μέχρι 3 αντικείμενα. Αγοράστε πλήρη λογαριασμό για απεριόριστα αντικείμενα.'
-        : locale === 'ru'
-        ? 'В DEMO можно создать до 3 объектов. Купите полный аккаунт для неограниченного количества объектов.'
-        : locale === 'uk'
-        ? 'У DEMO можна створити до 3 об\'єктів. Придбайте повний акаунт для необмеженої кількості об\'єктів.'
-        : locale === 'sq'
-        ? 'Në DEMO mund të krijoni deri në 3 objekte. Blini llogari të plotë për objekte të pakufizuara.'
-        : locale === 'bg'
-        ? 'В DEMO можете да създадете до 3 обекта. Купете пълен акаунт за неограничен брой обекти.'
-        : locale === 'ro'
-        ? 'În DEMO puteți crea până la 3 obiecte. Cumpărați cont complet pentru obiecte nelimitate.'
-        : locale === 'ar'
-        ? 'في DEMO يمكنك إنشاء ما يصل إلى 3 كائنات. اشترِ حسابًا كاملاً للكائنات غير المحدودة.'
-        : 'In DEMO you can create up to 3 objects. Purchase full account for unlimited objects.';
+  // Subscription limit messages
+  const subscriptionMessages = {
+    el: {
+      objectLimitBasic: 'Φτάσατε το όριο των 10 αντικειμένων. Αναβαθμίστε σε Standard (έως 50) ή Premium (απεριόριστα).',
+      objectLimitStandard: 'Φτάσατε το όριο των 50 αντικειμένων. Αναβαθμίστε σε Premium για απεριόριστα αντικείμενα.',
+      upgradePlan: 'Αναβάθμιση τιμολογίου',
+    },
+    ru: {
+      objectLimitBasic: 'Вы достигли лимита 10 объектов. Улучшите до Standard (до 50) или Premium (безлимит).',
+      objectLimitStandard: 'Вы достигли лимита 50 объектов. Улучшите до Premium для безлимитных объектов.',
+      upgradePlan: 'Улучшить тариф',
+    },
+    uk: {
+      objectLimitBasic: 'Ви досягли ліміту 10 об\'єктів. Покращіть до Standard (до 50) або Premium (безліміт).',
+      objectLimitStandard: 'Ви досягли ліміту 50 об\'єктів. Покращіть до Premium для безлімітних об\'єктів.',
+      upgradePlan: 'Покращити тариф',
+    },
+    sq: {
+      objectLimitBasic: 'Keni arritur limitin e 10 objekteve. Përmirësoni në Standard (deri në 50) ose Premium (pa limit).',
+      objectLimitStandard: 'Keni arritur limitin e 50 objekteve. Përmirësoni në Premium për objekte pa limit.',
+      upgradePlan: 'Përmirëso planin',
+    },
+    bg: {
+      objectLimitBasic: 'Достигнахте лимита от 10 обекта. Надградете до Standard (до 50) или Premium (неограничено).',
+      objectLimitStandard: 'Достигнахте лимита от 50 обекта. Надградете до Premium за неограничени обекти.',
+      upgradePlan: 'Надгради плана',
+    },
+    ro: {
+      objectLimitBasic: 'Ați atins limita de 10 obiecte. Actualizați la Standard (până la 50) sau Premium (nelimitat).',
+      objectLimitStandard: 'Ați atins limita de 50 obiecte. Actualizați la Premium pentru obiecte nelimitate.',
+      upgradePlan: 'Actualizare plan',
+    },
+    en: {
+      objectLimitBasic: 'You reached the limit of 10 objects. Upgrade to Standard (up to 50) or Premium (unlimited).',
+      objectLimitStandard: 'You reached the limit of 50 objects. Upgrade to Premium for unlimited objects.',
+      upgradePlan: 'Upgrade plan',
+    },
+    ar: {
+      objectLimitBasic: 'لقد وصلت إلى حد 10 كائنات. قم بالترقية إلى Standard (حتى 50) أو Premium (غير محدود).',
+      objectLimitStandard: 'لقد وصلت إلى حد 50 كائنًا. قم بالترقية إلى Premium للحصول على كائنات غير محدودة.',
+      upgradePlan: 'ترقية الخطة',
+    },
+  };
 
-      alert(demoLimitMessage);
+  const tSub = subscriptionMessages[locale] || subscriptionMessages.en;
+
+  const handleAddObjectClick = () => {
+    // Check subscription limits
+    const check = canCreateObject(userTier, objects.length);
+
+    if (!check.allowed) {
+      if (check.message === 'objectLimitBasic') {
+        setUpgradeMessage(tSub.objectLimitBasic);
+      } else if (check.message === 'objectLimitStandard') {
+        setUpgradeMessage(tSub.objectLimitStandard);
+      }
+      setShowUpgradeModal(true);
       return;
     }
 
@@ -262,6 +303,53 @@ export default function ObjectsPage() {
               />
             )}
           </div>
+
+          {/* Upgrade Modal */}
+          {showUpgradeModal && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center"
+              style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
+              onClick={() => setShowUpgradeModal(false)}
+            >
+              <div
+                className="rounded-2xl p-8 mx-4 max-w-sm"
+                style={{ backgroundColor: 'var(--deep-teal)', border: '2px solid var(--orange)' }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <p className="text-button text-center mb-6" style={{ color: 'var(--polar)' }}>
+                  {upgradeMessage}
+                </p>
+                <div className="flex flex-col gap-4">
+                  <button
+                    onClick={() => {
+                      setShowUpgradeModal(false);
+                      router.push(`/${locale}/pricing`);
+                    }}
+                    className="btn-universal w-full text-button"
+                    style={{
+                      minHeight: '52px',
+                      backgroundColor: 'var(--orange)',
+                      color: 'var(--deep-teal)',
+                    }}
+                  >
+                    {tSub.upgradePlan}
+                  </button>
+                  <button
+                    onClick={() => setShowUpgradeModal(false)}
+                    className="btn-universal w-full text-button"
+                    style={{
+                      minHeight: '52px',
+                      backgroundColor: 'transparent',
+                      border: '2px solid var(--polar)',
+                      color: 'var(--polar)',
+                    }}
+                  >
+                    {t.cancel || 'Cancel'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </BackgroundPage>
     );

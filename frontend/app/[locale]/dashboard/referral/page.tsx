@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth-context";
 import { type Locale } from "@/lib/messages";
 import BackgroundPage from "@/components/BackgroundPage";
 import { createClient } from "@/lib/supabase/client";
+import { getUserTier, canUseFeature, type SubscriptionTier } from "@/lib/subscription";
 
 interface ReferralStats {
   referral_code: string;
@@ -28,6 +29,37 @@ export default function ReferralPage() {
   const [stats, setStats] = useState<ReferralStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [userTier, setUserTier] = useState<SubscriptionTier>('demo');
+
+  // Check user subscription status
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        const supabase = createClient();
+        const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+
+        if (supabaseUser) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('subscription_status, subscription_tier, account_purchased, demo_expires_at, subscription_expires_at, vip_expires_at')
+            .eq('id', supabaseUser.id)
+            .single();
+
+          if (profile) {
+            const tier = getUserTier(profile);
+            setUserTier(tier);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking subscription:', error);
+      }
+    };
+
+    checkSubscription();
+  }, []);
+
+  // Check if user can use referral program
+  const referralCheck = canUseFeature(userTier, 'referralProgram');
 
   const texts = {
     el: {
@@ -57,6 +89,8 @@ export default function ReferralPage() {
       noReferrals: "Δεν έχετε παραπομπές ακόμα",
       noReferrals2: "Μοιραστείτε τον σύνδεσμό σας και κερδίστε Bonus!",
       back: "Πίσω",
+      demoRestriction: "Το πρόγραμμα παραπομπών είναι διαθέσιμο μόνο μετά την αγορά λογαριασμού",
+      buyAccount: "Αγορά Λογαριασμού",
     },
     ru: {
       title: "Реферальная Программа",
@@ -85,6 +119,8 @@ export default function ReferralPage() {
       noReferrals: "У вас пока нет рефералов",
       noReferrals2: "Поделитесь своей ссылкой и получите Bonus!",
       back: "Назад",
+      demoRestriction: "Реферальная программа доступна только после покупки аккаунта",
+      buyAccount: "Купить аккаунт",
     },
     en: {
       title: "Referral Program",
@@ -113,6 +149,158 @@ export default function ReferralPage() {
       noReferrals: "You don't have any referrals yet",
       noReferrals2: "Share your link and get Bonus!",
       back: "Back",
+      demoRestriction: "Referral program is only available after purchasing an account",
+      buyAccount: "Buy Account",
+    },
+    uk: {
+      title: "Реферальна Програма",
+      yourLink: "Ваше Посилання",
+      copyLink: "Копіювати Посилання",
+      copied: "Скопійовано!",
+      shareWhatsApp: "WhatsApp",
+      shareEmail: "Email",
+      howItWorks: "Як це працює?",
+      step1: "Надішліть посилання другу",
+      step2: "Друг реєструється за вашим посиланням",
+      step3: "Друг купує акаунт",
+      step4: "Ви отримуєте +1 місяць БЕЗКОШТОВНО!",
+      yourStats: "Ваша Статистика",
+      totalReferrals: "Всього Рефералів",
+      purchased: "Купили Акаунт",
+      bonusTotal: "Всього Bonus Місяців",
+      bonusAvailable: "Доступно Bonus Місяців",
+      referralsList: "Ваші Реферали",
+      name: "Ім'я",
+      email: "Email",
+      dateRegistered: "Дата Реєстрації",
+      status: "Статус",
+      registered: "Зареєструвався",
+      accountPurchased: "Купив Акаунт",
+      noReferrals: "У вас поки немає рефералів",
+      noReferrals2: "Поділіться своїм посиланням і отримайте Bonus!",
+      back: "Назад",
+      demoRestriction: "Реферальна програма доступна тільки після покупки акаунту",
+      buyAccount: "Купити акаунт",
+    },
+    sq: {
+      title: "Programi i Referimit",
+      yourLink: "Linku Juaj",
+      copyLink: "Kopjo Linkun",
+      copied: "U kopjua!",
+      shareWhatsApp: "WhatsApp",
+      shareEmail: "Email",
+      howItWorks: "Si funksionon?",
+      step1: "Dërgoni linkun një miku",
+      step2: "Miku regjistrohet përmes linkut tuaj",
+      step3: "Miku blen një llogari",
+      step4: "Merrni +1 muaj FALAS!",
+      yourStats: "Statistikat Tuaja",
+      totalReferrals: "Referime Totale",
+      purchased: "Blenë Llogari",
+      bonusTotal: "Total Muaj Bonus",
+      bonusAvailable: "Muaj Bonus të Disponueshëm",
+      referralsList: "Referimet Tuaja",
+      name: "Emri",
+      email: "Email",
+      dateRegistered: "Data e Regjistrimit",
+      status: "Statusi",
+      registered: "U regjistrua",
+      accountPurchased: "Bleu Llogari",
+      noReferrals: "Nuk keni referime ende",
+      noReferrals2: "Ndani linkun tuaj dhe merrni Bonus!",
+      back: "Prapa",
+      demoRestriction: "Programi i referimit është i disponueshëm vetëm pas blerjes së llogarisë",
+      buyAccount: "Bli Llogari",
+    },
+    bg: {
+      title: "Реферална Програма",
+      yourLink: "Вашият Линк",
+      copyLink: "Копирай Линка",
+      copied: "Копирано!",
+      shareWhatsApp: "WhatsApp",
+      shareEmail: "Email",
+      howItWorks: "Как работи?",
+      step1: "Изпратете линка на приятел",
+      step2: "Приятелят се регистрира чрез вашия линк",
+      step3: "Приятелят купува акаунт",
+      step4: "Получавате +1 месец БЕЗПЛАТНО!",
+      yourStats: "Вашата Статистика",
+      totalReferrals: "Общо Реферали",
+      purchased: "Купиха Акаунт",
+      bonusTotal: "Общо Bonus Месеци",
+      bonusAvailable: "Налични Bonus Месеци",
+      referralsList: "Вашите Реферали",
+      name: "Име",
+      email: "Email",
+      dateRegistered: "Дата на Регистрация",
+      status: "Статус",
+      registered: "Регистрира се",
+      accountPurchased: "Купи Акаунт",
+      noReferrals: "Все още нямате реферали",
+      noReferrals2: "Споделете линка си и получете Bonus!",
+      back: "Назад",
+      demoRestriction: "Реферална програма е достъпна само след покупка на акаунт",
+      buyAccount: "Купи акаунт",
+    },
+    ro: {
+      title: "Program de Referință",
+      yourLink: "Linkul Dvs.",
+      copyLink: "Copiază Linkul",
+      copied: "Copiat!",
+      shareWhatsApp: "WhatsApp",
+      shareEmail: "Email",
+      howItWorks: "Cum funcționează?",
+      step1: "Trimiteți linkul unui prieten",
+      step2: "Prietenul se înregistrează prin linkul dvs.",
+      step3: "Prietenul cumpără un cont",
+      step4: "Primiți +1 lună GRATUIT!",
+      yourStats: "Statisticile Dvs.",
+      totalReferrals: "Total Referințe",
+      purchased: "Au Cumpărat Cont",
+      bonusTotal: "Total Luni Bonus",
+      bonusAvailable: "Luni Bonus Disponibile",
+      referralsList: "Referințele Dvs.",
+      name: "Nume",
+      email: "Email",
+      dateRegistered: "Data Înregistrării",
+      status: "Status",
+      registered: "S-a Înregistrat",
+      accountPurchased: "A Cumpărat Cont",
+      noReferrals: "Nu aveți referințe încă",
+      noReferrals2: "Partajați linkul și primiți Bonus!",
+      back: "Înapoi",
+      demoRestriction: "Programul de referință este disponibil doar după cumpărarea contului",
+      buyAccount: "Cumpără Cont",
+    },
+    ar: {
+      title: "برنامج الإحالة",
+      yourLink: "رابطك",
+      copyLink: "نسخ الرابط",
+      copied: "تم النسخ!",
+      shareWhatsApp: "WhatsApp",
+      shareEmail: "Email",
+      howItWorks: "كيف يعمل؟",
+      step1: "أرسل الرابط لصديق",
+      step2: "يسجل الصديق عبر رابطك",
+      step3: "يشتري الصديق حسابًا",
+      step4: "تحصل على +1 شهر مجانًا!",
+      yourStats: "إحصائياتك",
+      totalReferrals: "إجمالي الإحالات",
+      purchased: "اشتروا حسابًا",
+      bonusTotal: "إجمالي أشهر البونص",
+      bonusAvailable: "أشهر البونص المتاحة",
+      referralsList: "إحالاتك",
+      name: "الاسم",
+      email: "البريد الإلكتروني",
+      dateRegistered: "تاريخ التسجيل",
+      status: "الحالة",
+      registered: "مسجل",
+      accountPurchased: "اشترى حسابًا",
+      noReferrals: "ليس لديك إحالات بعد",
+      noReferrals2: "شارك رابطك واحصل على بونص!",
+      back: "رجوع",
+      demoRestriction: "برنامج الإحالة متاح فقط بعد شراء الحساب",
+      buyAccount: "شراء حساب",
     },
   };
 
@@ -184,6 +372,57 @@ export default function ReferralPage() {
 
   if (!isAuthenticated || !user) {
     return null;
+  }
+
+  // DEMO restriction - show message for DEMO users
+  if (!referralCheck.allowed) {
+    return (
+      <BackgroundPage pageIndex={1}>
+        <div className="flex min-h-screen flex-col items-center justify-center" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
+          <div className="w-full max-w-sm flex flex-col gap-12 items-center">
+            {/* Header - always English */}
+            <h1
+              className="text-slogan font-bold text-center"
+              style={{ color: '#ff8f0a' }}
+            >
+              Referral Program
+            </h1>
+
+            {/* Restriction message */}
+            <p className="text-button text-center" style={{ color: 'var(--polar)' }}>
+              {t.demoRestriction}
+            </p>
+
+            {/* Buy account button */}
+            <button
+              onClick={() => router.push(`/${locale}/pricing`)}
+              className="btn-universal w-full text-button"
+              style={{
+                minHeight: '52px',
+                backgroundColor: 'var(--orange)',
+                color: 'var(--deep-teal)',
+              }}
+            >
+              {t.buyAccount}
+            </button>
+
+            {/* Back button */}
+            <button
+              onClick={() => router.push(`/${locale}/dashboard`)}
+              className="btn-universal w-full text-button"
+              style={{
+                minHeight: '52px',
+                backgroundColor: 'transparent',
+                border: '2px solid var(--polar)',
+                color: 'var(--polar)',
+              }}
+            >
+              ← {t.back}
+            </button>
+          </div>
+        </div>
+      </BackgroundPage>
+    );
   }
 
   const referralLink = `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/register?ref=${stats?.referral_code}`;

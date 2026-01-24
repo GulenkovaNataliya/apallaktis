@@ -23,6 +23,8 @@ import {
   type PaymentMethod as SupabasePaymentMethod,
   type GlobalExpense as SupabaseGlobalExpense,
 } from '@/lib/supabase/services';
+import { createClient } from '@/lib/supabase/client';
+import { getUserTier, canUseFeature, type SubscriptionTier } from '@/lib/subscription';
 
 type ViewType = 'expenses' | 'categories' | 'add-expense' | 'edit-expense' | 'add-category' | 'edit-category';
 
@@ -78,10 +80,88 @@ export default function GlobalExpensesPage() {
   const t = messages[locale]?.globalExpenses || messages.el.globalExpenses;
   const { user } = useAuth();
 
-  // Check if user has access to voice input and photo receipt (Standard/Premium/VIP only)
-  const hasVoiceAndPhoto = user?.subscriptionPlan === 'standard' ||
-                           user?.subscriptionPlan === 'premium' ||
-                           user?.subscriptionPlan === 'vip';
+  // User subscription state
+  const [userTier, setUserTier] = useState<SubscriptionTier>('demo');
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [upgradeMessage, setUpgradeMessage] = useState('');
+
+  // Check user subscription status
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        const supabase = createClient();
+        const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+
+        if (supabaseUser) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('subscription_status, subscription_tier, account_purchased, demo_expires_at, subscription_expires_at, vip_expires_at')
+            .eq('id', supabaseUser.id)
+            .single();
+
+          if (profile) {
+            const tier = getUserTier(profile);
+            setUserTier(tier);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking subscription:', error);
+      }
+    };
+
+    checkSubscription();
+  }, []);
+
+  // Check if user has access to voice input and photo receipt
+  const voiceCheck = canUseFeature(userTier, 'voiceInput');
+  const photoCheck = canUseFeature(userTier, 'photoReceipt');
+  const hasVoiceAndPhoto = voiceCheck.allowed && photoCheck.allowed;
+
+  // Subscription upgrade messages
+  const subscriptionMessages = {
+    el: {
+      voiceNotAvailable: 'Η φωνητική εισαγωγή δεν είναι διαθέσιμη στο τιμολόγιο Basic. Αναβαθμίστε σε Standard ή Premium.',
+      photoNotAvailable: 'Η σάρωση αποδείξεων δεν είναι διαθέσιμη στο τιμολόγιο Basic. Αναβαθμίστε σε Standard ή Premium.',
+      upgradePlan: 'Αναβάθμιση τιμολογίου',
+    },
+    ru: {
+      voiceNotAvailable: 'Голосовой ввод недоступен в тарифе Basic. Улучшите до Standard или Premium.',
+      photoNotAvailable: 'Сканирование чеков недоступно в тарифе Basic. Улучшите до Standard или Premium.',
+      upgradePlan: 'Улучшить тариф',
+    },
+    uk: {
+      voiceNotAvailable: 'Голосовий ввід недоступний в тарифі Basic. Покращіть до Standard або Premium.',
+      photoNotAvailable: 'Сканування чеків недоступне в тарифі Basic. Покращіть до Standard або Premium.',
+      upgradePlan: 'Покращити тариф',
+    },
+    sq: {
+      voiceNotAvailable: 'Hyrja me zë nuk është e disponueshme në planin Basic. Përmirësoni në Standard ose Premium.',
+      photoNotAvailable: 'Skanimi i faturave nuk është i disponueshëm në planin Basic. Përmirësoni në Standard ose Premium.',
+      upgradePlan: 'Përmirëso planin',
+    },
+    bg: {
+      voiceNotAvailable: 'Гласовото въвеждане не е налично в плана Basic. Надградете до Standard или Premium.',
+      photoNotAvailable: 'Сканирането на касови бележки не е налично в плана Basic. Надградете до Standard или Premium.',
+      upgradePlan: 'Надгради плана',
+    },
+    ro: {
+      voiceNotAvailable: 'Introducerea vocală nu este disponibilă în planul Basic. Actualizați la Standard sau Premium.',
+      photoNotAvailable: 'Scanarea chitanțelor nu este disponibilă în planul Basic. Actualizați la Standard sau Premium.',
+      upgradePlan: 'Actualizare plan',
+    },
+    en: {
+      voiceNotAvailable: 'Voice input is not available in Basic plan. Upgrade to Standard or Premium.',
+      photoNotAvailable: 'Receipt scanning is not available in Basic plan. Upgrade to Standard or Premium.',
+      upgradePlan: 'Upgrade plan',
+    },
+    ar: {
+      voiceNotAvailable: 'الإدخال الصوتي غير متاح في الخطة الأساسية. قم بالترقية إلى Standard أو Premium.',
+      photoNotAvailable: 'مسح الإيصالات غير متاح في الخطة الأساسية. قم بالترقية إلى Standard أو Premium.',
+      upgradePlan: 'ترقية الخطة',
+    },
+  };
+
+  const tSub = subscriptionMessages[locale] || subscriptionMessages.en;
 
   // Categories state
   const [categories, setCategories] = useState<ExpenseCategory[]>([]);
@@ -476,7 +556,63 @@ export default function GlobalExpensesPage() {
             }}
             locale={locale}
             hasVoiceAndPhoto={hasVoiceAndPhoto}
+            userTier={userTier}
+            onUpgradeVoice={() => {
+              setUpgradeMessage(tSub.voiceNotAvailable);
+              setShowUpgradeModal(true);
+            }}
+            onUpgradePhoto={() => {
+              setUpgradeMessage(tSub.photoNotAvailable);
+              setShowUpgradeModal(true);
+            }}
           />
+
+          {/* Upgrade Modal */}
+          {showUpgradeModal && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center"
+              style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
+              onClick={() => setShowUpgradeModal(false)}
+            >
+              <div
+                className="rounded-2xl p-8 mx-4 max-w-sm"
+                style={{ backgroundColor: 'var(--deep-teal)', border: '2px solid var(--orange)' }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <p className="text-button text-center mb-6" style={{ color: 'var(--polar)' }}>
+                  {upgradeMessage}
+                </p>
+                <div className="flex flex-col gap-4">
+                  <button
+                    onClick={() => {
+                      setShowUpgradeModal(false);
+                      router.push(`/${locale}/pricing`);
+                    }}
+                    className="btn-universal w-full text-button"
+                    style={{
+                      minHeight: '52px',
+                      backgroundColor: 'var(--orange)',
+                      color: 'var(--deep-teal)',
+                    }}
+                  >
+                    {tSub.upgradePlan}
+                  </button>
+                  <button
+                    onClick={() => setShowUpgradeModal(false)}
+                    className="btn-universal w-full text-button"
+                    style={{
+                      minHeight: '52px',
+                      backgroundColor: 'transparent',
+                      border: '2px solid var(--polar)',
+                      color: 'var(--polar)',
+                    }}
+                  >
+                    {t.cancel}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           </div>
         </div>
       </BackgroundPage>
@@ -587,6 +723,9 @@ function ExpenseForm({
   onCancel,
   locale,
   hasVoiceAndPhoto,
+  userTier,
+  onUpgradeVoice,
+  onUpgradePhoto,
 }: {
   expense: GlobalExpense | null;
   categories: ExpenseCategory[];
@@ -596,6 +735,9 @@ function ExpenseForm({
   onCancel: () => void;
   locale: Locale;
   hasVoiceAndPhoto: boolean;
+  userTier: SubscriptionTier;
+  onUpgradeVoice: () => void;
+  onUpgradePhoto: () => void;
 }) {
   const t = messages[locale]?.globalExpenses || messages.el.globalExpenses;
   const tPayments = messages[locale]?.paymentMethods || messages.el.paymentMethods;
@@ -1290,23 +1432,23 @@ function ExpenseForm({
           <label className="text-button" style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}>
             {t.description}
           </label>
-          {hasVoiceAndPhoto && (
-            <button
-              type="button"
-              onClick={handleVoiceInput}
-              disabled={isAnalyzing}
-              className="px-4 rounded-2xl flex items-center justify-center gap-2"
-              style={{
-                backgroundColor: isRecording ? '#ff6a1a' : isAnalyzing ? 'var(--polar)' : 'var(--zanah)',
-                color: isRecording ? 'white' : 'var(--deep-teal)',
-                minHeight: '40px',
-                fontSize: '16px',
-                fontWeight: 600
-              }}
-            >
-              {isRecording ? '⏹️ STOP' : isAnalyzing ? '🤖 ...' : `🎤 ${t.voiceButton}`}
-            </button>
-          )}
+          {/* Voice button - shown for all, but triggers upgrade for Basic */}
+          <button
+            type="button"
+            onClick={hasVoiceAndPhoto ? handleVoiceInput : onUpgradeVoice}
+            disabled={isAnalyzing}
+            className="px-4 rounded-2xl flex items-center justify-center gap-2"
+            style={{
+              backgroundColor: isRecording ? '#ff6a1a' : isAnalyzing ? 'var(--polar)' : hasVoiceAndPhoto ? 'var(--zanah)' : 'var(--polar)',
+              color: isRecording ? 'white' : 'var(--deep-teal)',
+              minHeight: '40px',
+              fontSize: '16px',
+              fontWeight: 600,
+              opacity: hasVoiceAndPhoto ? 1 : 0.7,
+            }}
+          >
+            {isRecording ? '⏹️ STOP' : isAnalyzing ? '🤖 ...' : `🎤 ${t.voiceButton}`}
+          </button>
         </div>
         {(isRecording || isAnalyzing) && (
           <div
@@ -1329,13 +1471,13 @@ function ExpenseForm({
         />
       </div>
 
-      {/* Receipt Photo */}
-      {hasVoiceAndPhoto && (
-        <div>
-          <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
-            {t.receiptPhoto} {isAnalyzing && '🔄'}
-          </label>
-          {!photoPreview ? (
+      {/* Receipt Photo - shown for all, but triggers upgrade for Basic */}
+      <div>
+        <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+          {t.receiptPhoto} {isAnalyzing && '🔄'}
+        </label>
+        {!photoPreview ? (
+          hasVoiceAndPhoto ? (
             <label className="w-full rounded-2xl text-center cursor-pointer flex items-center justify-center"
               style={{ border: '2px dashed var(--polar)', color: 'var(--polar)', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}>
               <span>{t.uploadPhoto}</span>
@@ -1347,48 +1489,56 @@ function ExpenseForm({
               />
             </label>
           ) : (
-            <div className="relative">
-              <img
-                src={photoPreview}
-                alt="Receipt preview"
-                className="rounded-2xl w-full"
-                style={{ maxHeight: '300px', objectFit: 'cover', opacity: isAnalyzing ? 0.5 : 1 }}
-              />
-              {isAnalyzing && (
-                <div
-                  className="absolute inset-0 flex items-center justify-center rounded-2xl"
-                  style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
-                >
-                  <div className="text-center" style={{ color: 'white' }}>
-                    <div className="text-2xl mb-2">🤖</div>
-                    <p style={{ fontSize: '16px', fontWeight: 600 }}>{t.analyzing || 'Анализируем чек...'}</p>
-                  </div>
-                </div>
-              )}
-              <button
-                type="button"
-                onClick={handleRemovePhoto}
-                disabled={isAnalyzing}
-                className="absolute top-2 right-2 px-4 rounded-2xl flex items-center justify-center"
-                style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '40px', fontSize: '16px', fontWeight: 600 }}
+            <button
+              type="button"
+              onClick={onUpgradePhoto}
+              className="w-full rounded-2xl text-center flex items-center justify-center"
+              style={{ border: '2px dashed var(--polar)', color: 'var(--polar)', minHeight: '52px', fontSize: '18px', fontWeight: 600, opacity: 0.7 }}>
+              {t.uploadPhoto}
+            </button>
+          )
+        ) : (
+          <div className="relative">
+            <img
+              src={photoPreview}
+              alt="Receipt preview"
+              className="rounded-2xl w-full"
+              style={{ maxHeight: '300px', objectFit: 'cover', opacity: isAnalyzing ? 0.5 : 1 }}
+            />
+            {isAnalyzing && (
+              <div
+                className="absolute inset-0 flex items-center justify-center rounded-2xl"
+                style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
               >
-                {t.removePhoto}
-              </button>
-              {!isAnalyzing && (
-                <p className="absolute bottom-0 left-0 right-0 text-center py-2 rounded-b-2xl"
-                  style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: 'var(--orange)', fontSize: '18px', fontWeight: 600 }}>
-                  {t.deletePhotoToSave}
-                </p>
-              )}
-            </div>
-          )}
-          {analyzeError && (
-            <p className="mt-2 text-center" style={{ color: 'var(--orange)', fontSize: '14px' }}>
-              {analyzeError}
-            </p>
-          )}
-        </div>
-      )}
+                <div className="text-center" style={{ color: 'white' }}>
+                  <div className="text-2xl mb-2">🤖</div>
+                  <p style={{ fontSize: '16px', fontWeight: 600 }}>{t.analyzing || 'Анализируем чек...'}</p>
+                </div>
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={handleRemovePhoto}
+              disabled={isAnalyzing}
+              className="absolute top-2 right-2 px-4 rounded-2xl flex items-center justify-center"
+              style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '40px', fontSize: '16px', fontWeight: 600 }}
+            >
+              {t.removePhoto}
+            </button>
+            {!isAnalyzing && (
+              <p className="absolute bottom-0 left-0 right-0 text-center py-2 rounded-b-2xl"
+                style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: 'var(--orange)', fontSize: '18px', fontWeight: 600 }}>
+                {t.deletePhotoToSave}
+              </p>
+            )}
+          </div>
+        )}
+        {analyzeError && (
+          <p className="mt-2 text-center" style={{ color: 'var(--orange)', fontSize: '14px' }}>
+            {analyzeError}
+          </p>
+        )}
+      </div>
 
       {/* Buttons */}
       <div className="flex gap-4">
