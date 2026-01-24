@@ -76,17 +76,18 @@ export default function AdminVIP() {
     }
 
     const supabase = createClient();
+    const userEmail = email.trim().toLowerCase();
 
     try {
-      // Ищем пользователя по email
-      const { data: user, error: userError } = await supabase
+      // Ищем пользователя по email в profiles
+      let { data: user, error: userError } = await supabase
         .from('profiles')
         .select('*')
-        .eq('email', email.trim().toLowerCase())
+        .eq('email', userEmail)
         .single();
 
       if (userError || !user) {
-        alert(`Пользователь с email ${email} не найден`);
+        alert(`Пользователь с email ${userEmail} не найден.\n\nУбедитесь, что email есть в таблице profiles.`);
         return;
       }
 
