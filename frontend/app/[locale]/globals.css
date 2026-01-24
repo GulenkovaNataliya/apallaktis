@@ -79,6 +79,15 @@ body[dir="rtl"] {
   font-family: var(--font-noto-sans-arabic), var(--font-noto-sans), system-ui, -apple-system, sans-serif;
 }
 
+/* Hide scrollbar but keep scroll functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
 /* Mobile preview wrapper - shows mobile view on desktop */
 .mobile-preview-wrapper {
   width: 100%;
@@ -91,6 +100,12 @@ body[dir="rtl"] {
   overflow-y: auto;
   overflow-x: hidden;
   isolation: isolate;
+  /* Hide scrollbar */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.mobile-preview-wrapper::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
 }
 
 /* Frame on desktop */

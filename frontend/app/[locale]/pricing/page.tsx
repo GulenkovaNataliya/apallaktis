@@ -11,12 +11,24 @@ export default function PricingPage() {
   const t = messages[locale]?.pricing || messages.el.pricing;
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Fullscreen video background */}
-      <VideoBackground videoSrc="/video/video1.mp4" posterSrc="/pages/page-01.webp" />
+    <div className="relative">
+      {/* Sticky video background - stays in place while scrolling */}
+      <div className="sticky top-0 h-screen w-full z-0">
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="/pages/page-01.webp"
+        >
+          <source src="/video/video1.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/20" />
+      </div>
 
-      {/* Content overlay */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center px-4 safe-area-top safe-area-bottom" style={{ paddingTop: '180px', paddingLeft: '40px', paddingRight: '40px', paddingBottom: '120px' }}>
+      {/* Content overlay - positioned over the video */}
+      <div className="relative z-10 flex flex-col items-center px-4 safe-area-top safe-area-bottom" style={{ marginTop: '-100vh', paddingTop: '180px', paddingLeft: '40px', paddingRight: '40px', paddingBottom: '120px' }}>
         <div className="w-full max-w-sm flex flex-col gap-12">
         {/* Back */}
         <p
