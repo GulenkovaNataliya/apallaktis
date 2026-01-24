@@ -1182,6 +1182,7 @@ ${t.closeProjectQuestion}
             onSave={handleAddExpense}
             onCancel={() => setView('main')}
             locale={locale}
+            hasVoiceAndPhoto={hasVoiceAndPhoto}
           />
         </div>
       </BackgroundPage>
@@ -1743,6 +1744,7 @@ function AddExpenseForm({
   onSave,
   onCancel,
   locale,
+  hasVoiceAndPhoto,
 }: {
   objectId: string;
   userId: string;
@@ -1752,6 +1754,7 @@ function AddExpenseForm({
   onSave: (expense: Omit<ObjectExpense, 'id' | 'createdAt' | 'updatedAt'>) => void;
   onCancel: () => void;
   locale: Locale;
+  hasVoiceAndPhoto: boolean;
 }) {
   const t = messages[locale]?.finance || messages.el.finance;
   const tGlobal = messages[locale]?.globalExpenses || messages.el.globalExpenses;

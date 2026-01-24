@@ -475,6 +475,7 @@ export default function GlobalExpensesPage() {
               setEditingExpense(null);
             }}
             locale={locale}
+            hasVoiceAndPhoto={hasVoiceAndPhoto}
           />
           </div>
         </div>
@@ -585,6 +586,7 @@ function ExpenseForm({
   onSave,
   onCancel,
   locale,
+  hasVoiceAndPhoto,
 }: {
   expense: GlobalExpense | null;
   categories: ExpenseCategory[];
@@ -593,6 +595,7 @@ function ExpenseForm({
   onSave: (expense: GlobalExpense) => void;
   onCancel: () => void;
   locale: Locale;
+  hasVoiceAndPhoto: boolean;
 }) {
   const t = messages[locale]?.globalExpenses || messages.el.globalExpenses;
   const tPayments = messages[locale]?.paymentMethods || messages.el.paymentMethods;
