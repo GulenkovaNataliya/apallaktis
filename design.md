@@ -495,6 +495,46 @@ shadow-color == text-color
 
 ## 12. ДИЗАЙН СТРАНИЦ
 
+### /[locale] — Главная страница (Landing)
+
+**Layout:**
+- `paddingTop: 180px`
+- `paddingLeft: 40px`, `paddingRight: 40px`
+- `gap: 48px` (gap-12)
+
+**Элементы:**
+
+| Элемент | Стиль | Цвет |
+|---------|-------|------|
+| "← Выбор языка" | `<p>` text-button cursor-pointer | `var(--polar)` |
+| Слоган | text-slogan, width: 75%, **margin: 0 auto** (центрирован) | `#ff8f0a` |
+| Кнопка "Вход" | btn-primary, 52px | bg: #e7f4f1, text: #033a45 |
+| Кнопка "Создать аккаунт" | btn-primary, 52px | bg: #dbeee8, text: #033a45 |
+| Кнопка "Прайс-лист" | btn-primary, 52px | bg: #cfe8e3, text: #033a45 |
+| Кнопка "Инструкция" | btn-primary, 52px | bg: #c3e2dc, text: #033a45 |
+
+**Переводы кнопок (8 языков):**
+
+| Ключ | el | ru | uk | sq | bg | ro | en | ar |
+|------|----|----|----|----|----|----|----|----|
+| backToLanguageSelection | ← Επιλογή γλώσσας | ← Выбор языка | ← Вибір мови | ← Zgjedhja e gjuhës | ← Избор на език | ← Alegerea limbii | ← Language selection | ← اختيار اللغة |
+| viewPricing | Τιμοκατάλογος | Прайс-лист | Прайс-лист | Lista e çmimeve | Ценоразпис | Lista de prețuri | Price list | قائمة الأسعار |
+| howToUse | Οδηγίες | Инструкция | Інструкція | Udhëzime | Инструкция | Instrucțiuni | Instructions | تعليمات |
+
+**Слоган центрирован:**
+```jsx
+<h1
+  className="text-center text-slogan font-semibold"
+  style={{ color: "#ff8f0a", width: "75%", margin: "0 auto" }}
+>
+  {t.slogan}
+</h1>
+```
+
+**Файл:** `frontend/app/[locale]/page.tsx`
+
+---
+
 ### /[locale]/email-not-confirmed — Email не подтверждён
 
 **Layout:**
