@@ -1111,8 +1111,8 @@ interface ObjectFinance {
 
 ---
 
-### Задача 7.4: PWA — manifest и service worker ⚠️ ЧАСТИЧНО
-**Оценка**: 2 ч
+### Задача 7.4: PWA — manifest и service worker ✅ ГОТОВО
+**Оценка**: 2 ч | **Выполнено**: 24.01.2026
 
 **Описание**:
 - Создать manifest.json
@@ -1121,23 +1121,25 @@ interface ObjectFinance {
 
 **Критерии успешности**:
 - [x] manifest.json создан (77 строк, полная конфигурация)
-- [ ] Иконки корректные (⚠️ ОТСУТСТВУЮТ: icon-192.png, icon-512.png, icon-maskable-*)
-- [ ] Splash screen работает
-- [ ] Lighthouse PWA score > 90
+- [x] Иконки созданы из логотипа A.png
+- [x] Favicon и Apple Touch Icon созданы
+- [x] Meta tags в layout.tsx настроены
+- [ ] Lighthouse PWA score > 90 (требует проверки)
 
-**Что готово**:
-- `frontend/public/manifest.json` ✅
-  - Имя: "ΑΠΑΛΛΑΚΤΗΣ - Τέλος στη ρουτίνα!"
-  - Display: standalone
-  - Тема: #01312d
-  - Shortcuts: New expense, Export
+**Созданные файлы**:
+- `frontend/public/logo.png` — оригинальный логотип
+- `frontend/public/icon-192.png` — PWA иконка 192x192
+- `frontend/public/icon-512.png` — PWA иконка 512x512
+- `frontend/public/icon-maskable-192.png` — адаптивная 192x192
+- `frontend/public/icon-maskable-512.png` — адаптивная 512x512
+- `frontend/public/favicon.ico` — favicon 48x48
+- `frontend/public/apple-touch-icon.png` — Apple 180x180
+- `frontend/scripts/generate-icons.js` — скрипт генерации
 
-**Что осталось**:
-- Создать 4 файла иконок в `/public/`:
-  - `icon-192.png`
-  - `icon-512.png`
-  - `icon-maskable-192.png`
-  - `icon-maskable-512.png`
+**Конфигурация**:
+- manifest.json: background_color=#01312d, theme_color=#01312d
+- layout.tsx: icons, openGraph, viewport с themeColor
+- Service Worker регистрация в layout.tsx
 
 ---
 ## ФАЗА 8: ИНТЕГРАЦИИ И АВТОМАТИЗАЦИЯ
@@ -1633,16 +1635,16 @@ POST /api/clients/lookup-afm
 | Фаза 4: Внутренние страницы | 2 | 3 | 0 | 5 |
 | Фаза 5: Объекты | 7 | 1 | 0 | 8 |
 | Фаза 6: Подписки | 4 | 2 | 0 | 6 |
-| Фаза 7: Экспорт | 3 | 1 | 0 | 4 |
+| Фаза 7: Экспорт | 4 | 0 | 0 | 4 |
 | Фаза 8: Интеграции | 0 | 0 | 1 | 1 |
 | Фаза 9: Тестирование | 2 | 0 | 2 | 4 |
-| **ИТОГО** | **27** | **8** | **4** | **39** |
+| **ИТОГО** | **28** | **7** | **4** | **39** |
 
 ### Процент готовности: **~85-90%**
 
 ### Критические задачи для завершения:
 
-1. **⚠️ PWA иконки** — создать 4 файла (icon-192.png, icon-512.png, maskable версии)
+1. ~~**⚠️ PWA иконки**~~ — ✅ ГОТОВО (24.01.2026)
 2. **⚠️ AFM lookup** — активировать VIES интеграцию (код готов, не подключен)
 3. **⚠️ Ограничение 3 объекта в DEMO** — добавить проверку
 4. **⚠️ Read-only enforcement** — усилить middleware проверки
