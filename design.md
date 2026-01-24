@@ -19,6 +19,38 @@
 | `/language-select` | video.mp4 |
 | `/[locale]` (главная) | video1.mp4 |
 | `/[locale]/thank-you` | video1.mp4 |
+| `/[locale]/pricing` | video1.mp4 |
+| `/[locale]/help` | video1.mp4 |
+
+### Видео на скроллируемых страницах
+
+Для страниц с длинным контентом (pricing, help) используется **sticky видео**:
+
+```jsx
+<div className="relative">
+  {/* Sticky video - stays in place while scrolling */}
+  <div className="sticky top-0 h-screen w-full z-0">
+    <video
+      className="absolute inset-0 h-full w-full object-cover"
+      autoPlay loop muted playsInline
+      poster="/pages/page-01.webp"
+    >
+      <source src="/video/video1.mp4" type="video/mp4" />
+    </video>
+    <div className="absolute inset-0 bg-black/20" />
+  </div>
+
+  {/* Content overlays the video */}
+  <div className="relative z-10" style={{ marginTop: '-100vh' }}>
+    {/* ... контент ... */}
+  </div>
+</div>
+```
+
+**ВАЖНО:**
+- `sticky top-0 h-screen` — видео занимает экран и "прилипает" при скролле
+- `marginTop: '-100vh'` — контент накладывается поверх видео
+- НЕ использовать `absolute inset-0` для скроллируемых страниц — видео не покроет весь контент
 
 ---
 
@@ -302,6 +334,32 @@ shadow-color == text-color
   box-shadow: 0 0 0 2px #333, 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 ```
+
+### Скрытие scrollbar
+
+На всех клиентских страницах scrollbar скрыт, но прокрутка работает.
+
+```css
+/* Hide scrollbar but keep scroll functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+/* Применено к mobile-preview-wrapper */
+.mobile-preview-wrapper {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.mobile-preview-wrapper::-webkit-scrollbar {
+  display: none;
+}
+```
+
+**ВАЖНО:** Scrollbar скрыт глобально в `globals.css` для всех браузеров.
 
 ### Safe area (iOS)
 ```css
