@@ -21,7 +21,7 @@ export interface ReceiptData {
  * ВАЖНО: Это НЕ налоговый документ! Τιμολόγιο выдаётся отдельно через myDATA
  */
 export function generateReceiptHTML(data: ReceiptData): string {
-  const formattedDate = data.date.toLocaleDateString('el-GR', {
+  const formattedDate = data.date.toLocaleDateString('en-US', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -29,11 +29,11 @@ export function generateReceiptHTML(data: ReceiptData): string {
 
   return `
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ΕΠΙΒΕΒΑΙΩΣΗ ΠΛΗΡΩΜΗΣ #${data.accountNumber}</title>
+  <title>PAYMENT CONFIRMATION #${data.accountNumber}</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -142,25 +142,25 @@ export function generateReceiptHTML(data: ReceiptData): string {
     <!-- Header -->
     <div class="header">
       <h1>ΑΠΑΛΛΑΚΤΗΣ</h1>
-      <p>Διαχείριση Ακινήτων & Εξόδων</p>
-      <p>Τηλ: +30 698 320 8844</p>
+      <p>Property & Expense Management</p>
+      <p>Tel: +30 698 320 8844</p>
     </div>
 
     <!-- Receipt Number -->
     <div style="text-align: center;">
       <div class="receipt-number">
-        ΕΠΙΒΕΒΑΙΩΣΗ ΠΛΗΡΩΜΗΣ #${data.accountNumber}
+        PAYMENT CONFIRMATION #${data.accountNumber}
       </div>
     </div>
 
     <!-- Info -->
     <div style="margin: 30px 0;">
       <div class="info-row">
-        <span class="info-label">Ημερομηνία:</span>
+        <span class="info-label">Date:</span>
         <span class="info-value">${formattedDate}</span>
       </div>
       <div class="info-row">
-        <span class="info-label">Λογαριασμός:</span>
+        <span class="info-label">Account:</span>
         <span class="info-value">#${data.accountNumber}</span>
       </div>
     </div>
@@ -169,21 +169,21 @@ export function generateReceiptHTML(data: ReceiptData): string {
     <table class="items-table">
       <thead>
         <tr>
-          <th>Περιγραφή</th>
-          <th style="text-align: right;">Ποσό</th>
+          <th>Description</th>
+          <th style="text-align: right;">Amount</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Αγορά Λογαριασμού ΑΠΑΛΛΑΚΤΗΣ</td>
+          <td>ΑΠΑΛΛΑΚΤΗΣ Account Purchase</td>
           <td style="text-align: right;">${data.amount.toFixed(2)} €</td>
         </tr>
         <tr>
-          <td>ΦΠΑ 24%</td>
+          <td>VAT 24%</td>
           <td style="text-align: right;">${data.tax.toFixed(2)} €</td>
         </tr>
         <tr class="total-row">
-          <td>ΣΥΝΟΛΟ</td>
+          <td>TOTAL</td>
           <td style="text-align: right;">${data.total.toFixed(2)} €</td>
         </tr>
       </tbody>
@@ -191,15 +191,15 @@ export function generateReceiptHTML(data: ReceiptData): string {
 
     <!-- Important Notice -->
     <div class="notice">
-      <strong>⚠️ Σημαντική Σημείωση:</strong><br>
-      Η παρούσα επιβεβαίωση αφορά την πληρωμή σας μέσω Stripe.<br>
-      <strong>Το Τιμολόγιο/Απόδειξη θα εκδοθεί και θα αποσταλεί ξεχωριστά</strong> μέσω ηλεκτρονικού ταχυδρομείου.
+      <strong>⚠️ Important Notice:</strong><br>
+      This confirmation is for your payment via Stripe.<br>
+      <strong>The official Tax Invoice (ΤΙΜΟΛΟΓΙΟ/ΑΠΟΔΕΙΞΗ) will be issued and sent separately</strong> via email.
     </div>
 
     <!-- Footer -->
     <div class="footer">
-      <p>Ευχαριστούμε για την προτίμησή σας!</p>
-      <p>Για οποιαδήποτε απορία, επικοινωνήστε μαζί μας:</p>
+      <p>Thank you for your purchase!</p>
+      <p>For any questions, contact us:</p>
       <p>Email: support@apallaktis.com | WhatsApp/Viber: +30 698 320 8844</p>
     </div>
   </div>
@@ -213,7 +213,7 @@ export function generateReceiptHTML(data: ReceiptData): string {
  * ВАЖНО: Это НЕ налоговый документ! Τιμολόγιο выдаётся отдельно через myDATA
  */
 export function generateInvoiceHTML(data: ReceiptData): string {
-  const formattedDate = data.date.toLocaleDateString('el-GR', {
+  const formattedDate = data.date.toLocaleDateString('en-US', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -221,11 +221,11 @@ export function generateInvoiceHTML(data: ReceiptData): string {
 
   return `
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ΕΠΙΒΕΒΑΙΩΣΗ ΠΛΗΡΩΜΗΣ #${data.accountNumber}</title>
+  <title>PAYMENT CONFIRMATION #${data.accountNumber}</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -336,55 +336,55 @@ export function generateInvoiceHTML(data: ReceiptData): string {
     <div class="header">
       <div class="company-info">
         <h1>ΑΠΑΛΛΑΚΤΗΣ</h1>
-        <p>Διαχείριση Ακινήτων & Εξόδων</p>
-        <p><strong>Τηλ:</strong> +30 698 320 8844</p>
+        <p>Property & Expense Management</p>
+        <p><strong>Tel:</strong> +30 698 320 8844</p>
       </div>
       <div class="invoice-details">
         <div class="invoice-number">
-          ΕΠΙΒΕΒΑΙΩΣΗ ΠΛΗΡΩΜΗΣ #${data.accountNumber}
+          PAYMENT CONFIRMATION #${data.accountNumber}
         </div>
-        <p style="margin: 10px 0; color: #666;"><strong>Ημερομηνία:</strong> ${formattedDate}</p>
+        <p style="margin: 10px 0; color: #666;"><strong>Date:</strong> ${formattedDate}</p>
       </div>
     </div>
 
     <!-- Customer Info -->
     <div class="customer-info">
-      <h3>Στοιχεία Πελάτη</h3>
-      <p><strong>Επωνυμία:</strong> ${data.companyName || 'N/A'}</p>
-      <p><strong>ΑΦΜ:</strong> ${data.afm || 'N/A'}</p>
-      <p><strong>ΔΟΥ:</strong> ${data.doy || 'N/A'}</p>
-      <p><strong>Λογαριασμός:</strong> #${data.accountNumber}</p>
+      <h3>Customer Details</h3>
+      <p><strong>Company Name:</strong> ${data.companyName || 'N/A'}</p>
+      <p><strong>ΑΦΜ (Tax ID):</strong> ${data.afm || 'N/A'}</p>
+      <p><strong>ΔΟΥ (Tax Office):</strong> ${data.doy || 'N/A'}</p>
+      <p><strong>Account:</strong> #${data.accountNumber}</p>
     </div>
 
     <!-- Items Table -->
     <table class="items-table">
       <thead>
         <tr>
-          <th>Α/Α</th>
-          <th>Περιγραφή</th>
-          <th style="text-align: center;">Ποσότητα</th>
-          <th style="text-align: right;">Τιμή</th>
-          <th style="text-align: right;">Σύνολο</th>
+          <th>#</th>
+          <th>Description</th>
+          <th style="text-align: center;">Qty</th>
+          <th style="text-align: right;">Price</th>
+          <th style="text-align: right;">Total</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>1</td>
-          <td>Αγορά Λογαριασμού ΑΠΑΛΛΑΚΤΗΣ<br><small>30 ημέρες δωρεάν χρήση</small></td>
+          <td>ΑΠΑΛΛΑΚΤΗΣ Account Purchase<br><small>30 days free trial</small></td>
           <td style="text-align: center;">1</td>
           <td style="text-align: right;">${data.amount.toFixed(2)} €</td>
           <td style="text-align: right;">${data.amount.toFixed(2)} €</td>
         </tr>
         <tr>
-          <td colspan="4" style="text-align: right;"><strong>Μερικό Σύνολο:</strong></td>
+          <td colspan="4" style="text-align: right;"><strong>Subtotal:</strong></td>
           <td style="text-align: right;">${data.amount.toFixed(2)} €</td>
         </tr>
         <tr>
-          <td colspan="4" style="text-align: right;"><strong>ΦΠΑ 24%:</strong></td>
+          <td colspan="4" style="text-align: right;"><strong>VAT 24%:</strong></td>
           <td style="text-align: right;">${data.tax.toFixed(2)} €</td>
         </tr>
         <tr class="total-row">
-          <td colspan="4" style="text-align: right;">ΓΕΝΙΚΟ ΣΥΝΟΛΟ:</td>
+          <td colspan="4" style="text-align: right;">GRAND TOTAL:</td>
           <td style="text-align: right;">${data.total.toFixed(2)} €</td>
         </tr>
       </tbody>
@@ -392,15 +392,15 @@ export function generateInvoiceHTML(data: ReceiptData): string {
 
     <!-- Important Notice -->
     <div class="notice">
-      <strong>⚠️ Σημαντική Σημείωση:</strong><br>
-      Η παρούσα επιβεβαίωση αφορά την πληρωμή σας μέσω Stripe.<br>
-      <strong>Το Τιμολόγιο θα εκδοθεί και θα αποσταλεί ξεχωριστά</strong> μέσω ηλεκτρονικού ταχυδρομείου.
+      <strong>⚠️ Important Notice:</strong><br>
+      This confirmation is for your payment via Stripe.<br>
+      <strong>The official Tax Invoice (ΤΙΜΟΛΟΓΙΟ) will be issued and sent separately</strong> via email.
     </div>
 
     <!-- Footer -->
     <div class="footer">
-      <p>Ευχαριστούμε για την προτίμησή σας!</p>
-      <p>Για οποιαδήποτε απορία, επικοινωνήστε μαζί μας:</p>
+      <p>Thank you for your purchase!</p>
+      <p>For any questions, contact us:</p>
       <p>Email: support@apallaktis.com | WhatsApp/Viber: +30 698 320 8844</p>
     </div>
   </div>

@@ -25,23 +25,14 @@ export async function sendReceiptEmail(
   },
   locale: string = 'el'
 ): Promise<boolean> {
-  // Тема письма - Подтверждение оплаты (не налоговый документ!)
-  const subjects = {
-    el: `✅ ΕΠΙΒΕΒΑΙΩΣΗ ΠΛΗΡΩΜΗΣ #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
-    ru: `✅ ПОДТВЕРЖДЕНИЕ ОПЛАТЫ #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
-    en: `✅ PAYMENT CONFIRMATION #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
-    uk: `✅ ПІДТВЕРДЖЕННЯ ОПЛАТИ #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
-    sq: `✅ KONFIRMIMI I PAGESES #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
-    bg: `✅ ПОТВЪРЖДЕНИЕ ЗА ПЛАЩАНЕ #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
-    ro: `✅ CONFIRMARE PLATĂ #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
-    ar: `✅ تأكيد الدفع #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`,
-  };
+  // Subject always in English
+  const subject = `✅ PAYMENT CONFIRMATION #${receiptData.accountNumber} - ΑΠΑΛΛΑΚΤΗΣ`;
 
   const html = generateReceiptOrInvoice(receiptData);
 
   return sendEmail({
     to: userEmail,
-    subject: subjects[locale as keyof typeof subjects] || subjects.el,
+    subject,
     html,
   });
 }
