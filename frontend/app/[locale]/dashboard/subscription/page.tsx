@@ -22,8 +22,11 @@ const translations = {
   el: {
     title: "Η Συνδρομή μου",
     currentPlan: "Τρέχον Πρόγραμμα",
+    plan: "Πλάνο",
     status: "Κατάσταση",
     expiresAt: "Λήγει",
+    expiresOn: "Έως",
+    unlimited: "Απεριόριστο",
     nextPayment: "Επόμενη Πληρωμή",
     autoRenewal: "Αυτόματη Ανανέωση",
     enabled: "Ενεργοποιημένη",
@@ -38,11 +41,11 @@ const translations = {
     buyAccount: "Αγορά Λογαριασμού",
     choosePlan: "Επιλογή Πλάνου",
     upgradePlan: "Αναβάθμιση Πλάνου",
+    changePlan: "Αλλαγή Πακέτου",
     extendSubscription: "Παράταση Συνδρομής",
     cancelSubscription: "Ακύρωση Συνδρομής",
     paymentHistory: "Ιστορικό Πληρωμών",
     paymentHistoryNote: "Εδώ εμφανίζονται οι επιβεβαιώσεις πληρωμών μέσω Stripe.",
-    invoiceNote: "Το Τιμολόγιο/Απόδειξη θα εκδοθεί και θα αποσταλεί ξεχωριστά μέσω email.",
     date: "Ημερομηνία",
     description: "Περιγραφή",
     amount: "Ποσό",
@@ -60,8 +63,11 @@ const translations = {
   ru: {
     title: "Моя Подписка",
     currentPlan: "Текущий План",
+    plan: "План",
     status: "Статус",
     expiresAt: "Истекает",
+    expiresOn: "До",
+    unlimited: "Безлимит",
     nextPayment: "Следующий Платёж",
     autoRenewal: "Автопродление",
     enabled: "Включено",
@@ -76,11 +82,11 @@ const translations = {
     buyAccount: "Купить Аккаунт",
     choosePlan: "Выбрать План",
     upgradePlan: "Улучшить План",
+    changePlan: "Сменить Пакет",
     extendSubscription: "Продлить Подписку",
     cancelSubscription: "Отменить Подписку",
     paymentHistory: "История Платежей",
     paymentHistoryNote: "Здесь отображаются подтверждения оплаты через Stripe.",
-    invoiceNote: "Τιμολόγιο/Απόδειξη будет выдан и отправлен отдельно по email.",
     date: "Дата",
     description: "Описание",
     amount: "Сумма",
@@ -98,8 +104,11 @@ const translations = {
   en: {
     title: "My Subscription",
     currentPlan: "Current Plan",
+    plan: "Plan",
     status: "Status",
     expiresAt: "Expires",
+    expiresOn: "Until",
+    unlimited: "Unlimited",
     nextPayment: "Next Payment",
     autoRenewal: "Auto Renewal",
     enabled: "Enabled",
@@ -114,11 +123,11 @@ const translations = {
     buyAccount: "Buy Account",
     choosePlan: "Choose Plan",
     upgradePlan: "Upgrade Plan",
+    changePlan: "Change Plan",
     extendSubscription: "Extend Subscription",
     cancelSubscription: "Cancel Subscription",
     paymentHistory: "Payment History",
     paymentHistoryNote: "Payment confirmations via Stripe are displayed here.",
-    invoiceNote: "The official Tax Invoice will be issued and sent separately via email.",
     date: "Date",
     description: "Description",
     amount: "Amount",
@@ -136,8 +145,11 @@ const translations = {
   uk: {
     title: "Моя Підписка",
     currentPlan: "Поточний План",
+    plan: "План",
     status: "Статус",
     expiresAt: "Закінчується",
+    expiresOn: "До",
+    unlimited: "Безліміт",
     nextPayment: "Наступний Платіж",
     autoRenewal: "Автопродовження",
     enabled: "Увімкнено",
@@ -152,11 +164,11 @@ const translations = {
     buyAccount: "Купити Акаунт",
     choosePlan: "Вибрати План",
     upgradePlan: "Покращити План",
+    changePlan: "Змінити Пакет",
     extendSubscription: "Продовжити Підписку",
     cancelSubscription: "Скасувати Підписку",
     paymentHistory: "Історія Платежів",
     paymentHistoryNote: "Тут відображаються підтвердження оплати через Stripe.",
-    invoiceNote: "Τιμολόγιο/Απόδειξη буде видано та надіслано окремо по email.",
     date: "Дата",
     description: "Опис",
     amount: "Сума",
@@ -174,8 +186,11 @@ const translations = {
   sq: {
     title: "Abonimi Im",
     currentPlan: "Plani Aktual",
+    plan: "Plani",
     status: "Statusi",
     expiresAt: "Skadon",
+    expiresOn: "Deri më",
+    unlimited: "Pa Limit",
     nextPayment: "Pagesa Tjetër",
     autoRenewal: "Rinovim Automatik",
     enabled: "Aktivizuar",
@@ -190,11 +205,11 @@ const translations = {
     buyAccount: "Bli Llogari",
     choosePlan: "Zgjidh Planin",
     upgradePlan: "Përmirëso Planin",
+    changePlan: "Ndrysho Paketën",
     extendSubscription: "Zgjat Abonimin",
     cancelSubscription: "Anulo Abonimin",
     paymentHistory: "Historia e Pagesave",
     paymentHistoryNote: "Këtu shfaqen konfirmimet e pagesave përmes Stripe.",
-    invoiceNote: "Fatura zyrtare tatimore do të lëshohet dhe dërgohet veçmas me email.",
     date: "Data",
     description: "Përshkrimi",
     amount: "Shuma",
@@ -212,8 +227,11 @@ const translations = {
   bg: {
     title: "Моят Абонамент",
     currentPlan: "Текущ План",
+    plan: "План",
     status: "Статус",
     expiresAt: "Изтича",
+    expiresOn: "До",
+    unlimited: "Неограничено",
     nextPayment: "Следващо Плащане",
     autoRenewal: "Автоматично Подновяване",
     enabled: "Включено",
@@ -228,11 +246,11 @@ const translations = {
     buyAccount: "Купи Акаунт",
     choosePlan: "Избери План",
     upgradePlan: "Надгради План",
+    changePlan: "Смени Пакета",
     extendSubscription: "Удължи Абонамент",
     cancelSubscription: "Откажи Абонамент",
     paymentHistory: "История на Плащанията",
     paymentHistoryNote: "Тук се показват потвържденията за плащане чрез Stripe.",
-    invoiceNote: "Официалната данъчна фактура ще бъде издадена и изпратена отделно по имейл.",
     date: "Дата",
     description: "Описание",
     amount: "Сума",
@@ -250,8 +268,11 @@ const translations = {
   ro: {
     title: "Abonamentul Meu",
     currentPlan: "Planul Curent",
+    plan: "Plan",
     status: "Status",
     expiresAt: "Expiră",
+    expiresOn: "Până la",
+    unlimited: "Nelimitat",
     nextPayment: "Următoarea Plată",
     autoRenewal: "Reînnoire Automată",
     enabled: "Activată",
@@ -266,11 +287,11 @@ const translations = {
     buyAccount: "Cumpără Cont",
     choosePlan: "Alege Plan",
     upgradePlan: "Actualizează Plan",
+    changePlan: "Schimbă Pachetul",
     extendSubscription: "Prelungește Abonament",
     cancelSubscription: "Anulează Abonament",
     paymentHistory: "Istoric Plăți",
     paymentHistoryNote: "Aici sunt afișate confirmările de plată prin Stripe.",
-    invoiceNote: "Factura fiscală oficială va fi emisă și trimisă separat prin email.",
     date: "Data",
     description: "Descriere",
     amount: "Sumă",
@@ -288,8 +309,11 @@ const translations = {
   ar: {
     title: "اشتراكي",
     currentPlan: "الخطة الحالية",
+    plan: "الخطة",
     status: "الحالة",
     expiresAt: "ينتهي في",
+    expiresOn: "حتى",
+    unlimited: "غير محدود",
     nextPayment: "الدفعة التالية",
     autoRenewal: "التجديد التلقائي",
     enabled: "مفعّل",
@@ -304,11 +328,11 @@ const translations = {
     buyAccount: "شراء حساب",
     choosePlan: "اختر خطة",
     upgradePlan: "ترقية الخطة",
+    changePlan: "تغيير الباقة",
     extendSubscription: "تمديد الاشتراك",
     cancelSubscription: "إلغاء الاشتراك",
     paymentHistory: "سجل المدفوعات",
     paymentHistoryNote: "يتم عرض تأكيدات الدفع عبر Stripe هنا.",
-    invoiceNote: "سيتم إصدار الفاتورة الضريبية الرسمية وإرسالها بشكل منفصل عبر البريد الإلكتروني.",
     date: "التاريخ",
     description: "الوصف",
     amount: "المبلغ",
@@ -334,6 +358,7 @@ export default function SubscriptionPage() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [subscription, setSubscription] = useState<SubscriptionData | null>(null);
+  const [isLoadingPortal, setIsLoadingPortal] = useState(false);
 
   useEffect(() => {
     async function loadSubscription() {
@@ -438,6 +463,62 @@ export default function SubscriptionPage() {
     return `${diffHours} ${t.hoursLeft}`;
   };
 
+  const isVipUnlimited = () => {
+    if (!subscription || subscription.status !== 'vip' || !subscription.vipExpiresAt) return false;
+    const vipExpires = new Date(subscription.vipExpiresAt);
+    const now = new Date();
+    const diffYears = (vipExpires.getTime() - now.getTime()) / (1000 * 60 * 60 * 24 * 365);
+    return diffYears > 50;
+  };
+
+  const getVipExpiresFormatted = () => {
+    if (!subscription?.vipExpiresAt) return null;
+    const date = new Date(subscription.vipExpiresAt);
+    return date.toLocaleDateString('el-GR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  };
+
+  const getPlanDisplayName = () => {
+    if (!subscription) return '';
+    if (subscription.status === 'vip') return 'VIP';
+    if (subscription.status === 'demo') return 'DEMO';
+    if (!subscription.plan) return '';
+    const planMap: Record<string, string> = {
+      'basic': 'Basic',
+      'standard': 'Standard',
+      'premium': 'Premium',
+    };
+    return planMap[subscription.plan] || subscription.plan.toUpperCase();
+  };
+
+  const canChangePlan = () => {
+    if (!subscription) return false;
+    // Only for active subscriptions with Basic/Standard/Premium
+    if (subscription.status !== 'active') return false;
+    if (!subscription.plan) return false;
+    return ['basic', 'standard', 'premium'].includes(subscription.plan);
+  };
+
+  const openCustomerPortal = async () => {
+    setIsLoadingPortal(true);
+    try {
+      const response = await fetch('/api/stripe/customer-portal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ locale }),
+      });
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error('Failed to create portal session:', data.error);
+      }
+    } catch (error) {
+      console.error('Error opening customer portal:', error);
+    } finally {
+      setIsLoadingPortal(false);
+    }
+  };
+
   if (isLoading || !subscription) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -447,6 +528,7 @@ export default function SubscriptionPage() {
   }
 
   const timeRemaining = getTimeRemaining();
+  const planName = getPlanDisplayName();
 
   return (
     <BackgroundPage pageIndex={1}>
@@ -486,21 +568,81 @@ export default function SubscriptionPage() {
             </span>
           </p>
 
+          {/* Buy Account Button - right after status */}
+          {!subscription.accountPurchased && (
+            <button
+              onClick={() => router.push(`/${locale}/purchase-account`)}
+              className="w-full rounded-2xl text-slogan font-bold transition-opacity hover:opacity-80"
+              style={{
+                backgroundColor: 'var(--orange)',
+                color: 'white',
+                minHeight: '52px',
+              }}
+            >
+              {t.buyAccount}
+            </button>
+          )}
+
           {/* Current Plan */}
           <p className="text-heading font-semibold text-center" style={{ color: 'var(--zanah)' }}>
             📋 {t.currentPlan}
           </p>
 
+          {/* Current Plan - Plan Name */}
+          {planName && (
+            <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
+              {t.plan}:{' '}
+              <span style={{ color: 'var(--orange)', fontWeight: 'bold' }}>
+                {planName}
+              </span>
+            </p>
+          )}
+
           {/* Current Plan - Status */}
           <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
             {t.status}:{' '}
-            <span style={{ color: subscription.status === 'active' ? '#25D366' : 'var(--orange)', fontWeight: 'bold' }}>
+            <span style={{ color: getStatusColor(subscription.status), fontWeight: 'bold' }}>
               {getStatusLabel(subscription.status)}
             </span>
-            {timeRemaining && (
-              <span> — {t.expiresAt}: {timeRemaining}</span>
-            )}
           </p>
+
+          {/* VIP Expires / Subscription Expires */}
+          {subscription.status === 'vip' && subscription.vipExpiresAt && (
+            <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
+              {isVipUnlimited() ? (
+                <span style={{ color: '#25D366', fontWeight: 'bold' }}>
+                  {t.unlimited}
+                </span>
+              ) : (
+                <>
+                  {t.expiresOn}:{' '}
+                  <span style={{ color: 'var(--orange)', fontWeight: 'bold' }}>
+                    {getVipExpiresFormatted()}
+                  </span>
+                </>
+              )}
+            </p>
+          )}
+
+          {/* Active subscription expires */}
+          {subscription.status === 'active' && timeRemaining && (
+            <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
+              {t.expiresAt}:{' '}
+              <span style={{ fontWeight: 'bold' }}>
+                {timeRemaining}
+              </span>
+            </p>
+          )}
+
+          {/* Demo expires */}
+          {subscription.status === 'demo' && timeRemaining && (
+            <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
+              {t.expiresAt}:{' '}
+              <span style={{ color: 'var(--orange)', fontWeight: 'bold' }}>
+                {timeRemaining}
+              </span>
+            </p>
+          )}
 
           {/* Bonus Months */}
           {subscription.bonusMonths > 0 && (
@@ -509,32 +651,25 @@ export default function SubscriptionPage() {
             </p>
           )}
 
-          {/* Buy Account Button - only button */}
-          <button
-            onClick={() => !subscription.accountPurchased && router.push(`/${locale}/purchase-account`)}
-            disabled={subscription.accountPurchased}
-            className="w-full rounded-2xl text-slogan font-bold transition-opacity hover:opacity-80 disabled:cursor-not-allowed"
-            style={{
-              backgroundColor: subscription.accountPurchased ? '#6b7280' : 'var(--orange)',
-              color: 'white',
-              minHeight: '52px',
-              opacity: subscription.accountPurchased ? 0.6 : 1,
-            }}
-          >
-            {t.buyAccount}
-          </button>
+          {/* Change Plan Button - only for active Basic/Standard/Premium */}
+          {canChangePlan() && (
+            <button
+              onClick={openCustomerPortal}
+              disabled={isLoadingPortal}
+              className="w-full rounded-2xl text-button font-semibold transition-opacity hover:opacity-80 disabled:opacity-60"
+              style={{
+                backgroundColor: 'var(--zanah)',
+                color: 'var(--deep-teal)',
+                minHeight: '52px',
+              }}
+            >
+              {isLoadingPortal ? '...' : t.changePlan}
+            </button>
+          )}
 
           {/* Payment History */}
           <p className="text-heading font-semibold text-center" style={{ color: 'var(--zanah)' }}>
             📜 {t.paymentHistory}
-          </p>
-
-          {/* Invoice notice */}
-          <p
-            className="text-body text-center"
-            style={{ color: 'var(--zanah)' }}
-          >
-            {t.invoiceNote}
           </p>
 
           {/* No Payments */}
