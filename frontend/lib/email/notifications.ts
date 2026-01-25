@@ -216,14 +216,14 @@ export async function sendNewReferralEmail(
   locale: string = 'el'
 ): Promise<boolean> {
   const subjects = {
-    el: '🎉 Νέος παραπεμπόμενος εγγράφηκε μέσω του συνδέσμου σας!',
-    ru: '🎉 Новый реферал зарегистрировался по вашей ссылке!',
+    el: '🎉 New referral signed up via your link!',
+    ru: '🎉 New referral signed up via your link!',
     en: '🎉 New referral signed up via your link!',
-    uk: '🎉 Новий реферал зареєструвався за вашим посиланням!',
-    sq: '🎉 Referal i ri u regjistrua përmes lidhjes suaj!',
-    bg: '🎉 Нов реферал се регистрира чрез вашата връзка!',
-    ro: '🎉 Referință nouă s-a înregistrat prin linkul dvs.!',
-    ar: '🎉 تم تسجيل إحالة جديدة عبر رابطك!',
+    uk: '🎉 New referral signed up via your link!',
+    sq: '🎉 New referral signed up via your link!',
+    bg: '🎉 New referral signed up via your link!',
+    ro: '🎉 New referral signed up via your link!',
+    ar: '🎉 New referral signed up via your link!',
   };
 
   const html = generateNewReferralHTML(referralName, referralEmail, locale);
@@ -245,14 +245,14 @@ export async function sendReferralPurchaseEmail(
   locale: string = 'el'
 ): Promise<boolean> {
   const subjects = {
-    el: '🎁 Κερδίσατε +1 μήνα ΔΩΡΕΑΝ! Ο παραπεμπόμενός σας αγόρασε λογαριασμό!',
-    ru: '🎁 Вы получили +1 месяц БЕСПЛАТНО! Ваш реферал купил аккаунт!',
+    el: '🎁 You earned +1 month FREE! Your referral purchased an account!',
+    ru: '🎁 You earned +1 month FREE! Your referral purchased an account!',
     en: '🎁 You earned +1 month FREE! Your referral purchased an account!',
-    uk: '🎁 Ви отримали +1 місяць БЕЗКОШТОВНО! Ваш реферал купив акаунт!',
-    sq: '🎁 Fituat +1 muaj FALAS! Referali juaj bleu një llogari!',
-    bg: '🎁 Спечелихте +1 месец БЕЗПЛАТНО! Вашият реферал купи акаунт!',
-    ro: '🎁 Ați câștigat +1 lună GRATUIT! Referința dvs. a cumpărat un cont!',
-    ar: '🎁 لقد ربحت +1 شهر مجاناً! اشترى المُحال الخاص بك حساباً!',
+    uk: '🎁 You earned +1 month FREE! Your referral purchased an account!',
+    sq: '🎁 You earned +1 month FREE! Your referral purchased an account!',
+    bg: '🎁 You earned +1 month FREE! Your referral purchased an account!',
+    ro: '🎁 You earned +1 month FREE! Your referral purchased an account!',
+    ar: '🎁 You earned +1 month FREE! Your referral purchased an account!',
   };
 
   const html = generateReferralPurchaseHTML(referralName, bonusMonthsTotal, locale);
