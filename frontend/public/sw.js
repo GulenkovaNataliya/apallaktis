@@ -71,6 +71,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Пропускаем админ-панель - не кэшируем вообще
+  if (request.url.includes('/admin')) {
+    return;
+  }
+
   // Пропускаем chrome-extension и другие схемы
   if (!request.url.startsWith('http')) {
     return;
