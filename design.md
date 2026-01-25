@@ -1618,3 +1618,85 @@ debtsByObject = objects.filter(obj => obj.balance > 0.01)
 8. **Пустые состояния:** оранжевый текст по центру
 9. **Баланс:** оранжевый (долг), зелёный (оплачено), zanah (переплата)
 10. **"← Назад":** это `<p>`, не `<button>`, цвет `var(--polar)`
+
+---
+
+## 24. ДИЗАЙН СТРАНИЦ КОМАНДЫ
+
+### 24.1 `/[locale]/dashboard/team` — Управление командой
+
+**Layout:**
+- `paddingTop: 180px`
+- `paddingLeft: 40px`, `paddingRight: 40px`
+- `paddingBottom: 120px`
+- `gap: 48px` (gap-12)
+
+**Элементы:**
+
+| Элемент | Фон | Цвет текста | Размер/Стиль |
+|---------|-----|-------------|--------------|
+| ← Назад | — | `var(--polar)` | `<p>` text-button cursor-pointer |
+| Заголовок | — | `#ff8f0a` | text-slogan font-bold |
+| Лимит участников | `var(--zanah)` | `var(--deep-teal)` | rounded-2xl p-4 |
+| Карточка участника | `var(--zanah)` | `var(--deep-teal)` | rounded-2xl p-4 |
+| Роль "Владелец" | — | `var(--orange)` | text-small |
+| Роль "Участник" | — | `var(--deep-teal)` | text-small |
+| Кнопка "Удалить" | `#ef4444` | white | px-3 py-1 rounded-lg |
+| Кнопка "Покинуть" | transparent | `#ef4444` | 52px, border: 2px solid #ef4444 |
+| Кнопка "Пригласить" | `var(--orange)` | `var(--deep-teal)` | 52px |
+| Кнопка "Обновить" | `var(--orange)` | `var(--deep-teal)` | 52px |
+
+**Модальное окно приглашения:**
+
+| Элемент | Фон | Цвет | Размер |
+|---------|-----|------|--------|
+| Контейнер | `var(--zanah)` | — | rounded-2xl p-6 |
+| Заголовок | — | `var(--deep-teal)` | text-heading font-semibold |
+| Input email | white | `var(--deep-teal)` | 52px, rounded-2xl, padding: 12px |
+| Кнопка "Отмена" | transparent | `var(--deep-teal)` | 52px, border: 2px solid |
+| Кнопка "Отправить" | `var(--orange)` | `var(--deep-teal)` | 52px |
+
+**Файл:** `frontend/app/[locale]/dashboard/team/page.tsx`
+
+---
+
+### 24.2 `/[locale]/team-invite` — Принятие приглашения
+
+**Layout:**
+- Центрирование по вертикали (justify-center) — исключение для этой страницы
+- `paddingLeft: 40px`, `paddingRight: 40px`
+
+**Элементы:**
+
+| Элемент | Фон | Цвет текста | Размер/Стиль |
+|---------|-----|-------------|--------------|
+| Заголовок | — | `#ff8f0a` | text-slogan font-bold |
+| Карточка приглашения | `var(--zanah)` | `var(--deep-teal)` | rounded-2xl p-6 |
+| Имя приглашающего | — | `var(--orange)` | text-heading font-semibold |
+| Название команды | — | `var(--orange)` | text-heading font-semibold |
+| Кнопка "Принять" | `var(--orange)` | `var(--deep-teal)` | 52px |
+| Кнопка "Отклонить" | transparent | `var(--polar)` | 52px, border: 2px solid var(--polar) |
+| Кнопка "Войти" | `var(--orange)` | `var(--deep-teal)` | 52px |
+| Кнопка "Регистрация" | transparent | `var(--polar)` | 52px, border: 2px solid var(--polar) |
+
+**Состояния:**
+
+| Состояние | Иконка | Цвет заголовка |
+|-----------|--------|----------------|
+| Успех | ✅ (text-6xl) | `#10b981` (green) |
+| Ошибка | ❌ (text-6xl) | `#ef4444` (red) |
+
+**Файл:** `frontend/app/[locale]/team-invite/page.tsx`
+
+---
+
+### 24.3 КЛЮЧЕВЫЕ ПРАВИЛА СТРАНИЦ КОМАНДЫ
+
+1. **Gap между блоками:** `gap-12` (48px)
+2. **Высота кнопок:** `minHeight: '52px'`
+3. **Border-radius:** `rounded-2xl` (16px)
+4. **Карточки участников:** фон `var(--zanah)`, текст `var(--deep-teal)`
+5. **Роль Owner:** цвет `var(--orange)`
+6. **Деструктивные кнопки:** красный `#ef4444`
+7. **"← Назад":** это `<p>`, не `<button>`, цвет `var(--polar)`
+8. **Модальные окна:** фон `var(--zanah)`, кнопки 52px

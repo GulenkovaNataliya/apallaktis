@@ -297,3 +297,37 @@ psql $DATABASE_URL < database/migrations/create_team_tables.sql
 | `frontend/app/[locale]/dashboard/team/page.tsx` | UI управления |
 | `frontend/app/[locale]/team-invite/page.tsx` | UI принятия приглашения |
 | `frontend/lib/email/notifications.ts` | Email templates |
+
+---
+
+## Дизайн (design.md compliance)
+
+### Layout страницы `/dashboard/team`:
+```css
+paddingTop: '180px'
+paddingLeft: '40px'
+paddingRight: '40px'
+paddingBottom: '120px'
+gap: 'gap-12' (48px)
+```
+
+### Элементы UI:
+
+| Элемент | Требование |
+|---------|------------|
+| Кнопки | `minHeight: '52px'` |
+| Border-radius | `rounded-2xl` (16px) |
+| Gap между блоками | `gap-12` (48px) |
+| "← Назад" | `<p>` с `text-button cursor-pointer`, цвет `var(--polar)` |
+| Карточки участников | фон `var(--zanah)`, текст `var(--deep-teal)` |
+| Роль Owner | цвет `var(--orange)` |
+| Кнопка "Пригласить" | фон `var(--orange)`, текст `var(--deep-teal)` |
+| Модальное окно | фон `var(--zanah)`, кнопки `minHeight: '52px'` |
+
+### Модальное окно приглашения:
+- Input: `minHeight: '52px'`, `padding: '12px'`, `rounded-2xl`
+- Кнопка "Отмена": `border: 2px solid var(--deep-teal)`
+- Кнопка "Отправить": `backgroundColor: var(--orange)`
+- Gap между кнопками: `gap-4` (16px)
+
+Полная документация дизайна: `design.md` раздел 24

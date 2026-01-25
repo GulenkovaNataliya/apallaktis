@@ -21,9 +21,36 @@
 
 **Путь:** `/[locale]/admin`
 **Файл:** `frontend/app/[locale]/admin/page.tsx`
+**Layout:** `frontend/app/[locale]/admin/layout.tsx`
 **Доступ:** только для `role: "admin"`
 **Логотип:** `/Apallaktis.photos/apallaktis-logo-orange@2x.png`
 **Тип:** Desktop-only (полноэкранная страница, без мобильной рамки)
+**Язык:** Только русский (автоматический редирект с других языков)
+
+### Full-Screen Layout
+
+Админ-панель работает на весь экран компьютера, без мобильной рамки. Это реализовано в `layout.tsx`:
+
+```typescript
+useEffect(() => {
+  // Override body styles
+  document.body.style.backgroundColor = "#fff";
+  document.body.style.display = "block";
+
+  // Override mobile-preview-wrapper
+  const wrapper = document.querySelector(".mobile-preview-wrapper") as HTMLElement;
+  if (wrapper) {
+    wrapper.style.maxWidth = "100%";
+    wrapper.style.width = "100%";
+    wrapper.style.borderRadius = "0";
+    wrapper.style.boxShadow = "none";
+    wrapper.style.margin = "0";
+  }
+
+  // Cleanup on unmount
+  return () => { /* restore styles */ };
+}, []);
+```
 
 ### Макет
 
