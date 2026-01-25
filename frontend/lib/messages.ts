@@ -9,6 +9,7 @@ export const messages = {
       backToLanguageSelection: "← Επιλογή γλώσσας",
       viewPricing: "Τιμοκατάλογος",
       howToUse: "Οδηγίες",
+      downloadApp: "Κατέβασε την εφαρμογή",
     },
     pricing: {
       title: "Τιμές",
@@ -395,6 +396,7 @@ export const messages = {
       backToLanguageSelection: "← Выбор языка",
       viewPricing: "Прайс-лист",
       howToUse: "Инструкция",
+      downloadApp: "Скачать приложение",
     },
     pricing: {
       title: "Тарифы",
@@ -780,6 +782,7 @@ export const messages = {
       backToLanguageSelection: "← Вибір мови",
       viewPricing: "Прайс-лист",
       howToUse: "Інструкція",
+      downloadApp: "Завантажити додаток",
     },
     pricing: {
       title: "Тарифи",
@@ -1165,6 +1168,7 @@ export const messages = {
       backToLanguageSelection: "← Zgjedhja e gjuhës",
       viewPricing: "Lista e çmimeve",
       howToUse: "Udhëzime",
+      downloadApp: "Shkarkoni aplikacionin",
     },
     pricing: {
       title: "Tarifat",
@@ -1550,6 +1554,7 @@ export const messages = {
       backToLanguageSelection: "← Избор на език",
       viewPricing: "Ценоразпис",
       howToUse: "Инструкция",
+      downloadApp: "Изтеглете приложението",
     },
     pricing: {
       title: "Тарифи",
@@ -1935,6 +1940,7 @@ export const messages = {
       backToLanguageSelection: "← Alegerea limbii",
       viewPricing: "Lista de prețuri",
       howToUse: "Instrucțiuni",
+      downloadApp: "Descărcați aplicația",
     },
     pricing: {
       title: "Tarife",
@@ -2320,6 +2326,7 @@ export const messages = {
       backToLanguageSelection: "← Language selection",
       viewPricing: "Price list",
       howToUse: "Instructions",
+      downloadApp: "Download App",
     },
     pricing: {
       title: "Pricing",
@@ -2705,6 +2712,7 @@ export const messages = {
       backToLanguageSelection: "← اختيار اللغة",
       viewPricing: "قائمة الأسعار",
       howToUse: "تعليمات",
+      downloadApp: "تحميل التطبيق",
     },
     pricing: {
       title: "الأسعار",

@@ -1,14 +1,54 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import VideoBackground from "@/components/VideoBackground";
 import { messages, type Locale } from "@/lib/messages";
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+}
+
 export default function LandingPage() {
   const params = useParams();
   const locale = (params.locale as Locale) || "el";
   const t = messages[locale]?.landing || messages.el.landing;
+
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      setShowInstallButton(true);
+    };
+
+    window.addEventListener("beforeinstallprompt", handler);
+
+    // Check if app is already installed
+    if (window.matchMedia("(display-mode: standalone)").matches) {
+      setShowInstallButton(false);
+    }
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === "accepted") {
+      setShowInstallButton(false);
+    }
+    setDeferredPrompt(null);
+  };
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -106,6 +146,28 @@ export default function LandingPage() {
             >
               {t.howToUse}
             </Link>
+
+            {/* Button 5: Download App (PWA Install) */}
+            {showInstallButton && (
+              <button
+                onClick={handleInstallClick}
+                className="btn-primary text-button text-center w-full"
+                style={{
+                  minHeight: "52px",
+                  backgroundColor: "#b7dcd5",
+                  color: "#033a45",
+                  boxShadow: "0 4px 8px #033a45",
+                  borderRadius: "1rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                {t.downloadApp}
+              </button>
+            )}
           </div>
         </div>
       </div>
