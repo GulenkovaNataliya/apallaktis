@@ -13,6 +13,7 @@ export type SubscriptionTier = 'demo' | 'basic' | 'standard' | 'premium' | 'vip'
 
 export interface SubscriptionLimits {
   maxObjects: number; // -1 = unlimited
+  maxUsers: number;   // Максимум пользователей в команде
   voiceInput: boolean;
   photoReceipt: boolean;
   financialAnalysis: boolean;
@@ -25,6 +26,7 @@ export interface SubscriptionLimits {
 export const SUBSCRIPTION_LIMITS: Record<SubscriptionTier, SubscriptionLimits> = {
   demo: {
     maxObjects: -1,           // Безлимит
+    maxUsers: 1,              // Только владелец
     voiceInput: true,         // ✅ Доступен
     photoReceipt: true,       // ✅ Доступен
     financialAnalysis: true,  // ✅ Доступен
@@ -34,6 +36,7 @@ export const SUBSCRIPTION_LIMITS: Record<SubscriptionTier, SubscriptionLimits> =
   },
   basic: {
     maxObjects: 10,           // Максимум 10
+    maxUsers: 1,              // Только владелец
     voiceInput: false,        // ❌ Недоступен
     photoReceipt: false,      // ❌ Недоступен
     financialAnalysis: true,  // ✅ Доступен
@@ -43,6 +46,7 @@ export const SUBSCRIPTION_LIMITS: Record<SubscriptionTier, SubscriptionLimits> =
   },
   standard: {
     maxObjects: 50,           // Максимум 50
+    maxUsers: 2,              // Владелец + 1 член
     voiceInput: true,         // ✅ Доступен
     photoReceipt: true,       // ✅ Доступен
     financialAnalysis: true,  // ✅ Доступен
@@ -52,6 +56,7 @@ export const SUBSCRIPTION_LIMITS: Record<SubscriptionTier, SubscriptionLimits> =
   },
   premium: {
     maxObjects: -1,           // Безлимит
+    maxUsers: -1,             // Безлимит
     voiceInput: true,         // ✅ Доступен
     photoReceipt: true,       // ✅ Доступен
     financialAnalysis: true,  // ✅ Доступен
@@ -61,6 +66,7 @@ export const SUBSCRIPTION_LIMITS: Record<SubscriptionTier, SubscriptionLimits> =
   },
   vip: {
     maxObjects: -1,           // Безлимит
+    maxUsers: -1,             // Безлимит
     voiceInput: true,         // ✅ Доступен
     photoReceipt: true,       // ✅ Доступен
     financialAnalysis: true,  // ✅ Доступен
@@ -70,6 +76,7 @@ export const SUBSCRIPTION_LIMITS: Record<SubscriptionTier, SubscriptionLimits> =
   },
   expired: {
     maxObjects: 0,            // Нельзя создавать
+    maxUsers: 0,              // Нельзя приглашать
     voiceInput: false,        // ❌ Недоступен
     photoReceipt: false,      // ❌ Недоступен
     financialAnalysis: false, // ❌ Недоступен
@@ -79,6 +86,7 @@ export const SUBSCRIPTION_LIMITS: Record<SubscriptionTier, SubscriptionLimits> =
   },
   'read-only': {
     maxObjects: 0,            // Нельзя создавать
+    maxUsers: 0,              // Нельзя приглашать
     voiceInput: false,        // ❌ Недоступен
     photoReceipt: false,      // ❌ Недоступен
     financialAnalysis: true,  // ✅ Только просмотр
@@ -229,6 +237,46 @@ export function getUserTier(profile: {
   }
 
   return 'demo';
+}
+
+/**
+ * Проверить, можно ли добавить члена команды
+ */
+export function canAddTeamMember(tier: SubscriptionTier, currentMemberCount: number): {
+  allowed: boolean;
+  message?: string;
+  upgradeToTier?: SubscriptionTier;
+} {
+  const limits = getSubscriptionLimits(tier);
+
+  // Безлимит
+  if (limits.maxUsers === -1) {
+    return { allowed: true };
+  }
+
+  // Проверяем лимит
+  if (currentMemberCount >= limits.maxUsers) {
+    if (tier === 'basic' || tier === 'demo') {
+      return {
+        allowed: false,
+        message: 'teamLimitBasic', // "План Basic поддерживает только 1 пользователя"
+        upgradeToTier: 'standard',
+      };
+    }
+    if (tier === 'standard') {
+      return {
+        allowed: false,
+        message: 'teamLimitStandard', // "План Standard поддерживает до 2 пользователей"
+        upgradeToTier: 'premium',
+      };
+    }
+    return {
+      allowed: false,
+      message: 'teamLimitGeneric',
+    };
+  }
+
+  return { allowed: true };
 }
 
 /**

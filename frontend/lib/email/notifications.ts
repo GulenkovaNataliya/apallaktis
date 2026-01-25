@@ -705,7 +705,171 @@ function generateSubscriptionActivatedHTML(accountNumber: number, plan: string, 
 }
 
 // ============================================
-// 10. Admin Notification: New Payment Received
+// 10. Team Invitation Email
+// ============================================
+
+/**
+ * 10. Уведомление: Приглашение в команду
+ */
+export async function sendTeamInvitationEmail(
+  email: string,
+  inviterName: string,
+  teamName: string,
+  inviteLink: string,
+  expiresAt: Date,
+  locale: string = 'el'
+): Promise<boolean> {
+  const subjects = {
+    el: `🤝 Πρόσκληση στην ομάδα "${teamName}" - ΑΠΑΛΛΑΚΤΗΣ`,
+    ru: `🤝 Приглашение в команду "${teamName}" - ΑΠΑΛΛΑΚΤΗΣ`,
+    en: `🤝 Invitation to join team "${teamName}" - ΑΠΑΛΛΑΚΤΗΣ`,
+    uk: `🤝 Запрошення до команди "${teamName}" - ΑΠΑΛΛΑΚΤΗΣ`,
+    sq: `🤝 Ftesë për t'u bashkuar në ekipin "${teamName}" - ΑΠΑΛΛΑΚΤΗΣ`,
+    bg: `🤝 Покана за присъединяване към екип "${teamName}" - ΑΠΑΛΛΑΚΤΗΣ`,
+    ro: `🤝 Invitație pentru echipa "${teamName}" - ΑΠΑΛΛΑΚΤΗΣ`,
+    ar: `🤝 دعوة للانضمام إلى الفريق "${teamName}" - ΑΠΑΛΛΑΚΤΗΣ`,
+  };
+
+  const html = generateTeamInvitationHTML(inviterName, teamName, inviteLink, expiresAt, locale);
+
+  return sendEmail({
+    to: email,
+    subject: subjects[locale as keyof typeof subjects] || subjects.el,
+    html,
+  });
+}
+
+function generateTeamInvitationHTML(
+  inviterName: string,
+  teamName: string,
+  inviteLink: string,
+  expiresAt: Date,
+  locale: string
+): string {
+  const texts = {
+    el: {
+      title: 'Πρόσκληση στην Ομάδα',
+      greeting: 'Γεια σας!',
+      message: `Ο/Η <strong>${inviterName}</strong> σας προσκαλεί να συμμετάσχετε στην ομάδα <strong>"${teamName}"</strong> στο ΑΠΑΛΛΑΚΤΗΣ.`,
+      info: 'Αφού συμμετάσχετε στην ομάδα, θα έχετε πρόσβαση σε όλα τα έργα και τα οικονομικά στοιχεία της ομάδας.',
+      expires: `Η πρόσκληση λήγει: ${expiresAt.toLocaleDateString('el-GR')}`,
+      button: 'Αποδοχή Πρόσκλησης',
+      note: 'Αν δεν αναγνωρίζετε αυτή την πρόσκληση, αγνοήστε αυτό το email.',
+    },
+    ru: {
+      title: 'Приглашение в команду',
+      greeting: 'Здравствуйте!',
+      message: `<strong>${inviterName}</strong> приглашает вас присоединиться к команде <strong>"${teamName}"</strong> в ΑΠΑΛΛΑΚΤΗΣ.`,
+      info: 'После присоединения к команде вы получите доступ ко всем проектам и финансовым данным команды.',
+      expires: `Приглашение действует до: ${expiresAt.toLocaleDateString('ru-RU')}`,
+      button: 'Принять приглашение',
+      note: 'Если вы не узнаёте это приглашение, проигнорируйте это письмо.',
+    },
+    en: {
+      title: 'Team Invitation',
+      greeting: 'Hello!',
+      message: `<strong>${inviterName}</strong> has invited you to join the team <strong>"${teamName}"</strong> on ΑΠΑΛΛΑΚΤΗΣ.`,
+      info: 'After joining the team, you will have access to all team projects and financial data.',
+      expires: `Invitation expires: ${expiresAt.toLocaleDateString('en-US')}`,
+      button: 'Accept Invitation',
+      note: 'If you don\'t recognize this invitation, please ignore this email.',
+    },
+    uk: {
+      title: 'Запрошення до команди',
+      greeting: 'Привіт!',
+      message: `<strong>${inviterName}</strong> запрошує вас приєднатися до команди <strong>"${teamName}"</strong> в ΑΠΑΛΛΑΚΤΗΣ.`,
+      info: 'Після приєднання до команди ви отримаєте доступ до всіх проектів та фінансових даних команди.',
+      expires: `Запрошення дійсне до: ${expiresAt.toLocaleDateString('uk-UA')}`,
+      button: 'Прийняти запрошення',
+      note: 'Якщо ви не впізнаєте це запрошення, проігноруйте цей лист.',
+    },
+    sq: {
+      title: 'Ftesë për Ekipin',
+      greeting: 'Përshëndetje!',
+      message: `<strong>${inviterName}</strong> ju fton të bashkoheni me ekipin <strong>"${teamName}"</strong> në ΑΠΑΛΛΑΚΤΗΣ.`,
+      info: 'Pasi të bashkoheni me ekipin, do të keni qasje në të gjitha projektet dhe të dhënat financiare të ekipit.',
+      expires: `Ftesa skadon: ${expiresAt.toLocaleDateString('sq-AL')}`,
+      button: 'Prano Ftesën',
+      note: 'Nëse nuk e njihni këtë ftesë, injoroni këtë email.',
+    },
+    bg: {
+      title: 'Покана за екип',
+      greeting: 'Здравейте!',
+      message: `<strong>${inviterName}</strong> ви кани да се присъедините към екип <strong>"${teamName}"</strong> в ΑΠΑΛΛΑΚΤΗΣ.`,
+      info: 'След като се присъедините към екипа, ще имате достъп до всички проекти и финансови данни на екипа.',
+      expires: `Поканата изтича: ${expiresAt.toLocaleDateString('bg-BG')}`,
+      button: 'Приемане на поканата',
+      note: 'Ако не разпознавате тази покана, игнорирайте този имейл.',
+    },
+    ro: {
+      title: 'Invitație pentru Echipă',
+      greeting: 'Bună!',
+      message: `<strong>${inviterName}</strong> te invită să te alături echipei <strong>"${teamName}"</strong> pe ΑΠΑΛΛΑΚΤΗΣ.`,
+      info: 'După ce te alături echipei, vei avea acces la toate proiectele și datele financiare ale echipei.',
+      expires: `Invitația expiră: ${expiresAt.toLocaleDateString('ro-RO')}`,
+      button: 'Acceptă Invitația',
+      note: 'Dacă nu recunoști această invitație, ignoră acest email.',
+    },
+    ar: {
+      title: 'دعوة للانضمام إلى الفريق',
+      greeting: 'مرحباً!',
+      message: `<strong>${inviterName}</strong> يدعوك للانضمام إلى الفريق <strong>"${teamName}"</strong> على ΑΠΑΛΛΑΚΤΗΣ.`,
+      info: 'بعد الانضمام إلى الفريق، ستحصل على إمكانية الوصول إلى جميع مشاريع الفريق والبيانات المالية.',
+      expires: `تنتهي الدعوة: ${expiresAt.toLocaleDateString('ar-SA')}`,
+      button: 'قبول الدعوة',
+      note: 'إذا كنت لا تتعرف على هذه الدعوة، يرجى تجاهل هذا البريد الإلكتروني.',
+    },
+  };
+
+  const t = texts[locale as keyof typeof texts] || texts.el;
+
+  return `
+<!DOCTYPE html>
+<html lang="${locale}" dir="${locale === 'ar' ? 'rtl' : 'ltr'}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+    <tr>
+      <td style="background: linear-gradient(135deg, #01312d 0%, #065f46 100%); padding: 40px 20px; text-align: center;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 28px;">🤝 ${t.title}</h1>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 40px 30px;">
+        <p style="font-size: 18px; color: #333; margin-bottom: 10px;">${t.greeting}</p>
+        <p style="font-size: 16px; color: #333; margin-bottom: 20px;">${t.message}</p>
+
+        <div style="background-color: #f0fdf4; border-left: 4px solid #10b981; padding: 15px; margin: 20px 0;">
+          <p style="margin: 0; color: #065f46; font-size: 15px;">${t.info}</p>
+        </div>
+
+        <p style="font-size: 14px; color: #666; margin: 15px 0;">${t.expires}</p>
+
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${inviteLink}" style="display: inline-block; background-color: #01312d; color: #ffffff; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+            ${t.button}
+          </a>
+        </div>
+
+        <p style="font-size: 13px; color: #999; margin-top: 30px; text-align: center;">${t.note}</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+        <p style="font-size: 12px; color: #999; margin: 0;">© 2026 ΑΠΑΛΛΑΚΤΗΣ</p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+}
+
+// ============================================
+// 11. Admin Notification: New Payment Received
 // ============================================
 
 export interface AdminPaymentNotificationData {

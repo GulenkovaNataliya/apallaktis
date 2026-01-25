@@ -466,7 +466,7 @@ export default function AdminPage() {
         zIndex: 100,
       }}>
         <Image
-          src="/logo.png"
+          src="/Apallaktis.photos/apallaktis-logo-orange@2x.png"
           alt="APALLAKTIS"
           width={180}
           height={45}

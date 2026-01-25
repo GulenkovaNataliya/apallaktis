@@ -17,6 +17,7 @@ const translations = {
     mySubscription: "Η Συνδρομή Μου",
     security: "Ασφάλεια",
     referral: "Παραπομπές",
+    team: "Η Ομάδα Μου",
     goToHome: "Μετάβαση στην Αρχική",
     logout: "Αποσύνδεση",
     deleteAccount: "Διαγραφή Λογαριασμού",
@@ -35,6 +36,7 @@ const translations = {
     mySubscription: "Моя Подписка",
     security: "Безопасность",
     referral: "Рефералы",
+    team: "Моя Команда",
     goToHome: "Перейти на Главную",
     logout: "Выход из Аккаунта",
     deleteAccount: "Удалить Аккаунт",
@@ -53,6 +55,7 @@ const translations = {
     mySubscription: "My Subscription",
     security: "Security",
     referral: "Referrals",
+    team: "My Team",
     goToHome: "Go to Home",
     logout: "Log Out",
     deleteAccount: "Delete Account",
@@ -71,6 +74,7 @@ const translations = {
     mySubscription: "Моя Підписка",
     security: "Безпека",
     referral: "Реферали",
+    team: "Моя Команда",
     goToHome: "Перейти на Головну",
     logout: "Вийти з Акаунту",
     deleteAccount: "Видалити Акаунт",
@@ -89,6 +93,7 @@ const translations = {
     mySubscription: "Abonamenti Im",
     security: "Siguria",
     referral: "Referime",
+    team: "Ekipi Im",
     goToHome: "Shko në Kryefaqe",
     logout: "Dilni nga Llogaria",
     deleteAccount: "Fshi Llogarinë",
@@ -107,6 +112,7 @@ const translations = {
     mySubscription: "Моят Абонамент",
     security: "Сигурност",
     referral: "Препоръки",
+    team: "Моят Екип",
     goToHome: "Към Началната Страница",
     logout: "Изход от Акаунта",
     deleteAccount: "Изтрий Акаунт",
@@ -125,6 +131,7 @@ const translations = {
     mySubscription: "Abonamentul Meu",
     security: "Securitate",
     referral: "Recomandări",
+    team: "Echipa Mea",
     goToHome: "Mergi la Pagina Principală",
     logout: "Deconectare",
     deleteAccount: "Șterge Contul",
@@ -143,6 +150,7 @@ const translations = {
     mySubscription: "اشتراكي",
     security: "الأمان",
     referral: "الإحالات",
+    team: "فريقي",
     goToHome: "الذهاب إلى الرئيسية",
     logout: "تسجيل الخروج",
     deleteAccount: "حذف الحساب",
@@ -332,7 +340,7 @@ export default function DashboardPage() {
             {(translations[locale] || translations.el).mySubscription}
           </button>
 
-          {/* Referrals Button - 3/4 */}
+          {/* Referrals Button - 3/5 */}
           <button
             onClick={() => router.push(`/${locale}/dashboard/referral`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"
@@ -341,7 +349,16 @@ export default function DashboardPage() {
             {(translations[locale] || translations.el).referral}
           </button>
 
-          {/* Go to Home Button - 4/4 darkest */}
+          {/* Team Button - 4/5 */}
+          <button
+            onClick={() => router.push(`/${locale}/dashboard/team`)}
+            className="btn-universal w-full text-button flex items-center justify-center text-center"
+            style={{ minHeight: '52px', backgroundColor: '#3da896', color: '#01312d' }}
+          >
+            {(translations[locale] || translations.el).team}
+          </button>
+
+          {/* Go to Home Button - 5/5 darkest */}
           <button
             onClick={() => router.push(`/${locale}/page-pay`)}
             className="btn-universal w-full text-button flex items-center justify-center text-center"

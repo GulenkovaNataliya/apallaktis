@@ -22,6 +22,8 @@
 **Путь:** `/[locale]/admin`
 **Файл:** `frontend/app/[locale]/admin/page.tsx`
 **Доступ:** только для `role: "admin"`
+**Логотип:** `/Apallaktis.photos/apallaktis-logo-orange@2x.png`
+**Тип:** Desktop-only (полноэкранная страница, без мобильной рамки)
 
 ### Макет
 
