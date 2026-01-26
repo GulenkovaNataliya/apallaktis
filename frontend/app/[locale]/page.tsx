@@ -18,6 +18,7 @@ export default function LandingPage() {
 
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
+  const [showInstallModal, setShowInstallModal] = useState(false);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -38,9 +39,15 @@ export default function LandingPage() {
     };
   }, []);
 
-  const handleInstallClick = async () => {
+  const handleInstallClick = () => {
+    if (!deferredPrompt) return;
+    setShowInstallModal(true);
+  };
+
+  const handleInstallConfirm = async () => {
     if (!deferredPrompt) return;
 
+    setShowInstallModal(false);
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
 
@@ -48,6 +55,10 @@ export default function LandingPage() {
       setShowInstallButton(false);
     }
     setDeferredPrompt(null);
+  };
+
+  const handleInstallCancel = () => {
+    setShowInstallModal(false);
   };
 
   return (
@@ -171,6 +182,84 @@ export default function LandingPage() {
           </div>
         </div>
       </div>
+
+      {/* Install Modal */}
+      {showInstallModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+          onClick={handleInstallCancel}
+        >
+          <div
+            className="rounded-2xl p-6 mx-4 max-w-sm w-full"
+            style={{ backgroundColor: "var(--polar)" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Title - translated */}
+            <h2
+              className="text-xl font-bold text-center mb-4"
+              style={{ color: "var(--deep-teal)" }}
+            >
+              {t.installTitle}
+            </h2>
+
+            {/* App name - always Greek */}
+            <p
+              className="text-2xl font-bold text-center mb-2"
+              style={{ color: "var(--deep-teal)" }}
+            >
+              ΑΠΑΛΛΑΚΤΗΣ
+            </p>
+
+            {/* Slogan - always Greek */}
+            <p
+              className="text-center mb-2"
+              style={{ color: "#ff8f0a", fontWeight: 600 }}
+            >
+              Τέλος στη ρουτίνα!
+            </p>
+
+            {/* Website - always English */}
+            <p
+              className="text-center mb-6 text-sm"
+              style={{ color: "var(--deep-teal)", opacity: 0.7 }}
+            >
+              www.apallaktis.com
+            </p>
+
+            {/* Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={handleInstallCancel}
+                className="flex-1 text-button font-semibold rounded-xl"
+                style={{
+                  backgroundColor: "#f0f0f0",
+                  color: "var(--deep-teal)",
+                  minHeight: "48px",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                {t.installCancel}
+              </button>
+              <button
+                onClick={handleInstallConfirm}
+                className="flex-1 text-button font-semibold rounded-xl"
+                style={{
+                  backgroundColor: "var(--zanah)",
+                  color: "var(--deep-teal)",
+                  boxShadow: "0 4px 8px var(--deep-teal)",
+                  minHeight: "48px",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                {t.installButton}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -10,6 +10,9 @@ export const messages = {
       viewPricing: "Τιμοκατάλογος",
       howToUse: "Οδηγίες",
       downloadApp: "Κατέβασε την εφαρμογή",
+      installTitle: "Εγκατάσταση εφαρμογής",
+      installCancel: "Ακύρωση",
+      installButton: "Εγκατάσταση",
     },
     pricing: {
       title: "Τιμοκατάλογος",
@@ -397,6 +400,9 @@ export const messages = {
       viewPricing: "Прайс-лист",
       howToUse: "Инструкция",
       downloadApp: "Скачать приложение",
+      installTitle: "Установка приложения",
+      installCancel: "Отмена",
+      installButton: "Установить",
     },
     pricing: {
       title: "Прайс-лист",
@@ -783,6 +789,9 @@ export const messages = {
       viewPricing: "Прайс-лист",
       howToUse: "Інструкція",
       downloadApp: "Завантажити додаток",
+      installTitle: "Встановлення додатку",
+      installCancel: "Скасувати",
+      installButton: "Встановити",
     },
     pricing: {
       title: "Прайс-лист",
@@ -1169,6 +1178,9 @@ export const messages = {
       viewPricing: "Lista e çmimeve",
       howToUse: "Udhëzime",
       downloadApp: "Shkarkoni aplikacionin",
+      installTitle: "Instalimi i aplikacionit",
+      installCancel: "Anulo",
+      installButton: "Instalo",
     },
     pricing: {
       title: "Lista e çmimeve",
@@ -1555,6 +1567,9 @@ export const messages = {
       viewPricing: "Ценоразпис",
       howToUse: "Инструкция",
       downloadApp: "Изтеглете приложението",
+      installTitle: "Инсталиране на приложението",
+      installCancel: "Отказ",
+      installButton: "Инсталирай",
     },
     pricing: {
       title: "Ценоразпис",
@@ -1941,6 +1956,9 @@ export const messages = {
       viewPricing: "Lista de prețuri",
       howToUse: "Instrucțiuni",
       downloadApp: "Descărcați aplicația",
+      installTitle: "Instalarea aplicației",
+      installCancel: "Anulare",
+      installButton: "Instalează",
     },
     pricing: {
       title: "Lista de prețuri",
@@ -2327,6 +2345,9 @@ export const messages = {
       viewPricing: "Price list",
       howToUse: "Instructions",
       downloadApp: "Download App",
+      installTitle: "Install app",
+      installCancel: "Cancel",
+      installButton: "Install",
     },
     pricing: {
       title: "Price list",
@@ -2713,6 +2734,9 @@ export const messages = {
       viewPricing: "قائمة الأسعار",
       howToUse: "تعليمات",
       downloadApp: "تحميل التطبيق",
+      installTitle: "تثبيت التطبيق",
+      installCancel: "إلغاء",
+      installButton: "تثبيت",
     },
     pricing: {
       title: "قائمة الأسعار",
