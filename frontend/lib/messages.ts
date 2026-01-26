@@ -12,7 +12,7 @@ export const messages = {
       downloadApp: "Κατέβασε την εφαρμογή",
     },
     pricing: {
-      title: "Τιμές",
+      title: "Τιμοκατάλογος",
       back: "← Πίσω",
       appCost: "Κόστος εφαρμογής",
       oneMonthFree: "1 μήνα δωρεάν",
@@ -399,7 +399,7 @@ export const messages = {
       downloadApp: "Скачать приложение",
     },
     pricing: {
-      title: "Тарифы",
+      title: "Прайс-лист",
       back: "← Назад",
       appCost: "Стоимость приложения",
       oneMonthFree: "1 месяц бесплатно",
@@ -785,7 +785,7 @@ export const messages = {
       downloadApp: "Завантажити додаток",
     },
     pricing: {
-      title: "Тарифи",
+      title: "Прайс-лист",
       back: "← Назад",
       appCost: "Вартість додатку",
       oneMonthFree: "1 місяць безкоштовно",
@@ -1171,7 +1171,7 @@ export const messages = {
       downloadApp: "Shkarkoni aplikacionin",
     },
     pricing: {
-      title: "Tarifat",
+      title: "Lista e çmimeve",
       back: "← Prapa",
       appCost: "Kostoja e aplikacionit",
       oneMonthFree: "1 muaj falas",
@@ -1557,7 +1557,7 @@ export const messages = {
       downloadApp: "Изтеглете приложението",
     },
     pricing: {
-      title: "Тарифи",
+      title: "Ценоразпис",
       back: "← Назад",
       appCost: "Цена на приложението",
       oneMonthFree: "1 месец безплатно",
@@ -1943,7 +1943,7 @@ export const messages = {
       downloadApp: "Descărcați aplicația",
     },
     pricing: {
-      title: "Tarife",
+      title: "Lista de prețuri",
       back: "← Înapoi",
       appCost: "Costul aplicației",
       oneMonthFree: "1 lună gratuit",
@@ -2329,7 +2329,7 @@ export const messages = {
       downloadApp: "Download App",
     },
     pricing: {
-      title: "Pricing",
+      title: "Price list",
       back: "← Back",
       appCost: "App Cost",
       oneMonthFree: "1 month free",
@@ -2715,7 +2715,7 @@ export const messages = {
       downloadApp: "تحميل التطبيق",
     },
     pricing: {
-      title: "الأسعار",
+      title: "قائمة الأسعار",
       back: "← رجوع",
       appCost: "تكلفة التطبيق",
       oneMonthFree: "شهر واحد مجانا",
