@@ -2,7 +2,7 @@
 // ================================
 // Генерация подтверждений оплаты (Επιβεβαίωση Πληρωμής)
 // ВАЖНО: Это НЕ официальный налоговый документ!
-// Τιμολόγιο/Απόδειξη выдаётся отдельно через myDATA (timologio.aade.gr)
+// ΤΙΜΟΛΟΓΙΟ/ΑΠΟΔΕΙΞΗ выдаётся отдельно через myDATA (timologio.aade.gr)
 
 export interface ReceiptData {
   accountNumber: number;
@@ -18,7 +18,7 @@ export interface ReceiptData {
 
 /**
  * Генерация HTML подтверждения оплаты (Επιβεβαίωση Πληρωμής)
- * ВАЖНО: Это НЕ налоговый документ! Τιμολόγιο выдаётся отдельно через myDATA
+ * ВАЖНО: Это НЕ налоговый документ! ΤΙΜΟΛΟΓΙΟ выдаётся отдельно через myDATA
  */
 export function generateReceiptHTML(data: ReceiptData): string {
   const formattedDate = data.date.toLocaleDateString('en-US', {
@@ -210,7 +210,7 @@ export function generateReceiptHTML(data: ReceiptData): string {
 
 /**
  * Генерация HTML подтверждения оплаты для компаний (с данными ΑΦΜ)
- * ВАЖНО: Это НЕ налоговый документ! Τιμολόγιο выдаётся отдельно через myDATA
+ * ВАЖНО: Это НЕ налоговый документ! ΤΙΜΟΛΟΓΙΟ выдаётся отдельно через myDATA
  */
 export function generateInvoiceHTML(data: ReceiptData): string {
   const formattedDate = data.date.toLocaleDateString('en-US', {

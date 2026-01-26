@@ -1,14 +1,14 @@
 // Send Payment Confirmation Email
 // ================================
 // Отправка подтверждений оплаты на email
-// ВАЖНО: Это НЕ налоговый документ! Τιμολόγιο выдаётся отдельно через myDATA
+// ВАЖНО: Это НЕ налоговый документ! ΤΙΜΟΛΟΓΙΟ выдаётся отдельно через myDATA
 
 import { sendEmail } from './send';
 import { generateReceiptOrInvoice, type ReceiptData } from '../receipts/generate';
 
 /**
  * Отправка подтверждения оплаты на email
- * ВАЖНО: Τιμολόγιο/Απόδειξη выдаётся администратором отдельно через timologio.aade.gr
+ * ВАЖНО: ΤΙΜΟΛΟΓΙΟ/ΑΠΟΔΕΙΞΗ выдаётся администратором отдельно через timologio.aade.gr
  */
 export async function sendReceiptEmail(
   userEmail: string,

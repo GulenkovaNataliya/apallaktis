@@ -887,7 +887,7 @@ export interface AdminPaymentNotificationData {
 }
 
 /**
- * 10. Уведомление администратору: Новая оплата (для выдачи Τιμολόγιο)
+ * 10. Уведомление администратору: Новая оплата (для выдачи ΤΙΜΟΛΟΓΙΟ)
  */
 export async function sendAdminPaymentNotificationEmail(
   adminEmail: string,
@@ -978,7 +978,7 @@ export async function sendAdminPaymentNotificationEmail(
           <h4 style="color: #d97706; margin: 0 0 10px 0;">⚠️ Απαιτείται έκδοση Τιμολογίου</h4>
           <p style="margin: 0 0 10px 0; color: #333; font-size: 14px;">
             Το Stripe έχει στείλει αυτόματα επιβεβαίωση πληρωμής στον πελάτη.<br>
-            <strong>Πρέπει να εκδώσετε Τιμολόγιο/Απόδειξη μέσω timologio.aade.gr</strong>
+            <strong>Πρέπει να εκδώσετε ΤΙΜΟΛΟΓΙΟ/ΑΠΟΔΕΙΞΗ μέσω timologio.aade.gr</strong>
           </p>
           <a href="https://timologio.aade.gr" target="_blank" style="display: inline-block; background-color: #f59e0b; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px;">
             Άνοιγμα timologio.aade.gr →
