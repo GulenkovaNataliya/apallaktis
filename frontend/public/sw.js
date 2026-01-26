@@ -1,13 +1,11 @@
 // Service Worker для ΑΠΑΛΛΑΚΤΗΣ
 // ================================
 
-const CACHE_NAME = 'apallaktis-v1';
+const CACHE_NAME = 'apallaktis-v9';
 const OFFLINE_URL = '/offline.html';
 
-// Файлы для кэширования при установке
+// Только статические файлы - НЕ кешируем HTML страницы
 const urlsToCache = [
-  '/',
-  '/el',
   '/offline.html',
   '/icon-192.png',
   '/icon-512.png',
@@ -82,11 +80,14 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(
-    // Стратегия: Network First, затем Cache
+    // Стратегия: Network First, НЕ кешируем HTML
     fetch(request)
       .then((response) => {
-        // Если ответ валидный, кэшируем его
-        if (response && response.status === 200 && response.type === 'basic') {
+        // Кешируем только статические ресурсы (изображения, шрифты), НЕ HTML
+        const url = new URL(request.url);
+        const isStaticAsset = /\.(png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf)$/i.test(url.pathname);
+
+        if (response && response.status === 200 && response.type === 'basic' && isStaticAsset) {
           const responseToCache = response.clone();
 
           caches.open(CACHE_NAME).then((cache) => {

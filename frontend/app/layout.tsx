@@ -49,14 +49,26 @@ export default function RootLayout({
   return (
     <html>
       <head>
+        {/* Disable HTML caching */}
+        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta httpEquiv="Pragma" content="no-cache" />
+        <meta httpEquiv="Expires" content="0" />
+
+        {/* Favicon for all browsers */}
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+
         {/* PWA Meta Tags */}
         <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="/favicon.ico" sizes="48x48" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="ΑΠΑΛΛΑΚΤΗΣ" />
         <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-TileImage" content="/icon-192.png" />
+        <meta name="msapplication-TileColor" content="#01312d" />
 
         {/* Service Worker Registration */}
         <Script

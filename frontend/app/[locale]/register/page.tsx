@@ -78,9 +78,10 @@ export default function RegisterPage() {
   const [afmResult, setAfmResult] = useState<{
     companyName?: string;
     address?: string;
-    activity?: string;
-    doy?: string;
   } | null>(null);
+  // Отдельные состояния для редактируемых полей
+  const [activityField, setActivityField] = useState('');
+  const [doyField, setDoyField] = useState('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -159,9 +160,10 @@ export default function RegisterPage() {
         setAfmResult({
           companyName: data.data.legalName || '',
           address: data.data.address || '',
-          activity: data.data.activity || '',
-          doy: data.data.doy || '',
         });
+        // Заполняем редактируемые поля данными из TaxisNet
+        if (data.data.activity) setActivityField(data.data.activity);
+        if (data.data.doy) setDoyField(data.data.doy);
         // Auto-fill company name
         if (data.data.legalName) {
           setFormData({ ...formData, companyName: data.data.legalName });
@@ -244,8 +246,9 @@ export default function RegisterPage() {
             invoice_type: invoiceType,
             company_name: invoiceType === 'invoice' ? formData.companyName : null,
             afm: invoiceType === 'invoice' ? formData.afm : null,
-            doy: invoiceType === 'invoice' && afmResult ? afmResult.doy : null,
+            doy: invoiceType === 'invoice' ? doyField : null,
             address: invoiceType === 'invoice' && afmResult ? afmResult.address : null,
+            activity: invoiceType === 'invoice' ? activityField : null,
             preferred_language: locale,
             // Referral code - only if validated
             referred_by: validatedReferralCode || null,
@@ -553,47 +556,45 @@ export default function RegisterPage() {
                   )}
                 </div>
 
-                {/* Auto-filled fields from TaxisNet */}
-                {afmResult && (
-                  <div className="flex flex-col gap-3">
-                    {/* Επωνυμία (Company Name) - read-only from VIES */}
-                    <input
-                      type="text"
-                      value={afmResult.companyName || ''}
-                      readOnly
-                      placeholder="Επωνυμία"
-                      className="input-dark-bg text-body w-full rounded-2xl border border-gray-300"
-                      style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: '#f3f4f6' }}
-                    />
-                    {/* Διεύθυνση (Address) - read-only from VIES */}
-                    <input
-                      type="text"
-                      value={afmResult.address || ''}
-                      readOnly
-                      placeholder="Διεύθυνση"
-                      className="input-dark-bg text-body w-full rounded-2xl border border-gray-300"
-                      style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: '#f3f4f6' }}
-                    />
-                    {/* Δραστηριότητα (Activity) - EDITABLE by user */}
-                    <input
-                      type="text"
-                      value={afmResult.activity || ''}
-                      onChange={(e) => setAfmResult({ ...afmResult, activity: e.target.value })}
-                      placeholder="Δραστηριότητα (συμπληρώστε)"
-                      className="input-dark-bg text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
-                      style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: 'white' }}
-                    />
-                    {/* ΔΟΥ - EDITABLE by user */}
-                    <input
-                      type="text"
-                      value={afmResult.doy || ''}
-                      onChange={(e) => setAfmResult({ ...afmResult, doy: e.target.value })}
-                      placeholder="ΔΟΥ (συμπληρώστε)"
-                      className="input-dark-bg text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
-                      style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: 'white' }}
-                    />
-                  </div>
-                )}
+                {/* 4 поля - показываются ВСЕГДА */}
+                <div className="flex flex-col gap-3">
+                  {/* Επωνυμία (Company Name) - read-only from TaxisNet */}
+                  <input
+                    type="text"
+                    value={afmResult?.companyName || ''}
+                    readOnly
+                    placeholder="Επωνυμία"
+                    className="input-dark-bg text-body w-full rounded-2xl border border-gray-300"
+                    style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: '#f3f4f6' }}
+                  />
+                  {/* Διεύθυνση (Address) - read-only from TaxisNet */}
+                  <input
+                    type="text"
+                    value={afmResult?.address || ''}
+                    readOnly
+                    placeholder="Διεύθυνση"
+                    className="input-dark-bg text-body w-full rounded-2xl border border-gray-300"
+                    style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: '#f3f4f6' }}
+                  />
+                  {/* Δραστηριότητα (Activity) - EDITABLE by user */}
+                  <input
+                    type="text"
+                    value={activityField}
+                    onChange={(e) => setActivityField(e.target.value)}
+                    placeholder={`Δραστηριότητα (${t.fillInGreek})`}
+                    className="input-dark-bg text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+                    style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: 'white' }}
+                  />
+                  {/* ΔΟΥ - EDITABLE by user */}
+                  <input
+                    type="text"
+                    value={doyField}
+                    onChange={(e) => setDoyField(e.target.value)}
+                    placeholder={`ΔΟΥ (${t.fillInGreek})`}
+                    className="input-dark-bg text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
+                    style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: 'white' }}
+                  />
+                </div>
               </>
             )}
 
