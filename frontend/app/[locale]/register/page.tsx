@@ -480,7 +480,7 @@ export default function RegisterPage() {
                   value={formData.countryCode}
                   onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
                   className="select-dark-bg text-body rounded-2xl px-3 border border-gray-300 focus:outline-none focus:border-blue-500"
-                  style={{ minWidth: "110px", minHeight: '52px', backgroundColor: 'white' }}
+                  style={{ width: '30%', minHeight: '52px', backgroundColor: 'white' }}
                 >
                   {countryCodes.map((item) => (
                     <option key={item.code} value={item.code} style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>
@@ -497,10 +497,10 @@ export default function RegisterPage() {
                     setErrors({ ...errors, phone: "" });
                   }}
                   required
-                  className={`input-dark-bg text-body rounded-2xl border flex-1 focus:outline-none ${
+                  className={`input-dark-bg text-body rounded-2xl border focus:outline-none ${
                     errors.phone ? "border-red-500" : "border-gray-300 focus:border-blue-500"
                   }`}
-                  style={{ minHeight: '52px', padding: '12px', backgroundColor: 'white' }}
+                  style={{ width: 'calc(70% - 8px)', minHeight: '52px', padding: '12px', backgroundColor: 'white' }}
                 />
               </div>
               {errors.phone && (
@@ -581,7 +581,7 @@ export default function RegisterPage() {
                     type="text"
                     value={activityField}
                     onChange={(e) => setActivityField(e.target.value)}
-                    placeholder={`Δραστηριότητα (${t.fillInGreek})`}
+                    placeholder={locale === 'el' ? 'Δραστηριότητα' : `Δραστηριότητα (${t.fillInGreek})`}
                     className="input-dark-bg text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
                     style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: 'white' }}
                   />
@@ -590,7 +590,7 @@ export default function RegisterPage() {
                     type="text"
                     value={doyField}
                     onChange={(e) => setDoyField(e.target.value)}
-                    placeholder={`ΔΟΥ (${t.fillInGreek})`}
+                    placeholder={locale === 'el' ? 'ΔΟΥ' : `ΔΟΥ (${t.fillInGreek})`}
                     className="input-dark-bg text-body w-full rounded-2xl border border-gray-300 focus:outline-none focus:border-blue-500"
                     style={{ minHeight: '52px', padding: '12px', color: 'var(--deep-teal)', backgroundColor: 'white' }}
                   />
