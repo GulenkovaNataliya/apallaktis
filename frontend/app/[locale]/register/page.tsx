@@ -274,7 +274,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <BackgroundPage pageIndex={3}>
+    <BackgroundPage pageIndex={2}>
       <div
         className="flex flex-col items-center"
         style={{

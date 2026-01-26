@@ -162,7 +162,7 @@ export default function UpdatePasswordPage() {
       <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: 'url(/pages/page-01.webp)',
+          backgroundImage: 'url(/pages/page-04.webp)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

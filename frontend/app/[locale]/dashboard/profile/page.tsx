@@ -469,7 +469,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <BackgroundPage pageIndex={1}>
+    <BackgroundPage pageIndex={5}>
       <div
         className="flex min-h-screen flex-col items-center pb-20"
         style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}

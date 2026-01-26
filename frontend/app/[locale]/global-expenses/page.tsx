@@ -240,7 +240,7 @@ export default function GlobalExpensesPage() {
   // Loading state
   if (isLoading) {
     return (
-      <BackgroundPage pageIndex={4}>
+      <BackgroundPage pageIndex={3}>
         <div className="min-h-screen flex flex-col items-center justify-center">
           <div className="text-center" style={{ color: 'var(--polar)' }}>
             <div className="text-2xl mb-2">⏳</div>
@@ -254,7 +254,7 @@ export default function GlobalExpensesPage() {
   // EXPENSES VIEW
   if (view === 'expenses') {
     return (
-      <BackgroundPage pageIndex={4}>
+      <BackgroundPage pageIndex={3}>
         <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
           <div className="w-full flex flex-col flex-1 gap-12">
 
@@ -395,7 +395,7 @@ export default function GlobalExpensesPage() {
   // CATEGORIES VIEW
   if (view === 'categories') {
     return (
-      <BackgroundPage pageIndex={4}>
+      <BackgroundPage pageIndex={3}>
         <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
           <div className="w-full flex flex-col flex-1 gap-12">
 
@@ -469,7 +469,7 @@ export default function GlobalExpensesPage() {
   // ADD/EDIT CATEGORY FORM
   if (view === 'add-category' || view === 'edit-category') {
     return (
-      <BackgroundPage pageIndex={4}>
+      <BackgroundPage pageIndex={3}>
         <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
           <div className="w-full flex flex-col gap-12">
 
@@ -516,7 +516,7 @@ export default function GlobalExpensesPage() {
   // ADD/EDIT EXPENSE FORM
   if (view === 'add-expense' || view === 'edit-expense') {
     return (
-      <BackgroundPage pageIndex={4}>
+      <BackgroundPage pageIndex={3}>
         <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
           <div className="w-full flex flex-col gap-12">
 

@@ -65,7 +65,7 @@ export default function EmailConfirmedPage() {
   const t = translations[locale] || translations.el;
 
   return (
-    <BackgroundPage pageIndex={1}>
+    <BackgroundPage pageIndex={5}>
       <div
         className="flex min-h-screen flex-col items-center gap-8 px-4"
         style={{ direction: isRTL ? "rtl" : "ltr", paddingTop: "160px" }}

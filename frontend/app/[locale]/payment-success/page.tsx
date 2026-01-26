@@ -54,7 +54,7 @@ export default function PaymentSuccessPage() {
   }, [sessionId]);
 
   return (
-    <BackgroundPage pageIndex={1}>
+    <BackgroundPage pageIndex={2}>
       <div
         className="flex flex-col items-center gap-12"
         style={{

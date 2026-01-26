@@ -283,7 +283,7 @@ export default function TeamInvitePage() {
   // Success state
   if (success) {
     return (
-      <BackgroundPage pageIndex={1}>
+      <BackgroundPage pageIndex={4}>
         <div className="flex min-h-screen flex-col items-center justify-center" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
           <div className="w-full max-w-sm flex flex-col gap-8 items-center">
             <div className="text-6xl">✅</div>
@@ -310,7 +310,7 @@ export default function TeamInvitePage() {
   // Error state (invalid token, expired, etc.)
   if (error && !invitation) {
     return (
-      <BackgroundPage pageIndex={1}>
+      <BackgroundPage pageIndex={4}>
         <div className="flex min-h-screen flex-col items-center justify-center" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
           <div className="w-full max-w-sm flex flex-col gap-8 items-center">
             <div className="text-6xl">❌</div>
@@ -338,7 +338,7 @@ export default function TeamInvitePage() {
   // Not authenticated - show login prompt
   if (!isAuthenticated) {
     return (
-      <BackgroundPage pageIndex={1}>
+      <BackgroundPage pageIndex={4}>
         <div className="flex min-h-screen flex-col items-center justify-center" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
           <div className="w-full max-w-sm flex flex-col gap-8 items-center">
             <h1 className="text-slogan font-bold text-center" style={{ color: '#ff8f0a' }}>
@@ -392,7 +392,7 @@ export default function TeamInvitePage() {
 
   // Authenticated - show invitation details and accept button
   return (
-    <BackgroundPage pageIndex={1}>
+    <BackgroundPage pageIndex={4}>
       <div className="flex min-h-screen flex-col items-center justify-center" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
         <div className="w-full max-w-sm flex flex-col gap-8 items-center">
           <h1 className="text-slogan font-bold text-center" style={{ color: '#ff8f0a' }}>

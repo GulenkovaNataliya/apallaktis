@@ -302,7 +302,7 @@ export default function DashboardPage() {
   const demoTime = getDemoTimeRemaining();
 
   return (
-    <BackgroundPage pageIndex={1}>
+    <BackgroundPage pageIndex={4}>
       <div className="flex min-h-screen flex-col items-center gap-12 pb-20" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px' }}>
         <div className="w-full max-w-sm flex flex-col gap-12">
           {/* Back - phrase, not a button */}

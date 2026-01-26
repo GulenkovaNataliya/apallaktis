@@ -100,7 +100,7 @@ export default function PaymentMethodsPage() {
 
   if (showForm) {
     return (
-      <BackgroundPage pageIndex={3}>
+      <BackgroundPage pageIndex={2}>
         <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '40px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
           <div className="w-full">
 
@@ -146,7 +146,7 @@ export default function PaymentMethodsPage() {
   // Loading state (wait for both auth and data)
   if (authLoading || isLoading) {
     return (
-      <BackgroundPage pageIndex={3}>
+      <BackgroundPage pageIndex={2}>
         <div className="min-h-screen flex flex-col items-center justify-center">
           <div className="text-center" style={{ color: 'var(--polar)' }}>
             <div className="text-2xl mb-2">⏳</div>
@@ -158,7 +158,7 @@ export default function PaymentMethodsPage() {
   }
 
   return (
-    <BackgroundPage pageIndex={3}>
+    <BackgroundPage pageIndex={2}>
       <div className="min-h-screen flex flex-col items-center" style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}>
         <div className="w-full flex flex-col flex-1 gap-12">
 

@@ -60,7 +60,7 @@
 ```
 /public/pages/
 ├── page-01.webp ... page-08.webp  (циклические фоны)
-├── page-pay.webp                   (страница оплат)
+├── page-pay.webp                   (страница page-pay)
 └── page-objekt.webp                (страница объектов)
 ```
 
@@ -73,12 +73,56 @@ function getBackgroundPage(index: number): string {
 ```
 После page-08 начинается с page-01.
 
-### Специальные фоны
+### Специальные фоны (specialPage)
 | Страница | Фон |
 |----------|-----|
-| page-pay | page-pay.webp |
-| objects | page-objekt.webp |
-| Все остальные | page-01...page-08 (цикл) |
+| `/[locale]/page-pay` | `specialPage="pay"` → page-pay.webp |
+| `/[locale]/objects` | `specialPage="objekt"` → page-objekt.webp |
+| `/[locale]/objects/[id]/finance` | `specialPage="objekt"` → page-objekt.webp |
+| `/[locale]/analysis` (с объектом) | `specialPage="objekt"` → page-objekt.webp |
+
+### Циклические фоны (pageIndex)
+
+**Авторизация:**
+| # | Страница | pageIndex |
+|---|----------|-----------|
+| 1 | `/[locale]/login` | 1 (inline style) |
+| 2 | `/[locale]/register` | 2 |
+| 3 | `/[locale]/reset-password` | 3 (inline style) |
+| 4 | `/[locale]/update-password` | 4 (inline style) |
+| 5 | `/[locale]/email-confirmed` | 5 |
+| 6 | `/[locale]/email-not-confirmed` | 6 |
+
+**Покупка/Подписка:**
+| # | Страница | pageIndex |
+|---|----------|-----------|
+| 7 | `/[locale]/purchase-account` | 7 |
+| 8 | `/[locale]/subscription` | 8 |
+| 1 | `/[locale]/subscription/success` | 1 |
+
+**Основные разделы:**
+| # | Страница | pageIndex |
+|---|----------|-----------|
+| 2 | `/[locale]/payment-methods` | 2 |
+| 3 | `/[locale]/global-expenses` | 3 |
+
+**Личный кабинет:**
+| # | Страница | pageIndex |
+|---|----------|-----------|
+| 4 | `/[locale]/dashboard` | 4 |
+| 5 | `/[locale]/dashboard/profile` | 5 |
+| 6 | `/[locale]/dashboard/settings` | 6 |
+| 7 | `/[locale]/dashboard/subscription` | 7 |
+| 8 | `/[locale]/dashboard/team` | 8 |
+| 1 | `/[locale]/dashboard/referral` | 1 |
+
+**Прочие:**
+| # | Страница | pageIndex |
+|---|----------|-----------|
+| 2 | `/[locale]/payment-success` | 2 |
+| 3 | `/[locale]/demo-expired` | 3 |
+| 4 | `/[locale]/team-invite` | 4 |
+| 5 | `/[locale]/analysis` (без объекта) | 5 |
 
 ### Формат изображений
 - **Формат**: WebP (оптимизированный)

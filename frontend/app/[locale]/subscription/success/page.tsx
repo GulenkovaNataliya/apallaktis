@@ -27,7 +27,7 @@ export default function SubscriptionSuccessPage() {
 
   if (isVerifying) {
     return (
-      <BackgroundPage pageIndex={2}>
+      <BackgroundPage pageIndex={1}>
         <div
           className="flex flex-col items-center gap-12"
           style={{
@@ -58,7 +58,7 @@ export default function SubscriptionSuccessPage() {
   }
 
   return (
-    <BackgroundPage pageIndex={2}>
+    <BackgroundPage pageIndex={1}>
       <div
         className="flex flex-col items-center gap-12"
         style={{

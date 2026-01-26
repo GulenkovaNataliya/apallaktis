@@ -1054,7 +1054,7 @@ export default function AnalysisPage() {
   // Loading state
   if (isLoading) {
     return (
-      <BackgroundPage pageIndex={1}>
+      <BackgroundPage pageIndex={5}>
         <div className="min-h-screen flex items-center justify-center">
           <p style={{ color: 'var(--polar)' }}>{t.loading}</p>
         </div>
@@ -1065,7 +1065,7 @@ export default function AnalysisPage() {
   // Access denied for Basic plan
   if (!hasAccess) {
     return (
-      <BackgroundPage pageIndex={1}>
+      <BackgroundPage pageIndex={5}>
         <div className="flex flex-col items-center gap-8" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}>
           {/* Back */}
           <p

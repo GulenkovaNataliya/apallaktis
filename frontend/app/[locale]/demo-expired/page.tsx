@@ -23,7 +23,7 @@ export default function DemoExpiredPage() {
   }, []);
 
   return (
-    <BackgroundPage pageIndex={1}>
+    <BackgroundPage pageIndex={3}>
       <div
         className="min-h-screen flex flex-col items-center"
         style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}

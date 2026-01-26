@@ -319,7 +319,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <BackgroundPage pageIndex={1}>
+    <BackgroundPage pageIndex={6}>
       <div
         className="flex min-h-screen flex-col items-center gap-8 pb-20"
         style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px' }}

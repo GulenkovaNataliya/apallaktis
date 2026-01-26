@@ -531,7 +531,7 @@ export default function SubscriptionPage() {
   const planName = getPlanDisplayName();
 
   return (
-    <BackgroundPage pageIndex={1}>
+    <BackgroundPage pageIndex={7}>
       <div
         className="flex min-h-screen flex-col items-center"
         style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}

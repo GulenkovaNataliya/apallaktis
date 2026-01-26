@@ -143,7 +143,7 @@ export default function SubscriptionPage() {
 
   if (isLoading) {
     return (
-      <BackgroundPage pageIndex={2}>
+      <BackgroundPage pageIndex={8}>
         <div className="min-h-screen flex items-center justify-center">
           <p style={{ color: 'var(--polar)' }}>Loading...</p>
         </div>
@@ -152,7 +152,7 @@ export default function SubscriptionPage() {
   }
 
   return (
-    <BackgroundPage pageIndex={2}>
+    <BackgroundPage pageIndex={8}>
       <div className="flex flex-col items-center gap-12" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}>
 
           {/* Back - law: <p> element at top */}

@@ -11,7 +11,7 @@ export default function PagePay() {
   const t = messages[locale]?.pagePay || messages.el.pagePay;
 
   return (
-    <BackgroundPage pageIndex={2}>
+    <BackgroundPage specialPage="pay">
       <div className="flex min-h-screen flex-col items-center gap-12 pb-20" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px' }}>
 
         {/* Payment Methods Button */}

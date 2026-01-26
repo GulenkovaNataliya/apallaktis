@@ -156,7 +156,7 @@ export default function EmailNotConfirmedPage() {
   };
 
   return (
-    <BackgroundPage pageIndex={1}>
+    <BackgroundPage pageIndex={6}>
       <div
         className="flex min-h-screen flex-col items-center"
         style={{ direction: isRTL ? "rtl" : "ltr", paddingTop: "180px", paddingBottom: "120px", paddingLeft: "40px", paddingRight: "40px" }}
