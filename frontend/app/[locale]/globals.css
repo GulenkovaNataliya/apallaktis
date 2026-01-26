@@ -26,24 +26,24 @@
   --shadow-pressed: 0 2px 4px var(--deep-teal);
 }
 
-/* Input placeholder styling for dark backgrounds */
+/* Input placeholder styling for light backgrounds */
 .input-dark-bg::placeholder {
-  color: var(--polar);
+  color: var(--deep-teal);
   opacity: 0.7;
 }
 
 .input-dark-bg::-webkit-input-placeholder {
-  color: var(--polar);
+  color: var(--deep-teal);
   opacity: 0.7;
 }
 
 .input-dark-bg::-moz-placeholder {
-  color: var(--polar);
+  color: var(--deep-teal);
   opacity: 0.7;
 }
 
 .input-dark-bg:-ms-input-placeholder {
-  color: var(--polar);
+  color: var(--deep-teal);
   opacity: 0.7;
 }
 
