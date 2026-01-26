@@ -485,6 +485,7 @@ shadow-color == text-color
 - Viber
 - Referral Program
 - Copy (кнопка копирования)
+- Unlimited (для тарифа Premium)
 
 ### Заголовки кнопок
 - Первая буква заглавная, остальные строчные

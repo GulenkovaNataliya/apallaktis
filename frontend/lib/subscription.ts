@@ -3,10 +3,18 @@
  *
  * Тарифы и их ограничения:
  * - DEMO (48 часов): всё доступно, referral недоступен
- * - Basic (24,80€/мес): 10 объектов, без voice/photo/email
- * - Standard (49,60€/мес): 50 объектов, всё доступно
- * - Premium (93,00€/мес): безлимит, всё доступно
- * - VIP: безлимит, всё доступно
+ * - Basic (24,80€/мес): 10 объектов, 1 пользователь, без voice/photo
+ * - Standard (49,60€/мес): 50 объектов, 2 пользователя, всё доступно
+ * - Premium (93,00€/мес): Unlimited, всё доступно
+ * - VIP: Unlimited, всё доступно
+ *
+ * Одинаково для ВСЕХ тарифов:
+ * ✅ Экспорт PDF/Excel
+ * ✅ Отправка на email
+ * ✅ Финансовый анализ
+ * ✅ Категории расходов
+ * ✅ Способы оплаты
+ * ✅ Общие расходы
  */
 
 export type SubscriptionTier = 'demo' | 'basic' | 'standard' | 'premium' | 'vip' | 'expired' | 'read-only';
@@ -37,11 +45,11 @@ export const SUBSCRIPTION_LIMITS: Record<SubscriptionTier, SubscriptionLimits> =
   basic: {
     maxObjects: 10,           // Максимум 10
     maxUsers: 1,              // Только владелец
-    voiceInput: false,        // ❌ Недоступен
-    photoReceipt: false,      // ❌ Недоступен
+    voiceInput: false,        // ❌ Недоступен (только Standard+)
+    photoReceipt: false,      // ❌ Недоступен (только Standard+)
     financialAnalysis: true,  // ✅ Доступен
     exportExcelPdf: true,     // ✅ Доступен
-    emailReports: false,      // ❌ Недоступен
+    emailReports: true,       // ✅ Доступен
     referralProgram: true,    // ✅ Доступен
   },
   standard: {

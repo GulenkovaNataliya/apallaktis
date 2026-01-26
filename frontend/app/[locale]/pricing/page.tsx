@@ -82,6 +82,12 @@ export default function PricingPage() {
             <p style={{ color: 'var(--deep-teal)', fontSize: '16px', fontWeight: 600 }}>
               ✅ {t.users}: 1
             </p>
+            <p style={{ color: 'var(--deep-teal)', fontSize: '16px', fontWeight: 600, opacity: 0.5 }}>
+              ❌ {t.voiceInput}
+            </p>
+            <p style={{ color: 'var(--deep-teal)', fontSize: '16px', fontWeight: 600, opacity: 0.5 }}>
+              ❌ {t.receiptPhoto}
+            </p>
             <p style={{ color: 'var(--deep-teal)', fontSize: '16px', fontWeight: 600 }}>
               ✅ {t.closedArchive}
             </p>
@@ -177,10 +183,10 @@ export default function PricingPage() {
 
           <div className="space-y-2 mb-4">
             <p style={{ color: 'var(--deep-teal)', fontSize: '16px', fontWeight: 600 }}>
-              ✅ {t.objects}: {t.unlimited}
+              ✅ {t.objects}: Unlimited
             </p>
             <p style={{ color: 'var(--deep-teal)', fontSize: '16px', fontWeight: 600 }}>
-              ✅ {t.users}: {t.unlimited}
+              ✅ {t.users}: Unlimited
             </p>
             <p style={{ color: 'var(--deep-teal)', fontSize: '16px', fontWeight: 600 }}>
               ✅ {t.voiceInput}
