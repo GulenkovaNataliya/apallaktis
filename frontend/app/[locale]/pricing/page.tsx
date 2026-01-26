@@ -177,10 +177,10 @@ export default function PricingPage() {
 
           <div className="space-y-2 mb-4">
             <p style={{ color: 'var(--deep-teal)', fontSize: '16px', fontWeight: 600 }}>
-              ✅ {t.objects}: ∞
+              ✅ {t.objects}: {t.unlimited}
             </p>
             <p style={{ color: 'var(--deep-teal)', fontSize: '16px', fontWeight: 600 }}>
-              ✅ {t.users}: ∞
+              ✅ {t.users}: {t.unlimited}
             </p>
             <p style={{ color: 'var(--deep-teal)', fontSize: '16px', fontWeight: 600 }}>
               ✅ {t.voiceInput}

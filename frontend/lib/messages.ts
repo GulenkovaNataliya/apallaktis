@@ -33,6 +33,7 @@ export const messages = {
       pdfExport: "Εξαγωγή PDF",
       unlimitedReferral: "Unlimited Referral Program",
       support48h: "Υποστήριξη Viber/WhatsApp εντός 48ω",
+      unlimited: "Unlimited",
     },
     help: {
       title: "Πώς να χρησιμοποιήσετε",
@@ -423,6 +424,7 @@ export const messages = {
       pdfExport: "Экспорт PDF",
       unlimitedReferral: "Unlimited Referral Program",
       support48h: "Поддержка Viber/WhatsApp в течение 48ч",
+      unlimited: "Безлимит",
     },
     help: {
       title: "Как пользоваться",
@@ -812,6 +814,7 @@ export const messages = {
       pdfExport: "Експорт PDF",
       unlimitedReferral: "Unlimited Referral Program",
       support48h: "Підтримка Viber/WhatsApp протягом 48г",
+      unlimited: "Безліміт",
     },
     help: {
       title: "Як користуватися",
@@ -1201,6 +1204,7 @@ export const messages = {
       pdfExport: "Eksport PDF",
       unlimitedReferral: "Unlimited Referral Program",
       support48h: "Mbështetje Viber/WhatsApp brenda 48o",
+      unlimited: "Pa limit",
     },
     help: {
       title: "Si të përdorni",
@@ -1590,6 +1594,7 @@ export const messages = {
       pdfExport: "Експорт PDF",
       unlimitedReferral: "Unlimited Referral Program",
       support48h: "Поддръжка Viber/WhatsApp в рамките на 48ч",
+      unlimited: "Неограничено",
     },
     help: {
       title: "Как да използвате",
@@ -1979,6 +1984,7 @@ export const messages = {
       pdfExport: "Export PDF",
       unlimitedReferral: "Unlimited Referral Program",
       support48h: "Suport Viber/WhatsApp în 48o",
+      unlimited: "Nelimitat",
     },
     help: {
       title: "Cum să utilizați",
@@ -2368,6 +2374,7 @@ export const messages = {
       pdfExport: "PDF Export",
       unlimitedReferral: "Unlimited Referral Program",
       support48h: "Viber/WhatsApp Support within 48h",
+      unlimited: "Unlimited",
     },
     help: {
       title: "How to Use",
@@ -2757,6 +2764,7 @@ export const messages = {
       pdfExport: "PDF تصدير",
       unlimitedReferral: "Unlimited Referral Program",
       support48h: "Viber/WhatsApp دعم خلال 48 ساعة",
+      unlimited: "غير محدود",
     },
     help: {
       title: "كيفية الاستخدام",
