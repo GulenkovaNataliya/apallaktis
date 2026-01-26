@@ -3,7 +3,7 @@
   "short_name": "ΑΠΑΛΛΑΚΤΗΣ",
   "description": "Όχι λογιστικό πρόγραμμα — εργαλείο προσωπικού οικονομικού ελέγχου για έργα",
   "id": "https://apallaktis.com/",
-  "start_url": "https://apallaktis.com/el",
+  "start_url": "https://apallaktis.com/language-select",
   "display": "standalone",
   "background_color": "#01312d",
   "theme_color": "#01312d",

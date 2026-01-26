@@ -83,6 +83,7 @@ export const messages = {
       companyName: "Επωνυμία εταιρείας",
       afm: "ΑΦΜ",
       doy: "ΔΟΥ",
+      fillInGreek: "συμπληρώστε στα ελληνικά",
       agreeTerms: "Συμφωνώ με τους Όρους Χρήσης και την Πολιτική Απορρήτου",
       submit: "Εγγραφή",
       mustAgreeTerms: "Πρέπει να αποδεχτείτε τους όρους",
@@ -473,6 +474,7 @@ export const messages = {
       companyName: "Название компании",
       afm: "ΑΦΜ",
       doy: "ΔΟΥ",
+      fillInGreek: "заполните на греческом языке",
       agreeTerms: "Соглашаюсь с Условиями использования и Политикой конфиденциальности",
       submit: "Зарегистрироваться",
       mustAgreeTerms: "Вы должны принять условия",
@@ -863,6 +865,7 @@ export const messages = {
       companyName: "Назва компанії",
       afm: "ΑΦΜ",
       doy: "ΔΟΥ",
+      fillInGreek: "заповніть грецькою мовою",
       agreeTerms: "Погоджуюсь з Умовами використання та Політикою конфіденційності",
       submit: "Зареєструватися",
       mustAgreeTerms: "Ви повинні прийняти умови",
@@ -1253,6 +1256,7 @@ export const messages = {
       companyName: "Emri i kompanisë",
       afm: "ΑΦΜ",
       doy: "ΔΟΥ",
+      fillInGreek: "plotësoni në greqisht",
       agreeTerms: "Pajtohem me Kushtet e Përdorimit dhe Politikën e Privatësisë",
       submit: "Regjistrohuni",
       mustAgreeTerms: "Duhet të pranoni kushtet",
@@ -1661,6 +1665,7 @@ export const messages = {
       validatingReferral: "Validating referral code...",
       referralApplied: "Referral code applied!",
       enterEmailForReferral: "Enter your email to validate referral code",
+      fillInGreek: "попълнете на гръцки език",
     },
     thankYou: {
       title: "Благодарим за регистрацията!",
@@ -2051,6 +2056,7 @@ export const messages = {
       validatingReferral: "Validating referral code...",
       referralApplied: "Referral code applied!",
       enterEmailForReferral: "Enter your email to validate referral code",
+      fillInGreek: "completați în greacă",
     },
     thankYou: {
       title: "Vă mulțumim pentru înregistrare!",
@@ -2441,6 +2447,7 @@ export const messages = {
       validatingReferral: "Validating referral code...",
       referralApplied: "Referral code applied!",
       enterEmailForReferral: "Enter your email to validate referral code",
+      fillInGreek: "fill in Greek",
     },
     thankYou: {
       title: "Thank you for registering!",
@@ -2831,6 +2838,7 @@ export const messages = {
       validatingReferral: "Validating referral code...",
       referralApplied: "Referral code applied!",
       enterEmailForReferral: "Enter your email to validate referral code",
+      fillInGreek: "املأ باللغة اليونانية",
     },
     thankYou: {
       title: "!شكراً لتسجيلك",

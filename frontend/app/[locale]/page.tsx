@@ -17,21 +17,20 @@ export default function LandingPage() {
   const t = messages[locale]?.landing || messages.el.landing;
 
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [showInstallButton, setShowInstallButton] = useState(false);
+  const [isAppInstalled, setIsAppInstalled] = useState(false);
   const [showInstallModal, setShowInstallModal] = useState(false);
 
   useEffect(() => {
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setShowInstallButton(true);
     };
 
     window.addEventListener("beforeinstallprompt", handler);
 
     // Check if app is already installed
     if (window.matchMedia("(display-mode: standalone)").matches) {
-      setShowInstallButton(false);
+      setIsAppInstalled(true);
     }
 
     return () => {
@@ -40,21 +39,24 @@ export default function LandingPage() {
   }, []);
 
   const handleInstallClick = () => {
-    if (!deferredPrompt) return;
     setShowInstallModal(true);
   };
 
   const handleInstallConfirm = async () => {
-    if (!deferredPrompt) return;
+    if (deferredPrompt) {
+      // Chrome/Android - use native install prompt
+      setShowInstallModal(false);
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
 
-    setShowInstallModal(false);
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-
-    if (outcome === "accepted") {
-      setShowInstallButton(false);
+      if (outcome === "accepted") {
+        setIsAppInstalled(true);
+      }
+      setDeferredPrompt(null);
+    } else {
+      // iOS/Other - just close the modal (user follows instructions)
+      setShowInstallModal(false);
     }
-    setDeferredPrompt(null);
   };
 
   const handleInstallCancel = () => {
@@ -158,27 +160,25 @@ export default function LandingPage() {
               {t.howToUse}
             </Link>
 
-            {/* Button 5: Download App (PWA Install) */}
-            {showInstallButton && (
-              <button
-                onClick={handleInstallClick}
-                className="btn-primary text-button text-center w-full"
-                style={{
-                  minHeight: "52px",
-                  backgroundColor: "#b7dcd5",
-                  color: "#033a45",
-                  boxShadow: "0 4px 8px #033a45",
-                  borderRadius: "1rem",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                {t.downloadApp}
-              </button>
-            )}
+            {/* Button 5: Download App (PWA Install) - ВСЕГДА видна */}
+            <button
+              onClick={handleInstallClick}
+              className="btn-primary text-button text-center w-full"
+              style={{
+                minHeight: "52px",
+                backgroundColor: "#b7dcd5",
+                color: "#033a45",
+                boxShadow: "0 4px 8px #033a45",
+                borderRadius: "1rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              {t.downloadApp}
+            </button>
           </div>
         </div>
       </div>
