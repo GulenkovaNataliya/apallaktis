@@ -514,6 +514,10 @@ export const termsOfUse: Record<string, LegalContent> = {
       {
         heading: "10. Εφαρμοστέο Δίκαιο",
         content: "Οι παρόντες Όροι διέπονται από το Ελληνικό Δίκαιο. Αρμόδια είναι τα δικαστήρια της Ελλάδας."
+      },
+      {
+        heading: "11. Στοιχεία Παρόχου / Provider Details",
+        content: "Επωνυμία: Gulenkova Nataliya • ΑΦΜ: 125485682 • Email: gulenkovanatalia@gmail.com • Τηλέφωνο: +30 6983208844 • Τραπεζικά στοιχεία: EUROBANK GR16 0260 1070 0002 8020 1824 734, ΠΕΙΡΑΙΩΣ GR90 0172 1020 0051 0208 6382 968 (Δικαιούχος: Gulenkova Nataliya)"
       }
     ]
   },
@@ -559,6 +563,10 @@ export const termsOfUse: Record<string, LegalContent> = {
       {
         heading: "10. Governing Law",
         content: "Greek law applies."
+      },
+      {
+        heading: "11. Provider Details",
+        content: "Name: Gulenkova Nataliya • VAT: 125485682 • Email: gulenkovanatalia@gmail.com • Phone: +30 6983208844 • Bank details: EUROBANK GR16 0260 1070 0002 8020 1824 734, PIRAEUS GR90 0172 1020 0051 0208 6382 968 (Beneficiary: Gulenkova Nataliya)"
       }
     ]
   },
@@ -604,6 +612,10 @@ export const termsOfUse: Record<string, LegalContent> = {
       {
         heading: "10. Применимое право",
         content: "Применяется право Греции."
+      },
+      {
+        heading: "11. Данные провайдера",
+        content: "Название: Gulenkova Nataliya • ΑΦΜ: 125485682 • Email: gulenkovanatalia@gmail.com • Телефон: +30 6983208844 • Банковские реквизиты: EUROBANK GR16 0260 1070 0002 8020 1824 734, PIRAEUS GR90 0172 1020 0051 0208 6382 968 (Получатель: Gulenkova Nataliya)"
       }
     ]
   },
@@ -649,6 +661,10 @@ export const termsOfUse: Record<string, LegalContent> = {
       {
         heading: "10. Застосовне право",
         content: "Ці Умови регулюються законодавством Греції. Компетентними є суди Греції."
+      },
+      {
+        heading: "11. Дані провайдера",
+        content: "Назва: Gulenkova Nataliya • ΑΦΜ: 125485682 • Email: gulenkovanatalia@gmail.com • Телефон: +30 6983208844 • Банківські реквізити: EUROBANK GR16 0260 1070 0002 8020 1824 734, PIRAEUS GR90 0172 1020 0051 0208 6382 968 (Отримувач: Gulenkova Nataliya)"
       }
     ]
   },
@@ -694,6 +710,10 @@ export const termsOfUse: Record<string, LegalContent> = {
       {
         heading: "10. Ligji i Zbatueshëm",
         content: "Zbatohet ligji grek."
+      },
+      {
+        heading: "11. Të Dhënat e Ofruesit",
+        content: "Emri: Gulenkova Nataliya • ΑΦΜ: 125485682 • Email: gulenkovanatalia@gmail.com • Telefon: +30 6983208844 • Të dhënat bankare: EUROBANK GR16 0260 1070 0002 8020 1824 734, PIRAEUS GR90 0172 1020 0051 0208 6382 968 (Përfituesi: Gulenkova Nataliya)"
       }
     ]
   },
@@ -739,6 +759,10 @@ export const termsOfUse: Record<string, LegalContent> = {
       {
         heading: "10. Приложимо право",
         content: "Прилага се гръцкото право."
+      },
+      {
+        heading: "11. Данни на доставчика",
+        content: "Име: Gulenkova Nataliya • ΑΦΜ: 125485682 • Email: gulenkovanatalia@gmail.com • Телефон: +30 6983208844 • Банкови данни: EUROBANK GR16 0260 1070 0002 8020 1824 734, PIRAEUS GR90 0172 1020 0051 0208 6382 968 (Получател: Gulenkova Nataliya)"
       }
     ]
   },
@@ -784,6 +808,10 @@ export const termsOfUse: Record<string, LegalContent> = {
       {
         heading: "10. Legea aplicabilă",
         content: "Se aplică legea Greciei."
+      },
+      {
+        heading: "11. Detalii furnizor",
+        content: "Nume: Gulenkova Nataliya • ΑΦΜ: 125485682 • Email: gulenkovanatalia@gmail.com • Telefon: +30 6983208844 • Date bancare: EUROBANK GR16 0260 1070 0002 8020 1824 734, PIRAEUS GR90 0172 1020 0051 0208 6382 968 (Beneficiar: Gulenkova Nataliya)"
       }
     ]
   },
@@ -829,6 +857,10 @@ export const termsOfUse: Record<string, LegalContent> = {
       {
         heading: "10. القانون المعمول به",
         content: "يخضع ذلك لقانون اليونان."
+      },
+      {
+        heading: "11. بيانات المزود",
+        content: "الاسم: Gulenkova Nataliya • ΑΦΜ: 125485682 • البريد الإلكتروني: gulenkovanatalia@gmail.com • الهاتف: +30 6983208844 • البيانات المصرفية: EUROBANK GR16 0260 1070 0002 8020 1824 734, PIRAEUS GR90 0172 1020 0051 0208 6382 968 (المستفيد: Gulenkova Nataliya)"
       }
     ]
   }
