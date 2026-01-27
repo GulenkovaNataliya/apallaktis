@@ -336,7 +336,7 @@ async function rewardReferrer(
     // Находим реферера по его referral_code
     const { data: referrer, error: referrerError } = await supabase
       .from('profiles')
-      .select('id, email, bonus_months, referrals_count, name, preferred_language, account_purchased')
+      .select('id, email, bonus_months, referrals_count, name, preferred_language, account_purchased, subscription_status, vip_expires_at')
       .eq('referral_code', referralCode)
       .single();
 
@@ -351,9 +351,10 @@ async function rewardReferrer(
       return;
     }
 
-    // ⚠️ ANTI-FRAUD ПРОВЕРКА 3: Реферер должен сам иметь оплаченный аккаунт
-    if (!referrer.account_purchased) {
-      console.error('❌ WEBHOOK: Отклонено - реферер без оплаченного аккаунта:', referralCode);
+    // ⚠️ ANTI-FRAUD ПРОВЕРКА 3: Реферер должен сам иметь оплаченный аккаунт ИЛИ быть VIP
+    const isVip = referrer.subscription_status === 'vip';
+    if (!referrer.account_purchased && !isVip) {
+      console.error('❌ WEBHOOK: Отклонено - реферер без оплаченного аккаунта и не VIP:', referralCode);
       return;
     }
 
@@ -391,33 +392,64 @@ async function rewardReferrer(
     }
 
     // ✅ Все проверки пройдены - начисляем бонус
-    const newBonusMonths = (referrer.bonus_months || 0) + 1;
+    // Специальная логика для VIP:
+    // - VIP навсегда (vip_expires_at = null) → не добавляем bonus (некуда), но считаем реферала
+    // - VIP до даты (vip_expires_at !== null) → добавляем +1 месяц к vip_expires_at
+    // - Обычный пользователь → добавляем +1 к bonus_months
+
+    let updateData: any = {
+      referrals_count: (referrer.referrals_count || 0) + 1,
+    };
+
+    let bonusMessage = '';
+
+    if (isVip) {
+      if (referrer.vip_expires_at === null) {
+        // VIP навсегда — бонус не начисляется (некуда добавить)
+        bonusMessage = 'VIP навсегда - бонус не нужен';
+        console.log(`ℹ️ WEBHOOK: Реферер ${referrer.id} - VIP навсегда, бонус не начисляется`);
+      } else {
+        // VIP до определённой даты — добавляем +1 месяц к vip_expires_at
+        const currentVipExpires = new Date(referrer.vip_expires_at);
+        currentVipExpires.setMonth(currentVipExpires.getMonth() + 1);
+        updateData.vip_expires_at = currentVipExpires.toISOString();
+        bonusMessage = `VIP продлён до ${currentVipExpires.toLocaleDateString()}`;
+        console.log(`✅ WEBHOOK: +1 месяц к VIP для реферера ${referrer.id}`);
+        console.log(`   Новая дата VIP: ${currentVipExpires.toISOString()}`);
+      }
+    } else {
+      // Обычный пользователь — добавляем bonus_months
+      const newBonusMonths = (referrer.bonus_months || 0) + 1;
+      updateData.bonus_months = newBonusMonths;
+      bonusMessage = `+1 bonus month (всего: ${newBonusMonths})`;
+      console.log(`✅ WEBHOOK: +1 bonus month начислен рефереру ${referrer.id}`);
+      console.log(`   Новый баланс: ${newBonusMonths} bonus months`);
+    }
 
     const { error: updateError } = await supabase
       .from('profiles')
-      .update({
-        bonus_months: newBonusMonths,
-        referrals_count: (referrer.referrals_count || 0) + 1,
-      })
+      .update(updateData)
       .eq('id', referrer.id);
 
     if (updateError) {
-      console.error('❌ WEBHOOK: Ошибка начисления bonus month:', updateError);
+      console.error('❌ WEBHOOK: Ошибка начисления бонуса:', updateError);
       throw updateError;
     }
 
-    console.log(`✅ WEBHOOK: +1 bonus month начислен рефереру ${referrer.id}`);
-    console.log(`   Новый баланс: ${newBonusMonths} bonus months`);
-
-    // 📧 Отправляем email рефереру о получении bonus month
-    if (referrer.email) {
+    // 📧 Отправляем email рефереру о получении бонуса
+    // Для VIP навсегда — не отправляем (нет бонуса)
+    // Для VIP до даты или обычного пользователя — отправляем
+    if (referrer.email && !(isVip && referrer.vip_expires_at === null)) {
       const { data: { user: newUser } } = await supabase.auth.admin.getUserById(newUserId);
       const newUserName = newUser?.user_metadata?.name || newUserEmail.split('@')[0];
+
+      // Для email используем общий счётчик бонусов (или 1 для VIP с датой)
+      const bonusCount = isVip ? 1 : (updateData.bonus_months || 1);
 
       await sendReferralPurchaseEmail(
         referrer.email,
         newUserName,
-        newBonusMonths,
+        bonusCount,
         referrer.preferred_language || 'el'
       );
 

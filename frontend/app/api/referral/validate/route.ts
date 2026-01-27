@@ -50,10 +50,11 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Проверка 2: Реферер должен иметь оплаченный аккаунт
-    // (бонус начисляется только если реферер сам платящий клиент)
-    if (!referrer.account_purchased) {
-      console.log('❌ Referral validation: реферер не оплатил аккаунт:', referralCode);
+    // Проверка 2: Реферер должен иметь оплаченный аккаунт ИЛИ быть VIP
+    // (VIP может использовать реферальную программу даже без account_purchased)
+    const isVip = referrer.subscription_status === 'vip';
+    if (!referrer.account_purchased && !isVip) {
+      console.log('❌ Referral validation: реферер не оплатил аккаунт и не VIP:', referralCode);
       return NextResponse.json({
         valid: false,
         error: 'REFERRER_NOT_ACTIVE',
