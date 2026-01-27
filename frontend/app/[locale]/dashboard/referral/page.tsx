@@ -89,7 +89,7 @@ export default function ReferralPage() {
       noReferrals: "You don't have any referrals yet",
       noReferrals2: "Share your link and get Bonus!",
       back: "Πίσω",
-      demoRestriction: "Referral Program is only available after purchasing an account",
+      demoRestriction: "Διαθέσιμο μετά την αγορά λογαριασμού",
       buyAccount: "Αγορά Λογαριασμού",
     },
     ru: {
@@ -119,7 +119,7 @@ export default function ReferralPage() {
       noReferrals: "You don't have any referrals yet",
       noReferrals2: "Share your link and get Bonus!",
       back: "Назад",
-      demoRestriction: "Referral Program is only available after purchasing an account",
+      demoRestriction: "Доступно после покупки аккаунта",
       buyAccount: "Купить аккаунт",
     },
     en: {
@@ -149,7 +149,7 @@ export default function ReferralPage() {
       noReferrals: "You don't have any referrals yet",
       noReferrals2: "Share your link and get Bonus!",
       back: "Back",
-      demoRestriction: "Referral program is only available after purchasing an account",
+      demoRestriction: "Available after purchasing an account",
       buyAccount: "Buy Account",
     },
     uk: {
@@ -179,7 +179,7 @@ export default function ReferralPage() {
       noReferrals: "You don't have any referrals yet",
       noReferrals2: "Share your link and get Bonus!",
       back: "Назад",
-      demoRestriction: "Referral Program is only available after purchasing an account",
+      demoRestriction: "Доступно після покупки акаунта",
       buyAccount: "Купити акаунт",
     },
     sq: {
@@ -209,7 +209,7 @@ export default function ReferralPage() {
       noReferrals: "You don't have any referrals yet",
       noReferrals2: "Share your link and get Bonus!",
       back: "Prapa",
-      demoRestriction: "Referral Program is only available after purchasing an account",
+      demoRestriction: "E disponueshme pas blerjes së llogarisë",
       buyAccount: "Bli Llogari",
     },
     bg: {
@@ -239,7 +239,7 @@ export default function ReferralPage() {
       noReferrals: "You don't have any referrals yet",
       noReferrals2: "Share your link and get Bonus!",
       back: "Назад",
-      demoRestriction: "Referral Program is only available after purchasing an account",
+      demoRestriction: "Достъпно след закупуване на акаунт",
       buyAccount: "Купи акаунт",
     },
     ro: {
@@ -269,7 +269,7 @@ export default function ReferralPage() {
       noReferrals: "You don't have any referrals yet",
       noReferrals2: "Share your link and get Bonus!",
       back: "Înapoi",
-      demoRestriction: "Referral Program is only available after purchasing an account",
+      demoRestriction: "Disponibil după achiziționarea contului",
       buyAccount: "Cumpără Cont",
     },
     ar: {
@@ -299,7 +299,7 @@ export default function ReferralPage() {
       noReferrals: "You don't have any referrals yet",
       noReferrals2: "Share your link and get Bonus!",
       back: "رجوع",
-      demoRestriction: "Referral Program is only available after purchasing an account",
+      demoRestriction: "متاح بعد شراء الحساب",
       buyAccount: "شراء حساب",
     },
   };
@@ -406,19 +406,14 @@ export default function ReferralPage() {
               {t.buyAccount}
             </button>
 
-            {/* Back button */}
-            <button
+            {/* Back - phrase, not a button */}
+            <p
               onClick={() => router.push(`/${locale}/dashboard`)}
-              className="btn-universal w-full text-button"
-              style={{
-                minHeight: '52px',
-                backgroundColor: 'transparent',
-                border: '2px solid var(--polar)',
-                color: 'var(--polar)',
-              }}
+              className="text-button cursor-pointer text-center"
+              style={{ color: 'var(--polar)' }}
             >
               ← {t.back}
-            </button>
+            </p>
           </div>
         </div>
       </BackgroundPage>
