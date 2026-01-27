@@ -75,19 +75,10 @@ export default function ReferralPage() {
       step3: "Ο φίλος αγοράζει λογαριασμό",
       step4: "Λαμβάνετε +1 μήνα ΔΩΡΕΑΝ!",
       yourStats: "Η Στατιστική σας",
-      totalReferrals: "Total Referrals",
+      totalReferrals: "Συνολικές Προσκλήσεις",
       purchased: "Αγόρασαν Λογαριασμό",
       bonusTotal: "Σύνολο Bonus Μήνες",
       bonusAvailable: "Διαθέσιμοι Bonus Μήνες",
-      referralsList: "Your Referrals",
-      name: "Όνομα",
-      email: "Email",
-      dateRegistered: "Ημερομηνία Εγγραφής",
-      status: "Κατάσταση",
-      registered: "Εγγράφηκε",
-      accountPurchased: "Αγόρασε Λογαριασμό",
-      noReferrals: "You don't have any referrals yet",
-      noReferrals2: "Share your link and get Bonus!",
       back: "Πίσω",
       demoRestriction: "Διαθέσιμο μετά την αγορά λογαριασμού",
       buyAccount: "Αγορά Λογαριασμού",
@@ -105,19 +96,10 @@ export default function ReferralPage() {
       step3: "Друг покупает аккаунт",
       step4: "Вы получаете +1 месяц БЕСПЛАТНО!",
       yourStats: "Ваша Статистика",
-      totalReferrals: "Total Referrals",
+      totalReferrals: "Всего Приглашений",
       purchased: "Купили Аккаунт",
       bonusTotal: "Всего Bonus Месяцев",
       bonusAvailable: "Доступно Bonus Месяцев",
-      referralsList: "Your Referrals",
-      name: "Имя",
-      email: "Email",
-      dateRegistered: "Дата Регистрации",
-      status: "Статус",
-      registered: "Зарегистрировался",
-      accountPurchased: "Купил Аккаунт",
-      noReferrals: "You don't have any referrals yet",
-      noReferrals2: "Share your link and get Bonus!",
       back: "Назад",
       demoRestriction: "Доступно после покупки аккаунта",
       buyAccount: "Купить аккаунт",
@@ -139,15 +121,6 @@ export default function ReferralPage() {
       purchased: "Purchased Account",
       bonusTotal: "Total Bonus Months",
       bonusAvailable: "Available Bonus Months",
-      referralsList: "Your Referrals",
-      name: "Name",
-      email: "Email",
-      dateRegistered: "Date Registered",
-      status: "Status",
-      registered: "Registered",
-      accountPurchased: "Purchased Account",
-      noReferrals: "You don't have any referrals yet",
-      noReferrals2: "Share your link and get Bonus!",
       back: "Back",
       demoRestriction: "Available after purchasing an account",
       buyAccount: "Buy Account",
@@ -165,19 +138,10 @@ export default function ReferralPage() {
       step3: "Друг купує акаунт",
       step4: "Ви отримуєте +1 місяць БЕЗКОШТОВНО!",
       yourStats: "Ваша Статистика",
-      totalReferrals: "Total Referrals",
+      totalReferrals: "Всього Запрошень",
       purchased: "Купили Акаунт",
       bonusTotal: "Всього Bonus Місяців",
       bonusAvailable: "Доступно Bonus Місяців",
-      referralsList: "Your Referrals",
-      name: "Ім'я",
-      email: "Email",
-      dateRegistered: "Дата Реєстрації",
-      status: "Статус",
-      registered: "Зареєструвався",
-      accountPurchased: "Купив Акаунт",
-      noReferrals: "You don't have any referrals yet",
-      noReferrals2: "Share your link and get Bonus!",
       back: "Назад",
       demoRestriction: "Доступно після покупки акаунта",
       buyAccount: "Купити акаунт",
@@ -195,19 +159,10 @@ export default function ReferralPage() {
       step3: "Miku blen një llogari",
       step4: "Merrni +1 muaj FALAS!",
       yourStats: "Statistikat Tuaja",
-      totalReferrals: "Total Referrals",
+      totalReferrals: "Totali i Ftesave",
       purchased: "Blenë Llogari",
       bonusTotal: "Total Muaj Bonus",
       bonusAvailable: "Muaj Bonus të Disponueshëm",
-      referralsList: "Your Referrals",
-      name: "Emri",
-      email: "Email",
-      dateRegistered: "Data e Regjistrimit",
-      status: "Statusi",
-      registered: "U regjistrua",
-      accountPurchased: "Bleu Llogari",
-      noReferrals: "You don't have any referrals yet",
-      noReferrals2: "Share your link and get Bonus!",
       back: "Prapa",
       demoRestriction: "E disponueshme pas blerjes së llogarisë",
       buyAccount: "Bli Llogari",
@@ -225,19 +180,10 @@ export default function ReferralPage() {
       step3: "Приятелят купува акаунт",
       step4: "Получавате +1 месец БЕЗПЛАТНО!",
       yourStats: "Вашата Статистика",
-      totalReferrals: "Total Referrals",
+      totalReferrals: "Общо Покани",
       purchased: "Купиха Акаунт",
       bonusTotal: "Общо Bonus Месеци",
       bonusAvailable: "Налични Bonus Месеци",
-      referralsList: "Your Referrals",
-      name: "Име",
-      email: "Email",
-      dateRegistered: "Дата на Регистрация",
-      status: "Статус",
-      registered: "Регистрира се",
-      accountPurchased: "Купи Акаунт",
-      noReferrals: "You don't have any referrals yet",
-      noReferrals2: "Share your link and get Bonus!",
       back: "Назад",
       demoRestriction: "Достъпно след закупуване на акаунт",
       buyAccount: "Купи акаунт",
@@ -255,19 +201,10 @@ export default function ReferralPage() {
       step3: "Prietenul cumpără un cont",
       step4: "Primiți +1 lună GRATUIT!",
       yourStats: "Statisticile Dvs.",
-      totalReferrals: "Total Referrals",
+      totalReferrals: "Total Invitații",
       purchased: "Au Cumpărat Cont",
       bonusTotal: "Total Luni Bonus",
       bonusAvailable: "Luni Bonus Disponibile",
-      referralsList: "Your Referrals",
-      name: "Nume",
-      email: "Email",
-      dateRegistered: "Data Înregistrării",
-      status: "Status",
-      registered: "S-a Înregistrat",
-      accountPurchased: "A Cumpărat Cont",
-      noReferrals: "You don't have any referrals yet",
-      noReferrals2: "Share your link and get Bonus!",
       back: "Înapoi",
       demoRestriction: "Disponibil după achiziționarea contului",
       buyAccount: "Cumpără Cont",
@@ -285,19 +222,10 @@ export default function ReferralPage() {
       step3: "يشتري الصديق حسابًا",
       step4: "تحصل على +1 شهر مجانًا!",
       yourStats: "إحصائياتك",
-      totalReferrals: "Total Referrals",
+      totalReferrals: "إجمالي الدعوات",
       purchased: "اشتروا حسابًا",
       bonusTotal: "إجمالي أشهر البونص",
       bonusAvailable: "أشهر البونص المتاحة",
-      referralsList: "Your Referrals",
-      name: "الاسم",
-      email: "البريد الإلكتروني",
-      dateRegistered: "تاريخ التسجيل",
-      status: "الحالة",
-      registered: "مسجل",
-      accountPurchased: "اشترى حسابًا",
-      noReferrals: "You don't have any referrals yet",
-      noReferrals2: "Share your link and get Bonus!",
       back: "رجوع",
       demoRestriction: "متاح بعد شراء الحساب",
       buyAccount: "شراء حساب",
@@ -565,44 +493,6 @@ export default function ReferralPage() {
             </div>
           </div>
 
-          {/* Referrals List - phrase, centered */}
-          <p className="text-heading font-semibold text-center" style={{ color: 'var(--zanah)' }}>
-            {t.referralsList}
-          </p>
-
-          {stats?.referrals && stats.referrals.length > 0 ? (
-            <div className="flex flex-col gap-12 items-center">
-              {stats.referrals.map((referral) => (
-                <div
-                  key={referral.id}
-                  className="w-full rounded-2xl p-4 text-center"
-                  style={{ backgroundColor: 'var(--zanah)' }}
-                >
-                  <p className="text-button" style={{ color: 'var(--deep-teal)' }}>
-                    {t.name}: <span style={{ color: 'var(--orange)' }}>{referral.name}</span>
-                  </p>
-                  <p className="text-button mt-2" style={{ color: 'var(--deep-teal)' }}>
-                    Email: <span style={{ color: 'var(--orange)' }}>{referral.email}</span>
-                  </p>
-                  <p className="text-button mt-2" style={{ color: 'var(--deep-teal)' }}>
-                    {t.dateRegistered}: <span style={{ color: 'var(--orange)' }}>{new Date(referral.created_at).toLocaleDateString(locale)}</span>
-                  </p>
-                  <p className="text-button mt-2" style={{ color: 'var(--deep-teal)' }}>
-                    {t.status}: <span style={{ color: referral.account_purchased ? '#25D366' : 'var(--orange)' }}>{referral.account_purchased ? t.accountPurchased : t.registered}</span>
-                  </p>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col gap-4">
-              <p className="text-button text-center" style={{ color: 'var(--orange)' }}>
-                {t.noReferrals}
-              </p>
-              <p className="text-button text-center" style={{ color: 'var(--orange)' }}>
-                {t.noReferrals2}
-              </p>
-            </div>
-          )}
 
         </div>
       </div>

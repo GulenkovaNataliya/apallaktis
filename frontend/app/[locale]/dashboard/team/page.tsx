@@ -502,7 +502,7 @@ export default function TeamPage() {
           {/* Plan Limit Info */}
           <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: 'var(--zanah)' }}>
             <p className="text-button" style={{ color: 'var(--deep-teal)' }}>
-              {t.planLimit}: {teamData?.members.length || 0} / {limits.maxUsers === -1 ? t.unlimited : limits.maxUsers}
+              {t.planLimit}: {limits.maxUsers === -1 ? t.unlimited : `${teamData?.members.length || 0} / ${limits.maxUsers}`}
             </p>
           </div>
 

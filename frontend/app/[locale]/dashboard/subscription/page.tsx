@@ -549,38 +549,42 @@ export default function SubscriptionPage() {
 
           {/* Header */}
           <h1
-            className="text-slogan font-bold text-center"
+            className="text-heading font-bold text-center"
             style={{ color: '#ff8f0a' }}
           >
             {t.title}
           </h1>
 
-          {/* Account Purchase */}
-          <p className="text-heading font-semibold text-center" style={{ color: 'var(--zanah)' }}>
-            💳 {t.accountPurchase}
-          </p>
+          {/* Account Purchase - Hide for VIP */}
+          {subscription.status !== 'vip' && (
+            <>
+              <p className="text-heading font-semibold text-center" style={{ color: 'var(--zanah)' }}>
+                💳 {t.accountPurchase}
+              </p>
 
-          {/* Account Purchase - Status */}
-          <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
-            {t.status}:{' '}
-            <span style={{ color: subscription.accountPurchased ? '#25D366' : 'var(--orange)', fontWeight: 'bold' }}>
-              {subscription.accountPurchased ? `✓ ${t.paid}` : t.notPaid}
-            </span>
-          </p>
+              {/* Account Purchase - Status */}
+              <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
+                {t.status}:{' '}
+                <span style={{ color: subscription.accountPurchased ? '#25D366' : 'var(--orange)', fontWeight: 'bold' }}>
+                  {subscription.accountPurchased ? `✓ ${t.paid}` : t.notPaid}
+                </span>
+              </p>
 
-          {/* Buy Account Button - right after status */}
-          {!subscription.accountPurchased && (
-            <button
-              onClick={() => router.push(`/${locale}/purchase-account`)}
-              className="w-full rounded-2xl text-slogan font-bold transition-opacity hover:opacity-80"
-              style={{
-                backgroundColor: 'var(--orange)',
-                color: 'white',
-                minHeight: '52px',
-              }}
-            >
-              {t.buyAccount}
-            </button>
+              {/* Buy Account Button - right after status */}
+              {!subscription.accountPurchased && (
+                <button
+                  onClick={() => router.push(`/${locale}/purchase-account`)}
+                  className="w-full rounded-2xl text-slogan font-bold transition-opacity hover:opacity-80"
+                  style={{
+                    backgroundColor: 'var(--orange)',
+                    color: 'white',
+                    minHeight: '52px',
+                  }}
+                >
+                  {t.buyAccount}
+                </button>
+              )}
+            </>
           )}
 
           {/* Current Plan */}
@@ -668,13 +672,13 @@ export default function SubscriptionPage() {
           )}
 
           {/* Payment History */}
-          <p className="text-heading font-semibold text-center" style={{ color: 'var(--zanah)' }}>
+          <p className="text-heading font-bold text-center" style={{ color: 'var(--zanah)' }}>
             📜 {t.paymentHistory}
           </p>
 
           {/* No Payments */}
           <p
-            className="text-body text-center"
+            className="text-button font-semibold text-center"
             style={{ color: 'var(--zanah)' }}
           >
             {t.noPayments}
