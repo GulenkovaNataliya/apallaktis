@@ -63,7 +63,7 @@ export async function DELETE(request: NextRequest) {
       // Get user profile
       const { data: profile } = await supabase
         .from('profiles')
-        .select('name, subscription_tier, subscription_status')
+        .select('name, subscription_status, vip_expires_at, account_purchased, demo_expires_at')
         .eq('id', user.id)
         .single();
 

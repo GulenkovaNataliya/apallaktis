@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     // Get owner's profile for subscription info
     const { data: ownerProfile } = await supabase
       .from('profiles')
-      .select('subscription_status, subscription_tier, name')
+      .select('subscription_status, vip_expires_at, account_purchased, demo_expires_at, name')
       .eq('id', user.id)
       .single();
 
@@ -48,8 +48,9 @@ export async function POST(request: NextRequest) {
       .select('*', { count: 'exact', head: true })
       .eq('team_id', team.id);
 
-    // Check subscription limits
-    const tier = (ownerProfile?.subscription_tier || ownerProfile?.subscription_status || 'demo').toLowerCase();
+    // Check subscription limits using getUserTier for proper VIP detection
+    const { getUserTier } = await import('@/lib/subscription');
+    const tier = ownerProfile ? getUserTier(ownerProfile) : 'demo';
     const canAdd = canAddTeamMember(tier as any, memberCount || 0);
 
     if (!canAdd.allowed) {

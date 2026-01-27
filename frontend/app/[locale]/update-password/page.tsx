@@ -157,19 +157,15 @@ export default function UpdatePasswordPage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: 'url(/pages/page-04.webp)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          width: '100%',
-          height: '100%',
-        }}
-      />
+    <div className="relative min-h-screen w-full overflow-hidden">
+      {/* Background Image - same structure as VideoBackground */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/pages/page-04.webp"
+          alt=""
+          className="h-full w-full object-cover"
+        />
+      </div>
 
       {/* Content */}
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 safe-area-top safe-area-bottom py-8">

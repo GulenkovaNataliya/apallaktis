@@ -31,16 +31,14 @@ export default function BackgroundPage({
 
   return (
     <div className={`relative min-h-screen w-full overflow-hidden ${className}`}>
-      {/* Background Image - use absolute (not fixed) to stay inside mobile wrapper */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: `url(${backgroundSrc})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      />
+      {/* Background Image - same structure as VideoBackground */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src={backgroundSrc}
+          alt=""
+          className="h-full w-full object-cover"
+        />
+      </div>
 
       {/* Content */}
       <div className="relative z-10 min-h-screen w-full">

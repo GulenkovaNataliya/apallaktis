@@ -112,13 +112,28 @@ body[dir="rtl"] {
 @media (min-width: 600px) {
   .mobile-preview-wrapper {
     max-width: 500px;
-    height: 90vh;
-    margin-top: 5vh;
+    height: 96vh;
+    margin-top: 2vh;
     border-radius: 40px;
     border: 12px solid #1a1a1a;
     box-shadow:
       0 0 0 2px #333,
       0 20px 50px rgba(0, 0, 0, 0.5);
+    /* Clip all content to rounded corners */
+    overflow: hidden;
+  }
+
+  /* Inner scrollable container */
+  .mobile-preview-wrapper > div {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* Hide scrollbar */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .mobile-preview-wrapper > div::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -393,21 +408,9 @@ body[dir="rtl"] {
   width: 60%;
 }
 
-/* Media containment - ensure images and videos stay inside mobile wrapper */
-.mobile-preview-wrapper img,
-.mobile-preview-wrapper video {
+/* Media containment - only for content images, not background images/videos */
+/* Background media uses .object-cover class and should keep full dimensions */
+.mobile-preview-wrapper img:not(.object-cover),
+.mobile-preview-wrapper video:not(.object-cover) {
   max-width: 100%;
-  height: auto;
-}
-
-/* For media that should cover container */
-.mobile-preview-wrapper img.object-cover,
-.mobile-preview-wrapper video.object-cover {
-  object-fit: cover;
-}
-
-/* For media that should fit/contain */
-.mobile-preview-wrapper img.object-contain,
-.mobile-preview-wrapper video.object-contain {
-  object-fit: contain;
 }

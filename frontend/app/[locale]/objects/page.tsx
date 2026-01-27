@@ -99,7 +99,7 @@ export default function ObjectsPage() {
         if (supabaseUser) {
           const { data: profile } = await supabase
             .from('profiles')
-            .select('subscription_status, subscription_tier, account_purchased, demo_expires_at, subscription_expires_at, vip_expires_at')
+            .select('subscription_status, account_purchased, demo_expires_at, vip_expires_at')
             .eq('id', supabaseUser.id)
             .single();
 

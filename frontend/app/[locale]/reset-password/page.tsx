@@ -50,19 +50,15 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: 'url(/pages/page-03.webp)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          width: '100%',
-          height: '100%',
-        }}
-      />
+    <div className="relative min-h-screen w-full overflow-hidden">
+      {/* Background Image - same structure as VideoBackground */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/pages/page-03.webp"
+          alt=""
+          className="h-full w-full object-cover"
+        />
+      </div>
 
       {/* Content */}
       <div className="relative z-10 flex min-h-screen flex-col items-center px-4 safe-area-top safe-area-bottom" style={{ paddingTop: '180px', paddingLeft: '40px', paddingRight: '40px' }}>
