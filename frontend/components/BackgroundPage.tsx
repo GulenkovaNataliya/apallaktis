@@ -31,9 +31,9 @@ export default function BackgroundPage({
 
   return (
     <div className={`relative min-h-screen w-full overflow-hidden ${className}`}>
-      {/* Background Image */}
+      {/* Background Image - use absolute (not fixed) to stay inside mobile wrapper */}
       <div
-        className="fixed inset-0 z-0"
+        className="absolute inset-0 z-0"
         style={{
           backgroundImage: `url(${backgroundSrc})`,
           backgroundSize: 'cover',

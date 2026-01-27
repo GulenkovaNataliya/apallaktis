@@ -392,3 +392,22 @@ body[dir="rtl"] {
 .btn-afm {
   width: 60%;
 }
+
+/* Media containment - ensure images and videos stay inside mobile wrapper */
+.mobile-preview-wrapper img,
+.mobile-preview-wrapper video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* For media that should cover container */
+.mobile-preview-wrapper img.object-cover,
+.mobile-preview-wrapper video.object-cover {
+  object-fit: cover;
+}
+
+/* For media that should fit/contain */
+.mobile-preview-wrapper img.object-contain,
+.mobile-preview-wrapper video.object-contain {
+  object-fit: contain;
+}
