@@ -676,10 +676,10 @@ export default function SubscriptionPage() {
             📜 {t.paymentHistory}
           </p>
 
-          {/* No Payments */}
+          {/* No Payments - orange, disappears when payments exist */}
           <p
             className="text-button font-semibold text-center"
-            style={{ color: 'var(--zanah)' }}
+            style={{ color: 'var(--orange)' }}
           >
             {t.noPayments}
           </p>
