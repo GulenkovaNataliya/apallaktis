@@ -44,8 +44,8 @@ export default function ThankYouPage() {
             {t.title}
           </div>
 
-          {/* Slogan 2 - with slogan color */}
-          <div className="text-slogan font-semibold" style={{ color: "#ff8f0a" }}>
+          {/* Slogan 2 - white text */}
+          <div className="text-slogan font-semibold" style={{ color: "var(--polar)" }}>
             {t.slogan2}
           </div>
 

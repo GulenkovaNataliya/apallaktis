@@ -1809,3 +1809,42 @@ debtsByObject = objects.filter(obj => obj.balance > 0.01)
 **API:** `frontend/app/api/stripe/customer-portal/route.ts`
 
 ---
+
+## CHANGELOG (28.01.2026)
+
+### 1. /[locale]/email-not-confirmed — Проверьте спам
+
+**Было:** Оранжевый блок с текстом `var(--deep-teal)`
+**Стало:** Простой текст цвета `var(--orange)` без фона
+
+```jsx
+// Было
+<div style={{ backgroundColor: "var(--orange)" }}>
+  <p style={{ color: "var(--deep-teal)" }}>{t.checkSpam}</p>
+</div>
+
+// Стало
+<p style={{ color: "var(--orange)" }}>{t.checkSpam}</p>
+```
+
+### 2. /[locale]/dashboard/subscription — Увеличен текст Plan/Status/Expires
+
+**Было:** `text-body` для строк План, Статус, Срок
+**Стало:** `text-heading` (как заголовок "Текущий План")
+
+Также добавлена подпись для VIP unlimited:
+- **Было:** просто "Безлимит"
+- **Стало:** "До: Безлимит"
+
+### 3. /[locale]/thank-you — Слоган белым текстом
+
+**Было:** `color: "#ff8f0a"` (оранжевый)
+**Стало:** `color: "var(--polar)"` (белый)
+
+| Элемент | Цвет |
+|---------|------|
+| "Спасибо за регистрацию!" | `#ff8f0a` (оранжевый) |
+| "Возьми контроль в свои руки!" | `var(--polar)` (белый) |
+| Таймер редиректа | `#ff8f0a` (оранжевый) |
+
+---
