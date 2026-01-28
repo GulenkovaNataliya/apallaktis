@@ -358,6 +358,40 @@ export default function DashboardPage() {
             {(translations[locale] || translations.el).team}
           </button>
 
+          {/* Support Section */}
+          <div className="flex flex-col gap-4">
+            <p
+              className="text-slogan font-bold text-center"
+              style={{ color: '#ff8f0a' }}
+            >
+              {(translations[locale] || translations.el).needHelp}
+            </p>
+            <p
+              className="text-body text-center"
+              style={{ color: 'var(--zanah)' }}
+            >
+              {(translations[locale] || translations.el).responseTime}
+            </p>
+            <div className="flex gap-4">
+              <a
+                href="viber://chat?number=306983208844"
+                className="flex-1 btn-universal text-button flex items-center justify-center text-center rounded-2xl"
+                style={{ minHeight: '52px', backgroundColor: '#7360F2', color: '#ffffff' }}
+              >
+                💬 Viber
+              </a>
+              <a
+                href="https://wa.me/306983208844"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 btn-universal text-button flex items-center justify-center text-center rounded-2xl"
+                style={{ minHeight: '52px', backgroundColor: '#25D366', color: '#ffffff' }}
+              >
+                💬 WhatsApp
+              </a>
+            </div>
+          </div>
+
           {/* Go to Home Button - 5/5 darkest */}
           <button
             onClick={() => router.push(`/${locale}/page-pay`)}
