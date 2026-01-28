@@ -189,17 +189,9 @@ export default function EmailNotConfirmedPage() {
           {/* Message */}
           <p
             className="text-body text-center"
-            style={{ color: "var(--polar)" }}
-          >
-            {t.message}
-          </p>
-
-          {/* Check Spam Note */}
-          <p
-            className="text-body text-center"
             style={{ color: "var(--orange)" }}
           >
-            {t.checkSpam}
+            {t.message}
           </p>
 
           {/* Resend Status */}

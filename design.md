@@ -1861,4 +1861,14 @@ debtsByObject = objects.filter(obj => obj.balance > 0.01)
 - `marginTop: '40px'`
 - Кнопка "← Назад к Расходам" удалена (есть верхняя фраза "← Назад к Расходам")
 
+### 5. /[locale]/email-not-confirmed — Сообщение "Проверьте входящие"
+
+**Было:**
+- `t.message` ("Проверьте входящие...") — `var(--polar)` (белый)
+- `t.checkSpam` ("Также проверьте спам...") — `var(--orange)` (повтор)
+
+**Стало:**
+- `t.message` — `var(--orange)` (оранжевый)
+- `t.checkSpam` — удалён (дублирует информацию из `t.message`)
+
 ---
