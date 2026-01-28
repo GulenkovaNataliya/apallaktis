@@ -594,7 +594,7 @@ export default function SubscriptionPage() {
 
           {/* Current Plan - Plan Name */}
           {planName && (
-            <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
+            <p className="text-heading text-center" style={{ color: 'var(--zanah)' }}>
               {t.plan}:{' '}
               <span style={{ color: 'var(--orange)', fontWeight: 'bold' }}>
                 {planName}
@@ -603,7 +603,7 @@ export default function SubscriptionPage() {
           )}
 
           {/* Current Plan - Status */}
-          <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
+          <p className="text-heading text-center" style={{ color: 'var(--zanah)' }}>
             {t.status}:{' '}
             <span style={{ color: getStatusColor(subscription.status), fontWeight: 'bold' }}>
               {getStatusLabel(subscription.status)}
@@ -612,11 +612,14 @@ export default function SubscriptionPage() {
 
           {/* VIP Expires / Subscription Expires */}
           {subscription.status === 'vip' && subscription.vipExpiresAt && (
-            <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
+            <p className="text-heading text-center" style={{ color: 'var(--zanah)' }}>
               {isVipUnlimited() ? (
-                <span style={{ color: '#25D366', fontWeight: 'bold' }}>
-                  {t.unlimited}
-                </span>
+                <>
+                  {t.expiresOn}:{' '}
+                  <span style={{ color: '#25D366', fontWeight: 'bold' }}>
+                    {t.unlimited}
+                  </span>
+                </>
               ) : (
                 <>
                   {t.expiresOn}:{' '}
@@ -630,7 +633,7 @@ export default function SubscriptionPage() {
 
           {/* Active subscription expires */}
           {subscription.status === 'active' && timeRemaining && (
-            <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
+            <p className="text-heading text-center" style={{ color: 'var(--zanah)' }}>
               {t.expiresAt}:{' '}
               <span style={{ fontWeight: 'bold' }}>
                 {timeRemaining}
@@ -640,7 +643,7 @@ export default function SubscriptionPage() {
 
           {/* Demo expires */}
           {subscription.status === 'demo' && timeRemaining && (
-            <p className="text-body text-center" style={{ color: 'var(--zanah)' }}>
+            <p className="text-heading text-center" style={{ color: 'var(--zanah)' }}>
               {t.expiresAt}:{' '}
               <span style={{ color: 'var(--orange)', fontWeight: 'bold' }}>
                 {timeRemaining}
