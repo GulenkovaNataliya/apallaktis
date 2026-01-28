@@ -17,6 +17,7 @@ import {
   type PaymentMethod,
   type GlobalExpense,
 } from '@/lib/supabase/services';
+import { getUserTier } from '@/lib/subscription';
 
 // Translations for Analysis page
 const translations = {
@@ -579,16 +580,18 @@ export default function AnalysisPage() {
         // Get user profile with subscription info
         const { data: profile } = await supabase
           .from('profiles')
-          .select('subscription_plan, email')
+          .select('subscription_plan, subscription_status, subscription_tier, account_purchased, demo_expires_at, subscription_expires_at, vip_expires_at, email')
           .eq('id', user.id)
           .single();
 
         if (profile) {
-          setSubscriptionPlan(profile.subscription_plan);
+          // Use getUserTier to properly detect VIP status
+          const userTier = getUserTier(profile);
+          setSubscriptionPlan(userTier);
           setUserEmail(profile.email || '');
 
-          // Check if user has Basic, Standard, Premium or VIP
-          const hasAccess = ['basic', 'standard', 'premium', 'vip'].includes(profile.subscription_plan || '');
+          // Check if user has Demo, Basic, Standard, Premium or VIP
+          const hasAccess = ['demo', 'basic', 'standard', 'premium', 'vip'].includes(userTier);
           setHasAccess(hasAccess);
 
           if (hasAccess) {

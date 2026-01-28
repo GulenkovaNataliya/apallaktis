@@ -24,15 +24,58 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
-    // Get user's team (must be owner)
-    const { data: team, error: teamError } = await supabase
+    // Get user's team (must be owner) - create if doesn't exist
+    let { data: team, error: teamError } = await supabase
       .from('teams')
       .select('*')
       .eq('owner_id', user.id)
       .single();
 
+    // If team doesn't exist, create one automatically
     if (teamError || !team) {
-      return NextResponse.json({ error: 'Only team owner can invite members' }, { status: 403 });
+      // Get user's profile for team name
+      const { data: userProfile } = await supabase
+        .from('profiles')
+        .select('name, email')
+        .eq('id', user.id)
+        .single();
+
+      const teamName = userProfile?.name
+        ? `${userProfile.name}'s Team`
+        : `Team ${userProfile?.email?.split('@')[0] || 'Owner'}`;
+
+      // Create team
+      const { data: newTeam, error: createTeamError } = await supabase
+        .from('teams')
+        .insert({
+          name: teamName,
+          owner_id: user.id,
+          subscription_plan: 'standard',
+          max_members: 10,
+        })
+        .select()
+        .single();
+
+      if (createTeamError || !newTeam) {
+        console.error('Error creating team:', createTeamError);
+        return NextResponse.json({ error: 'Failed to create team' }, { status: 500 });
+      }
+
+      // Add owner as team member
+      const { error: addOwnerError } = await supabase
+        .from('team_members')
+        .insert({
+          team_id: newTeam.id,
+          user_id: user.id,
+          role: 'owner',
+          joined_at: new Date().toISOString(),
+        });
+
+      if (addOwnerError) {
+        console.error('Error adding owner to team:', addOwnerError);
+      }
+
+      team = newTeam;
     }
 
     // Get owner's profile for subscription info
