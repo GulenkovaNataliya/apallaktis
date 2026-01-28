@@ -370,7 +370,7 @@ export function generateInvoiceHTML(data: ReceiptData): string {
       <tbody>
         <tr>
           <td>1</td>
-          <td>ΑΠΑΛΛΑΚΤΗΣ Account Purchase<br><small>30 days free trial</small></td>
+          <td>ΑΠΑΛΛΑΚΤΗΣ Account Purchase<br><small>One month free trial</small></td>
           <td style="text-align: center;">1</td>
           <td style="text-align: right;">${data.amount.toFixed(2)} €</td>
           <td style="text-align: right;">${data.amount.toFixed(2)} €</td>
