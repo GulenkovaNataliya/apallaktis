@@ -1314,17 +1314,10 @@ function ExpenseForm({
 
   if (categories.length === 0) {
     return (
-      <div className="text-center" style={{ marginTop: '96px' }}>
-        <p className="text-body mb-4" style={{ color: 'var(--polar)' }}>
+      <div className="text-center" style={{ marginTop: '40px' }}>
+        <p className="text-body" style={{ color: 'var(--orange)' }}>
           {t.noCategories}
         </p>
-        <button
-          onClick={onCancel}
-          className="btn-universal"
-          style={{ minHeight: '52px', fontSize: '18px', fontWeight: 600 }}
-        >
-          {t.backToExpenses}
-        </button>
       </div>
     );
   }
