@@ -172,8 +172,190 @@ export default function GlobalExpensesPage() {
   // Payment methods state
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
 
+  // Expanded categories for analysis view
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
+
+  // Analysis date range and export states
+  const [analysisDateFrom, setAnalysisDateFrom] = useState<string>(new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0]);
+  const [analysisDateTo, setAnalysisDateTo] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [isExportingExcel, setIsExportingExcel] = useState(false);
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
+
   // Loading state
   const [isLoading, setIsLoading] = useState(true);
+
+  // Toggle category expansion
+  const toggleCategory = (categoryId: string) => {
+    const newExpanded = new Set(expandedCategories);
+    if (newExpanded.has(categoryId)) {
+      newExpanded.delete(categoryId);
+    } else {
+      newExpanded.add(categoryId);
+    }
+    setExpandedCategories(newExpanded);
+  };
+
+  // Group expenses by category
+  const groupByCategory = () => {
+    const groups: Record<string, GlobalExpense[]> = {};
+    expenses.forEach(expense => {
+      const catId = expense.categoryId || 'unknown';
+      if (!groups[catId]) {
+        groups[catId] = [];
+      }
+      groups[catId].push(expense);
+    });
+    return groups;
+  };
+
+  // Filter expenses by date range
+  const getFilteredExpenses = () => {
+    return expenses.filter(exp => {
+      const expDate = new Date(exp.date);
+      const fromDate = new Date(analysisDateFrom);
+      const toDate = new Date(analysisDateTo);
+      toDate.setHours(23, 59, 59, 999);
+      return expDate >= fromDate && expDate <= toDate;
+    });
+  };
+
+  // Group filtered expenses by category
+  const groupFilteredByCategory = () => {
+    const filtered = getFilteredExpenses();
+    const groups: Record<string, GlobalExpense[]> = {};
+    filtered.forEach(expense => {
+      const catId = expense.categoryId || 'unknown';
+      if (!groups[catId]) {
+        groups[catId] = [];
+      }
+      groups[catId].push(expense);
+    });
+    return groups;
+  };
+
+  // Export to Excel
+  const handleExportExcel = async () => {
+    setIsExportingExcel(true);
+    try {
+      const XLSX = (await import('xlsx')).default;
+      const wb = XLSX.utils.book_new();
+      const filtered = getFilteredExpenses();
+      const grouped = groupFilteredByCategory();
+
+      // Summary sheet
+      const summaryData = [
+        [t.analysisTitle],
+        [`${t.dateFrom}: ${analysisDateFrom}`, `${t.dateTo}: ${analysisDateTo}`],
+        [''],
+        [t.totalExpenses, formatEuro(filtered.reduce((sum, exp) => sum + exp.amount, 0))],
+        [''],
+        [t.byCategory],
+      ];
+      Object.entries(grouped).forEach(([catId, catExpenses]) => {
+        const cat = categories.find(c => c.id === catId);
+        const catName = cat?.name || 'Unknown';
+        const total = catExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+        summaryData.push([catName, formatEuro(total)]);
+      });
+      const summarySheet = XLSX.utils.aoa_to_sheet(summaryData);
+      XLSX.utils.book_append_sheet(wb, summarySheet, t.analysisTitle.slice(0, 31));
+
+      // Expenses detail sheet
+      const expensesData = [
+        [t.date, t.category, t.name, t.amount, t.description, t.paymentMethod],
+      ];
+      filtered.forEach(exp => {
+        const cat = categories.find(c => c.id === exp.categoryId);
+        const pm = paymentMethods.find(p => p.id === exp.paymentMethodId);
+        expensesData.push([
+          new Date(exp.date).toLocaleDateString(locale),
+          cat?.name || '',
+          exp.name,
+          exp.amount.toString(),
+          exp.description || '',
+          pm?.name || '',
+        ]);
+      });
+      const expensesSheet = XLSX.utils.aoa_to_sheet(expensesData);
+      XLSX.utils.book_append_sheet(wb, expensesSheet, t.title.slice(0, 31));
+
+      XLSX.writeFile(wb, `global_expenses_${analysisDateFrom}_${analysisDateTo}.xlsx`);
+    } catch (error) {
+      console.error('Export Excel error:', error);
+    } finally {
+      setIsExportingExcel(false);
+    }
+  };
+
+  // Export to PDF
+  const handleExportPdf = async () => {
+    setIsExportingPdf(true);
+    try {
+      const { default: jsPDF } = await import('jspdf');
+      const doc = new jsPDF();
+      const filtered = getFilteredExpenses();
+      const grouped = groupFilteredByCategory();
+
+      // Title
+      doc.setFontSize(18);
+      doc.text(t.analysisTitle, 20, 20);
+
+      // Period
+      doc.setFontSize(12);
+      doc.text(`${t.dateFrom}: ${analysisDateFrom}  ${t.dateTo}: ${analysisDateTo}`, 20, 30);
+
+      // Total
+      const totalAmount = filtered.reduce((sum, exp) => sum + exp.amount, 0);
+      doc.setFontSize(14);
+      doc.text(`${t.totalExpenses}: ${formatEuro(totalAmount)}`, 20, 45);
+
+      // By Category
+      doc.setFontSize(14);
+      doc.text(t.byCategory, 20, 60);
+
+      let y = 70;
+      doc.setFontSize(11);
+      Object.entries(grouped).forEach(([catId, catExpenses]) => {
+        const cat = categories.find(c => c.id === catId);
+        const catName = cat?.name || 'Unknown';
+        const total = catExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+        doc.text(`${catName}: ${formatEuro(total)}`, 25, y);
+        y += 8;
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+      });
+
+      // Expense details
+      y += 10;
+      if (y > 250) {
+        doc.addPage();
+        y = 20;
+      }
+      doc.setFontSize(14);
+      doc.text(t.title, 20, y);
+      y += 10;
+
+      doc.setFontSize(9);
+      filtered.forEach(exp => {
+        const cat = categories.find(c => c.id === exp.categoryId);
+        const line = `${new Date(exp.date).toLocaleDateString(locale)} | ${cat?.name || ''} | ${exp.name} | ${formatEuro(exp.amount)}`;
+        doc.text(line, 20, y);
+        y += 6;
+        if (y > 280) {
+          doc.addPage();
+          y = 20;
+        }
+      });
+
+      doc.save(`global_expenses_${analysisDateFrom}_${analysisDateTo}.pdf`);
+    } catch (error) {
+      console.error('Export PDF error:', error);
+    } finally {
+      setIsExportingPdf(false);
+    }
+  };
 
   // Load from Supabase
   useEffect(() => {
@@ -296,95 +478,228 @@ export default function GlobalExpensesPage() {
             {t.addNew}
           </button>
 
-          {/* Expenses List */}
-          <div className="flex flex-col gap-12 flex-1">
-            {expenses.length === 0 ? (
-              <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
-                {t.noExpenses}
-              </p>
-            ) : (
-              expenses.map(expense => {
-                const category = categories.find(c => c.id === expense.categoryId);
-                const paymentMethod = paymentMethods.find(pm => pm.id === expense.paymentMethodId);
-                return (
-                  <div
-                    key={expense.id}
-                    className="p-4 rounded-2xl"
-                    style={{ backgroundColor: 'var(--polar)' }}
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex-1" style={{ paddingLeft: '6px' }}>
-                        <p className="text-button" style={{ color: 'var(--deep-teal)' }}>
-                          {expense.name}
-                        </p>
-                        <p className="text-link" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                          {category?.name || 'Uncategorized'}
-                        </p>
-                        {expense.amount && (
-                          <p className="text-link" style={{ color: '#ff8f0a', fontWeight: 600 }}>
-                            {formatEuro(expense.amount)}
-                          </p>
-                        )}
-                        {(expense.date || expense.paymentMethodId || expense.inputMethod) && (
-                          <div className="flex gap-2 items-center flex-wrap mt-2">
-                            {expense.date && (
-                              <>
-                                <p className="text-xs" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                                  {new Date(expense.date).toLocaleDateString(locale)}
-                                </p>
-                                <span style={{ color: 'var(--deep-teal)', opacity: 0.5 }}>•</span>
-                              </>
-                            )}
-                            {paymentMethod && (
-                              <>
-                                <p className="text-xs" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                                  {paymentMethod.name}
-                                </p>
-                                <span style={{ color: 'var(--deep-teal)', opacity: 0.5 }}>•</span>
-                              </>
-                            )}
-                            {expense.inputMethod && (
-                              <p className="text-xs" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                                {expense.inputMethod === 'voice' ? '🎤' : expense.inputMethod === 'photo' ? '📸' : '⌨️'}
-                              </p>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => {
-                            setEditingExpense(expense);
-                            setView('edit-expense');
-                          }}
-                          className="px-4 rounded-2xl"
-                          style={{ backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)', minHeight: '104px', fontSize: '18px', fontWeight: 600 }}
-                        >
-                          {t.edit}
-                        </button>
-                        <button
-                          onClick={() => handleDeleteExpense(expense.id)}
-                          className="px-4 rounded-2xl"
-                          style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '104px', fontSize: '18px', fontWeight: 600 }}
-                        >
-                          {t.delete}
-                        </button>
-                      </div>
+          {/* Expense Analysis by Category */}
+          {expenses.length === 0 ? (
+            <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
+              {t.noExpenses}
+            </p>
+          ) : (
+            <>
+              {/* Title */}
+              <h3 className="text-lg font-semibold text-center" style={{ color: 'var(--polar)' }}>
+                {messages[locale]?.finance?.expenseAnalysisByCategory || 'Expense Analysis by Category'}
+              </h3>
+
+              {/* Grouped by Category */}
+              <div className="flex flex-col gap-12">
+                {Object.entries(groupByCategory()).map(([categoryId, categoryExpenses]) => {
+                  const category = categories.find(c => c.id === categoryId);
+                  const categoryName = category?.name || 'Unknown';
+                  const totalAmount = categoryExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+                  const count = categoryExpenses.length;
+                  const isExpanded = expandedCategories.has(categoryId);
+
+                  return (
+                    <div key={categoryId} className="rounded-2xl" style={{ backgroundColor: 'var(--polar)', padding: '16px 20px' }}>
+                      {/* Category Header */}
+                      <button
+                        onClick={() => toggleCategory(categoryId)}
+                        className="w-full flex justify-between items-center text-left"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span style={{ fontSize: '20px' }}>📦</span>
+                          <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
+                            {categoryName}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
+                            ({count}x)
+                          </span>
+                          <span className="text-lg font-bold" style={{ color: 'var(--deep-teal)' }}>
+                            {formatEuro(totalAmount)}
+                          </span>
+                          <span style={{ color: 'var(--deep-teal)', fontSize: '18px' }}>
+                            {isExpanded ? '▲' : '▼'}
+                          </span>
+                        </div>
+                      </button>
+
+                      {/* Expanded Items */}
+                      {isExpanded && (
+                        <div className="mt-4 space-y-3 pl-8 border-l-2" style={{ borderColor: 'rgba(1, 49, 45, 0.2)' }}>
+                          {categoryExpenses.map((expense) => {
+                            const paymentMethod = paymentMethods.find(pm => pm.id === expense.paymentMethodId);
+                            const paymentMethodName = paymentMethod ? paymentMethod.name : expense.paymentMethodName || '-';
+
+                            return (
+                              <div key={expense.id} className="rounded-lg" style={{ backgroundColor: 'rgba(0,0,0,0.05)', padding: '12px 16px' }}>
+                                <div className="flex justify-between items-start mb-2">
+                                  <div className="flex-1">
+                                    <p className="text-sm font-semibold mb-1" style={{ color: 'var(--deep-teal)' }}>
+                                      {expense.name}
+                                    </p>
+                                    <div className="flex gap-2 items-center flex-wrap mb-1">
+                                      <p className="text-xs font-semibold" style={{ color: 'var(--orange)' }}>
+                                        {formatEuro(expense.amount)}
+                                      </p>
+                                      <span style={{ color: 'var(--deep-teal)', opacity: 0.5 }}>•</span>
+                                      <p className="text-xs" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
+                                        {paymentMethodName}
+                                      </p>
+                                      <span style={{ color: 'var(--deep-teal)', opacity: 0.5 }}>•</span>
+                                      <p className="text-xs" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
+                                        {new Date(expense.date).toLocaleDateString(locale)}
+                                      </p>
+                                      {expense.inputMethod && (
+                                        <>
+                                          <span style={{ color: 'var(--deep-teal)', opacity: 0.5 }}>•</span>
+                                          <p className="text-xs" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
+                                            {expense.inputMethod === 'voice' ? '🎤' : expense.inputMethod === 'photo' ? '📸' : '⌨️'}
+                                          </p>
+                                        </>
+                                      )}
+                                    </div>
+                                    {expense.description && (
+                                      <p className="text-sm mt-1" style={{ color: 'var(--deep-teal)' }}>
+                                        {expense.description}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <div className="flex gap-2 ml-2">
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setEditingExpense(expense);
+                                        setView('edit-expense');
+                                      }}
+                                      className="text-button px-3 py-2 rounded-lg font-semibold"
+                                      style={{ backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)', minHeight: '44px' }}
+                                    >
+                                      {t.edit}
+                                    </button>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDeleteExpense(expense.id);
+                                      }}
+                                      className="text-button px-3 py-2 rounded-lg font-semibold"
+                                      style={{ backgroundColor: '#ff6a1a', color: 'white', minHeight: '44px' }}
+                                    >
+                                      {t.delete}
+                                    </button>
+                                  </div>
+                                </div>
+                                {expense.receiptPhotoUrl && (
+                                  <div className="mt-2">
+                                    <img
+                                      src={expense.receiptPhotoUrl}
+                                      alt="Receipt"
+                                      className="rounded-lg max-w-full"
+                                      style={{ maxHeight: '150px', objectFit: 'cover' }}
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
-                    {expense.receiptPhotoUrl && (
-                      <div className="mt-2" style={{ paddingLeft: '6px' }}>
-                        <img
-                          src={expense.receiptPhotoUrl}
-                          alt="Receipt"
-                          className="rounded-2xl max-w-full"
-                          style={{ maxHeight: '150px', objectFit: 'cover' }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                );
-              })
-            )}
+                  );
+                })}
+              </div>
+
+              {/* Total Expenses */}
+              <div className="btn-universal w-full text-lg flex justify-between items-center px-4" style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)' }}>
+                <span className="font-semibold">
+                  {messages[locale]?.finance?.totalExpensesTitle || 'Total'}
+                </span>
+                <span className="font-bold" style={{ color: 'var(--orange)' }}>
+                  {formatEuro(expenses.reduce((sum, exp) => sum + exp.amount, 0))}
+                </span>
+              </div>
+            </>
+          )}
+
+          {/* Analysis Section with Export */}
+          <div className="w-full flex flex-col gap-6 mt-8">
+            {/* Analysis Title - as <p>, NOT a button */}
+            <p className="text-xl font-bold text-center" style={{ color: 'var(--polar)' }}>
+              {t.analysisTitle}
+            </p>
+
+            {/* Date Range Selection */}
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <label className="block text-sm mb-2" style={{ color: 'var(--polar)' }}>
+                    {t.dateFrom}
+                  </label>
+                  <input
+                    type="date"
+                    value={analysisDateFrom}
+                    onChange={(e) => setAnalysisDateFrom(e.target.value)}
+                    className="w-full rounded-2xl"
+                    style={{
+                      border: '2px solid var(--polar)',
+                      color: 'var(--polar)',
+                      backgroundColor: 'transparent',
+                      minHeight: '44px',
+                      padding: '8px 12px'
+                    }}
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-sm mb-2" style={{ color: 'var(--polar)' }}>
+                    {t.dateTo}
+                  </label>
+                  <input
+                    type="date"
+                    value={analysisDateTo}
+                    onChange={(e) => setAnalysisDateTo(e.target.value)}
+                    className="w-full rounded-2xl"
+                    style={{
+                      border: '2px solid var(--polar)',
+                      color: 'var(--polar)',
+                      backgroundColor: 'transparent',
+                      minHeight: '44px',
+                      padding: '8px 12px'
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Download Buttons */}
+            <div className="flex gap-4">
+              <button
+                onClick={handleExportExcel}
+                disabled={isExportingExcel || expenses.length === 0}
+                className="flex-1 btn-universal text-button flex items-center justify-center gap-2"
+                style={{
+                  minHeight: '52px',
+                  backgroundColor: 'var(--zanah)',
+                  color: 'var(--deep-teal)',
+                  opacity: expenses.length === 0 ? 0.5 : 1
+                }}
+              >
+                {isExportingExcel ? '...' : `📊 ${t.downloadExcel}`}
+              </button>
+              <button
+                onClick={handleExportPdf}
+                disabled={isExportingPdf || expenses.length === 0}
+                className="flex-1 btn-universal text-button flex items-center justify-center gap-2"
+                style={{
+                  minHeight: '52px',
+                  backgroundColor: 'var(--orange)',
+                  color: 'white',
+                  opacity: expenses.length === 0 ? 0.5 : 1
+                }}
+              >
+                {isExportingPdf ? '...' : `📄 ${t.downloadPdf}`}
+              </button>
+            </div>
           </div>
           </div>
         </div>
@@ -1160,6 +1475,7 @@ function ExpenseForm({
   // Ref для хранения recognition instance
   const recognitionRef = useRef<any>(null);
   const transcriptRef = useRef<string>('');
+  const processedResultsRef = useRef<number>(0);
 
   const handleVoiceInput = () => {
     // Если уже записываем - останавливаем
@@ -1177,6 +1493,7 @@ function ExpenseForm({
     const recognition = new SpeechRecognition();
     recognitionRef.current = recognition;
     transcriptRef.current = '';
+    processedResultsRef.current = 0;
 
     recognition.lang = locale === 'el' ? 'el-GR' :
                       locale === 'ru' ? 'ru-RU' :
@@ -1196,21 +1513,23 @@ function ExpenseForm({
     };
 
     recognition.onresult = (event: any) => {
-      // Используем event.resultIndex чтобы не дублировать результаты
-      for (let i = event.resultIndex; i < event.results.length; i++) {
+      // Используем processedResultsRef чтобы не дублировать результаты на мобильных
+      // (resultIndex может сбрасываться при перезапусках recognition)
+      const startIndex = Math.max(event.resultIndex, processedResultsRef.current);
+      for (let i = startIndex; i < event.results.length; i++) {
         const result = event.results[i];
         if (result.isFinal) {
           // Добавляем только НОВЫЕ финальные результаты
           transcriptRef.current += result[0].transcript + ' ';
+          processedResultsRef.current = i + 1;
         }
       }
 
-      // Собираем текущий interim для отображения
+      // Собираем текущий interim для отображения (только текущий незавершённый)
       let interimTranscript = '';
-      for (let i = 0; i < event.results.length; i++) {
-        if (!event.results[i].isFinal) {
-          interimTranscript += event.results[i][0].transcript;
-        }
+      const lastResult = event.results[event.results.length - 1];
+      if (lastResult && !lastResult.isFinal) {
+        interimTranscript = lastResult[0].transcript;
       }
 
       // Показываем финальный + промежуточный текст

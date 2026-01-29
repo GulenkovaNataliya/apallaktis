@@ -147,12 +147,7 @@ export default function ObjectFinancePage() {
   const [expandedPaymentMethods, setExpandedPaymentMethods] = useState<Set<string>>(new Set());
   const [expandedPaymentReceived, setExpandedPaymentReceived] = useState(false);
   const [expandedExpensesPaid, setExpandedExpensesPaid] = useState(false);
-
-  // Email modal state
-  const [showEmailModal, setShowEmailModal] = useState(false);
-  const [emailTo, setEmailTo] = useState('');
-  const [reportFormat, setReportFormat] = useState<'pdf' | 'excel'>('pdf');
-  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   // Load data from Supabase
   useEffect(() => {
@@ -417,44 +412,113 @@ export default function ObjectFinancePage() {
     return null;
   }
 
-  // Send object finance report email
-  const handleSendReportEmail = async () => {
-    if (!object || !finance || !emailTo) return;
-    setIsSendingEmail(true);
+  // Export to Excel
+  const handleExportExcel = async () => {
+    if (!object || !finance) return;
+    setIsExporting(true);
 
     try {
-      const actualPrice = object.contractPrice + finance.totalAdditionalWorks;
-      const response = await fetch('/api/send-object-finance-report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: emailTo,
-          objectName: object.name,
-          contractPrice: object.contractPrice,
-          additionalWorks: finance.additionalWorks,
-          totalAdditionalWorks: finance.totalAdditionalWorks,
-          actualPrice: actualPrice,
-          payments: finance.payments,
-          totalPayments: finance.totalPayments,
-          balance: finance.balance,
-          expenses: expenses,
-          totalExpenses: expenses.reduce((sum, e) => sum + e.amount, 0),
-          locale,
-          format: reportFormat,
-        }),
-      });
+      const XLSX = (await import('xlsx')).default;
+      const wb = XLSX.utils.book_new();
 
-      if (response.ok) {
-        setShowEmailModal(false);
-        alert(t.emailSent);
-      } else {
-        alert(t.emailError);
+      const actualPrice = object.contractPrice + finance.totalAdditionalWorks;
+      const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+
+      // Summary sheet
+      const summaryData = [
+        [t.objectFinanceTitle, object.name],
+        [],
+        [t.contractPrice, formatEuro(object.contractPrice)],
+        [t.additionalWork, formatEuro(finance.totalAdditionalWorks)],
+        [t.actualPrice, formatEuro(actualPrice)],
+        [],
+        [t.payment, formatEuro(finance.totalPayments)],
+        [t.balance, formatEuro(finance.balance)],
+        [],
+        [t.totalExpensesTitle, formatEuro(totalExpenses)],
+      ];
+      const summarySheet = XLSX.utils.aoa_to_sheet(summaryData);
+      XLSX.utils.book_append_sheet(wb, summarySheet, 'Summary');
+
+      // Payments sheet
+      if (finance.payments.length > 0) {
+        const paymentsData = [
+          [t.date, t.amount, t.paymentMethod],
+          ...finance.payments.map(p => [
+            new Date(p.date).toLocaleDateString(locale),
+            formatEuro(p.amount),
+            paymentMethods.find(pm => pm.id === p.paymentMethodId)?.name || '-',
+          ]),
+        ];
+        const paymentsSheet = XLSX.utils.aoa_to_sheet(paymentsData);
+        XLSX.utils.book_append_sheet(wb, paymentsSheet, 'Payments');
       }
+
+      // Expenses sheet
+      if (expenses.length > 0) {
+        const expensesData = [
+          [t.date, t.category, t.amount, t.description],
+          ...expenses.map(e => [
+            new Date(e.date).toLocaleDateString(locale),
+            categories.find(c => c.id === e.categoryId)?.name || '-',
+            formatEuro(e.amount),
+            e.description || '-',
+          ]),
+        ];
+        const expensesSheet = XLSX.utils.aoa_to_sheet(expensesData);
+        XLSX.utils.book_append_sheet(wb, expensesSheet, 'Expenses');
+      }
+
+      XLSX.writeFile(wb, `${object.name}_finance.xlsx`);
     } catch (error) {
-      console.error('Send email error:', error);
-      alert(t.emailError);
+      console.error('Export Excel error:', error);
     } finally {
-      setIsSendingEmail(false);
+      setIsExporting(false);
+    }
+  };
+
+  // Export to PDF
+  const handleExportPdf = async () => {
+    if (!object || !finance) return;
+    setIsExporting(true);
+
+    try {
+      const { jsPDF } = await import('jspdf');
+      const doc = new jsPDF();
+      let y = 20;
+
+      const actualPrice = object.contractPrice + finance.totalAdditionalWorks;
+      const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+
+      // Title
+      doc.setFontSize(18);
+      doc.text(t.objectFinanceTitle, 20, y);
+      y += 10;
+      doc.setFontSize(14);
+      doc.text(object.name, 20, y);
+      y += 15;
+
+      // Summary
+      doc.setFontSize(12);
+      doc.text(`${t.contractPrice}: ${formatEuro(object.contractPrice)}`, 20, y);
+      y += 8;
+      doc.text(`${t.additionalWork}: ${formatEuro(finance.totalAdditionalWorks)}`, 20, y);
+      y += 8;
+      doc.text(`${t.actualPrice}: ${formatEuro(actualPrice)}`, 20, y);
+      y += 12;
+
+      doc.text(`${t.payment}: ${formatEuro(finance.totalPayments)}`, 20, y);
+      y += 8;
+      doc.text(`${t.balance}: ${formatEuro(finance.balance)}`, 20, y);
+      y += 12;
+
+      doc.text(`${t.totalExpensesTitle}: ${formatEuro(totalExpenses)}`, 20, y);
+
+      doc.save(`${object.name}_finance.pdf`);
+    } catch (error) {
+      console.error('Export PDF error:', error);
+    } finally {
+      setIsExporting(false);
     }
   };
 
@@ -956,122 +1020,37 @@ ${t.closeProjectQuestion}
               </button>
             )}
 
-            {/* Send Report Button */}
-            <button
-              onClick={() => {
-                setEmailTo(object?.clientContact || '');
-                setShowEmailModal(true);
-              }}
-              className="btn-universal w-full text-button"
-              style={{
-                minHeight: '52px',
-                backgroundColor: 'var(--zanah)',
-                color: 'var(--deep-teal)'
-              }}
-            >
-              📧 {t.sendReport}
-            </button>
-          </div>
-        </div>
-
-        {/* Email Modal */}
-        {showEmailModal && (
-          <div
-            className="fixed inset-0 flex items-center justify-center z-50"
-            style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-            onClick={() => setShowEmailModal(false)}
-          >
-            <div
-              className="rounded-2xl p-6 w-full max-w-sm mx-4"
-              style={{ backgroundColor: 'var(--polar)' }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Title */}
-              <h3 className="text-lg font-bold text-center mb-6" style={{ color: 'var(--deep-teal)' }}>
-                📧 {t.sendReport}
-              </h3>
-
-              {/* Email Input */}
-              <label className="text-button mb-2 block" style={{ color: 'var(--deep-teal)' }}>
-                {t.emailRecipient}
-              </label>
-              <input
-                type="email"
-                value={emailTo}
-                onChange={(e) => setEmailTo(e.target.value)}
-                placeholder="email@example.com"
-                className="w-full rounded-2xl text-button mb-6"
+            {/* Download Buttons */}
+            <div className="flex gap-4">
+              <button
+                onClick={handleExportExcel}
+                disabled={isExporting}
+                className="btn-universal flex-1 text-button"
                 style={{
-                  border: '2px solid var(--deep-teal)',
-                  color: 'var(--deep-teal)',
-                  backgroundColor: 'white',
                   minHeight: '52px',
-                  padding: '12px'
+                  backgroundColor: 'var(--zanah)',
+                  color: 'var(--deep-teal)',
+                  opacity: isExporting ? 0.5 : 1
                 }}
-              />
-
-              {/* Format Selection */}
-              <label className="text-button mb-2 block" style={{ color: 'var(--deep-teal)' }}>
-                {t.selectFormat}
-              </label>
-              <div className="flex gap-4 mb-6">
-                <button
-                  onClick={() => setReportFormat('pdf')}
-                  className="flex-1 rounded-2xl text-button"
-                  style={{
-                    minHeight: '52px',
-                    backgroundColor: reportFormat === 'pdf' ? 'var(--zanah)' : 'transparent',
-                    border: reportFormat === 'pdf' ? 'none' : '2px solid var(--deep-teal)',
-                    color: 'var(--deep-teal)'
-                  }}
-                >
-                  📄 PDF
-                </button>
-                <button
-                  onClick={() => setReportFormat('excel')}
-                  className="flex-1 rounded-2xl text-button"
-                  style={{
-                    minHeight: '52px',
-                    backgroundColor: reportFormat === 'excel' ? 'var(--zanah)' : 'transparent',
-                    border: reportFormat === 'excel' ? 'none' : '2px solid var(--deep-teal)',
-                    color: 'var(--deep-teal)'
-                  }}
-                >
-                  📥 Excel
-                </button>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-4">
-                <button
-                  onClick={() => setShowEmailModal(false)}
-                  className="flex-1 rounded-2xl text-button"
-                  style={{
-                    minHeight: '52px',
-                    backgroundColor: 'transparent',
-                    border: '2px solid var(--deep-teal)',
-                    color: 'var(--deep-teal)'
-                  }}
-                >
-                  {t.cancel}
-                </button>
-                <button
-                  onClick={handleSendReportEmail}
-                  disabled={isSendingEmail || !emailTo}
-                  className="flex-1 rounded-2xl text-button"
-                  style={{
-                    minHeight: '52px',
-                    backgroundColor: 'var(--zanah)',
-                    color: 'var(--deep-teal)',
-                    opacity: (!emailTo || isSendingEmail) ? 0.5 : 1
-                  }}
-                >
-                  {isSendingEmail ? '...' : t.sendButton}
-                </button>
-              </div>
+              >
+                📥 {t.downloadExcel}
+              </button>
+              <button
+                onClick={handleExportPdf}
+                disabled={isExporting}
+                className="btn-universal flex-1 text-button"
+                style={{
+                  minHeight: '52px',
+                  backgroundColor: 'var(--orange)',
+                  color: 'white',
+                  opacity: isExporting ? 0.5 : 1
+                }}
+              >
+                📄 {t.downloadPdf}
+              </button>
             </div>
           </div>
-        )}
+        </div>
       </BackgroundPage>
     );
   }
@@ -1213,6 +1192,7 @@ function AddWorkForm({
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef<any>(null);
   const transcriptRef = useRef<string>('');
+  const processedResultsRef = useRef<number>(0);
 
   const handleVoiceInput = () => {
     // Если уже записываем - останавливаем
@@ -1230,6 +1210,7 @@ function AddWorkForm({
     const recognition = new SpeechRecognition();
     recognitionRef.current = recognition;
     transcriptRef.current = '';
+    processedResultsRef.current = 0;
 
     recognition.lang = locale === 'el' ? 'el-GR' :
                       locale === 'ru' ? 'ru-RU' :
@@ -1247,21 +1228,23 @@ function AddWorkForm({
     };
 
     recognition.onresult = (event: any) => {
-      // Используем event.resultIndex чтобы не дублировать результаты
-      for (let i = event.resultIndex; i < event.results.length; i++) {
+      // Используем processedResultsRef чтобы не дублировать результаты на мобильных
+      // (resultIndex может сбрасываться при перезапусках recognition)
+      const startIndex = Math.max(event.resultIndex, processedResultsRef.current);
+      for (let i = startIndex; i < event.results.length; i++) {
         const result = event.results[i];
         if (result.isFinal) {
           // Добавляем только НОВЫЕ финальные результаты
           transcriptRef.current += result[0].transcript + ' ';
+          processedResultsRef.current = i + 1;
         }
       }
 
-      // Собираем текущий interim для отображения
+      // Собираем текущий interim для отображения (только текущий незавершённый)
       let interimTranscript = '';
-      for (let i = 0; i < event.results.length; i++) {
-        if (!event.results[i].isFinal) {
-          interimTranscript += event.results[i][0].transcript;
-        }
+      const lastResult = event.results[event.results.length - 1];
+      if (lastResult && !lastResult.isFinal) {
+        interimTranscript = lastResult[0].transcript;
       }
 
       // Показываем финальный + промежуточный текст
@@ -1458,6 +1441,7 @@ function AddPaymentForm({
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef<any>(null);
   const transcriptRef = useRef<string>('');
+  const processedResultsRef = useRef<number>(0);
 
   const handleVoiceInput = () => {
     // Если уже записываем - останавливаем
@@ -1475,6 +1459,7 @@ function AddPaymentForm({
     const recognition = new SpeechRecognition();
     recognitionRef.current = recognition;
     transcriptRef.current = '';
+    processedResultsRef.current = 0;
 
     recognition.lang = locale === 'el' ? 'el-GR' :
                       locale === 'ru' ? 'ru-RU' :
@@ -1492,21 +1477,23 @@ function AddPaymentForm({
     };
 
     recognition.onresult = (event: any) => {
-      // Используем event.resultIndex чтобы не дублировать результаты
-      for (let i = event.resultIndex; i < event.results.length; i++) {
+      // Используем processedResultsRef чтобы не дублировать результаты на мобильных
+      // (resultIndex может сбрасываться при перезапусках recognition)
+      const startIndex = Math.max(event.resultIndex, processedResultsRef.current);
+      for (let i = startIndex; i < event.results.length; i++) {
         const result = event.results[i];
         if (result.isFinal) {
           // Добавляем только НОВЫЕ финальные результаты
           transcriptRef.current += result[0].transcript + ' ';
+          processedResultsRef.current = i + 1;
         }
       }
 
-      // Собираем текущий interim для отображения
+      // Собираем текущий interim для отображения (только текущий незавершённый)
       let interimTranscript = '';
-      for (let i = 0; i < event.results.length; i++) {
-        if (!event.results[i].isFinal) {
-          interimTranscript += event.results[i][0].transcript;
-        }
+      const lastResult = event.results[event.results.length - 1];
+      if (lastResult && !lastResult.isFinal) {
+        interimTranscript = lastResult[0].transcript;
       }
 
       // Показываем финальный + промежуточный текст
@@ -1779,6 +1766,7 @@ function AddExpenseForm({
   // Refs для голосового ввода
   const recognitionRef = useRef<any>(null);
   const transcriptRef = useRef<string>('');
+  const processedResultsRef = useRef<number>(0);
 
   // categoryMap (10 категорий, 8 языков)
   const categoryMap: Record<string, string[]> = {
@@ -2094,6 +2082,7 @@ function AddExpenseForm({
     const recognition = new SpeechRecognition();
     recognitionRef.current = recognition;
     transcriptRef.current = '';
+    processedResultsRef.current = 0;
 
     recognition.lang = locale === 'el' ? 'el-GR' :
                       locale === 'ru' ? 'ru-RU' :
@@ -2113,21 +2102,23 @@ function AddExpenseForm({
     };
 
     recognition.onresult = (event: any) => {
-      // Используем event.resultIndex чтобы не дублировать результаты
-      for (let i = event.resultIndex; i < event.results.length; i++) {
+      // Используем processedResultsRef чтобы не дублировать результаты на мобильных
+      // (resultIndex может сбрасываться при перезапусках recognition)
+      const startIndex = Math.max(event.resultIndex, processedResultsRef.current);
+      for (let i = startIndex; i < event.results.length; i++) {
         const result = event.results[i];
         if (result.isFinal) {
           // Добавляем только НОВЫЕ финальные результаты
           transcriptRef.current += result[0].transcript + ' ';
+          processedResultsRef.current = i + 1;
         }
       }
 
-      // Собираем текущий interim для отображения
+      // Собираем текущий interim для отображения (только текущий незавершённый)
       let interimTranscript = '';
-      for (let i = 0; i < event.results.length; i++) {
-        if (!event.results[i].isFinal) {
-          interimTranscript += event.results[i][0].transcript;
-        }
+      const lastResult = event.results[event.results.length - 1];
+      if (lastResult && !lastResult.isFinal) {
+        interimTranscript = lastResult[0].transcript;
       }
 
       // Показываем финальный + промежуточный текст
@@ -2255,8 +2246,8 @@ function AddExpenseForm({
             <button
               type="button"
               onClick={() => setShowNewCategory(true)}
-              className="rounded-lg px-4 text-button"
-              style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+              className="rounded-2xl px-6 text-button font-bold"
+              style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '52px', fontSize: '24px', boxShadow: '0 4px 8px rgba(255, 106, 26, 0.3)' }}
             >
               +
             </button>
