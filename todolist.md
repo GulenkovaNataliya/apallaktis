@@ -2321,3 +2321,41 @@ const tier = getUserTier(profile);
 - `api/team/members/route.ts` — убран subscription_tier
 
 ---
+
+## 📊 ИЗМЕНЕНИЯ 29.01.2026
+
+### Исправления и улучшения
+
+| Задача | Статус | Описание |
+|--------|--------|----------|
+| Голосовой ввод на мобильных | ✅ | Исправлено дублирование текста 5-6 раз (processedResultsRef) |
+| Замена email на скачивание | ✅ | Кнопки "Скачать Excel" и "Скачать PDF" вместо отправки email |
+| Анализ по категориям | ✅ | Группировка расходов по категориям на global-expenses |
+| Секция анализа | ✅ | Добавлена в конец global-expenses с выбором периода и экспортом |
+
+### Файлы изменены
+
+**Основные:**
+- `global-expenses/page.tsx` — голосовой ввод, категории, анализ, экспорт
+- `objects/[id]/finance/page.tsx` — голосовой ввод (3 функции), экспорт Excel/PDF
+- `analysis/page.tsx` — замена email на скачивание
+
+**Переводы:**
+- `lib/messages.ts` — добавлены ключи для всех 8 языков:
+  - `globalExpenses.analysisTitle`
+  - `globalExpenses.dateFrom`
+  - `globalExpenses.dateTo`
+  - `globalExpenses.downloadExcel`
+  - `globalExpenses.downloadPdf`
+  - `globalExpenses.totalExpenses`
+  - `globalExpenses.byCategory`
+  - `finance.downloadExcel`
+  - `finance.downloadPdf`
+
+### Коммит
+
+```
+f9fa7c2 Fix voice input duplication + add download reports + global expenses analysis
+```
+
+---
