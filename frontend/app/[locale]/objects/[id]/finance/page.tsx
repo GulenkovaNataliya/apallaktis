@@ -500,8 +500,13 @@ export default function ObjectFinancePage() {
       container.style.cssText = 'position: absolute; left: -9999px; top: 0; width: 800px; padding: 40px; font-family: Arial, sans-serif; background: white;';
 
       container.innerHTML = `
-        <h1 style="color: #01312d; font-size: 24px; margin-bottom: 10px;">${t.objectFinanceTitle}</h1>
-        <h2 style="color: #ff6a1a; font-size: 20px; margin-bottom: 30px;">${object.name}</h2>
+        <!-- Logo -->
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" style="width: 50%; max-width: 400px; height: auto;" alt="ΑΠΑΛΛΑΚΤΗΣ" />
+        </div>
+
+        <h1 style="color: #01312d; font-size: 24px; margin-bottom: 10px; text-align: center;">${t.objectFinanceTitle}</h1>
+        <h2 style="color: #ff6a1a; font-size: 20px; margin-bottom: 30px; text-align: center;">${object.name}</h2>
 
         <div style="margin-bottom: 20px;">
           <p style="font-size: 16px; margin: 8px 0;"><strong>${t.contractPrice}:</strong> ${formatEuro(object.contractPrice)}</p>

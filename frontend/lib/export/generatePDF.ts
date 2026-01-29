@@ -136,20 +136,46 @@ const translations: Record<Locale, any> = {
   },
 };
 
-export function generatePDF(data: ExportData): void {
+// Load logo as base64
+async function loadLogoBase64(): Promise<string | null> {
+  try {
+    const response = await fetch('/logo.png');
+    const blob = await response.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(blob);
+    });
+  } catch {
+    return null;
+  }
+}
+
+export async function generatePDF(data: ExportData): Promise<void> {
   const { properties, expenses, dateFrom, dateTo, locale } = data;
   const t = translations[locale] || translations.en;
 
   // Create PDF
   const doc = new jsPDF();
 
+  // Load and add logo
+  const logoBase64 = await loadLogoBase64();
+  let startY = 20;
+
+  if (logoBase64) {
+    // Add logo centered at top (25x25mm)
+    doc.addImage(logoBase64, 'PNG', 92.5, 10, 20, 20);
+    startY = 35;
+  }
+
   // Title
   doc.setFontSize(20);
-  doc.text(t.title, 105, 20, { align: 'center' });
+  doc.text(t.title, 105, startY, { align: 'center' });
 
   // Period
   doc.setFontSize(12);
-  doc.text(`${t.period}: ${dateFrom} - ${dateTo}`, 105, 30, { align: 'center' });
+  doc.text(`${t.period}: ${dateFrom} - ${dateTo}`, 105, startY + 10, { align: 'center' });
 
   // Collect all expenses
   const allExpenses: any[] = [];
@@ -190,7 +216,7 @@ export function generatePDF(data: ExportData): void {
   autoTable(doc, {
     head: [[t.date, t.property, t.category, t.description, t.amount, t.paymentMethod]],
     body: expenseRows,
-    startY: 40,
+    startY: startY + 20,
     theme: 'grid',
     headStyles: {
       fillColor: [1, 49, 45], // deep-teal

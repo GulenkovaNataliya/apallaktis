@@ -304,8 +304,13 @@ export default function GlobalExpensesPage() {
       container.style.cssText = 'position: absolute; left: -9999px; top: 0; width: 800px; padding: 40px; font-family: Arial, sans-serif; background: white;';
 
       container.innerHTML = `
-        <h1 style="color: #01312d; font-size: 24px; margin-bottom: 10px;">${t.analysisTitle}</h1>
-        <p style="color: #666; font-size: 14px; margin-bottom: 20px;">${t.dateFrom}: ${analysisDateFrom} — ${t.dateTo}: ${analysisDateTo}</p>
+        <!-- Logo -->
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" style="width: 50%; max-width: 400px; height: auto;" alt="ΑΠΑΛΛΑΚΤΗΣ" />
+        </div>
+
+        <h1 style="color: #01312d; font-size: 24px; margin-bottom: 10px; text-align: center;">${t.analysisTitle}</h1>
+        <p style="color: #666; font-size: 14px; margin-bottom: 20px; text-align: center;">${t.dateFrom}: ${analysisDateFrom} — ${t.dateTo}: ${analysisDateTo}</p>
 
         <div style="margin-bottom: 25px; padding: 15px; background: #f5f5f5; border-radius: 8px;">
           <p style="font-size: 18px; margin: 0;"><strong>${t.totalExpenses}:</strong> <span style="color: #ff6a1a; font-weight: bold;">${formatEuro(totalAmount)}</span></p>
