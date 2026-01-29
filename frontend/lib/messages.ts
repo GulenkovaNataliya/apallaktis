@@ -509,7 +509,7 @@ export const messages = {
     demoExpired: {
       title: "DEMO период истек",
       subtitle: "Для продолжения работы приобретите полный аккаунт",
-      freeMonth: "Первый месяц подписка - бесплатно!",
+      freeMonth: "Первый месяц подписки Premium - бесплатно!",
       buyOnline: "Купить онлайн",
       temporarilyUnavailable: "Скоро! Временно недоступно",
       or: "Или",
