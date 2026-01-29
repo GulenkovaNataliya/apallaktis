@@ -280,6 +280,58 @@ padding: '12px';
 
 **Применяется на:** page-pay, global-expenses, payment-methods, и других страницах с меню кнопок.
 
+### ⚖️ ЗАКОН ФОРМ (эталон: payment-methods)
+
+Стандартный layout для форм ввода:
+
+```jsx
+<form className="flex flex-col gap-12" style={{ marginTop: '48px' }}>
+  <div>
+    <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '20px' }}>
+      Название поля
+    </label>
+    <input
+      className="w-full rounded-2xl text-body"
+      style={{
+        border: '2px solid var(--polar)',
+        color: 'var(--polar)',
+        backgroundColor: 'transparent',
+        minHeight: '52px',
+        padding: '12px',
+        fontSize: '18px'
+      }}
+    />
+  </div>
+</form>
+```
+
+**Layout формы:**
+
+| Параметр | Значение |
+|----------|----------|
+| gap между полями | `48px` (gap-12) |
+| marginTop формы | `48px` |
+| marginBottom у label | `20px` |
+| minHeight инпута | `52px` |
+| padding инпута | `12px` |
+| fontSize инпута | `18px` |
+| border инпута | `2px solid var(--polar)` |
+| backgroundColor | `transparent` |
+| color текста | `var(--polar)` |
+
+**Кнопки формы:**
+
+| Параметр | Значение |
+|----------|----------|
+| layout | `flex gap-4 mt-4` |
+| minHeight | `52px` |
+| fontSize | `18px` |
+| fontWeight | `600` |
+| Cancel | `backgroundColor: var(--polar)` |
+| Save | `backgroundColor: var(--zanah)` |
+
+**Применяется на:** payment-methods, objects (add/edit), global-expenses (add), и других страницах с формами.
+
 ### Специальные отступы
 | Страница | paddingBottom |
 |----------|---------------|
