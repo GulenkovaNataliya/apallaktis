@@ -19,6 +19,55 @@ interface HelpSection {
 // Russian content
 const helpContentRu: HelpSection[] = [
   {
+    id: 'design',
+    title: '0. Дизайн страницы',
+    items: [
+      {
+        title: '0.1 Цвета',
+        content: [
+          'Фон страницы: #033a45 (blue-whale)',
+          'Текст: var(--polar) — светло-голубой',
+          'Акцент: var(--orange) — оранжевый',
+          'Кнопки разделов: var(--polar) — светло-голубой',
+          'Кнопки пунктов: var(--zanah) — светло-зелёный',
+        ],
+        screenshots: [],
+      },
+      {
+        title: '0.2 Размеры текста',
+        content: [
+          '← Назад: 18px',
+          'Вступительный текст: 16px',
+          'Слоган: 24px',
+          'Заголовок "Инструкция": 30px',
+          'Заголовки разделов: 18px',
+          'Заголовки пунктов: 16px',
+          'Контент: 14px',
+        ],
+        screenshots: [],
+      },
+      {
+        title: '0.3 Отступы',
+        content: [
+          'Между фразами: 48px (gap-12)',
+          'Padding страницы: 40px по бокам',
+          'Padding сверху: 40px',
+          'Padding снизу: 120px',
+        ],
+        screenshots: [],
+      },
+      {
+        title: '0.4 Логотип',
+        content: [
+          'Расположение: внизу страницы',
+          'Размер: 450px ширина',
+          'Отступ сверху: 48px',
+        ],
+        screenshots: [],
+      },
+    ],
+  },
+  {
     id: 'start',
     title: '1. Начало работы',
     items: [
