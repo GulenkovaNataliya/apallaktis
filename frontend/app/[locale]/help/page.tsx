@@ -151,7 +151,7 @@ const helpContentRu: HelpSection[] = [
           '• Способы оплаты — как вам платят клиенты',
           '• Общие расходы — расходы на бизнес',
           '• Объекты — ваши проекты',
-          '• Финансовый анализ — отчёты (Standard/Premium)',
+          '• Финансовый анализ — отчёты',
           '• Личный кабинет — настройки',
         ],
         screenshots: ['10.ru.jpg'],
@@ -163,14 +163,7 @@ const helpContentRu: HelpSection[] = [
     title: '3. Способы оплаты',
     items: [
       {
-        title: '3.1 Список способов оплаты',
-        content: [
-          'Здесь отображаются все ваши способы оплаты.',
-        ],
-        screenshots: ['11.ru.jpg'],
-      },
-      {
-        title: '3.2 Добавление способа оплаты',
+        title: '3.1 Добавление способа оплаты',
         content: [
           '1. Нажмите «Добавить способ оплаты»',
           '2. Выберите тип:',
@@ -182,6 +175,13 @@ const helpContentRu: HelpSection[] = [
           '4. Нажмите «Сохранить»',
         ],
         screenshots: ['12.ru.jpg'],
+      },
+      {
+        title: '3.2 Список способов оплаты',
+        content: [
+          'Здесь отображаются все ваши способы оплаты.',
+        ],
+        screenshots: ['11.ru.jpg'],
       },
     ],
   },
@@ -360,8 +360,6 @@ const helpContentRu: HelpSection[] = [
         title: '6.1 Общий анализ',
         content: [
           'Финансовый анализ — это отчёты по вашему бизнесу.',
-          '',
-          'Доступно для тарифов: Standard и Premium',
           '',
           'Что показывает анализ:',
           '• Общая сумма договорных цен',
@@ -670,6 +668,17 @@ export default function HelpPage() {
         {t.back}
       </p>
 
+      {/* Logo at top */}
+      <div className="flex justify-center" style={{ marginBottom: '48px' }}>
+        <Image
+          src="/Apallaktis.photos/apallaktis-logo-orange@2x.png"
+          alt="ΑΠΑΛΛΑΚΤΗΣ"
+          width={450}
+          height={150}
+          style={{ objectFit: 'contain' }}
+        />
+      </div>
+
       {/* Intro text */}
       <div className="flex flex-col items-center gap-12">
         <p
@@ -850,16 +859,6 @@ export default function HelpPage() {
           })}
         </div>
 
-        {/* Logo at bottom - 3x bigger */}
-        <div className="flex justify-center" style={{ marginTop: '48px' }}>
-          <Image
-            src="/Apallaktis.photos/apallaktis-logo-orange@2x.png"
-            alt="ΑΠΑΛΛΑΚΤΗΣ"
-            width={450}
-            height={150}
-            style={{ objectFit: 'contain' }}
-          />
-        </div>
     </div>
   );
 }

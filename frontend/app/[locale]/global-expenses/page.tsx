@@ -237,7 +237,7 @@ export default function GlobalExpensesPage() {
   const handleExportExcel = async () => {
     setIsExportingExcel(true);
     try {
-      const XLSX = (await import('xlsx')).default;
+      const XLSX = await import('xlsx');
       const wb = XLSX.utils.book_new();
       const filtered = getFilteredExpenses();
       const grouped = groupFilteredByCategory();
@@ -279,7 +279,17 @@ export default function GlobalExpensesPage() {
       const expensesSheet = XLSX.utils.aoa_to_sheet(expensesData);
       XLSX.utils.book_append_sheet(wb, expensesSheet, t.title.slice(0, 31));
 
-      XLSX.writeFile(wb, `global_expenses_${analysisDateFrom}_${analysisDateTo}.xlsx`);
+      // Download - use Blob for mobile compatibility
+      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `global_expenses_${analysisDateFrom}_${analysisDateTo}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Export Excel error:', error);
     } finally {

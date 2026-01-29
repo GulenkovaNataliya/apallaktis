@@ -421,7 +421,7 @@ export default function ObjectFinancePage() {
     setIsExporting(true);
 
     try {
-      const XLSX = (await import('xlsx')).default;
+      const XLSX = await import('xlsx');
       const wb = XLSX.utils.book_new();
 
       const actualPrice = object.contractPrice + finance.totalAdditionalWorks;
@@ -472,7 +472,17 @@ export default function ObjectFinancePage() {
         XLSX.utils.book_append_sheet(wb, expensesSheet, 'Expenses');
       }
 
-      XLSX.writeFile(wb, `${object.name}_finance.xlsx`);
+      // Download - use Blob for mobile compatibility
+      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${object.name}_finance.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Export Excel error:', error);
     } finally {

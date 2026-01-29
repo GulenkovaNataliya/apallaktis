@@ -800,8 +800,8 @@ export default function AnalysisPage() {
     setIsExporting(true);
 
     try {
-      // Dynamic import XLSX
-      const XLSX = (await import('xlsx')).default;
+      // Dynamic import XLSX (no default export)
+      const XLSX = await import('xlsx');
 
       // Create workbook
       const wb = XLSX.utils.book_new();
@@ -924,8 +924,17 @@ export default function AnalysisPage() {
         XLSX.utils.book_append_sheet(wb, debtsSheet, 'Debts');
       }
 
-      // Download
-      XLSX.writeFile(wb, `analysis_${dateFrom}_${dateTo}.xlsx`);
+      // Download - use Blob for mobile compatibility
+      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `analysis_${dateFrom}_${dateTo}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
 
     } catch (error) {
       console.error('Export Excel error:', error);
