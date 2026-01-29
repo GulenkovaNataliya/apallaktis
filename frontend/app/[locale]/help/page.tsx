@@ -398,8 +398,8 @@ export default function HelpPage() {
       {/* Back - at top with normal padding */}
       <p
         onClick={() => router.push(`/${locale}`)}
-        className="text-button cursor-pointer"
-        style={{ color: 'var(--polar)', marginBottom: '48px' }}
+        className="text-subheading cursor-pointer"
+        style={{ color: 'var(--polar)', marginBottom: '48px', fontSize: '18px' }}
       >
         {t.back}
       </p>
@@ -407,29 +407,29 @@ export default function HelpPage() {
       {/* Intro text */}
       <div className="flex flex-col items-center gap-12">
         <p
-          className="text-center text-body"
-          style={{ color: 'var(--polar)', fontWeight: 500 }}
+          className="text-center"
+          style={{ color: 'var(--polar)', fontWeight: 500, fontSize: '16px' }}
         >
           Мобильное приложение, которое освобождает мастера от рутины учёта финансов.
         </p>
 
         <p
-          className="text-center text-body"
-          style={{ color: 'var(--polar)', fontWeight: 500 }}
+          className="text-center"
+          style={{ color: 'var(--polar)', fontWeight: 500, fontSize: '16px' }}
         >
           ΑΠΑΛΛΑΚΤΗΣ — «освободитель»
         </p>
 
         <p
-          className="text-center text-slogan"
-          style={{ color: 'var(--orange)' }}
+          className="text-center"
+          style={{ color: 'var(--orange)', fontSize: '24px', fontWeight: 500 }}
         >
           "Τέλος στη ρουτίνα!"
         </p>
 
         <p
-          className="text-center text-body"
-          style={{ color: 'var(--polar)', fontWeight: 500 }}
+          className="text-center"
+          style={{ color: 'var(--polar)', fontWeight: 500, fontSize: '16px' }}
         >
           — "Конец рутине!"
         </p>
@@ -440,17 +440,17 @@ export default function HelpPage() {
         className="text-center"
         style={{ marginTop: '48px', marginBottom: '48px' }}
       >
-        <p className="text-button font-semibold" style={{ color: 'white' }}>
+        <p className="font-semibold" style={{ color: 'white', fontSize: '18px' }}>
           Это НЕ бухгалтерская программа
         </p>
-        <p className="text-sm mt-2" style={{ color: 'var(--polar)' }}>
+        <p className="mt-2" style={{ color: 'var(--polar)', fontSize: '14px' }}>
           Это персональный инструмент финансового контроля
         </p>
       </div>
 
       {/* Title */}
       <h1
-        className="text-2xl font-bold text-center"
+        className="text-3xl font-bold text-center"
         style={{ color: 'var(--polar)', marginBottom: '48px' }}
       >
         Инструкция
@@ -475,11 +475,11 @@ export default function HelpPage() {
                 >
                   <span
                     className="font-bold"
-                    style={{ color: 'var(--deep-teal)', fontSize: '16px' }}
+                    style={{ color: 'var(--deep-teal)', fontSize: '18px' }}
                   >
                     {section.title}
                   </span>
-                  <span style={{ color: 'var(--deep-teal)', fontSize: '18px' }}>
+                  <span style={{ color: 'var(--deep-teal)', fontSize: '20px' }}>
                     {isSectionExpanded ? '▲' : '▼'}
                   </span>
                 </button>
@@ -505,11 +505,11 @@ export default function HelpPage() {
                           >
                             <span
                               className="font-semibold text-left"
-                              style={{ color: 'var(--deep-teal)', fontSize: '14px' }}
+                              style={{ color: 'var(--deep-teal)', fontSize: '16px' }}
                             >
                               {item.title}
                             </span>
-                            <span style={{ color: 'var(--deep-teal)', fontSize: '14px' }}>
+                            <span style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
                               {isItemExpanded ? '▲' : '▼'}
                             </span>
                           </button>
@@ -560,9 +560,9 @@ export default function HelpPage() {
                                 {item.content.map((line, lineIdx) => (
                                   <p
                                     key={lineIdx}
-                                    className="text-sm"
                                     style={{
                                       color: 'var(--deep-teal)',
+                                      fontSize: '14px',
                                       paddingLeft: line.startsWith('•') || line.startsWith('   ') ? '12px' : '0'
                                     }}
                                   >
