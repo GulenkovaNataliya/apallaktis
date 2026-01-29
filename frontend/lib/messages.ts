@@ -297,6 +297,9 @@ export const messages = {
       voiceButton: "Voice",
       voiceInputNotSupported: "Η φωνητική εισαγωγή δεν υποστηρίζεται στο πρόγραμμα περιήγησης. Χρησιμοποιήστε Chrome, Edge ή Safari.",
       voiceInputFailed: "Η φωνητική εισαγωγή απέτυχε. Παρακαλώ δοκιμάστε ξανά.",
+      clickPlusToCreateCategory: "Πατήστε + για να δημιουργήσετε νέα κατηγορία",
+      addWork: "Προσθήκη Εργασίας",
+      addPaymentTitle: "Προσθήκη Πληρωμής",
     },
     subscription: {
       title: "Επιλέξτε το πλάνο σας",
@@ -691,6 +694,9 @@ export const messages = {
       voiceButton: "Voice",
       voiceInputNotSupported: "Голосовой ввод не поддерживается вашим браузером. Используйте Chrome, Edge или Safari.",
       voiceInputFailed: "Голосовой ввод не удался. Попробуйте снова.",
+      clickPlusToCreateCategory: "Нажмите + для создания новой категории",
+      addWork: "Добавить работу",
+      addPaymentTitle: "Добавить оплату",
     },
     subscription: {
       title: "Выберите ваш план",
@@ -1085,6 +1091,9 @@ export const messages = {
       voiceButton: "Voice",
       voiceInputNotSupported: "Голосовий ввід не підтримується вашим браузером. Використовуйте Chrome, Edge або Safari.",
       voiceInputFailed: "Голосовий ввід не вдався. Спробуйте ще раз.",
+      clickPlusToCreateCategory: "Натисніть + для створення нової категорії",
+      addWork: "Додати роботу",
+      addPaymentTitle: "Додати оплату",
     },
     subscription: {
       title: "Оберіть ваш план",
@@ -1479,6 +1488,9 @@ export const messages = {
       voiceButton: "Voice",
       voiceInputNotSupported: "Hyrja me zë nuk mbështetet në shfletuesin tuaj. Përdorni Chrome, Edge ose Safari.",
       voiceInputFailed: "Hyrja me zë dështoi. Ju lutemi provoni përsëri.",
+      clickPlusToCreateCategory: "Shtypni + për të krijuar kategori të re",
+      addWork: "Shto punë",
+      addPaymentTitle: "Shto pagesë",
     },
     subscription: {
       title: "Zgjidhni planin tuaj",
@@ -1873,6 +1885,9 @@ export const messages = {
       voiceButton: "Voice",
       voiceInputNotSupported: "Гласовият вход не се поддържа във вашия браузър. Използвайте Chrome, Edge или Safari.",
       voiceInputFailed: "Гласовият вход се провали. Моля, опитайте отново.",
+      clickPlusToCreateCategory: "Натиснете + за създаване на нова категория",
+      addWork: "Добави работа",
+      addPaymentTitle: "Добави плащане",
     },
     subscription: {
       title: "Изберете вашия план",
@@ -2267,6 +2282,9 @@ export const messages = {
       voiceButton: "Voice",
       voiceInputNotSupported: "Intrarea vocală nu este acceptată în browserul dvs. Utilizați Chrome, Edge sau Safari.",
       voiceInputFailed: "Intrarea vocală a eșuat. Vă rugăm să încercați din nou.",
+      clickPlusToCreateCategory: "Apăsați + pentru a crea o categorie nouă",
+      addWork: "Adăugare lucrare",
+      addPaymentTitle: "Adăugare plată",
     },
     subscription: {
       title: "Alegeți planul dvs.",
@@ -2661,6 +2679,9 @@ export const messages = {
       voiceButton: "Voice",
       voiceInputNotSupported: "Voice input is not supported in your browser. Please use Chrome, Edge, or Safari.",
       voiceInputFailed: "Voice input failed. Please try again.",
+      clickPlusToCreateCategory: "Click + to create a new category",
+      addWork: "Add Work",
+      addPaymentTitle: "Add Payment",
     },
     subscription: {
       title: "Choose your plan",
@@ -3055,6 +3076,9 @@ export const messages = {
       voiceButton: "Voice",
       voiceInputNotSupported: "إدخال الصوت غير مدعوم في متصفحك. يرجى استخدام Chrome أو Edge أو Safari.",
       voiceInputFailed: "فشل إدخال الصوت. يرجى المحاولة مرة أخرى.",
+      clickPlusToCreateCategory: "اضغط + لإنشاء فئة جديدة",
+      addWork: "إضافة عمل",
+      addPaymentTitle: "إضافة دفعة",
     },
     subscription: {
       title: "اختر خطتك",

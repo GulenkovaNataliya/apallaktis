@@ -543,7 +543,7 @@ export default function AnalysisPage() {
         // Get user profile with subscription info
         const { data: profile } = await supabase
           .from('profiles')
-          .select('subscription_plan, subscription_status, subscription_tier, account_purchased, demo_expires_at, subscription_expires_at, vip_expires_at, email')
+          .select('subscription_plan, subscription_status, account_purchased, demo_expires_at, subscription_expires_at, vip_expires_at, email')
           .eq('id', user.id)
           .single();
 
@@ -873,78 +873,87 @@ export default function AnalysisPage() {
     }
   };
 
-  // Export to PDF
+  // Export to PDF using html2canvas for Unicode support
   const handleExportPdf = async () => {
     if (!analysisData) return;
     setIsExporting(true);
 
     try {
-      // Dynamic import jsPDF
       const { jsPDF } = await import('jspdf');
+      const html2canvas = (await import('html2canvas')).default;
 
-      const doc = new jsPDF();
-      let y = 20;
+      // Create hidden HTML element for PDF content
+      const container = document.createElement('div');
+      container.style.cssText = 'position: absolute; left: -9999px; top: 0; width: 800px; padding: 40px; font-family: Arial, sans-serif; background: white;';
 
-      // Title
-      doc.setFontSize(18);
-      doc.text(t.title, 20, y);
-      y += 10;
-      doc.setFontSize(12);
-      doc.text(`${dateFrom} - ${dateTo}`, 20, y);
-      y += 15;
+      const profitColor = analysisData.netProfit >= 0 ? '#25D366' : '#ff6a1a';
 
-      // Summary
-      doc.setFontSize(14);
-      doc.text(`${t.income}: ${formatEuro(analysisData.totalIncome)}`, 20, y);
-      y += 8;
-      doc.text(`${t.totalExpenses}: ${formatEuro(analysisData.totalExpenses)}`, 20, y);
-      y += 8;
-      doc.text(`${t.netProfit}: ${formatEuro(analysisData.netProfit)}`, 20, y);
-      y += 8;
-      doc.text(`${t.totalOwed}: ${formatEuro(analysisData.totalDebts)}`, 20, y);
-      y += 15;
+      container.innerHTML = `
+        <h1 style="color: #01312d; font-size: 24px; margin-bottom: 10px;">${t.title}</h1>
+        <p style="color: #666; font-size: 14px; margin-bottom: 30px;">${dateFrom} - ${dateTo}</p>
 
-      // Objects
-      doc.text(`${t.totalObjects}: ${analysisData.totalObjects}`, 20, y);
-      y += 8;
-      doc.text(`${t.openObjects}: ${analysisData.openObjects}`, 20, y);
-      y += 8;
-      doc.text(`${t.closedInPeriod}: ${analysisData.closedInPeriod}`, 20, y);
-      y += 15;
+        <div style="margin-bottom: 25px;">
+          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.income}:</strong> <span style="color: #25D366;">${formatEuro(analysisData.totalIncome)}</span></p>
+          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.totalExpenses}:</strong> <span style="color: #ff6a1a;">${formatEuro(analysisData.totalExpenses)}</span></p>
+          <p style="font-size: 18px; margin: 12px 0;"><strong>${t.netProfit}:</strong> <span style="color: ${profitColor}; font-weight: bold;">${formatEuro(analysisData.netProfit)}</span></p>
+          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.totalOwed}:</strong> <span style="color: #ff6a1a;">${formatEuro(analysisData.totalDebts)}</span></p>
+        </div>
 
-      // Income by payment method
-      doc.setFontSize(12);
-      doc.text(t.byPaymentMethod + ':', 20, y);
-      y += 8;
-      Object.entries(analysisData.incomeByPaymentMethod).forEach(([pmId, amount]) => {
-        doc.text(`  ${getPaymentMethodName(pmId)}: ${formatEuro(amount)}`, 20, y);
-        y += 6;
-      });
-      y += 10;
+        <div style="margin-bottom: 25px;">
+          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.totalObjects}:</strong> ${analysisData.totalObjects}</p>
+          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.openObjects}:</strong> ${analysisData.openObjects}</p>
+          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.closedInPeriod}:</strong> ${analysisData.closedInPeriod}</p>
+        </div>
 
-      // Object expenses
-      doc.text(t.objectExpenses + ':', 20, y);
-      y += 8;
-      Object.entries(analysisData.objectExpensesByCategory).forEach(([catId, amount]) => {
-        doc.text(`  ${getCategoryName(catId)}: ${formatEuro(amount)}`, 20, y);
-        y += 6;
-      });
-      y += 10;
+        <h3 style="color: #01312d; font-size: 16px; margin-top: 20px;">${t.byPaymentMethod}:</h3>
+        ${Object.entries(analysisData.incomeByPaymentMethod).map(([pmId, amount]) =>
+          `<p style="font-size: 14px; margin: 4px 0 4px 20px;">${getPaymentMethodName(pmId)}: ${formatEuro(amount)}</p>`
+        ).join('')}
 
-      // Global expenses
-      if (y > 250) {
-        doc.addPage();
-        y = 20;
+        <h3 style="color: #01312d; font-size: 16px; margin-top: 20px;">${t.objectExpenses}:</h3>
+        ${Object.entries(analysisData.objectExpensesByCategory).map(([catId, amount]) =>
+          `<p style="font-size: 14px; margin: 4px 0 4px 20px;">${getCategoryName(catId)}: ${formatEuro(amount)}</p>`
+        ).join('')}
+
+        <h3 style="color: #01312d; font-size: 16px; margin-top: 20px;">${t.globalExpenses}:</h3>
+        ${Object.entries(analysisData.globalExpensesByCategory).map(([catId, amount]) =>
+          `<p style="font-size: 14px; margin: 4px 0 4px 20px;">${getCategoryName(catId)}: ${formatEuro(amount)}</p>`
+        ).join('')}
+
+        ${analysisData.debtsByObject.length > 0 ? `
+          <h3 style="color: #01312d; font-size: 16px; margin-top: 20px;">${t.clientDebts}:</h3>
+          ${analysisData.debtsByObject.map(d =>
+            `<p style="font-size: 14px; margin: 4px 0 4px 20px;">${d.objectName}: <span style="color: #ff6a1a;">${formatEuro(d.debt)}</span></p>`
+          ).join('')}
+        ` : ''}
+      `;
+
+      document.body.appendChild(container);
+
+      const canvas = await html2canvas(container, { scale: 2 });
+      document.body.removeChild(container);
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      // Handle multiple pages if content is too long
+      if (pdfHeight > pdf.internal.pageSize.getHeight()) {
+        let position = 0;
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        while (position < pdfHeight) {
+          pdf.addImage(imgData, 'PNG', 0, -position, pdfWidth, pdfHeight);
+          position += pageHeight;
+          if (position < pdfHeight) {
+            pdf.addPage();
+          }
+        }
+      } else {
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       }
-      doc.text(t.globalExpenses + ':', 20, y);
-      y += 8;
-      Object.entries(analysisData.globalExpensesByCategory).forEach(([catId, amount]) => {
-        doc.text(`  ${getCategoryName(catId)}: ${formatEuro(amount)}`, 20, y);
-        y += 6;
-      });
 
-      // Download
-      doc.save(`analysis_${dateFrom}_${dateTo}.pdf`);
+      pdf.save(`analysis_${dateFrom}_${dateTo}.pdf`);
 
     } catch (error) {
       console.error('Export PDF error:', error);
@@ -1704,7 +1713,7 @@ export default function AnalysisPage() {
                 className="btn-universal flex-1 text-button"
                 style={{
                   minHeight: '52px',
-                  backgroundColor: 'var(--orange)',
+                  backgroundColor: '#25D366',
                   color: 'white',
                   opacity: isExporting ? 0.5 : 1
                 }}

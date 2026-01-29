@@ -1810,7 +1810,135 @@ debtsByObject = objects.filter(obj => obj.balance > 0.01)
 
 ---
 
-## CHANGELOG (29.01.2026)
+## 26. ЗАКОН ФРАЗЫ (Phrase Law)
+
+### Основное правило
+
+**Если это НЕ кнопка — это ФРАЗА.**
+
+Все элементы интерфейса, которые не являются кнопками действия (submit, cancel, navigate), должны быть оформлены как фразы (`<p>` элементы), а не как кнопки.
+
+### Применение
+
+| Тип элемента | HTML тег | Пример |
+|--------------|----------|--------|
+| Заголовок поля формы (label) | `<p>` | Категория, Способ оплаты, Дата |
+| Заголовок страницы | `<h1>` | Добавить работу, Добавить оплату |
+| Подсказка | `<p>` | Нажмите + для создания категории |
+| Навигация "Назад" | `<p>` | ← Назад к объекту |
+| Пустое состояние | `<p>` | Нет категорий |
+
+### Стиль лейблов форм
+
+```jsx
+<p className="text-button" style={{
+  color: 'var(--polar)',
+  marginBottom: '12px',
+  fontSize: '18px',
+  fontWeight: 600
+}}>
+  {t.fieldName}
+</p>
+```
+
+### Стиль подсказок (hint phrases)
+
+```jsx
+<p className="text-center text-button" style={{
+  color: 'var(--orange)',
+  fontSize: '14px'
+}}>
+  {t.hintText}
+</p>
+```
+
+### НЕ использовать кнопки для:
+
+- Labels полей ввода
+- Заголовков страниц добавления/редактирования
+- Информационных сообщений
+- Подсказок пользователю
+- Навигации "Назад"
+
+### Эталонные страницы
+
+- `/[locale]/global-expenses` — формы добавления расходов
+- `/[locale]/objects/[id]/finance` — формы добавления работ, оплат, расходов
+
+---
+
+## CHANGELOG (29.01.2026) - Часть 2
+
+### 5. Закон фразы — кнопки → фразы
+
+**Изменение:** На странице финансов объекта (AddExpenseForm, AddWorkForm, AddPaymentForm) все labels форм изменены с `<button>` или `<label>` на `<p>` элементы (фразы).
+
+**До:**
+```jsx
+<button type="button" className="btn-universal w-full">
+  {t.date}
+</button>
+```
+
+**После:**
+```jsx
+<p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+  {t.date}
+</p>
+```
+
+**Файлы изменены:**
+- `objects/[id]/finance/page.tsx` — AddWorkForm, AddPaymentForm, AddExpenseForm
+
+---
+
+### 6. Подсказка под категорией
+
+**Добавлено:** Оранжевая фраза-подсказка под выбором категории в AddExpenseForm:
+
+```jsx
+<p className="text-center text-button mt-3" style={{ color: 'var(--orange)', fontSize: '14px' }}>
+  {t.clickPlusToCreateCategory}
+</p>
+```
+
+**Переводы добавлены для всех 8 языков:**
+- el: "Πατήστε + για να δημιουργήσετε νέα κατηγορία"
+- ru: "Нажмите + для создания новой категории"
+- uk: "Натисніть + для створення нової категорії"
+- sq: "Shtypni + për të krijuar kategori të re"
+- bg: "Натиснете + за създаване на нова категория"
+- ro: "Apăsați + pentru a crea o categorie nouă"
+- en: "Click + to create a new category"
+- ar: "اضغط + لإنشاء فئة جديدة"
+
+---
+
+### 7. Заголовки страниц "Добавить работу" и "Добавить оплату"
+
+**Изменено:** Заголовки страниц add-work и add-payment с кнопок на `<h1>` элементы.
+
+**До:**
+```jsx
+<button className="btn-universal w-full">
+  {t.addAdditionalWork}
+</button>
+```
+
+**После:**
+```jsx
+<h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
+  {t.addWork}
+</h1>
+```
+
+**Новые ключи переводов:**
+- `addWork` — "Добавить работу"
+- `addPaymentTitle` — "Добавить оплату"
+
+---
+
+## CHANGELOG (29.01.2026) - Часть 1
 
 ### 1. Голосовой ввод — исправление дублирования на мобильных
 

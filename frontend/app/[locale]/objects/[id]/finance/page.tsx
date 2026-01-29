@@ -414,7 +414,10 @@ export default function ObjectFinancePage() {
 
   // Export to Excel
   const handleExportExcel = async () => {
-    if (!object || !finance) return;
+    if (!object || !finance) {
+      console.error('Export Excel: object or finance is null');
+      return;
+    }
     setIsExporting(true);
 
     try {
@@ -477,44 +480,75 @@ export default function ObjectFinancePage() {
     }
   };
 
-  // Export to PDF
+  // Export to PDF using html2canvas for Unicode support
   const handleExportPdf = async () => {
-    if (!object || !finance) return;
+    if (!object || !finance) {
+      console.error('Export PDF: object or finance is null');
+      return;
+    }
     setIsExporting(true);
 
     try {
       const { jsPDF } = await import('jspdf');
-      const doc = new jsPDF();
-      let y = 20;
+      const html2canvas = (await import('html2canvas')).default;
 
       const actualPrice = object.contractPrice + finance.totalAdditionalWorks;
       const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
 
-      // Title
-      doc.setFontSize(18);
-      doc.text(t.objectFinanceTitle, 20, y);
-      y += 10;
-      doc.setFontSize(14);
-      doc.text(object.name, 20, y);
-      y += 15;
+      // Create hidden HTML element for PDF content
+      const container = document.createElement('div');
+      container.style.cssText = 'position: absolute; left: -9999px; top: 0; width: 800px; padding: 40px; font-family: Arial, sans-serif; background: white;';
 
-      // Summary
-      doc.setFontSize(12);
-      doc.text(`${t.contractPrice}: ${formatEuro(object.contractPrice)}`, 20, y);
-      y += 8;
-      doc.text(`${t.additionalWork}: ${formatEuro(finance.totalAdditionalWorks)}`, 20, y);
-      y += 8;
-      doc.text(`${t.actualPrice}: ${formatEuro(actualPrice)}`, 20, y);
-      y += 12;
+      container.innerHTML = `
+        <h1 style="color: #01312d; font-size: 24px; margin-bottom: 10px;">${t.objectFinanceTitle}</h1>
+        <h2 style="color: #ff6a1a; font-size: 20px; margin-bottom: 30px;">${object.name}</h2>
 
-      doc.text(`${t.payment}: ${formatEuro(finance.totalPayments)}`, 20, y);
-      y += 8;
-      doc.text(`${t.balance}: ${formatEuro(finance.balance)}`, 20, y);
-      y += 12;
+        <div style="margin-bottom: 20px;">
+          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.contractPrice}:</strong> ${formatEuro(object.contractPrice)}</p>
+          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.additionalWork}:</strong> ${formatEuro(finance.totalAdditionalWorks)}</p>
+          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.actualPrice}:</strong> ${formatEuro(actualPrice)}</p>
+        </div>
 
-      doc.text(`${t.totalExpensesTitle}: ${formatEuro(totalExpenses)}`, 20, y);
+        <div style="margin-bottom: 20px;">
+          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.payment}:</strong> ${formatEuro(finance.totalPayments)}</p>
+          <p style="font-size: 16px; margin: 8px 0; color: ${finance.balance > 0 ? '#ff6a1a' : '#25D366'};"><strong>${t.balance}:</strong> ${formatEuro(finance.balance)}</p>
+        </div>
 
-      doc.save(`${object.name}_finance.pdf`);
+        <div style="margin-bottom: 20px;">
+          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.totalExpensesTitle}:</strong> ${formatEuro(totalExpenses)}</p>
+        </div>
+
+        ${expenses.length > 0 ? `
+          <h3 style="color: #01312d; font-size: 18px; margin-top: 30px; margin-bottom: 15px;">${t.expenses}</h3>
+          <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+            <tr style="background: #daf3f6;">
+              <th style="padding: 8px; text-align: left; border: 1px solid #ccc;">${t.date}</th>
+              <th style="padding: 8px; text-align: left; border: 1px solid #ccc;">${t.category}</th>
+              <th style="padding: 8px; text-align: right; border: 1px solid #ccc;">${t.amount}</th>
+            </tr>
+            ${expenses.map(e => `
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ccc;">${new Date(e.date).toLocaleDateString(locale)}</td>
+                <td style="padding: 8px; border: 1px solid #ccc;">${categories.find(c => c.id === e.categoryId)?.name || '-'}</td>
+                <td style="padding: 8px; text-align: right; border: 1px solid #ccc;">${formatEuro(e.amount)}</td>
+              </tr>
+            `).join('')}
+          </table>
+        ` : ''}
+      `;
+
+      document.body.appendChild(container);
+
+      const canvas = await html2canvas(container, { scale: 2 });
+      document.body.removeChild(container);
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${object.name}_finance.pdf`);
     } catch (error) {
       console.error('Export PDF error:', error);
     } finally {
@@ -1041,7 +1075,7 @@ ${t.closeProjectQuestion}
                 className="btn-universal flex-1 text-button"
                 style={{
                   minHeight: '52px',
-                  backgroundColor: 'var(--orange)',
+                  backgroundColor: '#25D366',
                   color: 'white',
                   opacity: isExporting ? 0.5 : 1
                 }}
@@ -1070,18 +1104,10 @@ ${t.closeProjectQuestion}
             {t.backToObject}
           </p>
 
-          {/* Add Additional Work Button (title) */}
-          <button
-            type="button"
-            className="btn-universal w-full text-button"
-            style={{
-              minHeight: '52px',
-              backgroundColor: 'var(--polar)',
-              color: 'var(--deep-teal)',
-            }}
-          >
-            {t.addAdditionalWork}
-          </button>
+          {/* Add Work - title phrase */}
+          <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
+            {t.addWork}
+          </h1>
 
           <AddWorkForm
             objectId={objectId}
@@ -1109,18 +1135,10 @@ ${t.closeProjectQuestion}
             {t.backToObject}
           </p>
 
-          {/* Add Payment Button (title) */}
-          <button
-            type="button"
-            className="btn-universal w-full text-button"
-            style={{
-              minHeight: '52px',
-              backgroundColor: 'var(--polar)',
-              color: 'var(--deep-teal)',
-            }}
-          >
-            {t.addPayment}
-          </button>
+          {/* Add Payment - title phrase */}
+          <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
+            {t.addPaymentTitle}
+          </h1>
 
           <AddPaymentForm
             objectId={objectId}
@@ -1288,20 +1306,11 @@ function AddWorkForm({
 
   return (
     <form onSubmit={handleSubmit} className="w-full flex flex-col gap-12">
-      {/* Date Button */}
+      {/* Date */}
       <div>
-        <button
-          type="button"
-          className="btn-universal w-full text-button"
-          style={{
-            minHeight: '52px',
-            backgroundColor: 'transparent',
-            border: '2px solid var(--polar)',
-            color: 'var(--polar)',
-          }}
-        >
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.date}
-        </button>
+        </p>
         <input
           type="date"
           value={formData.date}
@@ -1313,26 +1322,16 @@ function AddWorkForm({
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            marginTop: '12px',
             padding: '12px'
           }}
         />
       </div>
 
-      {/* Amount Button */}
+      {/* Amount */}
       <div>
-        <button
-          type="button"
-          className="btn-universal w-full text-button"
-          style={{
-            minHeight: '52px',
-            backgroundColor: 'transparent',
-            border: '2px solid var(--polar)',
-            color: 'var(--polar)',
-          }}
-        >
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.amount}
-        </button>
+        </p>
         <input
           type="number"
           value={formData.amount || ''}
@@ -1346,28 +1345,32 @@ function AddWorkForm({
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            marginTop: '12px',
             padding: '12px'
           }}
           placeholder="€"
         />
       </div>
 
-      {/* Description Button with Voice */}
+      {/* Description with Voice */}
       <div>
-        <button
-          type="button"
-          onClick={handleVoiceInput}
-          disabled={isRecording}
-          className="btn-universal w-full text-button"
-          style={{
-            minHeight: '52px',
-            backgroundColor: isRecording ? '#ff6a1a' : 'var(--zanah)',
-            color: isRecording ? 'white' : 'var(--deep-teal)',
-          }}
-        >
-          🎤 {t.description} {isRecording ? '...' : ''}
-        </button>
+        <div className="flex justify-between items-center mb-3">
+          <p className="text-button" style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}>
+            {t.description}
+          </p>
+          <button
+            type="button"
+            onClick={handleVoiceInput}
+            disabled={isRecording}
+            className="px-4 py-2 rounded-2xl text-button font-semibold flex items-center gap-2"
+            style={{
+              backgroundColor: isRecording ? '#ff6a1a' : 'var(--zanah)',
+              color: isRecording ? 'white' : 'var(--deep-teal)',
+              minHeight: '44px',
+            }}
+          >
+            {isRecording ? '⏹️ STOP' : '🎤 Voice'}
+          </button>
+        </div>
         <textarea
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -1378,7 +1381,6 @@ function AddWorkForm({
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '104px',
-            marginTop: '12px',
             padding: '12px'
           }}
           rows={3}
@@ -1542,20 +1544,11 @@ function AddPaymentForm({
 
   return (
     <form onSubmit={handleSubmit} className="w-full flex flex-col gap-12">
-      {/* Date Button */}
+      {/* Date */}
       <div>
-        <button
-          type="button"
-          className="btn-universal w-full text-button"
-          style={{
-            minHeight: '52px',
-            backgroundColor: 'transparent',
-            border: '2px solid var(--polar)',
-            color: 'var(--polar)',
-          }}
-        >
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.date}
-        </button>
+        </p>
         <input
           type="date"
           value={formData.date}
@@ -1567,35 +1560,24 @@ function AddPaymentForm({
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            marginTop: '12px',
             padding: '12px'
           }}
         />
       </div>
 
-      {/* Payment Method Button */}
+      {/* Payment Method */}
       <div>
-        <button
-          type="button"
-          className="btn-universal w-full text-button"
-          style={{
-            minHeight: '52px',
-            backgroundColor: 'transparent',
-            border: '2px solid var(--polar)',
-            color: 'var(--polar)',
-          }}
-        >
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.paymentMethod}
-        </button>
+        </p>
         {paymentMethods.length === 0 ? (
           <Link
             href={`/${locale}/payment-methods`}
             className="block text-sm p-3 rounded-lg text-center"
             style={{
-              color: 'var(--polar)',
+              color: 'var(--orange)',
               backgroundColor: 'rgba(255,255,255,0.1)',
               border: '2px dashed var(--polar)',
-              marginTop: '12px'
             }}
           >
             {tPayments.noMethods} →
@@ -1612,7 +1594,6 @@ function AddPaymentForm({
               minHeight: '52px',
               padding: '12px',
               fontSize: '18px',
-              marginTop: '12px'
             }}
           >
             {paymentMethods.map((method) => (
@@ -1624,20 +1605,11 @@ function AddPaymentForm({
         )}
       </div>
 
-      {/* Amount Button */}
+      {/* Amount */}
       <div>
-        <button
-          type="button"
-          className="btn-universal w-full text-button"
-          style={{
-            minHeight: '52px',
-            backgroundColor: 'transparent',
-            border: '2px solid var(--polar)',
-            color: 'var(--polar)',
-          }}
-        >
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.amount}
-        </button>
+        </p>
         <input
           type="number"
           value={formData.amount || ''}
@@ -1651,28 +1623,32 @@ function AddPaymentForm({
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
-            marginTop: '12px',
             padding: '12px'
           }}
           placeholder="€"
         />
       </div>
 
-      {/* Description Button with Voice */}
+      {/* Description with Voice */}
       <div>
-        <button
-          type="button"
-          onClick={handleVoiceInput}
-          disabled={isRecording}
-          className="btn-universal w-full text-button"
-          style={{
-            minHeight: '52px',
-            backgroundColor: isRecording ? '#ff6a1a' : 'var(--zanah)',
-            color: isRecording ? 'white' : 'var(--deep-teal)',
-          }}
-        >
-          🎤 {t.description} {isRecording ? '...' : ''}
-        </button>
+        <div className="flex justify-between items-center mb-3">
+          <p className="text-button" style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}>
+            {t.description}
+          </p>
+          <button
+            type="button"
+            onClick={handleVoiceInput}
+            disabled={isRecording}
+            className="px-4 py-2 rounded-2xl text-button font-semibold flex items-center gap-2"
+            style={{
+              backgroundColor: isRecording ? '#ff6a1a' : 'var(--zanah)',
+              color: isRecording ? 'white' : 'var(--deep-teal)',
+              minHeight: '44px',
+            }}
+          >
+            {isRecording ? '⏹️ STOP' : '🎤 Voice'}
+          </button>
+        </div>
         <textarea
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -1682,7 +1658,6 @@ function AddPaymentForm({
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '104px',
-            marginTop: '12px',
             padding: '12px'
           }}
           rows={3}
@@ -2218,40 +2193,46 @@ function AddExpenseForm({
     <form onSubmit={handleSubmit} className="flex flex-col gap-12" style={{ marginTop: '96px' }}>
       {/* Category Selection */}
       <div>
-        <label className="block mb-3 text-button" style={{ color: 'var(--polar)' }}>
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.category}
-        </label>
+        </p>
         {!showNewCategory ? (
-          <div className="flex gap-2">
-            {categories.length === 0 ? (
-              <div className="flex-1">
-                <p className="text-sm mb-2" style={{ color: 'var(--polar)', opacity: 0.7 }}>
-                  {messages[locale]?.globalExpenses?.noCategories || 'No categories'}
-                </p>
-              </div>
-            ) : (
-              <select
-                value={formData.categoryId}
-                onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                className="flex-1 rounded-2xl text-body"
-                style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px' }}
+          <>
+            <div className="flex gap-2">
+              {categories.length === 0 ? (
+                <div className="flex-1">
+                  <p className="text-sm mb-2" style={{ color: 'var(--orange)' }}>
+                    {messages[locale]?.globalExpenses?.noCategories || 'No categories'}
+                  </p>
+                </div>
+              ) : (
+                <select
+                  value={formData.categoryId}
+                  onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                  className="flex-1 rounded-2xl text-body"
+                  style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px' }}
+                >
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id} style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              )}
+              <button
+                type="button"
+                onClick={() => setShowNewCategory(true)}
+                className="rounded-2xl px-6 text-button font-bold"
+                style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '52px', fontSize: '24px', boxShadow: '0 4px 8px rgba(255, 106, 26, 0.3)' }}
               >
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id} style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            )}
-            <button
-              type="button"
-              onClick={() => setShowNewCategory(true)}
-              className="rounded-2xl px-6 text-button font-bold"
-              style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '52px', fontSize: '24px', boxShadow: '0 4px 8px rgba(255, 106, 26, 0.3)' }}
-            >
-              +
-            </button>
-          </div>
+                +
+              </button>
+            </div>
+            {/* Orange hint phrase */}
+            <p className="text-center text-button mt-3" style={{ color: 'var(--orange)', fontSize: '14px' }}>
+              {t.clickPlusToCreateCategory}
+            </p>
+          </>
         ) : (
           <div className="flex gap-2">
             <input
@@ -2287,9 +2268,9 @@ function AddExpenseForm({
 
       {/* Payment Method Selection */}
       <div>
-        <label className="block mb-3 text-button" style={{ color: 'var(--polar)' }}>
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.paymentMethod}
-        </label>
+        </p>
         {paymentMethods.length === 0 ? (
           <Link
             href={`/${locale}/payment-methods`}
@@ -2316,9 +2297,9 @@ function AddExpenseForm({
 
       {/* Date */}
       <div>
-        <label className="block mb-3 text-button" style={{ color: 'var(--polar)' }}>
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.date}
-        </label>
+        </p>
         <input
           type="date"
           value={formData.date}
@@ -2331,9 +2312,9 @@ function AddExpenseForm({
 
       {/* Amount */}
       <div>
-        <label className="block mb-3 text-button" style={{ color: 'var(--polar)' }}>
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.amount}
-        </label>
+        </p>
         <input
           type="number"
           value={formData.amount || ''}
@@ -2349,10 +2330,10 @@ function AddExpenseForm({
 
       {/* Description */}
       <div>
-        <div className="flex justify-between items-center mb-2">
-          <label className="text-button" style={{ color: 'var(--polar)' }}>
+        <div className="flex justify-between items-center mb-3">
+          <p className="text-button" style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}>
             {t.description}
-          </label>
+          </p>
           {hasVoiceAndPhoto && (
             <button
               type="button"
@@ -2393,9 +2374,9 @@ function AddExpenseForm({
       {/* Receipt Photo */}
       {hasVoiceAndPhoto && (
         <div>
-          <label className="block mb-3 text-button" style={{ color: 'var(--polar)' }}>
+          <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
             {t.receiptPhoto} {isAnalyzing && '🔄'}
-          </label>
+          </p>
           {!photoPreview ? (
             <label className="w-full rounded-2xl text-center cursor-pointer flex items-center justify-center"
               style={{ border: '2px dashed var(--polar)', color: 'var(--polar)', minHeight: '52px', fontSize: '18px', fontWeight: 600 }}>

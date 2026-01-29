@@ -288,68 +288,85 @@ export default function GlobalExpensesPage() {
   };
 
   // Export to PDF
+  // Export to PDF using html2canvas for Unicode support
   const handleExportPdf = async () => {
     setIsExportingPdf(true);
     try {
-      const { default: jsPDF } = await import('jspdf');
-      const doc = new jsPDF();
+      const { jsPDF } = await import('jspdf');
+      const html2canvas = (await import('html2canvas')).default;
+
       const filtered = getFilteredExpenses();
       const grouped = groupFilteredByCategory();
-
-      // Title
-      doc.setFontSize(18);
-      doc.text(t.analysisTitle, 20, 20);
-
-      // Period
-      doc.setFontSize(12);
-      doc.text(`${t.dateFrom}: ${analysisDateFrom}  ${t.dateTo}: ${analysisDateTo}`, 20, 30);
-
-      // Total
       const totalAmount = filtered.reduce((sum, exp) => sum + exp.amount, 0);
-      doc.setFontSize(14);
-      doc.text(`${t.totalExpenses}: ${formatEuro(totalAmount)}`, 20, 45);
 
-      // By Category
-      doc.setFontSize(14);
-      doc.text(t.byCategory, 20, 60);
+      // Create hidden HTML element for PDF content
+      const container = document.createElement('div');
+      container.style.cssText = 'position: absolute; left: -9999px; top: 0; width: 800px; padding: 40px; font-family: Arial, sans-serif; background: white;';
 
-      let y = 70;
-      doc.setFontSize(11);
-      Object.entries(grouped).forEach(([catId, catExpenses]) => {
-        const cat = categories.find(c => c.id === catId);
-        const catName = cat?.name || 'Unknown';
-        const total = catExpenses.reduce((sum, exp) => sum + exp.amount, 0);
-        doc.text(`${catName}: ${formatEuro(total)}`, 25, y);
-        y += 8;
-        if (y > 270) {
-          doc.addPage();
-          y = 20;
+      container.innerHTML = `
+        <h1 style="color: #01312d; font-size: 24px; margin-bottom: 10px;">${t.analysisTitle}</h1>
+        <p style="color: #666; font-size: 14px; margin-bottom: 20px;">${t.dateFrom}: ${analysisDateFrom} — ${t.dateTo}: ${analysisDateTo}</p>
+
+        <div style="margin-bottom: 25px; padding: 15px; background: #f5f5f5; border-radius: 8px;">
+          <p style="font-size: 18px; margin: 0;"><strong>${t.totalExpenses}:</strong> <span style="color: #ff6a1a; font-weight: bold;">${formatEuro(totalAmount)}</span></p>
+        </div>
+
+        <h3 style="color: #01312d; font-size: 16px; margin-top: 20px; margin-bottom: 15px;">${t.byCategory}:</h3>
+        ${Object.entries(grouped).map(([catId, catExpenses]) => {
+          const cat = categories.find(c => c.id === catId);
+          const catName = cat?.name || 'Unknown';
+          const total = catExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+          return `<p style="font-size: 14px; margin: 6px 0 6px 20px;">${catName}: <strong>${formatEuro(total)}</strong></p>`;
+        }).join('')}
+
+        <h3 style="color: #01312d; font-size: 16px; margin-top: 30px; margin-bottom: 15px;">${t.title}:</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+          <tr style="background: #daf3f6;">
+            <th style="padding: 8px; text-align: left; border: 1px solid #ccc;">${t.date}</th>
+            <th style="padding: 8px; text-align: left; border: 1px solid #ccc;">${t.category}</th>
+            <th style="padding: 8px; text-align: left; border: 1px solid #ccc;">${t.name}</th>
+            <th style="padding: 8px; text-align: right; border: 1px solid #ccc;">${t.amount}</th>
+          </tr>
+          ${filtered.map(exp => {
+            const cat = categories.find(c => c.id === exp.categoryId);
+            return `
+              <tr>
+                <td style="padding: 6px 8px; border: 1px solid #ccc;">${new Date(exp.date).toLocaleDateString(locale)}</td>
+                <td style="padding: 6px 8px; border: 1px solid #ccc;">${cat?.name || '-'}</td>
+                <td style="padding: 6px 8px; border: 1px solid #ccc;">${exp.name}</td>
+                <td style="padding: 6px 8px; text-align: right; border: 1px solid #ccc;">${formatEuro(exp.amount)}</td>
+              </tr>
+            `;
+          }).join('')}
+        </table>
+      `;
+
+      document.body.appendChild(container);
+
+      const canvas = await html2canvas(container, { scale: 2 });
+      document.body.removeChild(container);
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      // Handle multiple pages if content is too long
+      if (pdfHeight > pdf.internal.pageSize.getHeight()) {
+        let position = 0;
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        while (position < pdfHeight) {
+          pdf.addImage(imgData, 'PNG', 0, -position, pdfWidth, pdfHeight);
+          position += pageHeight;
+          if (position < pdfHeight) {
+            pdf.addPage();
+          }
         }
-      });
-
-      // Expense details
-      y += 10;
-      if (y > 250) {
-        doc.addPage();
-        y = 20;
+      } else {
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       }
-      doc.setFontSize(14);
-      doc.text(t.title, 20, y);
-      y += 10;
 
-      doc.setFontSize(9);
-      filtered.forEach(exp => {
-        const cat = categories.find(c => c.id === exp.categoryId);
-        const line = `${new Date(exp.date).toLocaleDateString(locale)} | ${cat?.name || ''} | ${exp.name} | ${formatEuro(exp.amount)}`;
-        doc.text(line, 20, y);
-        y += 6;
-        if (y > 280) {
-          doc.addPage();
-          y = 20;
-        }
-      });
-
-      doc.save(`global_expenses_${analysisDateFrom}_${analysisDateTo}.pdf`);
+      pdf.save(`global_expenses_${analysisDateFrom}_${analysisDateTo}.pdf`);
     } catch (error) {
       console.error('Export PDF error:', error);
     } finally {
@@ -692,7 +709,7 @@ export default function GlobalExpensesPage() {
                 className="flex-1 btn-universal text-button flex items-center justify-center gap-2"
                 style={{
                   minHeight: '52px',
-                  backgroundColor: 'var(--orange)',
+                  backgroundColor: '#25D366',
                   color: 'white',
                   opacity: expenses.length === 0 ? 0.5 : 1
                 }}
