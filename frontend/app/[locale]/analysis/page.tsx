@@ -806,43 +806,68 @@ export default function AnalysisPage() {
       // Create workbook
       const wb = XLSX.utils.book_new();
 
-      // Summary sheet
+      // Summary sheet - Full analysis
       const summaryData = [
         [t.title, `${dateFrom} - ${dateTo}`],
         [],
-        [t.income, formatEuro(analysisData.totalIncome)],
-        [t.totalExpenses, formatEuro(analysisData.totalExpenses)],
-        [t.netProfit, formatEuro(analysisData.netProfit)],
-        [t.totalOwed, formatEuro(analysisData.totalDebts)],
-        [],
+        ['=== ' + t.objectsSummary + ' ===', ''],
         [t.totalObjects, analysisData.totalObjects],
         [t.openObjects, analysisData.openObjects],
+        [t.closedObjects, analysisData.closedObjects],
         [t.closedInPeriod, analysisData.closedInPeriod],
+        [],
+        [t.totalContractPrices, formatEuro(analysisData.totalContractPrices)],
+        [t.totalAdditionalWorks, formatEuro(analysisData.totalAdditionalWorks)],
+        [t.totalActualPrices, formatEuro(analysisData.totalActualPrices)],
+        [t.totalBalance, formatEuro(analysisData.totalBalance)],
+        [],
+        ['=== ' + t.globalExpensesTotal + ' ===', ''],
+        [t.globalExpensesTotal, formatEuro(analysisData.totalGlobalExpenses)],
+        [],
+        ['=== ' + t.objectExpensesTotal + ' ===', ''],
+        [t.objectExpensesTotal, formatEuro(analysisData.totalObjectExpenses)],
+        [],
+        ['=== ' + t.totalProfit + ' ===', ''],
+        [t.netProfit, formatEuro(analysisData.netProfit)],
+        [analysisData.netProfit >= 0 ? t.profitStatus : t.lossStatus, ''],
+        [],
+        ['=== ' + t.summaryPaymentAnalysis + ' ===', ''],
+        [t.totalReceivedPayments, formatEuro(analysisData.totalIncome)],
+        [t.totalExpensePayments, formatEuro(analysisData.totalExpenses)],
+        [],
+        ['=== ' + t.clientDebts + ' ===', ''],
+        [t.totalOwed, formatEuro(analysisData.totalDebts)],
       ];
       const summarySheet = XLSX.utils.aoa_to_sheet(summaryData);
       XLSX.utils.book_append_sheet(wb, summarySheet, 'Summary');
 
+      // Objects details sheet
+      const objectsData = [
+        ['#', t.objects, t.statusOpen + '/' + t.statusClosed, t.balance, t.profit],
+        ...analysisData.objectsWithDetails.map((obj, index) => [
+          index + 1,
+          obj.name,
+          obj.status === 'closed' ? t.statusClosed : t.statusOpen,
+          formatEuro(obj.balance),
+          formatEuro(obj.profit),
+        ]),
+      ];
+      const objectsSheet = XLSX.utils.aoa_to_sheet(objectsData);
+      XLSX.utils.book_append_sheet(wb, objectsSheet, 'Objects');
+
       // Income by payment method
       const incomeData = [
-        [t.byPaymentMethod, t.income],
+        [t.totalReceivedPayments, ''],
+        [t.byPaymentMethod, ''],
         ...Object.entries(analysisData.incomeByPaymentMethod).map(([pmId, amount]) => [
           getPaymentMethodName(pmId),
           formatEuro(amount),
         ]),
+        [],
+        ['Total', formatEuro(analysisData.totalIncome)],
       ];
       const incomeSheet = XLSX.utils.aoa_to_sheet(incomeData);
       XLSX.utils.book_append_sheet(wb, incomeSheet, 'Income');
-
-      // Object expenses by category
-      const objExpensesData = [
-        [t.objectExpenses, ''],
-        ...Object.entries(analysisData.objectExpensesByCategory).map(([catId, amount]) => [
-          getCategoryName(catId),
-          formatEuro(amount),
-        ]),
-      ];
-      const objExpensesSheet = XLSX.utils.aoa_to_sheet(objExpensesData);
-      XLSX.utils.book_append_sheet(wb, objExpensesSheet, 'Object Expenses');
 
       // Global expenses by category
       const globalExpensesData = [
@@ -851,23 +876,57 @@ export default function AnalysisPage() {
           getCategoryName(catId),
           formatEuro(amount),
         ]),
+        [],
+        ['Total', formatEuro(analysisData.totalGlobalExpenses)],
       ];
       const globalExpensesSheet = XLSX.utils.aoa_to_sheet(globalExpensesData);
       XLSX.utils.book_append_sheet(wb, globalExpensesSheet, 'Global Expenses');
 
-      // Client debts
-      const debtsData = [
-        [t.clientDebts, ''],
-        ...analysisData.debtsByObject.map(d => [d.objectName, formatEuro(d.debt)]),
+      // Object expenses by category
+      const objExpensesData = [
+        [t.objectExpenses, ''],
+        ...Object.entries(analysisData.objectExpensesByCategory).map(([catId, amount]) => [
+          getCategoryName(catId),
+          formatEuro(amount),
+        ]),
+        [],
+        ['Total', formatEuro(analysisData.totalObjectExpenses)],
       ];
-      const debtsSheet = XLSX.utils.aoa_to_sheet(debtsData);
-      XLSX.utils.book_append_sheet(wb, debtsSheet, 'Debts');
+      const objExpensesSheet = XLSX.utils.aoa_to_sheet(objExpensesData);
+      XLSX.utils.book_append_sheet(wb, objExpensesSheet, 'Object Expenses');
+
+      // Expenses by payment method
+      const expensesByPmData = [
+        [t.totalExpensePayments, ''],
+        [t.byPaymentMethod, ''],
+        ...Object.entries(analysisData.expensesByPaymentMethod).map(([pmId, amount]) => [
+          getPaymentMethodName(pmId),
+          formatEuro(amount),
+        ]),
+        [],
+        ['Total', formatEuro(analysisData.totalExpenses)],
+      ];
+      const expensesByPmSheet = XLSX.utils.aoa_to_sheet(expensesByPmData);
+      XLSX.utils.book_append_sheet(wb, expensesByPmSheet, 'Expenses by PM');
+
+      // Client debts
+      if (analysisData.debtsByObject.length > 0) {
+        const debtsData = [
+          [t.clientDebts, ''],
+          ...analysisData.debtsByObject.map(d => [d.objectName, formatEuro(d.debt)]),
+          [],
+          [t.totalOwed, formatEuro(analysisData.totalDebts)],
+        ];
+        const debtsSheet = XLSX.utils.aoa_to_sheet(debtsData);
+        XLSX.utils.book_append_sheet(wb, debtsSheet, 'Debts');
+      }
 
       // Download
       XLSX.writeFile(wb, `analysis_${dateFrom}_${dateTo}.xlsx`);
 
     } catch (error) {
       console.error('Export Excel error:', error);
+      alert('Error exporting Excel: ' + (error as Error).message);
     } finally {
       setIsExporting(false);
     }
@@ -887,44 +946,120 @@ export default function AnalysisPage() {
       container.style.cssText = 'position: absolute; left: -9999px; top: 0; width: 800px; padding: 40px; font-family: Arial, sans-serif; background: white;';
 
       const profitColor = analysisData.netProfit >= 0 ? '#25D366' : '#ff6a1a';
+      const balanceColor = analysisData.totalBalance > 0.01 ? '#ff6a1a' : '#25D366';
 
       container.innerHTML = `
         <h1 style="color: #01312d; font-size: 24px; margin-bottom: 10px;">${t.title}</h1>
         <p style="color: #666; font-size: 14px; margin-bottom: 30px;">${dateFrom} - ${dateTo}</p>
 
-        <div style="margin-bottom: 25px;">
-          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.income}:</strong> <span style="color: #25D366;">${formatEuro(analysisData.totalIncome)}</span></p>
-          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.totalExpenses}:</strong> <span style="color: #ff6a1a;">${formatEuro(analysisData.totalExpenses)}</span></p>
-          <p style="font-size: 18px; margin: 12px 0;"><strong>${t.netProfit}:</strong> <span style="color: ${profitColor}; font-weight: bold;">${formatEuro(analysisData.netProfit)}</span></p>
-          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.totalOwed}:</strong> <span style="color: #ff6a1a;">${formatEuro(analysisData.totalDebts)}</span></p>
+        <!-- Objects Summary -->
+        <div style="background: #f5f5f5; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+          <h2 style="color: #01312d; font-size: 18px; margin: 0 0 15px 0;">${t.objectsSummary}</h2>
+          <div style="display: flex; gap: 20px; margin-bottom: 10px;">
+            <span>${t.totalObjects}: <strong>${analysisData.totalObjects}</strong></span>
+            <span style="color: #ff6a1a;">${t.openObjects}: <strong>${analysisData.openObjects}</strong></span>
+            <span style="color: #25D366;">${t.closedObjects}: <strong>${analysisData.closedObjects}</strong></span>
+          </div>
         </div>
 
-        <div style="margin-bottom: 25px;">
-          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.totalObjects}:</strong> ${analysisData.totalObjects}</p>
-          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.openObjects}:</strong> ${analysisData.openObjects}</p>
-          <p style="font-size: 16px; margin: 8px 0;"><strong>${t.closedInPeriod}:</strong> ${analysisData.closedInPeriod}</p>
+        <!-- Contract Prices -->
+        <div style="background: #daf3f6; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+          <p style="margin: 0;"><strong>${t.totalContractPrices}:</strong> <span style="color: #ff6a1a; font-size: 20px;">${formatEuro(analysisData.totalContractPrices)}</span></p>
         </div>
 
-        <h3 style="color: #01312d; font-size: 16px; margin-top: 20px;">${t.byPaymentMethod}:</h3>
-        ${Object.entries(analysisData.incomeByPaymentMethod).map(([pmId, amount]) =>
-          `<p style="font-size: 14px; margin: 4px 0 4px 20px;">${getPaymentMethodName(pmId)}: ${formatEuro(amount)}</p>`
-        ).join('')}
+        <!-- Additional Works -->
+        <div style="background: #daf3f6; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+          <p style="margin: 0;"><strong>${t.totalAdditionalWorks}:</strong> <span style="color: #ff6a1a; font-size: 20px;">${formatEuro(analysisData.totalAdditionalWorks)}</span></p>
+        </div>
 
-        <h3 style="color: #01312d; font-size: 16px; margin-top: 20px;">${t.objectExpenses}:</h3>
-        ${Object.entries(analysisData.objectExpensesByCategory).map(([catId, amount]) =>
-          `<p style="font-size: 14px; margin: 4px 0 4px 20px;">${getCategoryName(catId)}: ${formatEuro(amount)}</p>`
-        ).join('')}
+        <!-- Actual Prices -->
+        <div style="background: #daf3f6; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+          <p style="margin: 0;"><strong>${t.totalActualPrices}:</strong> <span style="color: #ff6a1a; font-size: 20px;">${formatEuro(analysisData.totalActualPrices)}</span></p>
+        </div>
 
-        <h3 style="color: #01312d; font-size: 16px; margin-top: 20px;">${t.globalExpenses}:</h3>
-        ${Object.entries(analysisData.globalExpensesByCategory).map(([catId, amount]) =>
-          `<p style="font-size: 14px; margin: 4px 0 4px 20px;">${getCategoryName(catId)}: ${formatEuro(amount)}</p>`
-        ).join('')}
+        <!-- Total Balance -->
+        <div style="background: ${balanceColor}; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+          <p style="margin: 0; color: white;"><strong>${t.totalBalance}:</strong> <span style="font-size: 24px;">${formatEuro(analysisData.totalBalance)}</span></p>
+          <p style="margin: 5px 0 0 0; color: white; font-size: 14px;">${analysisData.totalBalance > 0.01 ? t.totalDebt : t.allPaid}</p>
+        </div>
+
+        <!-- Global Expenses -->
+        <div style="background: #daf3f6; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+          <h3 style="color: #01312d; margin: 0 0 10px 0;">${t.globalExpensesTotal}: <span style="color: #ff6a1a;">${formatEuro(analysisData.totalGlobalExpenses)}</span></h3>
+          ${Object.entries(analysisData.globalExpensesByCategory).map(([catId, amount]) =>
+            `<p style="font-size: 14px; margin: 4px 0 4px 20px;">${getCategoryName(catId)}: ${formatEuro(amount)}</p>`
+          ).join('')}
+        </div>
+
+        <!-- Object Expenses -->
+        <div style="background: #daf3f6; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+          <h3 style="color: #01312d; margin: 0 0 10px 0;">${t.objectExpensesTotal}: <span style="color: #ff6a1a;">${formatEuro(analysisData.totalObjectExpenses)}</span></h3>
+          ${Object.entries(analysisData.objectExpensesByCategory).map(([catId, amount]) =>
+            `<p style="font-size: 14px; margin: 4px 0 4px 20px;">${getCategoryName(catId)}: ${formatEuro(amount)}</p>`
+          ).join('')}
+        </div>
+
+        <!-- Total Profit -->
+        <div style="background: ${profitColor}; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+          <h2 style="color: white; margin: 0;">${t.totalProfit}</h2>
+          <p style="color: white; font-size: 32px; font-weight: bold; margin: 10px 0;">${formatEuro(analysisData.netProfit)}</p>
+          <p style="color: white; font-size: 18px; margin: 0;">${analysisData.netProfit >= 0 ? t.profitStatus : t.lossStatus}</p>
+        </div>
+
+        <!-- Payment Analysis -->
+        <h2 style="color: #01312d; font-size: 18px; margin: 25px 0 15px 0;">${t.summaryPaymentAnalysis}</h2>
+
+        <!-- Received Payments -->
+        <div style="background: #daf3f6; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+          <h3 style="color: #01312d; margin: 0 0 10px 0;">${t.totalReceivedPayments}: <span style="color: #01312d;">${formatEuro(analysisData.totalIncome)}</span></h3>
+          ${Object.entries(analysisData.incomeByPaymentMethod).map(([pmId, amount]) =>
+            `<p style="font-size: 14px; margin: 4px 0 4px 20px;">${getPaymentMethodName(pmId)}: ${formatEuro(amount)}</p>`
+          ).join('')}
+        </div>
+
+        <!-- Expense Payments -->
+        <div style="background: #daf3f6; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+          <h3 style="color: #01312d; margin: 0 0 10px 0;">${t.totalExpensePayments}: <span style="color: #ff6a1a;">${formatEuro(analysisData.totalExpenses)}</span></h3>
+          ${Object.entries(analysisData.expensesByPaymentMethod).map(([pmId, amount]) =>
+            `<p style="font-size: 14px; margin: 4px 0 4px 20px;">${getPaymentMethodName(pmId)}: ${formatEuro(amount)}</p>`
+          ).join('')}
+        </div>
 
         ${analysisData.debtsByObject.length > 0 ? `
-          <h3 style="color: #01312d; font-size: 16px; margin-top: 20px;">${t.clientDebts}:</h3>
-          ${analysisData.debtsByObject.map(d =>
-            `<p style="font-size: 14px; margin: 4px 0 4px 20px;">${d.objectName}: <span style="color: #ff6a1a;">${formatEuro(d.debt)}</span></p>`
-          ).join('')}
+          <!-- Client Debts -->
+          <div style="background: #ffebe1; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+            <h3 style="color: #01312d; margin: 0 0 10px 0;">${t.clientDebts}: <span style="color: #ff6a1a;">${formatEuro(analysisData.totalDebts)}</span></h3>
+            ${analysisData.debtsByObject.map(d =>
+              `<p style="font-size: 14px; margin: 4px 0 4px 20px;">${d.objectName}: <span style="color: #ff6a1a;">${formatEuro(d.debt)}</span></p>`
+            ).join('')}
+          </div>
+        ` : ''}
+
+        <!-- Objects List -->
+        ${analysisData.objectsWithDetails.length > 0 ? `
+          <h2 style="color: #01312d; font-size: 18px; margin: 25px 0 15px 0;">${t.objects}</h2>
+          <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+            <thead>
+              <tr style="background: #01312d; color: white;">
+                <th style="padding: 8px; text-align: left;">#</th>
+                <th style="padding: 8px; text-align: left;">${t.objects}</th>
+                <th style="padding: 8px; text-align: center;">Status</th>
+                <th style="padding: 8px; text-align: right;">${t.balance}</th>
+                <th style="padding: 8px; text-align: right;">${t.profit}</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${analysisData.objectsWithDetails.map((obj, index) => `
+                <tr style="background: ${index % 2 === 0 ? '#f5f5f5' : 'white'};">
+                  <td style="padding: 8px;">${index + 1}</td>
+                  <td style="padding: 8px; color: #ff6a1a; font-weight: bold;">${obj.name}</td>
+                  <td style="padding: 8px; text-align: center;"><span style="background: ${obj.status === 'closed' ? '#25D366' : '#ff6a1a'}; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px;">${obj.status === 'closed' ? t.statusClosed : t.statusOpen}</span></td>
+                  <td style="padding: 8px; text-align: right;">${formatEuro(obj.balance)}</td>
+                  <td style="padding: 8px; text-align: right;">${formatEuro(obj.profit)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
         ` : ''}
       `;
 
@@ -957,6 +1092,7 @@ export default function AnalysisPage() {
 
     } catch (error) {
       console.error('Export PDF error:', error);
+      alert('Error exporting PDF: ' + (error as Error).message);
     } finally {
       setIsExporting(false);
     }
@@ -1525,171 +1661,6 @@ export default function AnalysisPage() {
                   {t.noData}
                 </p>
               )}
-            </div>
-
-            {/* Original blocks below - keeping for additional info */}
-
-            {/* Income Block */}
-            <div className="w-full rounded-2xl p-4" style={{ backgroundColor: 'var(--zanah)' }}>
-              <h3 className="text-lg font-bold mb-3" style={{ color: 'var(--deep-teal)' }}>
-                💰 {t.income}
-              </h3>
-              <p className="text-2xl font-bold mb-3" style={{ color: 'var(--deep-teal)' }}>
-                {formatEuro(analysisData.totalIncome)}
-              </p>
-              <p className="text-sm mb-2" style={{ color: 'var(--deep-teal)', opacity: 0.8 }}>
-                {t.byPaymentMethod}:
-              </p>
-              <div className="space-y-1">
-                {Object.entries(analysisData.incomeByPaymentMethod).map(([pmId, amount]) => (
-                  <div key={pmId} className="flex justify-between text-sm" style={{ color: 'var(--deep-teal)' }}>
-                    <span>{getPaymentMethodName(pmId)}</span>
-                    <span>{formatEuro(amount)}</span>
-                  </div>
-                ))}
-                {Object.keys(analysisData.incomeByPaymentMethod).length === 0 && (
-                  <p className="text-sm" style={{ color: 'var(--deep-teal)', opacity: 0.6 }}>{t.noData}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Object Expenses Block */}
-            <div className="w-full rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
-              <h3 className="text-lg font-bold mb-3" style={{ color: 'var(--deep-teal)' }}>
-                💸 {t.objectExpenses}
-              </h3>
-              <p className="text-2xl font-bold mb-3" style={{ color: 'var(--deep-teal)' }}>
-                {formatEuro(analysisData.totalObjectExpenses)}
-              </p>
-              <div className="space-y-1">
-                {Object.entries(analysisData.objectExpensesByCategory).map(([catId, amount]) => (
-                  <div key={catId} className="flex justify-between text-sm" style={{ color: 'var(--deep-teal)' }}>
-                    <span>{getCategoryName(catId)}</span>
-                    <span>{formatEuro(amount)}</span>
-                  </div>
-                ))}
-                {Object.keys(analysisData.objectExpensesByCategory).length === 0 && (
-                  <p className="text-sm" style={{ color: 'var(--deep-teal)', opacity: 0.6 }}>{t.noData}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Global Expenses Block */}
-            <div className="w-full rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
-              <h3 className="text-lg font-bold mb-3" style={{ color: 'var(--deep-teal)' }}>
-                💸 {t.globalExpenses}
-              </h3>
-              <p className="text-2xl font-bold mb-3" style={{ color: 'var(--deep-teal)' }}>
-                {formatEuro(analysisData.totalGlobalExpenses)}
-              </p>
-              <div className="space-y-1">
-                {Object.entries(analysisData.globalExpensesByCategory).map(([catId, amount]) => (
-                  <div key={catId} className="flex justify-between text-sm" style={{ color: 'var(--deep-teal)' }}>
-                    <span>{getCategoryName(catId)}</span>
-                    <span>{formatEuro(amount)}</span>
-                  </div>
-                ))}
-                {Object.keys(analysisData.globalExpensesByCategory).length === 0 && (
-                  <p className="text-sm" style={{ color: 'var(--deep-teal)', opacity: 0.6 }}>{t.noData}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Total Expenses Block */}
-            <div className="w-full rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
-              <h3 className="text-lg font-bold mb-3" style={{ color: 'var(--deep-teal)' }}>
-                💸 {t.totalExpenses}
-              </h3>
-              <p className="text-2xl font-bold mb-3" style={{ color: 'var(--deep-teal)' }}>
-                {formatEuro(analysisData.totalExpenses)}
-              </p>
-              <p className="text-sm mb-2" style={{ color: 'var(--deep-teal)', opacity: 0.8 }}>
-                {t.byPaymentMethod}:
-              </p>
-              <div className="space-y-1">
-                {Object.entries(analysisData.expensesByPaymentMethod).map(([pmId, amount]) => (
-                  <div key={pmId} className="flex justify-between text-sm" style={{ color: 'var(--deep-teal)' }}>
-                    <span>{getPaymentMethodName(pmId)}</span>
-                    <span>{formatEuro(amount)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Result Block */}
-            <div
-              className="w-full rounded-2xl p-4"
-              style={{
-                backgroundColor: analysisData.netProfit >= 0 ? 'var(--zanah)' : '#ff6a1a',
-              }}
-            >
-              <h3 className="text-lg font-bold mb-3" style={{ color: analysisData.netProfit >= 0 ? 'var(--deep-teal)' : 'white' }}>
-                📊 {t.result}
-              </h3>
-              <p className="text-sm mb-2" style={{ color: analysisData.netProfit >= 0 ? 'var(--deep-teal)' : 'white', opacity: 0.8 }}>
-                {t.netProfit}:
-              </p>
-              <p className="text-3xl font-bold" style={{ color: analysisData.netProfit >= 0 ? 'var(--deep-teal)' : 'white' }}>
-                {formatEuro(analysisData.netProfit)}
-              </p>
-            </div>
-
-            {/* Client Debts Block */}
-            <div className="w-full rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
-              <h3 className="text-lg font-bold mb-3" style={{ color: 'var(--deep-teal)' }}>
-                ⏳ {t.clientDebts}
-              </h3>
-              <p className="text-2xl font-bold mb-3" style={{ color: '#ff6a1a' }}>
-                {formatEuro(analysisData.totalDebts)}
-              </p>
-              {analysisData.debtsByObject.length > 0 && (
-                <div className="space-y-1 mt-2">
-                  {analysisData.debtsByObject.slice(0, 5).map((d, i) => (
-                    <div key={i} className="flex justify-between text-sm" style={{ color: 'var(--deep-teal)' }}>
-                      <span>{d.objectName}</span>
-                      <span>{formatEuro(d.debt)}</span>
-                    </div>
-                  ))}
-                  {analysisData.debtsByObject.length > 5 && (
-                    <p className="text-sm" style={{ color: 'var(--deep-teal)', opacity: 0.6 }}>
-                      +{analysisData.debtsByObject.length - 5} more...
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Objects Block */}
-            <div className="w-full rounded-2xl p-4" style={{ backgroundColor: 'var(--polar)' }}>
-              <h3 className="text-lg font-bold mb-3" style={{ color: 'var(--deep-teal)' }}>
-                📦 {t.objects}
-              </h3>
-              <div className="grid grid-cols-3 gap-2 text-center">
-                <div>
-                  <p className="text-2xl font-bold" style={{ color: 'var(--deep-teal)' }}>
-                    {analysisData.totalObjects}
-                  </p>
-                  <p className="text-xs" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                    {t.totalObjects}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold" style={{ color: 'var(--zanah)' }}>
-                    {analysisData.openObjects}
-                  </p>
-                  <p className="text-xs" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                    {t.openObjects}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold" style={{ color: '#ff6a1a' }}>
-                    {analysisData.closedInPeriod}
-                  </p>
-                  <p className="text-xs" style={{ color: 'var(--deep-teal)', opacity: 0.7 }}>
-                    {t.closedInPeriod}
-                  </p>
-                </div>
-              </div>
             </div>
 
             {/* Download Buttons */}
