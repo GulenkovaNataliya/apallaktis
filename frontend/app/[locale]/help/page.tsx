@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useParams, useRouter } from "next/navigation";
-import BackgroundPage from "@/components/BackgroundPage";
 import { messages, type Locale } from "@/lib/messages";
 import Image from 'next/image';
 
@@ -386,58 +385,79 @@ export default function HelpPage() {
   const helpContent = helpContentRu;
 
   return (
-    <BackgroundPage pageIndex={5}>
-      <div
-        className="min-h-screen flex flex-col"
-        style={{
-          paddingTop: '120px',
-          paddingBottom: '120px',
-          paddingLeft: '24px',
-          paddingRight: '24px'
-        }}
+    <div
+      className="min-h-screen flex flex-col"
+      style={{
+        backgroundColor: '#033a45',
+        paddingTop: '40px',
+        paddingBottom: '120px',
+        paddingLeft: '40px',
+        paddingRight: '40px'
+      }}
+    >
+      {/* Back - at top with normal padding */}
+      <p
+        onClick={() => router.push(`/${locale}`)}
+        className="text-button cursor-pointer"
+        style={{ color: 'var(--polar)', marginBottom: '48px' }}
       >
-        {/* Back */}
+        {t.back}
+      </p>
+
+      {/* Intro text */}
+      <div className="flex flex-col items-center gap-12">
         <p
-          onClick={() => router.push(`/${locale}`)}
-          className="text-button cursor-pointer mb-6"
-          style={{ color: 'var(--polar)' }}
+          className="text-center text-body"
+          style={{ color: 'var(--polar)', fontWeight: 500 }}
         >
-          {t.back}
+          Мобильное приложение, которое освобождает мастера от рутины учёта финансов.
         </p>
 
-        {/* Logo and Intro */}
-        <div className="flex flex-col items-center mb-8">
-          <Image
-            src="/Apallaktis.photos/apallaktis-logo-orange@2x.png"
-            alt="ΑΠΑΛΛΑΚΤΗΣ"
-            width={150}
-            height={50}
-            style={{ objectFit: 'contain' }}
-          />
-          <p
-            className="text-center text-body mt-4"
-            style={{ color: 'var(--polar)', fontWeight: 500 }}
-          >
-            Мобильное приложение, которое освобождает мастера от рутины учёта финансов.
-          </p>
-          <p
-            className="text-center text-sm mt-2"
-            style={{ color: 'var(--orange)' }}
-          >
-            ΑΠΑΛΛΑΚΤΗΣ — «освободитель» | "Τέλος στη ρουτίνα!" — "Конец рутине!"
-          </p>
-        </div>
-
-        {/* Title */}
-        <h1
-          className="text-2xl font-bold text-center mb-8"
-          style={{ color: 'var(--polar)' }}
+        <p
+          className="text-center text-body"
+          style={{ color: 'var(--polar)', fontWeight: 500 }}
         >
-          Инструкция
-        </h1>
+          ΑΠΑΛΛΑΚΤΗΣ — «освободитель»
+        </p>
 
-        {/* Sections */}
-        <div className="flex flex-col gap-4">
+        <p
+          className="text-center text-slogan"
+          style={{ color: 'var(--orange)' }}
+        >
+          "Τέλος στη ρουτίνα!"
+        </p>
+
+        <p
+          className="text-center text-body"
+          style={{ color: 'var(--polar)', fontWeight: 500 }}
+        >
+          — "Конец рутине!"
+        </p>
+      </div>
+
+      {/* Disclaimer - white text, no orange background */}
+      <div
+        className="text-center"
+        style={{ marginTop: '48px', marginBottom: '48px' }}
+      >
+        <p className="text-button font-semibold" style={{ color: 'white' }}>
+          Это НЕ бухгалтерская программа
+        </p>
+        <p className="text-sm mt-2" style={{ color: 'var(--polar)' }}>
+          Это персональный инструмент финансового контроля
+        </p>
+      </div>
+
+      {/* Title */}
+      <h1
+        className="text-2xl font-bold text-center"
+        style={{ color: 'var(--polar)', marginBottom: '48px' }}
+      >
+        Инструкция
+      </h1>
+
+      {/* Sections */}
+      <div className="flex flex-col gap-4">
           {helpContent.map((section, sectionIndex) => {
             const isSectionExpanded = expandedSections.has(section.id);
 
@@ -562,22 +582,17 @@ export default function HelpPage() {
           })}
         </div>
 
-        {/* Footer */}
-        <div
-          className="mt-8 rounded-2xl text-center"
-          style={{
-            backgroundColor: 'var(--orange)',
-            padding: '16px 20px'
-          }}
-        >
-          <p className="text-button font-semibold" style={{ color: 'white' }}>
-            Это НЕ бухгалтерская программа
-          </p>
-          <p className="text-sm mt-1" style={{ color: 'white', opacity: 0.9 }}>
-            Это персональный инструмент финансового контроля
-          </p>
+        {/* Logo at bottom - 3x bigger */}
+        <div className="flex justify-center" style={{ marginTop: '48px' }}>
+          <Image
+            src="/Apallaktis.photos/apallaktis-logo-orange@2x.png"
+            alt="ΑΠΑΛΛΑΚΤΗΣ"
+            width={450}
+            height={150}
+            style={{ objectFit: 'contain' }}
+          />
         </div>
       </div>
-    </BackgroundPage>
+    </div>
   );
 }
