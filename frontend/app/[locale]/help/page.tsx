@@ -641,7 +641,6 @@ export default function HelpPage() {
             style={{ objectFit: 'contain' }}
           />
         </div>
-      </div>
     </div>
   );
 }
