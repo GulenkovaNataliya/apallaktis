@@ -808,6 +808,9 @@ export default function AnalysisPage() {
 
       // Summary sheet - Full analysis
       const summaryData = [
+        ['ΑΠΑΛΛΑΚΤΗΣ', ''],
+        ['Financial Analysis / Οικονομική Ανάλυση', ''],
+        [],
         [t.title, `${dateFrom} - ${dateTo}`],
         [],
         ['=== ' + t.objectsSummary + ' ===', ''],
@@ -949,8 +952,13 @@ export default function AnalysisPage() {
       const balanceColor = analysisData.totalBalance > 0.01 ? '#ff6a1a' : '#25D366';
 
       container.innerHTML = `
-        <h1 style="color: #01312d; font-size: 24px; margin-bottom: 10px;">${t.title}</h1>
-        <p style="color: #666; font-size: 14px; margin-bottom: 30px;">${dateFrom} - ${dateTo}</p>
+        <!-- Logo -->
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" style="width: 50%; max-width: 400px; height: auto;" alt="ΑΠΑΛΛΑΚΤΗΣ" />
+        </div>
+
+        <h1 style="color: #01312d; font-size: 24px; margin-bottom: 10px; text-align: center;">${t.title}</h1>
+        <p style="color: #666; font-size: 14px; margin-bottom: 30px; text-align: center;">${dateFrom} - ${dateTo}</p>
 
         <!-- Objects Summary -->
         <div style="background: #f5f5f5; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
