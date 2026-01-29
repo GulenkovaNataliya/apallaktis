@@ -373,18 +373,10 @@ export default function ObjectsPage() {
             {t.backToDashboard}
           </p>
 
-          {/* Add/Edit Object Button (title) */}
-          <button
-            type="button"
-            className="btn-universal w-full text-button"
-            style={{
-              minHeight: '52px',
-              backgroundColor: 'var(--polar)',
-              color: 'var(--deep-teal)',
-            }}
-          >
+          {/* Title */}
+          <h1 className="text-2xl font-bold text-center" style={{ color: 'var(--polar)' }}>
             {editingObject ? t.edit : t.addNew}
-          </button>
+          </h1>
 
           <ObjectForm
             object={editingObject}
