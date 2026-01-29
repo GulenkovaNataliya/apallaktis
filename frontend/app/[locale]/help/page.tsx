@@ -739,22 +739,22 @@ export default function HelpPage() {
         </p>
 
         <p
-          className="text-center"
-          style={{ color: 'var(--polar)', fontWeight: 500, fontSize: '16px' }}
+          className="text-center text-slogan"
+          style={{ color: 'var(--orange)' }}
         >
           ΑΠΑΛΛΑΚΤΗΣ — «освободитель»
         </p>
 
         <p
-          className="text-center"
-          style={{ color: 'var(--orange)', fontSize: '24px', fontWeight: 500 }}
+          className="text-center text-slogan"
+          style={{ color: 'var(--orange)' }}
         >
           "Τέλος στη ρουτίνα!"
         </p>
 
         <p
-          className="text-center"
-          style={{ color: 'var(--polar)', fontWeight: 500, fontSize: '16px' }}
+          className="text-center text-slogan"
+          style={{ color: 'var(--orange)' }}
         >
           — "Конец рутине!"
         </p>
