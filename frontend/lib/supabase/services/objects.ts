@@ -19,6 +19,8 @@ export interface PropertyObject {
   color: string | null;
   created_at: string;
   updated_at: string;
+  deleted_at: string | null;
+  version: number;
 }
 
 export interface CreateObjectInput {
@@ -42,7 +44,7 @@ export interface UpdateObjectInput {
 }
 
 /**
- * Получить все объекты пользователя
+ * Получить все объекты пользователя (кроме удалённых)
  */
 export async function getObjects(userId: string): Promise<PropertyObject[]> {
   const supabase = createClient();
@@ -51,10 +53,32 @@ export async function getObjects(userId: string): Promise<PropertyObject[]> {
     .from('objects')
     .select('*')
     .eq('user_id', userId)
+    .is('deleted_at', null)
     .order('created_at', { ascending: false });
 
   if (error) {
     console.error('Error fetching objects:', error);
+    throw error;
+  }
+
+  return data || [];
+}
+
+/**
+ * Получить удалённые объекты (корзина)
+ */
+export async function getDeletedObjects(userId: string): Promise<PropertyObject[]> {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('objects')
+    .select('*')
+    .eq('user_id', userId)
+    .not('deleted_at', 'is', null)
+    .order('deleted_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching deleted objects:', error);
     throw error;
   }
 
@@ -139,6 +163,7 @@ export async function updateObject(
     .update(input)
     .eq('id', objectId)
     .eq('user_id', userId)
+    .is('deleted_at', null)
     .select()
     .single();
 
@@ -151,9 +176,118 @@ export async function updateObject(
 }
 
 /**
- * Удалить объект
+ * Обновить объект с проверкой версии (optimistic locking)
+ */
+export async function updateObjectWithVersion(
+  objectId: string,
+  userId: string,
+  input: UpdateObjectInput,
+  expectedVersion: number
+): Promise<{ success: boolean; data?: PropertyObject; conflict?: boolean }> {
+  const supabase = createClient();
+
+  // Сначала проверим текущую версию
+  const { data: current, error: checkError } = await supabase
+    .from('objects')
+    .select('version')
+    .eq('id', objectId)
+    .eq('user_id', userId)
+    .is('deleted_at', null)
+    .single();
+
+  if (checkError) {
+    console.error('Error checking object version:', checkError);
+    throw checkError;
+  }
+
+  if (!current) {
+    throw new Error('Object not found');
+  }
+
+  if (current.version !== expectedVersion) {
+    // Конфликт версий
+    return { success: false, conflict: true };
+  }
+
+  // Обновляем (триггер автоматически увеличит версию)
+  const { data, error } = await supabase
+    .from('objects')
+    .update(input)
+    .eq('id', objectId)
+    .eq('user_id', userId)
+    .eq('version', expectedVersion)
+    .is('deleted_at', null)
+    .select()
+    .single();
+
+  if (error) {
+    if (error.code === 'PGRST116') {
+      // Кто-то уже обновил объект
+      return { success: false, conflict: true };
+    }
+    console.error('Error updating object with version:', error);
+    throw error;
+  }
+
+  return { success: true, data };
+}
+
+/**
+ * Soft delete объекта (перемещение в корзину)
  */
 export async function deleteObject(
+  objectId: string,
+  userId: string
+): Promise<void> {
+  const supabase = createClient();
+
+  // Используем RPC функцию soft_delete_object
+  const { data, error } = await supabase
+    .rpc('soft_delete_object', {
+      p_object_id: objectId,
+      p_user_id: userId
+    });
+
+  if (error) {
+    console.error('Error soft deleting object:', error);
+    throw error;
+  }
+
+  if (!data) {
+    throw new Error('Object not found or already deleted');
+  }
+}
+
+/**
+ * Восстановить объект из корзины
+ */
+export async function restoreObject(
+  objectId: string,
+  userId: string
+): Promise<void> {
+  const supabase = createClient();
+
+  // Используем RPC функцию restore_object
+  const { data, error } = await supabase
+    .rpc('restore_object', {
+      p_object_id: objectId,
+      p_user_id: userId
+    });
+
+  if (error) {
+    console.error('Error restoring object:', error);
+    throw error;
+  }
+
+  if (!data) {
+    throw new Error('Object not found or not deleted');
+  }
+}
+
+/**
+ * Удалить объект навсегда
+ */
+export async function permanentlyDeleteObject(
   objectId: string,
   userId: string
 ): Promise<void> {
@@ -166,7 +300,7 @@ export async function deleteObject(
     .eq('user_id', userId);
 
   if (error) {
-    console.error('Error deleting object:', error);
+    console.error('Error permanently deleting object:', error);
     throw error;
   }
 }

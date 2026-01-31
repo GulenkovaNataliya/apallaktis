@@ -49,6 +49,12 @@ const translations = {
     passwordError: "Σφάλμα αλλαγής κωδικού",
     passwordMismatch: "Οι κωδικοί δεν ταιριάζουν",
     passwordTooShort: "Τουλάχιστον 6 χαρακτήρες",
+    changeEmail: "Αλλαγή Email",
+    newEmail: "Νέο Email",
+    emailSent: "Στάλθηκε email επιβεβαίωσης!",
+    emailError: "Σφάλμα αλλαγής email",
+    emailInUse: "Το email χρησιμοποιείται",
+    emailSameAsCurrent: "Το νέο email πρέπει να είναι διαφορετικό",
   },
   ru: {
     title: "Личные Данные",
@@ -81,6 +87,12 @@ const translations = {
     passwordError: "Ошибка смены пароля",
     passwordMismatch: "Пароли не совпадают",
     passwordTooShort: "Минимум 6 символов",
+    changeEmail: "Смена Email",
+    newEmail: "Новый Email",
+    emailSent: "Письмо с подтверждением отправлено!",
+    emailError: "Ошибка смены email",
+    emailInUse: "Email уже используется",
+    emailSameAsCurrent: "Новый email должен отличаться",
   },
   en: {
     title: "Personal Data",
@@ -113,6 +125,12 @@ const translations = {
     passwordError: "Error changing password",
     passwordMismatch: "Passwords do not match",
     passwordTooShort: "At least 6 characters",
+    changeEmail: "Change Email",
+    newEmail: "New Email",
+    emailSent: "Confirmation email sent!",
+    emailError: "Error changing email",
+    emailInUse: "Email is already in use",
+    emailSameAsCurrent: "New email must be different",
   },
   uk: {
     title: "Особисті Дані",
@@ -145,6 +163,12 @@ const translations = {
     passwordError: "Помилка зміни паролю",
     passwordMismatch: "Паролі не співпадають",
     passwordTooShort: "Мінімум 6 символів",
+    changeEmail: "Зміна Email",
+    newEmail: "Новий Email",
+    emailSent: "Лист з підтвердженням надіслано!",
+    emailError: "Помилка зміни email",
+    emailInUse: "Email вже використовується",
+    emailSameAsCurrent: "Новий email має відрізнятися",
   },
   sq: {
     title: "Të Dhënat Personale",
@@ -177,6 +201,12 @@ const translations = {
     passwordError: "Gabim në ndryshimin e fjalëkalimit",
     passwordMismatch: "Fjalëkalimet nuk përputhen",
     passwordTooShort: "Minimum 6 karaktere",
+    changeEmail: "Ndryshimi i Email",
+    newEmail: "Email i Ri",
+    emailSent: "Email konfirmimi u dërgua!",
+    emailError: "Gabim në ndryshimin e email",
+    emailInUse: "Email është në përdorim",
+    emailSameAsCurrent: "Email i ri duhet të jetë i ndryshëm",
   },
   bg: {
     title: "Лични Данни",
@@ -209,6 +239,12 @@ const translations = {
     passwordError: "Грешка при смяна на парола",
     passwordMismatch: "Паролите не съвпадат",
     passwordTooShort: "Минимум 6 символа",
+    changeEmail: "Смяна на Email",
+    newEmail: "Нов Email",
+    emailSent: "Изпратен е имейл за потвърждение!",
+    emailError: "Грешка при смяна на email",
+    emailInUse: "Email вече се използва",
+    emailSameAsCurrent: "Новият email трябва да е различен",
   },
   ro: {
     title: "Date Personale",
@@ -241,6 +277,12 @@ const translations = {
     passwordError: "Eroare la schimbarea parolei",
     passwordMismatch: "Parolele nu se potrivesc",
     passwordTooShort: "Minim 6 caractere",
+    changeEmail: "Schimbă Email",
+    newEmail: "Email Nou",
+    emailSent: "Email de confirmare trimis!",
+    emailError: "Eroare la schimbarea email",
+    emailInUse: "Email deja în uz",
+    emailSameAsCurrent: "Email-ul nou trebuie să fie diferit",
   },
   ar: {
     title: "البيانات الشخصية",
@@ -273,6 +315,12 @@ const translations = {
     passwordError: "خطأ في تغيير كلمة المرور",
     passwordMismatch: "كلمات المرور غير متطابقة",
     passwordTooShort: "6 أحرف على الأقل",
+    changeEmail: "تغيير البريد الإلكتروني",
+    newEmail: "البريد الإلكتروني الجديد",
+    emailSent: "تم إرسال بريد التأكيد!",
+    emailError: "خطأ في تغيير البريد الإلكتروني",
+    emailInUse: "البريد الإلكتروني قيد الاستخدام",
+    emailSameAsCurrent: "يجب أن يكون البريد الجديد مختلفاً",
   },
 };
 
@@ -314,6 +362,12 @@ export default function ProfilePage() {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Email change state
+  const [newEmail, setNewEmail] = useState("");
+  const [isChangingEmail, setIsChangingEmail] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [emailError, setEmailError] = useState("");
 
   useEffect(() => {
     async function loadProfile() {
@@ -457,6 +511,54 @@ export default function ProfilePage() {
       setPasswordError(t.passwordError);
     } finally {
       setIsChangingPassword(false);
+    }
+  };
+
+  const handleChangeEmail = async () => {
+    // Validate
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newEmail)) {
+      setEmailError(t.emailError);
+      return;
+    }
+    if (newEmail.toLowerCase() === email.toLowerCase()) {
+      setEmailError(t.emailSameAsCurrent);
+      return;
+    }
+
+    setIsChangingEmail(true);
+    setEmailStatus('idle');
+    setEmailError("");
+
+    try {
+      const response = await fetch('/api/auth/change-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ newEmail }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setEmailStatus('error');
+        if (response.status === 409) {
+          setEmailError(t.emailInUse);
+        } else if (data.error?.includes('different')) {
+          setEmailError(t.emailSameAsCurrent);
+        } else {
+          setEmailError(data.error || t.emailError);
+        }
+      } else {
+        setEmailStatus('success');
+        setNewEmail("");
+        setTimeout(() => setEmailStatus('idle'), 5000);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setEmailStatus('error');
+      setEmailError(t.emailError);
+    } finally {
+      setIsChangingEmail(false);
     }
   };
 
@@ -774,6 +876,56 @@ export default function ProfilePage() {
               }}
             >
               {isChangingPassword ? '...' : t.changePassword}
+            </button>
+          </div>
+
+          {/* Change Email Section */}
+          <div className="flex flex-col gap-12">
+            <h2
+              className="text-button font-bold text-center"
+              style={{ color: 'var(--polar)' }}
+            >
+              {t.changeEmail}
+            </h2>
+
+            {/* New Email */}
+            <input
+              type="email"
+              placeholder={t.newEmail}
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+              className="w-full rounded-2xl text-body border border-gray-300 focus:outline-none focus:border-blue-500"
+              style={{ minHeight: '52px', padding: '12px', backgroundColor: 'white' }}
+            />
+
+            {/* Email Error */}
+            {emailError && (
+              <p className="text-sm text-center" style={{ color: '#ff6a1a' }}>{emailError}</p>
+            )}
+
+            {/* Email Status */}
+            {emailStatus === 'success' && (
+              <div
+                className="text-center p-3 rounded-xl text-button font-semibold"
+                style={{ backgroundColor: '#25D366', color: 'white' }}
+              >
+                {t.emailSent}
+              </div>
+            )}
+
+            {/* Change Email Button */}
+            <button
+              onClick={handleChangeEmail}
+              disabled={isChangingEmail || !newEmail}
+              className="w-full rounded-2xl text-button font-semibold transition-opacity hover:opacity-80 disabled:opacity-50"
+              style={{
+                backgroundColor: 'var(--polar)',
+                color: 'var(--deep-teal)',
+                boxShadow: '0 4px 8px var(--deep-teal)',
+                minHeight: '52px',
+              }}
+            >
+              {isChangingEmail ? '...' : t.changeEmail}
             </button>
           </div>
         </div>

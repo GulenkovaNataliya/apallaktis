@@ -13,6 +13,7 @@ import {
   getObjects,
   createObject,
   updateObject,
+  updateObjectWithVersion,
   deleteObject as deleteObjectApi,
   type PropertyObject as SupabasePropertyObject,
 } from '@/lib/supabase/services';
@@ -21,7 +22,7 @@ import { getUserTier, canCreateObject, type SubscriptionTier } from '@/lib/subsc
 type ViewType = 'list' | 'add-object' | 'edit-object';
 
 // Конвертер из Supabase формата в локальный
-function toLocalObject(obj: SupabasePropertyObject): PropertyObject {
+function toLocalObject(obj: SupabasePropertyObject): PropertyObject & { version: number } {
   return {
     id: obj.id,
     userId: obj.user_id,
@@ -34,6 +35,7 @@ function toLocalObject(obj: SupabasePropertyObject): PropertyObject {
     color: obj.color || undefined,
     createdAt: new Date(obj.created_at),
     updatedAt: new Date(obj.updated_at),
+    version: obj.version || 1,
   };
 }
 
@@ -404,6 +406,58 @@ export default function ObjectsPage() {
   return null;
 }
 
+// Conflict modal translations
+const conflictTranslations = {
+  el: {
+    conflictTitle: "Σύγκρουση Αλλαγών",
+    conflictMessage: "Κάποιος άλλος άλλαξε αυτό το αντικείμενο. Θέλετε να φορτώσετε ξανά;",
+    reload: "Ναι, φόρτωσε ξανά",
+    overwrite: "Αντικατάσταση",
+  },
+  ru: {
+    conflictTitle: "Конфликт изменений",
+    conflictMessage: "Кто-то другой изменил этот объект. Хотите перезагрузить?",
+    reload: "Да, перезагрузить",
+    overwrite: "Перезаписать",
+  },
+  en: {
+    conflictTitle: "Edit Conflict",
+    conflictMessage: "Someone else edited this object. Would you like to reload?",
+    reload: "Yes, reload",
+    overwrite: "Overwrite",
+  },
+  uk: {
+    conflictTitle: "Конфлікт змін",
+    conflictMessage: "Хтось інший змінив цей об'єкт. Бажаєте перезавантажити?",
+    reload: "Так, перезавантажити",
+    overwrite: "Перезаписати",
+  },
+  sq: {
+    conflictTitle: "Konflikt Ndryshimesh",
+    conflictMessage: "Dikush tjetër ndryshoi këtë objekt. Dëshironi të ringarkoni?",
+    reload: "Po, ringarkoni",
+    overwrite: "Mbishkruaj",
+  },
+  bg: {
+    conflictTitle: "Конфликт на промени",
+    conflictMessage: "Някой друг промени този обект. Искате ли да презаредите?",
+    reload: "Да, презареди",
+    overwrite: "Презапиши",
+  },
+  ro: {
+    conflictTitle: "Conflict de editare",
+    conflictMessage: "Altcineva a editat acest obiect. Doriți să reîncărcați?",
+    reload: "Da, reîncarcă",
+    overwrite: "Suprascrie",
+  },
+  ar: {
+    conflictTitle: "تعارض في التحرير",
+    conflictMessage: "قام شخص آخر بتعديل هذا العنصر. هل تريد إعادة التحميل؟",
+    reload: "نعم، أعد التحميل",
+    overwrite: "استبدال",
+  },
+};
+
 // Object Form Component
 function ObjectForm({
   object,
@@ -419,6 +473,8 @@ function ObjectForm({
   locale: Locale;
 }) {
   const t = messages[locale]?.objects || messages.el.objects;
+  const tConflict = conflictTranslations[locale as keyof typeof conflictTranslations] || conflictTranslations.en;
+
   const [formData, setFormData] = useState({
     name: object?.name || '',
     address: object?.address || '',
@@ -428,6 +484,8 @@ function ObjectForm({
     status: object?.status || 'open' as ObjectStatus,
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [currentVersion, setCurrentVersion] = useState(object?.version || 1);
+  const [showConflictModal, setShowConflictModal] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -445,20 +503,33 @@ function ObjectForm({
     try {
       let savedObject: PropertyObject;
 
-      console.log('Saving object...', { formData, userId, isEdit: !!object?.id });
+      console.log('Saving object...', { formData, userId, isEdit: !!object?.id, version: currentVersion });
 
       if (object?.id) {
-        // Обновление существующего
-        const updated = await updateObject(object.id, userId, {
+        // Обновление существующего с проверкой версии
+        const result = await updateObjectWithVersion(object.id, userId, {
           name: formData.name,
           address: formData.address || null,
           client_name: formData.clientName || null,
           client_contact: formData.clientContact || null,
           contract_price: formData.contractPrice,
           status: formData.status,
-        });
-        console.log('Updated:', updated);
-        savedObject = toLocalObject(updated);
+        }, currentVersion);
+
+        if (!result.success && result.conflict) {
+          // Конфликт версий
+          setShowConflictModal(true);
+          setIsSaving(false);
+          return;
+        }
+
+        if (!result.data) {
+          throw new Error('Update failed');
+        }
+
+        console.log('Updated:', result.data);
+        savedObject = toLocalObject(result.data);
+        setCurrentVersion(result.data.version);
       } else {
         // Создание нового
         const created = await createObject(userId, {
@@ -477,6 +548,36 @@ function ObjectForm({
       onSave(savedObject);
     } catch (error: any) {
       console.error('Error saving object:', error);
+      alert(`Failed to save object: ${error?.message || error}`);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleReload = () => {
+    // Reload the page to get fresh data
+    window.location.reload();
+  };
+
+  const handleOverwrite = async () => {
+    setShowConflictModal(false);
+    setIsSaving(true);
+
+    try {
+      // Force update without version check
+      const updated = await updateObject(object!.id, userId, {
+        name: formData.name,
+        address: formData.address || null,
+        client_name: formData.clientName || null,
+        client_contact: formData.clientContact || null,
+        contract_price: formData.contractPrice,
+        status: formData.status,
+      });
+      const savedObject = toLocalObject(updated);
+      setCurrentVersion(updated.version);
+      onSave(savedObject);
+    } catch (error: any) {
+      console.error('Error overwriting object:', error);
       alert(`Failed to save object: ${error?.message || error}`);
     } finally {
       setIsSaving(false);
@@ -652,6 +753,56 @@ function ObjectForm({
           {isSaving ? '...' : (t.save || 'Αποθήκευση')}
         </button>
       </div>
+
+      {/* Version Conflict Modal */}
+      {showConflictModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
+        >
+          <div
+            className="rounded-2xl p-6 mx-4 max-w-sm"
+            style={{ backgroundColor: 'var(--polar)', border: '2px solid var(--orange)' }}
+          >
+            <h3
+              className="text-button font-bold text-center mb-4"
+              style={{ color: 'var(--orange)' }}
+            >
+              {tConflict.conflictTitle}
+            </h3>
+            <p
+              className="text-body text-center mb-6"
+              style={{ color: 'var(--deep-teal)' }}
+            >
+              {tConflict.conflictMessage}
+            </p>
+            <div className="flex gap-4">
+              <button
+                onClick={handleReload}
+                className="flex-1 rounded-2xl text-button font-medium"
+                style={{
+                  minHeight: '48px',
+                  backgroundColor: 'var(--zanah)',
+                  color: 'var(--deep-teal)',
+                }}
+              >
+                {tConflict.reload}
+              </button>
+              <button
+                onClick={handleOverwrite}
+                className="flex-1 rounded-2xl text-button font-medium"
+                style={{
+                  minHeight: '48px',
+                  backgroundColor: 'var(--orange)',
+                  color: 'white',
+                }}
+              >
+                {tConflict.overwrite}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </form>
   );
 }

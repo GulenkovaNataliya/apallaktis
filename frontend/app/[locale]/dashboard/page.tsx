@@ -18,6 +18,7 @@ const translations = {
     security: "Ασφάλεια",
     referral: "Referral Program",
     team: "Η Ομάδα Μου",
+    trash: "Κάδος Απορριμμάτων",
     goToHome: "Μετάβαση στην Αρχική",
     logout: "Αποσύνδεση",
     deleteAccount: "Διαγραφή Λογαριασμού",
@@ -37,6 +38,7 @@ const translations = {
     security: "Безопасность",
     referral: "Referral Program",
     team: "Моя Команда",
+    trash: "Корзина",
     goToHome: "Перейти на Главную",
     logout: "Выход из Аккаунта",
     deleteAccount: "Удалить Аккаунт",
@@ -56,6 +58,7 @@ const translations = {
     security: "Security",
     referral: "Referral Program",
     team: "My Team",
+    trash: "Trash",
     goToHome: "Go to Home",
     logout: "Log Out",
     deleteAccount: "Delete Account",
@@ -75,6 +78,7 @@ const translations = {
     security: "Безпека",
     referral: "Referral Program",
     team: "Моя Команда",
+    trash: "Кошик",
     goToHome: "Перейти на Головну",
     logout: "Вийти з Акаунту",
     deleteAccount: "Видалити Акаунт",
@@ -94,6 +98,7 @@ const translations = {
     security: "Siguria",
     referral: "Referral Program",
     team: "Ekipi Im",
+    trash: "Koshi",
     goToHome: "Shko në Kryefaqe",
     logout: "Dilni nga Llogaria",
     deleteAccount: "Fshi Llogarinë",
@@ -113,6 +118,7 @@ const translations = {
     security: "Сигурност",
     referral: "Referral Program",
     team: "Моят Екип",
+    trash: "Кошче",
     goToHome: "Към Началната Страница",
     logout: "Изход от Акаунта",
     deleteAccount: "Изтрий Акаунт",
@@ -132,6 +138,7 @@ const translations = {
     security: "Securitate",
     referral: "Referral Program",
     team: "Echipa Mea",
+    trash: "Coș de gunoi",
     goToHome: "Mergi la Pagina Principală",
     logout: "Deconectare",
     deleteAccount: "Șterge Contul",
@@ -151,6 +158,7 @@ const translations = {
     security: "الأمان",
     referral: "Referral Program",
     team: "فريقي",
+    trash: "سلة المهملات",
     goToHome: "الذهاب إلى الرئيسية",
     logout: "تسجيل الخروج",
     deleteAccount: "حذف الحساب",
@@ -372,6 +380,15 @@ export default function DashboardPage() {
             style={{ minHeight: '52px', backgroundColor: '#3da896', color: '#01312d' }}
           >
             {(translations[locale] || translations.el).team}
+          </button>
+
+          {/* Trash Button - separate section */}
+          <button
+            onClick={() => router.push(`/${locale}/dashboard/trash`)}
+            className="btn-universal w-full text-button flex items-center justify-center text-center"
+            style={{ minHeight: '52px', backgroundColor: 'transparent', border: '2px solid var(--polar)', color: 'var(--polar)' }}
+          >
+            {(translations[locale] || translations.el).trash}
           </button>
 
           {/* Support Section */}

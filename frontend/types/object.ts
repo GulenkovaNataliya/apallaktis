@@ -17,6 +17,7 @@ export interface PropertyObject {
   color?: string; // Computed based on index
   createdAt: Date;
   updatedAt: Date;
+  version?: number; // For optimistic locking
 }
 
 export interface CreateObjectInput {
