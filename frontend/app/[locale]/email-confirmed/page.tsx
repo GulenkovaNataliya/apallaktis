@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { type Locale } from "@/lib/messages";
 import BackgroundPage from "@/components/BackgroundPage";
@@ -63,6 +64,15 @@ export default function EmailConfirmedPage() {
   const isRTL = locale === "ar";
 
   const t = translations[locale] || translations.el;
+
+  // Auto-redirect to login after 3 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push(`/${locale}/login`);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [locale, router]);
 
   return (
     <BackgroundPage pageIndex={5}>

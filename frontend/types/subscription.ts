@@ -103,12 +103,12 @@ export const SUBSCRIPTION_PLANS: Record<SubscriptionPlanKey, PlanDetails> = {
     price: '0€',
     priceMonthly: 0,
     features: [
-      'До 3 проектов',
+      'Безлимит объектов',
       'OCR сканирование',
       'Голосовой ввод',
       '48 часов',
     ],
-    maxProjects: 3,
+    maxProjects: null,
     maxTeamMembers: 1,
   },
 

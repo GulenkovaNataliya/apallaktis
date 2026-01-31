@@ -102,13 +102,17 @@ export default function AdminPage() {
         return;
       }
 
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .single();
+      // Check admin role via RPC (bypasses RLS)
+      const { data: isAdmin, error: rpcError } = await supabase.rpc("is_admin");
 
-      if (!profile || profile.role !== "admin") {
+      if (rpcError) {
+        console.error("RPC is_admin error:", rpcError);
+        sessionStorage.removeItem("adminLoggedIn");
+        router.push("/admin/login");
+        return;
+      }
+
+      if (isAdmin !== true) {
         sessionStorage.removeItem("adminLoggedIn");
         router.push("/admin/login");
         return;

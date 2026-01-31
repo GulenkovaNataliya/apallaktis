@@ -22,7 +22,6 @@
     "react-dom": "19.2.1",
     "resend": "^6.6.0",
     "stripe": "^20.1.0",
-    "twilio": "^5.11.2",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

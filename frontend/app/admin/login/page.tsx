@@ -46,14 +46,18 @@ export default function AdminLoginPage() {
       return;
     }
 
-    // Check role in profiles
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", data.user.id)
-      .single();
+    // Check admin role via RPC (bypasses RLS)
+    const { data: isAdmin, error: rpcError } = await supabase.rpc("is_admin");
 
-    if (!profile || profile.role !== "admin") {
+    if (rpcError) {
+      console.error("RPC is_admin error:", rpcError);
+      setError("Ошибка проверки прав: " + rpcError.message);
+      await supabase.auth.signOut();
+      setIsLoading(false);
+      return;
+    }
+
+    if (isAdmin !== true) {
       setError("Доступ запрещён");
       await supabase.auth.signOut();
       setIsLoading(false);
