@@ -691,9 +691,32 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
       return;
     }
 
-    // TODO: Отправить email пользователю о неудачной оплате
+    // Get user profile for email and locale
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('email, account_number, preferred_language')
+      .eq('id', userId)
+      .single();
+
+    if (profile?.email) {
+      // Send payment failed email
+      const { sendPaymentFailedEmail } = await import('@/lib/email/notifications');
+      const amount = (invoice.amount_due || 0) / 100; // Convert from cents
+
+      await sendPaymentFailedEmail(
+        profile.email,
+        profile.account_number || 0,
+        amount,
+        profile.preferred_language || 'el'
+      );
+
+      console.log(`✅ WEBHOOK: Email об ошибке оплаты отправлен на ${profile.email}`);
+    } else {
+      console.log(`⚠️ WEBHOOK: Email не найден для пользователя ${userId}`);
+    }
+
     console.log(`⚠️ WEBHOOK: Платеж не прошел для пользователя ${userId}`);
-    console.log('   Необходимо обновить платежный метод');
+    console.log('   Пользователю отправлено уведомление');
 
   } catch (error) {
     console.error('❌ WEBHOOK: Ошибка при обработке failed invoice:', error);

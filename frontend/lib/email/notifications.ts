@@ -422,7 +422,163 @@ function generateSubscriptionExpiredHTML(accountNumber: number, locale: string):
 }
 
 function generatePaymentFailedHTML(accountNumber: number, amount: number, locale: string): string {
-  return `<html><body><h1>Payment Failed</h1><p>Account #${accountNumber}, Amount: €${amount}</p></body></html>`;
+  const texts = {
+    el: {
+      title: 'Η πληρωμή σας απορρίφθηκε',
+      greeting: 'Αγαπητέ πελάτη,',
+      message: `Η πληρωμή για το λογαριασμό σας <strong>#${accountNumber}</strong> απορρίφθηκε.`,
+      amount: `Ποσό: <strong>${amount.toFixed(2)}€</strong>`,
+      reason: 'Αυτό μπορεί να οφείλεται σε:',
+      reason1: 'Ανεπαρκές υπόλοιπο',
+      reason2: 'Ληγμένη κάρτα',
+      reason3: 'Απόρριψη από την τράπεζα',
+      action: 'Για να διατηρήσετε την πρόσβασή σας, ενημερώστε τη μέθοδο πληρωμής σας.',
+      retry: 'Θα προσπαθήσουμε ξανά αυτόματα σε 3-5 ημέρες.',
+      button: 'Ενημέρωση Μεθόδου Πληρωμής',
+    },
+    ru: {
+      title: 'Ваш платёж отклонён',
+      greeting: 'Уважаемый клиент,',
+      message: `Платёж для аккаунта <strong>#${accountNumber}</strong> был отклонён.`,
+      amount: `Сумма: <strong>${amount.toFixed(2)}€</strong>`,
+      reason: 'Возможные причины:',
+      reason1: 'Недостаточно средств',
+      reason2: 'Срок действия карты истёк',
+      reason3: 'Отказ банка',
+      action: 'Чтобы сохранить доступ, обновите способ оплаты.',
+      retry: 'Мы автоматически повторим попытку через 3-5 дней.',
+      button: 'Обновить способ оплаты',
+    },
+    en: {
+      title: 'Your payment was declined',
+      greeting: 'Dear customer,',
+      message: `The payment for account <strong>#${accountNumber}</strong> was declined.`,
+      amount: `Amount: <strong>€${amount.toFixed(2)}</strong>`,
+      reason: 'This may be due to:',
+      reason1: 'Insufficient funds',
+      reason2: 'Expired card',
+      reason3: 'Bank rejection',
+      action: 'To maintain your access, please update your payment method.',
+      retry: 'We will automatically retry in 3-5 days.',
+      button: 'Update Payment Method',
+    },
+    uk: {
+      title: 'Ваш платіж відхилено',
+      greeting: 'Шановний клієнте,',
+      message: `Платіж для акаунту <strong>#${accountNumber}</strong> було відхилено.`,
+      amount: `Сума: <strong>${amount.toFixed(2)}€</strong>`,
+      reason: 'Можливі причини:',
+      reason1: 'Недостатньо коштів',
+      reason2: 'Термін дії картки закінчився',
+      reason3: 'Відмова банку',
+      action: 'Щоб зберегти доступ, оновіть спосіб оплати.',
+      retry: 'Ми автоматично повторимо спробу через 3-5 днів.',
+      button: 'Оновити спосіб оплати',
+    },
+    sq: {
+      title: 'Pagesa juaj u refuzua',
+      greeting: 'I dashur klient,',
+      message: `Pagesa për llogarinë <strong>#${accountNumber}</strong> u refuzua.`,
+      amount: `Shuma: <strong>${amount.toFixed(2)}€</strong>`,
+      reason: 'Kjo mund të jetë për shkak të:',
+      reason1: 'Fondet e pamjaftueshme',
+      reason2: 'Karta e skaduar',
+      reason3: 'Refuzimi nga banka',
+      action: 'Për të ruajtur aksesin tuaj, përditësoni metodën e pagesës.',
+      retry: 'Ne do të provojmë automatikisht përsëri në 3-5 ditë.',
+      button: 'Përditëso Metodën e Pagesës',
+    },
+    bg: {
+      title: 'Вашето плащане беше отказано',
+      greeting: 'Уважаеми клиенте,',
+      message: `Плащането за акаунт <strong>#${accountNumber}</strong> беше отказано.`,
+      amount: `Сума: <strong>${amount.toFixed(2)}€</strong>`,
+      reason: 'Това може да се дължи на:',
+      reason1: 'Недостатъчни средства',
+      reason2: 'Изтекла карта',
+      reason3: 'Отказ от банката',
+      action: 'За да запазите достъпа си, актуализирайте метода на плащане.',
+      retry: 'Ще опитаме отново автоматично след 3-5 дни.',
+      button: 'Актуализирай Метода на Плащане',
+    },
+    ro: {
+      title: 'Plata dvs. a fost refuzată',
+      greeting: 'Stimate client,',
+      message: `Plata pentru contul <strong>#${accountNumber}</strong> a fost refuzată.`,
+      amount: `Sumă: <strong>${amount.toFixed(2)}€</strong>`,
+      reason: 'Aceasta poate fi din cauza:',
+      reason1: 'Fonduri insuficiente',
+      reason2: 'Card expirat',
+      reason3: 'Refuz de la bancă',
+      action: 'Pentru a vă menține accesul, actualizați metoda de plată.',
+      retry: 'Vom reîncerca automat în 3-5 zile.',
+      button: 'Actualizează Metoda de Plată',
+    },
+    ar: {
+      title: 'تم رفض دفعتك',
+      greeting: 'عزيزي العميل،',
+      message: `تم رفض الدفع للحساب <strong>#${accountNumber}</strong>.`,
+      amount: `المبلغ: <strong>${amount.toFixed(2)}€</strong>`,
+      reason: 'قد يكون هذا بسبب:',
+      reason1: 'رصيد غير كافٍ',
+      reason2: 'بطاقة منتهية الصلاحية',
+      reason3: 'رفض من البنك',
+      action: 'للحفاظ على وصولك، يرجى تحديث طريقة الدفع.',
+      retry: 'سنعاود المحاولة تلقائياً خلال 3-5 أيام.',
+      button: 'تحديث طريقة الدفع',
+    },
+  };
+
+  const t = texts[locale as keyof typeof texts] || texts.el;
+
+  return `
+<!DOCTYPE html>
+<html lang="${locale}" dir="${locale === 'ar' ? 'rtl' : 'ltr'}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+    <tr>
+      <td style="background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); padding: 40px 20px; text-align: center;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 28px;">❌ ${t.title}</h1>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 40px 30px;">
+        <p style="font-size: 18px; color: #333; margin-bottom: 10px;">${t.greeting}</p>
+        <p style="font-size: 16px; color: #333; margin-bottom: 15px;">${t.message}</p>
+        <p style="font-size: 16px; color: #333; margin-bottom: 20px;">${t.amount}</p>
+
+        <div style="background-color: #fef2f2; border-left: 4px solid #dc2626; padding: 15px; margin: 20px 0;">
+          <p style="margin: 0 0 10px 0; color: #991b1b; font-weight: bold;">${t.reason}</p>
+          <ul style="margin: 0; padding-left: 20px; color: #333;">
+            <li>${t.reason1}</li>
+            <li>${t.reason2}</li>
+            <li>${t.reason3}</li>
+          </ul>
+        </div>
+
+        <p style="font-size: 16px; color: #333; margin: 20px 0;">${t.action}</p>
+        <p style="font-size: 14px; color: #666; margin: 10px 0;">${t.retry}</p>
+
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="https://apallaktis.com/${locale}/dashboard/subscription" style="display: inline-block; background-color: #dc2626; color: #ffffff; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+            ${t.button}
+          </a>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+        <p style="font-size: 12px; color: #999; margin: 0;">© 2026 ΑΠΑΛΛΑΚΤΗΣ</p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
 }
 
 function generateVIPActivatedHTML(accountNumber: number, expiresAt: Date | null, reason: string | undefined, locale: string): string {

@@ -262,9 +262,34 @@ export default function DashboardPage() {
       const { data: { user: authUser } } = await supabase.auth.getUser();
 
       if (authUser) {
-        // Delete user profile first
+        // 1. Delete Stripe customer (subscription + customer)
+        try {
+          const stripeResponse = await fetch('/api/stripe/delete-customer', {
+            method: 'POST',
+          });
+          if (!stripeResponse.ok) {
+            console.error('Failed to delete Stripe customer');
+          }
+        } catch (stripeError) {
+          console.error('Stripe deletion error:', stripeError);
+        }
+
+        // 2. Delete user profile (CASCADE deletes all related data)
         await supabase.from('profiles').delete().eq('id', authUser.id);
-        // Sign out
+
+        // 3. Delete from auth.users
+        try {
+          const authResponse = await fetch('/api/auth/delete-user', {
+            method: 'POST',
+          });
+          if (!authResponse.ok) {
+            console.error('Failed to delete auth user');
+          }
+        } catch (authError) {
+          console.error('Auth deletion error:', authError);
+        }
+
+        // 4. Sign out (cleanup local session)
         await supabase.auth.signOut();
       }
 
