@@ -414,11 +414,329 @@ function generateDemoExpiredHTML(accountNumber: number, locale: string): string 
 }
 
 function generateSubscriptionExpiringHTML(accountNumber: number, plan: string, expiresAt: Date, locale: string): string {
-  return `<html><body><h1>Subscription Expiring</h1><p>Account #${accountNumber}, Plan: ${plan}, Expires: ${expiresAt.toLocaleDateString()}</p></body></html>`;
+  const texts: Record<string, {
+    title: string;
+    message: string;
+    daysLeft: string;
+    benefits: string[];
+    buttonText: string;
+    footer: string;
+  }> = {
+    en: {
+      title: 'Subscription Expiring Soon',
+      message: 'Your subscription will expire soon. Renew now to keep access to all features.',
+      daysLeft: 'Expiring soon',
+      benefits: [
+        'Unlimited access to all features',
+        'Priority support',
+        'Cloud sync across devices',
+        'No ads'
+      ],
+      buttonText: 'Renew Subscription',
+      footer: 'If you have any questions, contact our support team.'
+    },
+    ru: {
+      title: 'Подписка скоро истекает',
+      message: 'Ваша подписка скоро истечёт. Продлите сейчас, чтобы сохранить доступ ко всем функциям.',
+      daysLeft: 'Скоро истекает',
+      benefits: [
+        'Неограниченный доступ ко всем функциям',
+        'Приоритетная поддержка',
+        'Синхронизация между устройствами',
+        'Без рекламы'
+      ],
+      buttonText: 'Продлить подписку',
+      footer: 'Если у вас есть вопросы, свяжитесь с нашей службой поддержки.'
+    },
+    el: {
+      title: 'Η συνδρομή λήγει σύντομα',
+      message: 'Η συνδρομή σας θα λήξει σύντομα. Ανανεώστε τώρα για να διατηρήσετε πρόσβαση.',
+      daysLeft: 'Λήγει σύντομα',
+      benefits: [
+        'Απεριόριστη πρόσβαση σε όλες τις λειτουργίες',
+        'Προτεραιότητα υποστήριξης',
+        'Συγχρονισμός μεταξύ συσκευών',
+        'Χωρίς διαφημίσεις'
+      ],
+      buttonText: 'Ανανέωση συνδρομής',
+      footer: 'Για ερωτήσεις, επικοινωνήστε με την υποστήριξη.'
+    },
+    uk: {
+      title: 'Підписка скоро закінчується',
+      message: 'Ваша підписка скоро закінчиться. Поновіть зараз, щоб зберегти доступ.',
+      daysLeft: 'Скоро закінчується',
+      benefits: [
+        'Необмежений доступ до всіх функцій',
+        'Пріоритетна підтримка',
+        'Синхронізація між пристроями',
+        'Без реклами'
+      ],
+      buttonText: 'Поновити підписку',
+      footer: 'Якщо у вас є питання, зверніться до служби підтримки.'
+    },
+    sq: {
+      title: 'Abonimi skadon së shpejti',
+      message: 'Abonimi juaj do të skadojë së shpejti. Rinovoni tani për të ruajtur aksesin.',
+      daysLeft: 'Skadon së shpejti',
+      benefits: [
+        'Akses i pakufizuar në të gjitha veçoritë',
+        'Mbështetje me prioritet',
+        'Sinkronizim mes pajisjeve',
+        'Pa reklama'
+      ],
+      buttonText: 'Rinovoni abonimin',
+      footer: 'Për pyetje, kontaktoni ekipin tonë të mbështetjes.'
+    },
+    bg: {
+      title: 'Абонаментът изтича скоро',
+      message: 'Вашият абонамент ще изтече скоро. Подновете сега, за да запазите достъпа.',
+      daysLeft: 'Изтича скоро',
+      benefits: [
+        'Неограничен достъп до всички функции',
+        'Приоритетна поддръжка',
+        'Синхронизация между устройства',
+        'Без реклами'
+      ],
+      buttonText: 'Подновете абонамента',
+      footer: 'Ако имате въпроси, свържете се с екипа за поддръжка.'
+    },
+    ro: {
+      title: 'Abonamentul expiră curând',
+      message: 'Abonamentul dvs. va expira curând. Reînnoiți acum pentru a păstra accesul.',
+      daysLeft: 'Expiră curând',
+      benefits: [
+        'Acces nelimitat la toate funcțiile',
+        'Suport prioritar',
+        'Sincronizare între dispozitive',
+        'Fără reclame'
+      ],
+      buttonText: 'Reînnoiți abonamentul',
+      footer: 'Dacă aveți întrebări, contactați echipa de suport.'
+    },
+    ar: {
+      title: 'الاشتراك ينتهي قريباً',
+      message: 'اشتراكك سينتهي قريباً. جدد الآن للحفاظ على الوصول.',
+      daysLeft: 'ينتهي قريباً',
+      benefits: [
+        'وصول غير محدود لجميع الميزات',
+        'دعم ذو أولوية',
+        'مزامنة عبر الأجهزة',
+        'بدون إعلانات'
+      ],
+      buttonText: 'تجديد الاشتراك',
+      footer: 'إذا كان لديك أي أسئلة، اتصل بفريق الدعم.'
+    }
+  };
+
+  const t = texts[locale] || texts['el'];
+  const benefitsList = t.benefits.map(b => `<li style="margin-bottom: 8px; color: #374151;">✓ ${b}</li>`).join('');
+  const formattedDate = expiresAt.toLocaleDateString(locale === 'el' ? 'el-GR' : locale === 'ru' ? 'ru-RU' : 'en-US');
+
+  return `
+<!DOCTYPE html>
+<html lang="${locale}" dir="${locale === 'ar' ? 'rtl' : 'ltr'}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <tr>
+            <td style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 40px 30px; text-align: center;">
+              <div style="font-size: 48px; margin-bottom: 16px;">⏰</div>
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">${t.title}</h1>
+              <div style="background: rgba(255,255,255,0.2); display: inline-block; padding: 8px 20px; border-radius: 20px; margin-top: 16px;">
+                <span style="color: #ffffff; font-weight: 600;">${plan.toUpperCase()} - ${formattedDate}</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 40px 30px;">
+              <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
+                ${t.message}
+              </p>
+              <div style="background-color: #fffbeb; border-left: 4px solid #f59e0b; padding: 20px; margin-bottom: 32px; border-radius: 0 8px 8px 0;">
+                <ul style="margin: 0; padding-left: 20px; font-size: 14px; list-style: none;">
+                  ${benefitsList}
+                </ul>
+              </div>
+              <div style="text-align: center; margin-bottom: 32px;">
+                <a href="https://apallaktis.com/${locale}/dashboard/subscription"
+                   style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 8px; font-weight: 600; font-size: 16px;">
+                  ${t.buttonText}
+                </a>
+              </div>
+              <p style="color: #6b7280; font-size: 14px; text-align: center; margin: 0;">${t.footer}</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color: #f9fafb; padding: 20px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
+              <p style="color: #9ca3af; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} ΑΠΑΛΛΑΚΤΗΣ</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
 }
 
 function generateSubscriptionExpiredHTML(accountNumber: number, locale: string): string {
-  return `<html><body><h1>Subscription Expired</h1><p>Account #${accountNumber}</p></body></html>`;
+  const texts: Record<string, {
+    title: string;
+    message: string;
+    whatHappens: string[];
+    buttonText: string;
+    footer: string;
+  }> = {
+    en: {
+      title: 'Subscription Expired',
+      message: 'Your subscription has expired. Renew now to restore access to all premium features.',
+      whatHappens: [
+        'Limited access to basic features only',
+        'Cloud sync disabled',
+        'Your data is safe and waiting for you'
+      ],
+      buttonText: 'Renew Now',
+      footer: 'We miss you! Renew anytime to restore full access.'
+    },
+    ru: {
+      title: 'Подписка истекла',
+      message: 'Ваша подписка истекла. Продлите сейчас, чтобы восстановить доступ ко всем функциям.',
+      whatHappens: [
+        'Ограниченный доступ только к базовым функциям',
+        'Синхронизация отключена',
+        'Ваши данные в безопасности и ждут вас'
+      ],
+      buttonText: 'Продлить сейчас',
+      footer: 'Мы скучаем! Продлите в любое время для восстановления доступа.'
+    },
+    el: {
+      title: 'Η συνδρομή έληξε',
+      message: 'Η συνδρομή σας έληξε. Ανανεώστε τώρα για να επαναφέρετε την πρόσβαση.',
+      whatHappens: [
+        'Περιορισμένη πρόσβαση μόνο σε βασικές λειτουργίες',
+        'Ο συγχρονισμός απενεργοποιήθηκε',
+        'Τα δεδομένα σας είναι ασφαλή'
+      ],
+      buttonText: 'Ανανέωση τώρα',
+      footer: 'Μας λείπετε! Ανανεώστε οποτεδήποτε.'
+    },
+    uk: {
+      title: 'Підписка закінчилася',
+      message: 'Ваша підписка закінчилася. Поновіть зараз, щоб відновити доступ.',
+      whatHappens: [
+        'Обмежений доступ лише до базових функцій',
+        'Синхронізацію вимкнено',
+        'Ваші дані в безпеці та чекають на вас'
+      ],
+      buttonText: 'Поновити зараз',
+      footer: 'Ми сумуємо! Поновіть у будь-який час.'
+    },
+    sq: {
+      title: 'Abonimi skadoi',
+      message: 'Abonimi juaj ka skaduar. Rinovoni tani për të rikthyer aksesin.',
+      whatHappens: [
+        'Akses i kufizuar vetëm në veçori bazë',
+        'Sinkronizimi i çaktivizuar',
+        'Të dhënat tuaja janë të sigurta'
+      ],
+      buttonText: 'Rinovoni tani',
+      footer: 'Na mungoni! Rinovoni në çdo kohë.'
+    },
+    bg: {
+      title: 'Абонаментът изтече',
+      message: 'Вашият абонамент изтече. Подновете сега, за да възстановите достъпа.',
+      whatHappens: [
+        'Ограничен достъп само до основни функции',
+        'Синхронизацията е деактивирана',
+        'Вашите данни са в безопасност'
+      ],
+      buttonText: 'Подновете сега',
+      footer: 'Липсвате ни! Подновете по всяко време.'
+    },
+    ro: {
+      title: 'Abonamentul a expirat',
+      message: 'Abonamentul dvs. a expirat. Reînnoiți acum pentru a restabili accesul.',
+      whatHappens: [
+        'Acces limitat doar la funcțiile de bază',
+        'Sincronizarea dezactivată',
+        'Datele dvs. sunt în siguranță'
+      ],
+      buttonText: 'Reînnoiți acum',
+      footer: 'Ne este dor de tine! Reînnoiți oricând.'
+    },
+    ar: {
+      title: 'انتهى الاشتراك',
+      message: 'انتهى اشتراكك. جدد الآن لاستعادة الوصول.',
+      whatHappens: [
+        'وصول محدود للميزات الأساسية فقط',
+        'المزامنة معطلة',
+        'بياناتك آمنة وتنتظرك'
+      ],
+      buttonText: 'جدد الآن',
+      footer: 'نفتقدك! جدد في أي وقت.'
+    }
+  };
+
+  const t = texts[locale] || texts['el'];
+  const whatHappensList = t.whatHappens.map(w => `<li style="margin-bottom: 8px; color: #7f1d1d;">${w}</li>`).join('');
+
+  return `
+<!DOCTYPE html>
+<html lang="${locale}" dir="${locale === 'ar' ? 'rtl' : 'ltr'}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <tr>
+            <td style="background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); padding: 40px 30px; text-align: center;">
+              <div style="font-size: 48px; margin-bottom: 16px;">😢</div>
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">${t.title}</h1>
+              <p style="color: rgba(255,255,255,0.8); margin-top: 10px;">Account #${accountNumber}</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 40px 30px;">
+              <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
+                ${t.message}
+              </p>
+              <div style="background-color: #f3f4f6; border-left: 4px solid #6b7280; padding: 20px; margin-bottom: 32px; border-radius: 0 8px 8px 0;">
+                <ul style="margin: 0; padding-left: 20px; font-size: 14px;">
+                  ${whatHappensList}
+                </ul>
+              </div>
+              <div style="text-align: center; margin-bottom: 32px;">
+                <a href="https://apallaktis.com/${locale}/dashboard/subscription"
+                   style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 8px; font-weight: 600; font-size: 16px;">
+                  ${t.buttonText}
+                </a>
+              </div>
+              <p style="color: #6b7280; font-size: 14px; text-align: center; margin: 0;">${t.footer}</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color: #f9fafb; padding: 20px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
+              <p style="color: #9ca3af; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} ΑΠΑΛΛΑΚΤΗΣ</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
 }
 
 function generatePaymentFailedHTML(accountNumber: number, amount: number, locale: string): string {
