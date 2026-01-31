@@ -735,29 +735,40 @@ export default function HelpPage() {
           className="text-center"
           style={{ color: 'var(--polar)', fontWeight: 500, fontSize: '16px' }}
         >
-          Мобильное приложение, которое освобождает мастера от рутины учёта финансов.
+          Мобильное приложение,<br />
+          которое освобождает мастера<br />
+          от рутины учёта финансов
         </p>
 
-        <p
-          className="text-center text-slogan"
-          style={{ color: 'var(--orange)' }}
-        >
-          ΑΠΑΛΛΑΚΤΗΣ — «освободитель»
-        </p>
+        <div className="flex flex-col items-center gap-2">
+          <p
+            className="text-center text-slogan"
+            style={{ color: 'var(--orange)' }}
+          >
+            ΑΠΑΛΛΑΚΤΗΣ
+          </p>
+          <p
+            className="text-center"
+            style={{ color: 'white', fontSize: '14px' }}
+          >
+            переводится как освободитель
+          </p>
+        </div>
 
-        <p
-          className="text-center text-slogan"
-          style={{ color: 'var(--orange)' }}
-        >
-          "Τέλος στη ρουτίνα!"
-        </p>
-
-        <p
-          className="text-center text-slogan"
-          style={{ color: 'var(--orange)' }}
-        >
-          — "Конец рутине!"
-        </p>
+        <div className="flex flex-col items-center gap-2">
+          <p
+            className="text-center text-slogan"
+            style={{ color: 'var(--orange)' }}
+          >
+            "Τέλος στη ρουτίνα!"
+          </p>
+          <p
+            className="text-center"
+            style={{ color: 'white', fontSize: '14px' }}
+          >
+            переводится как конец рутине
+          </p>
+        </div>
       </div>
 
       {/* Disclaimer - white text, no orange background */}
