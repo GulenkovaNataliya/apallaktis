@@ -257,45 +257,36 @@ export default function DashboardPage() {
   };
 
   const handleDeleteAccount = async () => {
+    const supabase = createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+
+    if (!authUser) {
+      console.error('No user found');
+      return;
+    }
+
     try {
-      const supabase = createClient();
-      const { data: { user: authUser } } = await supabase.auth.getUser();
+      // 1. Delete Stripe customer first (subscription + customer)
+      const stripeRes = await fetch('/api/stripe/delete-customer', { method: 'POST' });
+      console.log('Stripe delete:', stripeRes.status, await stripeRes.text());
 
-      if (authUser) {
-        // 1. Delete Stripe customer (subscription + customer)
-        try {
-          const stripeResponse = await fetch('/api/stripe/delete-customer', {
-            method: 'POST',
-          });
-          if (!stripeResponse.ok) {
-            console.error('Failed to delete Stripe customer');
-          }
-        } catch (stripeError) {
-          console.error('Stripe deletion error:', stripeError);
-        }
+      // 2. Delete from auth.users BEFORE deleting profile
+      const authRes = await fetch('/api/auth/delete-user', { method: 'POST' });
+      console.log('Auth delete:', authRes.status, await authRes.text());
 
-        // 2. Delete user profile (CASCADE deletes all related data)
-        await supabase.from('profiles').delete().eq('id', authUser.id);
+      // 3. Delete profile (cleanup - CASCADE deletes all related data)
+      const { error: profileError } = await supabase.from('profiles').delete().eq('id', authUser.id);
+      console.log('Profile delete:', profileError || 'success');
 
-        // 3. Delete from auth.users
-        try {
-          const authResponse = await fetch('/api/auth/delete-user', {
-            method: 'POST',
-          });
-          if (!authResponse.ok) {
-            console.error('Failed to delete auth user');
-          }
-        } catch (authError) {
-          console.error('Auth deletion error:', authError);
-        }
+      // 4. Sign out (cleanup local session)
+      await supabase.auth.signOut();
 
-        // 4. Sign out (cleanup local session)
-        await supabase.auth.signOut();
-      }
-
+      // 5. Redirect to home
       router.push(`/${locale}`);
+
     } catch (error) {
-      console.error('Error deleting account:', error);
+      console.error('Delete account error:', error);
+      alert('Failed to delete account. Check console for details.');
     }
   };
 
