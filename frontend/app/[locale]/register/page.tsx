@@ -25,10 +25,10 @@ const isValidEmail = (email: string): boolean => {
   return emailRegex.test(email);
 };
 
-// Phone validation function (basic - checks if it has digits)
+// Phone validation function (exactly 10 digits without country code)
 const isValidPhone = (phone: string): boolean => {
-  const phoneRegex = /^\d{6,15}$/;
-  return phoneRegex.test(phone.replace(/[\s\-\(\)]/g, ""));
+  const digitsOnly = phone.replace(/\D/g, "");
+  return digitsOnly.length === 10;
 };
 
 // AFM validation function (must be exactly 9 digits)
@@ -492,8 +492,10 @@ export default function RegisterPage() {
                   type="tel"
                   placeholder={t.phone}
                   value={formData.phone}
+                  maxLength={10}
                   onChange={(e) => {
-                    setFormData({ ...formData, phone: e.target.value });
+                    const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, 10);
+                    setFormData({ ...formData, phone: digitsOnly });
                     setErrors({ ...errors, phone: "" });
                   }}
                   required
