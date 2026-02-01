@@ -899,6 +899,7 @@ export default function GlobalExpensesPage() {
           <ExpenseForm
             expense={editingExpense}
             categories={categories}
+            setCategories={setCategories}
             paymentMethods={paymentMethods}
             userId={user?.id || ''}
             onSave={(expense) => {
@@ -1077,6 +1078,7 @@ function CategoryForm({
 function ExpenseForm({
   expense,
   categories,
+  setCategories,
   paymentMethods,
   userId,
   onSave,
@@ -1089,6 +1091,7 @@ function ExpenseForm({
 }: {
   expense: GlobalExpense | null;
   categories: ExpenseCategory[];
+  setCategories: (categories: ExpenseCategory[]) => void;
   paymentMethods: PaymentMethod[];
   userId: string;
   onSave: (expense: GlobalExpense) => void;
@@ -1100,7 +1103,10 @@ function ExpenseForm({
   onUpgradePhoto: () => void;
 }) {
   const t = messages[locale]?.globalExpenses || messages.el.globalExpenses;
+  const tFinance = messages[locale]?.finance || messages.el.finance;
   const tPayments = messages[locale]?.paymentMethods || messages.el.paymentMethods;
+  const [showNewCategory, setShowNewCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
   const [formData, setFormData] = useState({
     categoryId: expense?.categoryId || (categories[0]?.id || ''),
     paymentMethodId: expense?.paymentMethodId || (paymentMethods[0]?.id || ''),
@@ -1116,6 +1122,26 @@ function ExpenseForm({
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analyzeError, setAnalyzeError] = useState<string | null>(null);
   const [inputMethod, setInputMethod] = useState<'manual' | 'voice' | 'photo'>(expense?.inputMethod || 'manual');
+
+  // Создание новой категории
+  const handleCreateCategory = async () => {
+    if (!newCategoryName.trim() || !userId) return;
+
+    try {
+      const created = await createExpenseCategory(userId, { name: newCategoryName.trim() });
+      const newCategory = toLocalCategory(created);
+
+      const updatedCategories = [...categories, newCategory];
+      setCategories(updatedCategories);
+
+      setFormData({ ...formData, categoryId: newCategory.id });
+      setNewCategoryName('');
+      setShowNewCategory(false);
+    } catch (error) {
+      console.error('Error creating category:', error);
+      alert('Failed to create category');
+    }
+  };
 
   // Анализ чека с помощью AI
   const analyzeReceipt = async (imageBase64: string) => {
@@ -1700,16 +1726,64 @@ function ExpenseForm({
         <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
           {t.category}
         </label>
-        <select
-          value={formData.categoryId}
-          onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-          className="w-full rounded-2xl"
-          style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px', fontWeight: 600 }}
-        >
-          {categories.map(cat => (
-            <option key={cat.id} value={cat.id} style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>{cat.name}</option>
-          ))}
-        </select>
+        {!showNewCategory ? (
+          <>
+            <div className="flex gap-2">
+              <select
+                value={formData.categoryId}
+                onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                className="flex-1 rounded-2xl"
+                style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px', fontSize: '18px', fontWeight: 600 }}
+              >
+                {categories.map(cat => (
+                  <option key={cat.id} value={cat.id} style={{ color: 'var(--deep-teal)', backgroundColor: 'white' }}>{cat.name}</option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={() => setShowNewCategory(true)}
+                className="rounded-2xl px-6 text-button font-bold"
+                style={{ backgroundColor: 'var(--orange)', color: 'white', minHeight: '52px', fontSize: '24px', boxShadow: '0 4px 8px rgba(255, 106, 26, 0.3)' }}
+              >
+                +
+              </button>
+            </div>
+            {/* Orange hint phrase */}
+            <p className="text-center text-button mt-3" style={{ color: 'var(--orange)', fontSize: '14px' }}>
+              {tFinance.clickPlusToCreateCategory}
+            </p>
+          </>
+        ) : (
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={newCategoryName}
+              onChange={(e) => setNewCategoryName(e.target.value)}
+              placeholder={t.name}
+              className="flex-1 rounded-2xl text-body"
+              style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px', padding: '12px' }}
+            />
+            <button
+              type="button"
+              onClick={handleCreateCategory}
+              className="rounded-lg px-4 text-button"
+              style={{ backgroundColor: 'var(--zanah)', color: 'var(--deep-teal)', minHeight: '52px' }}
+            >
+              ✓
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setShowNewCategory(false);
+                setNewCategoryName('');
+              }}
+              className="rounded-lg px-4 text-button"
+              style={{ border: '2px solid var(--polar)', color: 'var(--polar)', backgroundColor: 'transparent', minHeight: '52px' }}
+            >
+              ✕
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Payment Method Selection */}
