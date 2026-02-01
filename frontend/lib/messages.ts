@@ -248,6 +248,7 @@ export const messages = {
       cancel: "Ακύρωση",
       save: "Αποθήκευση",
       backToDashboard: "← Πίσω",
+      phoneError: "Ο αριθμός τηλεφώνου πρέπει να είναι ακριβώς 10 ψηφία",
     },
     finance: {
       title: "Οικονομικά",
@@ -659,6 +660,7 @@ export const messages = {
       cancel: "Отмена",
       save: "Сохранить",
       backToDashboard: "← Назад",
+      phoneError: "Номер телефона должен содержать ровно 10 цифр",
     },
     finance: {
       title: "Финансы",
@@ -1070,6 +1072,7 @@ export const messages = {
       cancel: "Скасувати",
       save: "Зберегти",
       backToDashboard: "← Назад",
+      phoneError: "Номер телефону має містити рівно 10 цифр",
     },
     finance: {
       title: "Фінанси",
@@ -1481,6 +1484,7 @@ export const messages = {
       cancel: "Anulo",
       save: "Ruaj",
       backToDashboard: "← Mbrapa",
+      phoneError: "Numri i telefonit duhet të ketë saktësisht 10 shifra",
     },
     finance: {
       title: "Financat",
@@ -1892,6 +1896,7 @@ export const messages = {
       cancel: "Отказ",
       save: "Запази",
       backToDashboard: "← Назад",
+      phoneError: "Телефонният номер трябва да съдържа точно 10 цифри",
     },
     finance: {
       title: "Финанси",
@@ -2303,6 +2308,7 @@ export const messages = {
       cancel: "Anulează",
       save: "Salvează",
       backToDashboard: "← Înapoi",
+      phoneError: "Numărul de telefon trebuie să conțină exact 10 cifre",
     },
     finance: {
       title: "Finanțe",
@@ -2714,6 +2720,7 @@ export const messages = {
       cancel: "Cancel",
       save: "Save",
       backToDashboard: "← Back",
+      phoneError: "Phone number must be exactly 10 digits",
     },
     finance: {
       title: "Finance",
@@ -3125,6 +3132,7 @@ export const messages = {
       cancel: "إلغاء",
       save: "حفظ",
       backToDashboard: "عودة ←",
+      phoneError: "يجب أن يتكون رقم الهاتف من 10 أرقام بالضبط",
     },
     finance: {
       title: "المالية",

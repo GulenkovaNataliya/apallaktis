@@ -13,6 +13,7 @@ import type { ExpenseCategory } from '@/types/globalExpense';
 import { formatEuro } from '@/lib/formatters';
 import { useAuth } from '@/lib/auth-context';
 import * as XLSX from 'xlsx';
+import { parseVoiceInput } from '@/lib/voiceParser';
 import {
   getExpenseCategories,
   createExpenseCategory,
@@ -1253,11 +1254,8 @@ function AddWorkForm({
 
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
-    recognitionRef.current = recognition;
-    transcriptRef.current = '';
-    processedResultsRef.current = 0;
 
-    // Карта языков для Web Speech API
+    // Карта языков для Web Speech API (BCP 47 формат)
     const langMap: Record<string, string> = {
       'el': 'el-GR',
       'ru': 'ru-RU',
@@ -1269,16 +1267,27 @@ function AddWorkForm({
       'en': 'en-US'
     };
     const speechLang = langMap[locale] || 'el-GR';
-    recognition.lang = speechLang;
-    // Отладка - показываем в консоли
-    console.log('=== VOICE RECOGNITION ===');
-    console.log('URL locale:', locale);
-    console.log('Speech API lang:', speechLang);
-    console.log('recognition.lang set to:', recognition.lang);
 
+    // КРИТИЧЕСКИ ВАЖНО: Устанавливаем язык СРАЗУ после создания объекта
+    recognition.lang = speechLang;
+
+    // Настройки записи
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
+
+    // Повторно устанавливаем язык после всех настроек
+    recognition.lang = speechLang;
+
+    recognitionRef.current = recognition;
+    transcriptRef.current = '';
+    processedResultsRef.current = 0;
+
+    // Отладка
+    console.log('=== VOICE RECOGNITION (AddWork) ===');
+    console.log('App locale from URL:', locale);
+    console.log('Mapped speech language:', speechLang);
+    console.log('Final recognition.lang:', recognition.lang);
 
     recognition.onstart = () => {
       setIsRecording(true);
@@ -1286,25 +1295,23 @@ function AddWorkForm({
 
     recognition.onresult = (event: any) => {
       // Используем processedResultsRef чтобы не дублировать результаты на мобильных
-      // (resultIndex может сбрасываться при перезапусках recognition)
       const startIndex = Math.max(event.resultIndex, processedResultsRef.current);
       for (let i = startIndex; i < event.results.length; i++) {
         const result = event.results[i];
         if (result.isFinal) {
-          // Добавляем только НОВЫЕ финальные результаты
           transcriptRef.current += result[0].transcript + ' ';
           processedResultsRef.current = i + 1;
         }
       }
 
-      // Собираем текущий interim для отображения (только текущий незавершённый)
+      // Показываем interim текст пока говорим
       let interimTranscript = '';
       const lastResult = event.results[event.results.length - 1];
       if (lastResult && !lastResult.isFinal) {
         interimTranscript = lastResult[0].transcript;
       }
 
-      // Показываем финальный + промежуточный текст
+      // Показываем текст в описании пока запись идёт
       setFormData(prev => ({
         ...prev,
         description: (transcriptRef.current + interimTranscript).trim() || prev.description
@@ -1321,6 +1328,22 @@ function AddWorkForm({
     recognition.onend = () => {
       setIsRecording(false);
       recognitionRef.current = null;
+
+      // Парсим голосовой ввод и распределяем по полям
+      const finalText = transcriptRef.current.trim();
+      if (finalText) {
+        const parsed = parseVoiceInput(finalText, locale);
+        console.log('=== VOICE PARSER (AddWork) ===');
+        console.log('Input:', finalText);
+        console.log('Parsed:', parsed);
+
+        setFormData(prev => ({
+          ...prev,
+          amount: parsed.amount !== null ? parsed.amount : prev.amount,
+          date: parsed.date || prev.date,
+          description: parsed.description || finalText,
+        }));
+      }
     };
 
     recognition.start();
@@ -1498,11 +1521,8 @@ function AddPaymentForm({
 
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
-    recognitionRef.current = recognition;
-    transcriptRef.current = '';
-    processedResultsRef.current = 0;
 
-    // Карта языков для Web Speech API
+    // Карта языков для Web Speech API (BCP 47 формат)
     const langMap: Record<string, string> = {
       'el': 'el-GR',
       'ru': 'ru-RU',
@@ -1514,16 +1534,27 @@ function AddPaymentForm({
       'en': 'en-US'
     };
     const speechLang = langMap[locale] || 'el-GR';
-    recognition.lang = speechLang;
-    // Отладка - показываем в консоли
-    console.log('=== VOICE RECOGNITION ===');
-    console.log('URL locale:', locale);
-    console.log('Speech API lang:', speechLang);
-    console.log('recognition.lang set to:', recognition.lang);
 
+    // КРИТИЧЕСКИ ВАЖНО: Устанавливаем язык СРАЗУ после создания объекта
+    recognition.lang = speechLang;
+
+    // Настройки записи
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
+
+    // Повторно устанавливаем язык после всех настроек
+    recognition.lang = speechLang;
+
+    recognitionRef.current = recognition;
+    transcriptRef.current = '';
+    processedResultsRef.current = 0;
+
+    // Отладка
+    console.log('=== VOICE RECOGNITION (AddPayment) ===');
+    console.log('App locale from URL:', locale);
+    console.log('Mapped speech language:', speechLang);
+    console.log('Final recognition.lang:', recognition.lang);
 
     recognition.onstart = () => {
       setIsRecording(true);
@@ -1531,25 +1562,23 @@ function AddPaymentForm({
 
     recognition.onresult = (event: any) => {
       // Используем processedResultsRef чтобы не дублировать результаты на мобильных
-      // (resultIndex может сбрасываться при перезапусках recognition)
       const startIndex = Math.max(event.resultIndex, processedResultsRef.current);
       for (let i = startIndex; i < event.results.length; i++) {
         const result = event.results[i];
         if (result.isFinal) {
-          // Добавляем только НОВЫЕ финальные результаты
           transcriptRef.current += result[0].transcript + ' ';
           processedResultsRef.current = i + 1;
         }
       }
 
-      // Собираем текущий interim для отображения (только текущий незавершённый)
+      // Показываем interim текст пока говорим
       let interimTranscript = '';
       const lastResult = event.results[event.results.length - 1];
       if (lastResult && !lastResult.isFinal) {
         interimTranscript = lastResult[0].transcript;
       }
 
-      // Показываем финальный + промежуточный текст
+      // Показываем текст в описании пока запись идёт
       setFormData(prev => ({
         ...prev,
         description: (transcriptRef.current + interimTranscript).trim() || prev.description
@@ -1566,6 +1595,22 @@ function AddPaymentForm({
     recognition.onend = () => {
       setIsRecording(false);
       recognitionRef.current = null;
+
+      // Парсим голосовой ввод и распределяем по полям
+      const finalText = transcriptRef.current.trim();
+      if (finalText) {
+        const parsed = parseVoiceInput(finalText, locale);
+        console.log('=== VOICE PARSER (AddPayment) ===');
+        console.log('Input:', finalText);
+        console.log('Parsed:', parsed);
+
+        setFormData(prev => ({
+          ...prev,
+          amount: parsed.amount !== null ? parsed.amount : prev.amount,
+          date: parsed.date || prev.date,
+          description: parsed.description || finalText,
+        }));
+      }
     };
 
     recognition.start();
@@ -1945,125 +1990,104 @@ function AddExpenseForm({
   };
 
   // Анализ голосового текста через AI
-  const analyzeVoiceText = async (transcript: string) => {
+  const analyzeVoiceText = (transcript: string) => {
     setIsAnalyzing(true);
     setAnalyzeError(null);
 
     try {
-      const response = await fetch('/api/analyze-voice', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: transcript, locale }),
-      });
+      // Используем локальный парсер
+      const categoryNames = categories.map(c => c.name);
+      const parsed = parseVoiceInput(transcript, locale, categoryNames);
 
-      const result = await response.json();
+      console.log('=== VOICE PARSER (AddExpense) ===');
+      console.log('Input:', transcript);
+      console.log('Parsed:', parsed);
 
-      if (result.success && result.data) {
-        const data = result.data;
+      // Автозаполнение формы
+      setFormData(prev => ({
+        ...prev,
+        amount: parsed.amount !== null ? parsed.amount : prev.amount,
+        description: parsed.description || transcript,
+        date: parsed.date || prev.date,
+      }));
 
-        // Автозаполнение формы
-        setFormData(prev => ({
-          ...prev,
-          amount: data.amount !== null && data.amount !== undefined ? data.amount : prev.amount,
-          description: data.description || transcript,
-          date: data.date || prev.date,
-        }));
+      // Выбор категории по ключевым словам из транскрипта
+      if (categories.length > 0) {
+        let matchedCategory: ExpenseCategory | undefined;
+        const lowerTranscript = transcript.toLowerCase();
 
-        // Выбор категории
-        if (categories.length > 0) {
-          let matchedCategory: ExpenseCategory | undefined;
-
-          if (data.suggestedCategory) {
-            const keywords = categoryMap[data.suggestedCategory] || [];
+        // Ищем по ключевым словам в categoryMap
+        for (const [categoryType, keywords] of Object.entries(categoryMap)) {
+          if (keywords.some(kw => lowerTranscript.includes(kw.toLowerCase()))) {
+            // Нашли тип категории, теперь ищем категорию пользователя
             matchedCategory = categories.find(cat =>
               keywords.some(kw => cat.name.toLowerCase().includes(kw.toLowerCase()))
             );
-          }
-
-          // Если не нашли, ищем по имени из data.name
-          if (!matchedCategory && data.name) {
-            matchedCategory = categories.find(cat =>
-              cat.name.toLowerCase().includes(data.name.toLowerCase()) ||
-              data.name.toLowerCase().includes(cat.name.toLowerCase())
-            );
-          }
-
-          // Если всё ещё не нашли, берем первую категорию
-          if (!matchedCategory) {
-            matchedCategory = categories[0];
-          }
-
-          if (matchedCategory) {
-            setFormData(prev => ({ ...prev, categoryId: matchedCategory!.id }));
+            if (matchedCategory) break;
           }
         }
 
-        // Выбор способа оплаты
-        if (paymentMethods.length > 0) {
-          let matchedPayment: PaymentMethod | undefined;
+        // Если не нашли по ключевым словам, ищем прямое совпадение с именем категории
+        if (!matchedCategory) {
+          matchedCategory = categories.find(cat =>
+            lowerTranscript.includes(cat.name.toLowerCase())
+          );
+        }
 
-          if (data.paymentMethod) {
-            // Ищем по типу
-            if (data.paymentMethod === 'card') {
+        if (matchedCategory) {
+          setFormData(prev => ({ ...prev, categoryId: matchedCategory!.id }));
+        }
+      }
+
+      // Выбор способа оплаты по ключевым словам
+      if (paymentMethods.length > 0) {
+        const lowerTranscript = transcript.toLowerCase();
+        let matchedPayment: PaymentMethod | undefined;
+
+        const paymentKeywords: Record<string, string[]> = {
+          cash: [
+            'cash', 'μετρητ', 'μετρητά', 'наличн', 'наличные', 'кэш', 'нал',
+            'готівк', 'готівка', 'кеш', 'брой', 'в брой', 'numerar', 'para', 'نقد', 'كاش'
+          ],
+          card: [
+            'card', 'credit', 'debit', 'visa', 'master', 'mastercard',
+            'κάρτ', 'κάρτα', 'πιστωτ', 'χρεωστ',
+            'карт', 'карта', 'картой', 'кредит', 'дебет',
+            'картк', 'кредит', 'дебет',
+            'carte', 'kartë', 'بطاقة', 'كارت', 'ائتمان', 'فيزا', 'ماستر'
+          ],
+          bank: [
+            'bank', 'transfer', 'wire', 'iban',
+            'τράπεζ', 'έμβασμα', 'μεταφορ',
+            'банк', 'перевод', 'ибан', 'счет', 'счёт',
+            'переказ', 'рахунок', 'превод', 'сметка',
+            'bancă', 'cont', 'bankë', 'transfertë', 'llogari',
+            'بنك', 'تحويل', 'حساب'
+          ],
+        };
+
+        for (const [type, keywords] of Object.entries(paymentKeywords)) {
+          if (keywords.some(kw => lowerTranscript.includes(kw))) {
+            if (type === 'cash') {
+              matchedPayment = paymentMethods.find(pm => pm.type === 'cash');
+            } else if (type === 'card') {
               matchedPayment = paymentMethods.find(pm =>
                 pm.type === 'credit_card' || pm.type === 'debit_card'
               );
-            } else if (data.paymentMethod === 'cash') {
-              matchedPayment = paymentMethods.find(pm => pm.type === 'cash');
-            } else if (data.paymentMethod === 'bank') {
+            } else if (type === 'bank') {
               matchedPayment = paymentMethods.find(pm => pm.type === 'bank_account');
             }
-
-            // Если не нашли по типу, ищем по имени
-            if (!matchedPayment) {
-              const paymentKeywords: Record<string, string[]> = {
-                cash: [
-                  'cash', 'μετρητ', 'μετρητά', 'наличн', 'наличные', 'кэш', 'нал',
-                  'готівк', 'готівка', 'кеш', 'брой', 'в брой', 'numerar', 'para', 'نقد', 'كاش'
-                ],
-                card: [
-                  'card', 'credit', 'debit', 'visa', 'master', 'mastercard',
-                  'κάρτ', 'κάρτα', 'πιστωτ', 'χρεωστ',
-                  'карт', 'карта', 'картой', 'кредит', 'дебет',
-                  'картк', 'кредит', 'дебет',
-                  'carte', 'kartë', 'بطاقة', 'كارت', 'ائتمان', 'فيزا', 'ماستر'
-                ],
-                bank: [
-                  'bank', 'transfer', 'wire', 'iban',
-                  'τράπεζ', 'έμβασμα', 'μεταφορ',
-                  'банк', 'перевод', 'ибан', 'счет', 'счёт',
-                  'переказ', 'рахунок', 'превод', 'сметка',
-                  'bancă', 'cont', 'bankë', 'transfertë', 'llogari',
-                  'بنك', 'تحويل', 'حساب'
-                ],
-              };
-              const keywords = paymentKeywords[data.paymentMethod] || [];
-              matchedPayment = paymentMethods.find(pm =>
-                keywords.some(kw => pm.name.toLowerCase().includes(kw.toLowerCase()))
-              );
-            }
-          }
-
-          if (!matchedPayment) {
-            matchedPayment = paymentMethods[0];
-          }
-
-          if (matchedPayment) {
-            setFormData(prev => ({ ...prev, paymentMethodId: matchedPayment!.id }));
+            if (matchedPayment) break;
           }
         }
 
-        setInputMethod('voice');
-      } else {
-        // Если AI не смог распознать, просто записываем текст в описание
-        setFormData(prev => ({ ...prev, description: transcript }));
-        setAnalyzeError(result.error || 'Не удалось распознать данные');
+        // Не меняем способ оплаты если не нашли ключевое слово
       }
+
+      setInputMethod('voice');
     } catch (error) {
-      console.error('Voice analyze error:', error);
-      // Если ошибка, просто записываем текст в описание
+      console.error('Voice parse error:', error);
       setFormData(prev => ({ ...prev, description: transcript }));
-      setAnalyzeError('Ошибка при анализе голоса');
     } finally {
       setIsAnalyzing(false);
     }
@@ -2106,11 +2130,8 @@ function AddExpenseForm({
 
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
-    recognitionRef.current = recognition;
-    transcriptRef.current = '';
-    processedResultsRef.current = 0;
 
-    // Карта языков для Web Speech API
+    // Карта языков для Web Speech API (BCP 47 формат)
     const langMap: Record<string, string> = {
       'el': 'el-GR',
       'ru': 'ru-RU',
@@ -2122,17 +2143,27 @@ function AddExpenseForm({
       'en': 'en-US'
     };
     const speechLang = langMap[locale] || 'el-GR';
-    recognition.lang = speechLang;
-    // Отладка - показываем в консоли
-    console.log('=== VOICE RECOGNITION ===');
-    console.log('URL locale:', locale);
-    console.log('Speech API lang:', speechLang);
-    console.log('recognition.lang set to:', recognition.lang);
 
-    // Включаем непрерывную запись для более длинных фраз
+    // КРИТИЧЕСКИ ВАЖНО: Устанавливаем язык СРАЗУ после создания объекта
+    recognition.lang = speechLang;
+
+    // Настройки записи
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
+
+    // Повторно устанавливаем язык после всех настроек
+    recognition.lang = speechLang;
+
+    recognitionRef.current = recognition;
+    transcriptRef.current = '';
+    processedResultsRef.current = 0;
+
+    // Отладка
+    console.log('=== VOICE RECOGNITION (AddExpense) ===');
+    console.log('App locale from URL:', locale);
+    console.log('Mapped speech language:', speechLang);
+    console.log('Final recognition.lang:', recognition.lang);
 
     recognition.onstart = () => {
       setIsRecording(true);
