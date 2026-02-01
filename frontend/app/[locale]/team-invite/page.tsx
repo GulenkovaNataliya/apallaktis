@@ -285,7 +285,7 @@ export default function TeamInvitePage() {
     return (
       <BackgroundPage pageIndex={4}>
         <div className="flex min-h-screen flex-col items-center justify-center" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
-          <div className="w-full max-w-sm flex flex-col gap-8 items-center">
+          <div className="w-full max-w-sm flex flex-col gap-12 items-center">
             <div className="text-6xl">✅</div>
             <h1 className="text-slogan font-bold text-center" style={{ color: '#10b981' }}>
               {t.success}
@@ -312,7 +312,7 @@ export default function TeamInvitePage() {
     return (
       <BackgroundPage pageIndex={4}>
         <div className="flex min-h-screen flex-col items-center justify-center" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
-          <div className="w-full max-w-sm flex flex-col gap-8 items-center">
+          <div className="w-full max-w-sm flex flex-col gap-12 items-center">
             <div className="text-6xl">❌</div>
             <h1 className="text-heading font-bold text-center" style={{ color: '#ef4444' }}>
               {error}
@@ -340,7 +340,7 @@ export default function TeamInvitePage() {
     return (
       <BackgroundPage pageIndex={4}>
         <div className="flex min-h-screen flex-col items-center justify-center" style={{ paddingLeft: '40px', paddingRight: '40px' }}>
-          <div className="w-full max-w-sm flex flex-col gap-8 items-center">
+          <div className="w-full max-w-sm flex flex-col gap-12 items-center">
             <h1 className="text-slogan font-bold text-center" style={{ color: '#ff8f0a' }}>
               {t.title}
             </h1>

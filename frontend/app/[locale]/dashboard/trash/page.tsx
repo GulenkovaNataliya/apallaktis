@@ -251,20 +251,20 @@ export default function TrashPage() {
   }
 
   return (
-    <BackgroundPage pageIndex={5}>
+    <BackgroundPage specialPage="objekt">
       <div
-        className="flex min-h-screen flex-col items-center pb-20"
+        className="flex min-h-screen flex-col items-center"
         style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}
         dir={isRTL ? 'rtl' : 'ltr'}
       >
-        <div className="w-full max-w-md flex flex-col gap-8">
+        <div className="w-full max-w-sm flex flex-col gap-12">
           {/* Back */}
           <p
-            onClick={() => router.push(`/${locale}/dashboard`)}
+            onClick={() => router.push(`/${locale}/objects`)}
             className="text-button cursor-pointer"
             style={{ color: 'var(--polar)' }}
           >
-            {t.back}
+            ← {t.back}
           </p>
 
           {/* Header */}
@@ -343,7 +343,7 @@ export default function TrashPage() {
                       onClick={() => handleRestore(obj.id)}
                       className="flex-1 rounded-2xl text-button font-medium"
                       style={{
-                        minHeight: '44px',
+                        minHeight: '52px',
                         backgroundColor: 'var(--zanah)',
                         color: 'var(--deep-teal)',
                       }}
@@ -354,7 +354,7 @@ export default function TrashPage() {
                       onClick={() => handlePermanentDelete(obj.id)}
                       className="flex-1 rounded-2xl text-button font-medium"
                       style={{
-                        minHeight: '44px',
+                        minHeight: '52px',
                         backgroundColor: 'var(--orange)',
                         color: 'white',
                       }}
