@@ -1089,7 +1089,8 @@ ${t.closeProjectQuestion}
                   minHeight: '52px',
                   backgroundColor: 'var(--zanah)',
                   color: 'var(--deep-teal)',
-                  opacity: isExporting ? 0.5 : 1
+                  opacity: isExporting ? 0.5 : 1,
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)'
                 }}
               >
                 📥 {t.downloadExcel}
@@ -1102,7 +1103,8 @@ ${t.closeProjectQuestion}
                   minHeight: '52px',
                   backgroundColor: '#25D366',
                   color: 'white',
-                  opacity: isExporting ? 0.5 : 1
+                  opacity: isExporting ? 0.5 : 1,
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)'
                 }}
               >
                 📄 {t.downloadPdf}
