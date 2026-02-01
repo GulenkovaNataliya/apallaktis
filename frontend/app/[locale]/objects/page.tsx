@@ -672,15 +672,19 @@ function ObjectForm({
         />
       </div>
 
-      {/* Client Contact */}
+      {/* Client Contact - only 10 digits */}
       <div>
         <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '20px' }}>
           {t.clientContact || 'Τηλέφωνο Πελάτη'}
         </label>
         <input
-          type="text"
+          type="tel"
           value={formData.clientContact}
-          onChange={(e) => setFormData({ ...formData, clientContact: e.target.value })}
+          maxLength={10}
+          onChange={(e) => {
+            const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 10);
+            setFormData({ ...formData, clientContact: digitsOnly });
+          }}
           className="w-full rounded-2xl text-body"
           style={{
             border: '2px solid var(--polar)',
