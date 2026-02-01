@@ -1,14 +1,75 @@
 "use client";
 
+import { useEffect, useState } from 'react';
 import BackgroundPage from '@/components/BackgroundPage';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { messages, type Locale } from '@/lib/messages';
+import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 
 export default function PagePay() {
   const params = useParams();
+  const router = useRouter();
   const locale = (params.locale as Locale) || 'el';
   const t = messages[locale]?.pagePay || messages.el.pagePay;
+  const [isChecking, setIsChecking] = useState(true);
+
+  // Check subscription status on mount
+  useEffect(() => {
+    async function checkSubscription() {
+      try {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+          router.push(`/${locale}/login`);
+          return;
+        }
+
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('subscription_status, demo_expires_at, account_purchased, created_at')
+          .eq('id', user.id)
+          .single();
+
+        if (profile) {
+          const isReadOnly = profile.subscription_status === 'read-only';
+          const isDemoExpired = profile.subscription_status === 'demo' &&
+            profile.demo_expires_at &&
+            new Date(profile.demo_expires_at) < new Date();
+
+          if (isReadOnly || isDemoExpired) {
+            // Check if this is a returning user (previously deleted account)
+            const accountCreatedAt = new Date(profile.created_at);
+            const demoExpiresAt = new Date(profile.demo_expires_at);
+            const hoursSinceCreation = (Date.now() - accountCreatedAt.getTime()) / (1000 * 60 * 60);
+            const isReturningUser = hoursSinceCreation < 1 && demoExpiresAt < accountCreatedAt;
+
+            if (isReturningUser) {
+              router.push(`/${locale}/account-reactivation`);
+            } else {
+              router.push(`/${locale}/demo-expired`);
+            }
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('Subscription check error:', error);
+      } finally {
+        setIsChecking(false);
+      }
+    }
+
+    checkSubscription();
+  }, [locale, router]);
+
+  if (isChecking) {
+    return (
+      <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: 'var(--deep-teal)' }}>
+        <div className="animate-pulse text-xl" style={{ color: 'var(--polar)' }}>...</div>
+      </div>
+    );
+  }
 
   return (
     <BackgroundPage specialPage="pay">

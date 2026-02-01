@@ -80,8 +80,8 @@ export async function POST(request: NextRequest) {
         break;
 
       case 'payment_intent.payment_failed':
-        console.log('❌ WEBHOOK: Платеж отклонен');
-        // TODO: Отправить email пользователю об ошибке
+        // Email отправляется через invoice.payment_failed (содержит привязку к подписке)
+        console.log('❌ WEBHOOK: Платеж отклонен (email через invoice.payment_failed)');
         break;
 
       default:

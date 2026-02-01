@@ -53,6 +53,40 @@ export default function LoginPage() {
         return;
       }
 
+      // Check subscription status before redirecting
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('subscription_status, demo_expires_at, account_purchased, created_at')
+        .eq('id', data.user.id)
+        .single();
+
+      if (profile) {
+        // Check if demo expired or user is read-only
+        const isReadOnly = profile.subscription_status === 'read-only';
+        const isDemoExpired = profile.subscription_status === 'demo' &&
+          profile.demo_expires_at &&
+          new Date(profile.demo_expires_at) < new Date();
+
+        if (isReadOnly || isDemoExpired) {
+          // Check if this is a returning user (account created recently but demo already expired)
+          // This happens when email was in used_emails table (previously deleted account)
+          const accountCreatedAt = new Date(profile.created_at);
+          const demoExpiresAt = new Date(profile.demo_expires_at);
+          const hoursSinceCreation = (Date.now() - accountCreatedAt.getTime()) / (1000 * 60 * 60);
+
+          // If account was created less than 1 hour ago AND demo already expired
+          // → This is a returning user who previously deleted their account
+          const isReturningUser = hoursSinceCreation < 1 && demoExpiresAt < accountCreatedAt;
+
+          if (isReturningUser) {
+            router.push(`/${locale}/account-reactivation`);
+          } else {
+            router.push(`/${locale}/demo-expired`);
+          }
+          return;
+        }
+      }
+
       // Success! Redirect to page-pay (main dashboard entry point)
       router.push(`/${locale}/page-pay`);
     } catch (err) {
