@@ -517,6 +517,12 @@ function ObjectForm({
       return;
     }
 
+    // Validate client phone: if entered, must be exactly 10 digits
+    if (formData.clientContact && formData.clientContact.length !== 10) {
+      alert(t.phoneError || 'Phone must be exactly 10 digits');
+      return;
+    }
+
     setIsSaving(true);
 
     try {
@@ -672,7 +678,7 @@ function ObjectForm({
         />
       </div>
 
-      {/* Client Contact - only 10 digits */}
+      {/* Client Contact - exactly 10 digits */}
       <div>
         <label className="block text-button" style={{ color: 'var(--polar)', marginBottom: '20px' }}>
           {t.clientContact || 'Τηλέφωνο Πελάτη'}
@@ -687,7 +693,7 @@ function ObjectForm({
           }}
           className="w-full rounded-2xl text-body"
           style={{
-            border: '2px solid var(--polar)',
+            border: `2px solid ${formData.clientContact && formData.clientContact.length !== 10 && formData.clientContact.length > 0 ? '#ff6a1a' : 'var(--polar)'}`,
             color: 'var(--polar)',
             backgroundColor: 'transparent',
             minHeight: '52px',
@@ -696,6 +702,11 @@ function ObjectForm({
           }}
           placeholder={t.clientContact || 'Τηλέφωνο'}
         />
+        {formData.clientContact && (
+          <p className="text-xs mt-1" style={{ color: formData.clientContact.length === 10 ? '#25D366' : '#ff6a1a' }}>
+            {formData.clientContact.length}/10
+          </p>
+        )}
       </div>
 
       {/* Contract Price */}
