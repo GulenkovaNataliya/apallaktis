@@ -1551,8 +1551,15 @@ function ExpenseForm({
       'en': 'en-US'
     };
     const speechLang = langMap[locale] || 'el-GR';
+
+    // ВАЖНО: Устанавливаем язык ДО start()
     recognition.lang = speechLang;
-    console.log('Voice recognition language:', speechLang, 'locale:', locale);
+
+    // Отладка - показываем в консоли
+    console.log('=== VOICE RECOGNITION ===');
+    console.log('URL locale:', locale);
+    console.log('Speech API lang:', speechLang);
+    console.log('recognition.lang set to:', recognition.lang);
 
     // Включаем непрерывную запись для более длинных фраз
     recognition.continuous = true;
@@ -1813,6 +1820,10 @@ function ExpenseForm({
           >
             {isRecording ? '⏹️ STOP' : isAnalyzing ? '🤖 ...' : `🎤 ${t.voiceButton}`}
           </button>
+        </div>
+        {/* Language indicator */}
+        <div className="text-xs text-right mb-1" style={{ color: 'var(--polar)', opacity: 0.6 }}>
+          🌐 {locale === 'el' ? 'Ελληνικά' : locale === 'ru' ? 'Русский' : locale === 'uk' ? 'Українська' : locale === 'en' ? 'English' : locale === 'sq' ? 'Shqip' : locale === 'bg' ? 'Български' : locale === 'ro' ? 'Română' : locale === 'ar' ? 'العربية' : locale}
         </div>
         {(isRecording || isAnalyzing) && (
           <div

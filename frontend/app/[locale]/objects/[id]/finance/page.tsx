@@ -1270,7 +1270,11 @@ function AddWorkForm({
     };
     const speechLang = langMap[locale] || 'el-GR';
     recognition.lang = speechLang;
-    console.log('Voice recognition language:', speechLang, 'locale:', locale);
+    // Отладка - показываем в консоли
+    console.log('=== VOICE RECOGNITION ===');
+    console.log('URL locale:', locale);
+    console.log('Speech API lang:', speechLang);
+    console.log('recognition.lang set to:', recognition.lang);
 
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -1511,7 +1515,11 @@ function AddPaymentForm({
     };
     const speechLang = langMap[locale] || 'el-GR';
     recognition.lang = speechLang;
-    console.log('Voice recognition language:', speechLang, 'locale:', locale);
+    // Отладка - показываем в консоли
+    console.log('=== VOICE RECOGNITION ===');
+    console.log('URL locale:', locale);
+    console.log('Speech API lang:', speechLang);
+    console.log('recognition.lang set to:', recognition.lang);
 
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -2115,7 +2123,11 @@ function AddExpenseForm({
     };
     const speechLang = langMap[locale] || 'el-GR';
     recognition.lang = speechLang;
-    console.log('Voice recognition language:', speechLang, 'locale:', locale);
+    // Отладка - показываем в консоли
+    console.log('=== VOICE RECOGNITION ===');
+    console.log('URL locale:', locale);
+    console.log('Speech API lang:', speechLang);
+    console.log('recognition.lang set to:', recognition.lang);
 
     // Включаем непрерывную запись для более длинных фраз
     recognition.continuous = true;
