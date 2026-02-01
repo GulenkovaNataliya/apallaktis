@@ -18,6 +18,7 @@ import {
   type GlobalExpense,
 } from '@/lib/supabase/services';
 import { getUserTier } from '@/lib/subscription';
+import * as XLSX from 'xlsx';
 
 // Translations for Analysis page
 const translations = {
@@ -795,15 +796,12 @@ export default function AnalysisPage() {
   };
 
   // Export to Excel
-  const handleExportExcel = async () => {
+  const handleExportExcel = () => {
     if (!analysisData) return;
     setIsExporting(true);
 
     try {
-      // Dynamic import XLSX (no default export)
-      const XLSX = await import('xlsx');
-
-      // Create workbook
+      // Create workbook (using static import for mobile compatibility)
       const wb = XLSX.utils.book_new();
 
       // Summary sheet - Full analysis
@@ -924,22 +922,34 @@ export default function AnalysisPage() {
         XLSX.utils.book_append_sheet(wb, debtsSheet, 'Debts');
       }
 
-      // Download - use Blob for mobile compatibility
+      // Download - improved for mobile compatibility
       const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `analysis_${dateFrom}_${dateTo}.xlsx`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      const filename = `analysis_${dateFrom}_${dateTo}.xlsx`;
+
+      // Try using navigator.msSaveBlob for IE/Edge (legacy)
+      if (typeof (navigator as any).msSaveBlob !== 'undefined') {
+        (navigator as any).msSaveBlob(blob, filename);
+        setIsExporting(false);
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        // Clean up after download starts
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          setIsExporting(false);
+        }, 150);
+      }
 
     } catch (error) {
       console.error('Export Excel error:', error);
       alert('Error exporting Excel: ' + (error as Error).message);
-    } finally {
       setIsExporting(false);
     }
   };

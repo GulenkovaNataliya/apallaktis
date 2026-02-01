@@ -25,6 +25,7 @@ import {
 } from '@/lib/supabase/services';
 import { createClient } from '@/lib/supabase/client';
 import { getUserTier, canUseFeature, type SubscriptionTier } from '@/lib/subscription';
+import * as XLSX from 'xlsx';
 
 type ViewType = 'expenses' | 'categories' | 'add-expense' | 'edit-expense' | 'add-category' | 'edit-category';
 
@@ -233,11 +234,10 @@ export default function GlobalExpensesPage() {
     return groups;
   };
 
-  // Export to Excel
-  const handleExportExcel = async () => {
+  // Export to Excel (using static import for mobile compatibility)
+  const handleExportExcel = () => {
     setIsExportingExcel(true);
     try {
-      const XLSX = await import('xlsx');
       const wb = XLSX.utils.book_new();
       const filtered = getFilteredExpenses();
       const grouped = groupFilteredByCategory();
@@ -279,20 +279,30 @@ export default function GlobalExpensesPage() {
       const expensesSheet = XLSX.utils.aoa_to_sheet(expensesData);
       XLSX.utils.book_append_sheet(wb, expensesSheet, t.title.slice(0, 31));
 
-      // Download - use Blob for mobile compatibility
+      // Download - improved for mobile compatibility
       const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `global_expenses_${analysisDateFrom}_${analysisDateTo}.xlsx`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      const filename = `global_expenses_${analysisDateFrom}_${analysisDateTo}.xlsx`;
+
+      if (typeof (navigator as any).msSaveBlob !== 'undefined') {
+        (navigator as any).msSaveBlob(blob, filename);
+        setIsExportingExcel(false);
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          setIsExportingExcel(false);
+        }, 150);
+      }
     } catch (error) {
       console.error('Export Excel error:', error);
-    } finally {
       setIsExportingExcel(false);
     }
   };

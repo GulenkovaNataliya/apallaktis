@@ -12,6 +12,7 @@ import type { ObjectExpense } from '@/types/objectExpense';
 import type { ExpenseCategory } from '@/types/globalExpense';
 import { formatEuro } from '@/lib/formatters';
 import { useAuth } from '@/lib/auth-context';
+import * as XLSX from 'xlsx';
 import {
   getExpenseCategories,
   createExpenseCategory,
@@ -412,8 +413,8 @@ export default function ObjectFinancePage() {
     return null;
   }
 
-  // Export to Excel
-  const handleExportExcel = async () => {
+  // Export to Excel (using static import for mobile compatibility)
+  const handleExportExcel = () => {
     if (!object || !finance) {
       console.error('Export Excel: object or finance is null');
       return;
@@ -421,7 +422,6 @@ export default function ObjectFinancePage() {
     setIsExporting(true);
 
     try {
-      const XLSX = await import('xlsx');
       const wb = XLSX.utils.book_new();
 
       const actualPrice = object.contractPrice + finance.totalAdditionalWorks;
@@ -472,20 +472,30 @@ export default function ObjectFinancePage() {
         XLSX.utils.book_append_sheet(wb, expensesSheet, 'Expenses');
       }
 
-      // Download - use Blob for mobile compatibility
+      // Download - improved for mobile compatibility
       const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${object.name}_finance.xlsx`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      const filename = `${object.name}_finance.xlsx`;
+
+      if (typeof (navigator as any).msSaveBlob !== 'undefined') {
+        (navigator as any).msSaveBlob(blob, filename);
+        setIsExporting(false);
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          setIsExporting(false);
+        }, 150);
+      }
     } catch (error) {
       console.error('Export Excel error:', error);
-    } finally {
       setIsExporting(false);
     }
   };
