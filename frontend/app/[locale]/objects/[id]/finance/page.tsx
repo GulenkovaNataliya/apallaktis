@@ -1257,16 +1257,24 @@ function AddWorkForm({
     transcriptRef.current = '';
     processedResultsRef.current = 0;
 
-    recognition.lang = locale === 'el' ? 'el-GR' :
-                      locale === 'ru' ? 'ru-RU' :
-                      locale === 'uk' ? 'uk-UA' :
-                      locale === 'sq' ? 'sq-AL' :
-                      locale === 'bg' ? 'bg-BG' :
-                      locale === 'ro' ? 'ro-RO' :
-                      locale === 'ar' ? 'ar-SA' : 'en-US';
+    // Карта языков для Web Speech API
+    const langMap: Record<string, string> = {
+      'el': 'el-GR',
+      'ru': 'ru-RU',
+      'uk': 'uk-UA',
+      'sq': 'sq-AL',
+      'bg': 'bg-BG',
+      'ro': 'ro-RO',
+      'ar': 'ar-SA',
+      'en': 'en-US'
+    };
+    const speechLang = langMap[locale] || 'el-GR';
+    recognition.lang = speechLang;
+    console.log('Voice recognition language:', speechLang, 'locale:', locale);
 
     recognition.continuous = true;
     recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
 
     recognition.onstart = () => {
       setIsRecording(true);
@@ -1490,16 +1498,24 @@ function AddPaymentForm({
     transcriptRef.current = '';
     processedResultsRef.current = 0;
 
-    recognition.lang = locale === 'el' ? 'el-GR' :
-                      locale === 'ru' ? 'ru-RU' :
-                      locale === 'uk' ? 'uk-UA' :
-                      locale === 'sq' ? 'sq-AL' :
-                      locale === 'bg' ? 'bg-BG' :
-                      locale === 'ro' ? 'ro-RO' :
-                      locale === 'ar' ? 'ar-SA' : 'en-US';
+    // Карта языков для Web Speech API
+    const langMap: Record<string, string> = {
+      'el': 'el-GR',
+      'ru': 'ru-RU',
+      'uk': 'uk-UA',
+      'sq': 'sq-AL',
+      'bg': 'bg-BG',
+      'ro': 'ro-RO',
+      'ar': 'ar-SA',
+      'en': 'en-US'
+    };
+    const speechLang = langMap[locale] || 'el-GR';
+    recognition.lang = speechLang;
+    console.log('Voice recognition language:', speechLang, 'locale:', locale);
 
     recognition.continuous = true;
     recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
 
     recognition.onstart = () => {
       setIsRecording(true);
@@ -2086,17 +2102,25 @@ function AddExpenseForm({
     transcriptRef.current = '';
     processedResultsRef.current = 0;
 
-    recognition.lang = locale === 'el' ? 'el-GR' :
-                      locale === 'ru' ? 'ru-RU' :
-                      locale === 'uk' ? 'uk-UA' :
-                      locale === 'sq' ? 'sq-AL' :
-                      locale === 'bg' ? 'bg-BG' :
-                      locale === 'ro' ? 'ro-RO' :
-                      locale === 'ar' ? 'ar-SA' : 'en-US';
+    // Карта языков для Web Speech API
+    const langMap: Record<string, string> = {
+      'el': 'el-GR',
+      'ru': 'ru-RU',
+      'uk': 'uk-UA',
+      'sq': 'sq-AL',
+      'bg': 'bg-BG',
+      'ro': 'ro-RO',
+      'ar': 'ar-SA',
+      'en': 'en-US'
+    };
+    const speechLang = langMap[locale] || 'el-GR';
+    recognition.lang = speechLang;
+    console.log('Voice recognition language:', speechLang, 'locale:', locale);
 
     // Включаем непрерывную запись для более длинных фраз
     recognition.continuous = true;
     recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
 
     recognition.onstart = () => {
       setIsRecording(true);
