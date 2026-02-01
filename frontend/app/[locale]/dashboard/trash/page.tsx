@@ -14,7 +14,7 @@ import {
 
 const translations = {
   el: {
-    title: "Κάδος Απορριμμάτων",
+    title: "🗑️",
     back: "Πίσω",
     empty: "Ο κάδος είναι άδειος",
     restore: "Επαναφορά",
@@ -26,10 +26,11 @@ const translations = {
     restored: "Επαναφέρθηκε!",
     deleted: "Διαγράφηκε οριστικά!",
     error: "Σφάλμα",
-    autoDeleteNote: "Τα στοιχεία διαγράφονται αυτόματα μετά από 30 ημέρες",
+    autoDeleteLine1: "Το αντικείμενο διαγράφεται αυτόματα",
+    autoDeleteLine2: "μετά από 30 ημέρες",
   },
   ru: {
-    title: "Корзина",
+    title: "🗑️",
     back: "Назад",
     empty: "Корзина пуста",
     restore: "Восстановить",
@@ -41,10 +42,11 @@ const translations = {
     restored: "Восстановлено!",
     deleted: "Удалено навсегда!",
     error: "Ошибка",
-    autoDeleteNote: "Элементы автоматически удаляются через 30 дней",
+    autoDeleteLine1: "Объект автоматически удаляется",
+    autoDeleteLine2: "через 30 дней",
   },
   en: {
-    title: "Trash",
+    title: "🗑️",
     back: "Back",
     empty: "Trash is empty",
     restore: "Restore",
@@ -56,10 +58,11 @@ const translations = {
     restored: "Restored!",
     deleted: "Permanently deleted!",
     error: "Error",
-    autoDeleteNote: "Items are automatically deleted after 30 days",
+    autoDeleteLine1: "Object is automatically deleted",
+    autoDeleteLine2: "after 30 days",
   },
   uk: {
-    title: "Кошик",
+    title: "🗑️",
     back: "Назад",
     empty: "Кошик порожній",
     restore: "Відновити",
@@ -71,10 +74,11 @@ const translations = {
     restored: "Відновлено!",
     deleted: "Видалено назавжди!",
     error: "Помилка",
-    autoDeleteNote: "Елементи автоматично видаляються через 30 днів",
+    autoDeleteLine1: "Об'єкт автоматично видаляється",
+    autoDeleteLine2: "через 30 днів",
   },
   sq: {
-    title: "Koshi",
+    title: "🗑️",
     back: "Kthehu",
     empty: "Koshi është bosh",
     restore: "Rikthe",
@@ -86,10 +90,11 @@ const translations = {
     restored: "U rikthye!",
     deleted: "U fshi përgjithmonë!",
     error: "Gabim",
-    autoDeleteNote: "Artikujt fshihen automatikisht pas 30 ditësh",
+    autoDeleteLine1: "Objekti fshihet automatikisht",
+    autoDeleteLine2: "pas 30 ditësh",
   },
   bg: {
-    title: "Кошче",
+    title: "🗑️",
     back: "Назад",
     empty: "Кошчето е празно",
     restore: "Възстанови",
@@ -101,10 +106,11 @@ const translations = {
     restored: "Възстановено!",
     deleted: "Изтрито завинаги!",
     error: "Грешка",
-    autoDeleteNote: "Елементите се изтриват автоматично след 30 дни",
+    autoDeleteLine1: "Обектът се изтрива автоматично",
+    autoDeleteLine2: "след 30 дни",
   },
   ro: {
-    title: "Coș de gunoi",
+    title: "🗑️",
     back: "Înapoi",
     empty: "Coșul este gol",
     restore: "Restaurează",
@@ -116,10 +122,11 @@ const translations = {
     restored: "Restaurat!",
     deleted: "Șters definitiv!",
     error: "Eroare",
-    autoDeleteNote: "Elementele sunt șterse automat după 30 de zile",
+    autoDeleteLine1: "Obiectul este șters automat",
+    autoDeleteLine2: "după 30 de zile",
   },
   ar: {
-    title: "سلة المهملات",
+    title: "🗑️",
     back: "رجوع",
     empty: "السلة فارغة",
     restore: "استعادة",
@@ -131,7 +138,8 @@ const translations = {
     restored: "تمت الاستعادة!",
     deleted: "تم الحذف نهائياً!",
     error: "خطأ",
-    autoDeleteNote: "يتم حذف العناصر تلقائياً بعد 30 يوماً",
+    autoDeleteLine1: "يتم حذف العنصر تلقائياً",
+    autoDeleteLine2: "بعد 30 يوماً",
   },
 };
 
@@ -275,19 +283,17 @@ export default function TrashPage() {
             {t.title}
           </h1>
 
-          {/* Auto-delete note */}
-          <p
-            className="text-sm text-center"
-            style={{ color: 'var(--polar)', opacity: 0.7 }}
-          >
-            {t.autoDeleteNote}
-          </p>
+          {/* Auto-delete note - two lines centered */}
+          <div className="text-center text-button" style={{ color: 'var(--zanah)' }}>
+            <p>{t.autoDeleteLine1}</p>
+            <p>{t.autoDeleteLine2}</p>
+          </div>
 
-          {/* Empty state */}
+          {/* Empty state - orange by law */}
           {deletedObjects.length === 0 && (
             <p
               className="text-center text-button"
-              style={{ color: 'var(--polar)', marginTop: '48px' }}
+              style={{ color: 'var(--orange)' }}
             >
               {t.empty}
             </p>

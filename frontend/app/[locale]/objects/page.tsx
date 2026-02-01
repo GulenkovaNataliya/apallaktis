@@ -267,32 +267,31 @@ export default function ObjectsPage() {
               {t.addNew}
             </button>
 
-            {/* Trash Button */}
-            <div className="flex flex-col gap-3">
-              <button
-                onClick={() => router.push(`/${locale}/dashboard/trash`)}
-                className="btn-universal w-full text-button"
-                style={{
-                  minHeight: '52px',
-                  backgroundColor: 'transparent',
-                  border: '2px solid var(--polar)',
-                  color: 'var(--polar)',
-                }}
-              >
-                {t.trash}
-              </button>
-              {/* Orange hint text */}
-              <p className="text-center text-body" style={{ color: 'var(--orange)' }}>
-                {t.trashHint}
-              </p>
-            </div>
-
-            {/* No Objects Message - text only, follows button law */}
+            {/* No Objects Message - right after Add Object button */}
             {objects.length === 0 && (
               <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
                 {t.noObjects}
               </p>
             )}
+
+            {/* Trash Button */}
+            <button
+              onClick={() => router.push(`/${locale}/dashboard/trash`)}
+              className="btn-universal w-full text-button"
+              style={{
+                minHeight: '52px',
+                backgroundColor: 'transparent',
+                border: '2px solid var(--polar)',
+                color: 'var(--polar)',
+              }}
+            >
+              {t.trash}
+            </button>
+
+            {/* Orange hint text - separate element with gap-12 */}
+            <p className="text-center text-button" style={{ color: 'var(--orange)' }}>
+              {t.trashHint}
+            </p>
 
           </div>
 
