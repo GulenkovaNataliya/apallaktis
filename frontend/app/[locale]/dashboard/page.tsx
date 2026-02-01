@@ -382,15 +382,6 @@ export default function DashboardPage() {
             {(translations[locale] || translations.el).team}
           </button>
 
-          {/* Trash Button - separate section */}
-          <button
-            onClick={() => router.push(`/${locale}/dashboard/trash`)}
-            className="btn-universal w-full text-button flex items-center justify-center text-center"
-            style={{ minHeight: '52px', backgroundColor: 'transparent', border: '2px solid var(--polar)', color: 'var(--polar)' }}
-          >
-            {(translations[locale] || translations.el).trash}
-          </button>
-
           {/* Support Section */}
           <div className="flex flex-col gap-4">
             <p
