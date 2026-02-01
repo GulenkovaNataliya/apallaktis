@@ -14,7 +14,7 @@ import {
 
 const translations = {
   el: {
-    title: "🗑️",
+    title: "Κάδος",
     back: "Πίσω",
     empty: "Ο κάδος είναι άδειος",
     restore: "Επαναφορά",
@@ -30,7 +30,7 @@ const translations = {
     autoDeleteLine2: "μετά από 30 ημέρες",
   },
   ru: {
-    title: "🗑️",
+    title: "Корзина",
     back: "Назад",
     empty: "Корзина пуста",
     restore: "Восстановить",
@@ -46,7 +46,7 @@ const translations = {
     autoDeleteLine2: "через 30 дней",
   },
   en: {
-    title: "🗑️",
+    title: "Trash",
     back: "Back",
     empty: "Trash is empty",
     restore: "Restore",
@@ -62,7 +62,7 @@ const translations = {
     autoDeleteLine2: "after 30 days",
   },
   uk: {
-    title: "🗑️",
+    title: "Кошик",
     back: "Назад",
     empty: "Кошик порожній",
     restore: "Відновити",
@@ -78,7 +78,7 @@ const translations = {
     autoDeleteLine2: "через 30 днів",
   },
   sq: {
-    title: "🗑️",
+    title: "Koshi",
     back: "Kthehu",
     empty: "Koshi është bosh",
     restore: "Rikthe",
@@ -94,7 +94,7 @@ const translations = {
     autoDeleteLine2: "pas 30 ditësh",
   },
   bg: {
-    title: "🗑️",
+    title: "Кошче",
     back: "Назад",
     empty: "Кошчето е празно",
     restore: "Възстанови",
@@ -110,7 +110,7 @@ const translations = {
     autoDeleteLine2: "след 30 дни",
   },
   ro: {
-    title: "🗑️",
+    title: "Coș",
     back: "Înapoi",
     empty: "Coșul este gol",
     restore: "Restaurează",
@@ -126,7 +126,7 @@ const translations = {
     autoDeleteLine2: "după 30 de zile",
   },
   ar: {
-    title: "🗑️",
+    title: "السلة",
     back: "رجوع",
     empty: "السلة فارغة",
     restore: "استعادة",
