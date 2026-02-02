@@ -1238,7 +1238,6 @@ function AddWorkForm({
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef<any>(null);
   const transcriptRef = useRef<string>('');
-  const processedResultsRef = useRef<number>(0);
 
   const handleVoiceInput = () => {
     // Если уже записываем - останавливаем
@@ -1272,7 +1271,7 @@ function AddWorkForm({
     recognition.lang = speechLang;
 
     // Настройки записи
-    recognition.continuous = true;
+    recognition.continuous = false;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
 
@@ -1281,7 +1280,6 @@ function AddWorkForm({
 
     recognitionRef.current = recognition;
     transcriptRef.current = '';
-    processedResultsRef.current = 0;
 
     // Отладка
     console.log('=== VOICE RECOGNITION (AddWork) ===');
@@ -1294,28 +1292,26 @@ function AddWorkForm({
     };
 
     recognition.onresult = (event: any) => {
-      // Используем processedResultsRef чтобы не дублировать результаты на мобильных
-      const startIndex = Math.max(event.resultIndex, processedResultsRef.current);
-      for (let i = startIndex; i < event.results.length; i++) {
-        const result = event.results[i];
-        if (result.isFinal) {
-          transcriptRef.current += result[0].transcript + ' ';
-          processedResultsRef.current = i + 1;
-        }
+      // 1) Собираем финальные результаты заново (без +=)
+      const finals: string[] = [];
+      for (let i = 0; i < event.results.length; i++) {
+        const r = event.results[i];
+        if (r.isFinal) finals.push(r[0].transcript);
       }
+      const finalText = finals.join(" ").replace(/\s+/g, " ").trim();
 
-      // Показываем interim текст пока говорим
-      let interimTranscript = '';
-      const lastResult = event.results[event.results.length - 1];
-      if (lastResult && !lastResult.isFinal) {
-        interimTranscript = lastResult[0].transcript;
-      }
+      // 2) Interim — только для показа
+      const last = event.results[event.results.length - 1];
+      const interimText = last && !last.isFinal ? String(last[0].transcript || "").trim() : "";
 
-      // Показываем текст в описании пока запись идёт
+      // 3) Live preview
       setFormData(prev => ({
         ...prev,
-        description: (transcriptRef.current + interimTranscript).trim() || prev.description
+        description: (finalText + (interimText ? " " + interimText : "")).trim() || prev.description
       }));
+
+      // 4) Храним финальный текст для onend
+      transcriptRef.current = finalText;
     };
 
     recognition.onerror = (event: any) => {
@@ -1341,7 +1337,7 @@ function AddWorkForm({
           ...prev,
           amount: parsed.amount !== null ? parsed.amount : prev.amount,
           date: parsed.date || prev.date,
-          description: parsed.description || finalText,
+          description: (parsed.description ?? "").trim() || prev.description,
         }));
       }
     };
@@ -1505,7 +1501,6 @@ function AddPaymentForm({
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef<any>(null);
   const transcriptRef = useRef<string>('');
-  const processedResultsRef = useRef<number>(0);
 
   const handleVoiceInput = () => {
     // Если уже записываем - останавливаем
@@ -1539,7 +1534,7 @@ function AddPaymentForm({
     recognition.lang = speechLang;
 
     // Настройки записи
-    recognition.continuous = true;
+    recognition.continuous = false;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
 
@@ -1548,7 +1543,6 @@ function AddPaymentForm({
 
     recognitionRef.current = recognition;
     transcriptRef.current = '';
-    processedResultsRef.current = 0;
 
     // Отладка
     console.log('=== VOICE RECOGNITION (AddPayment) ===');
@@ -1561,28 +1555,26 @@ function AddPaymentForm({
     };
 
     recognition.onresult = (event: any) => {
-      // Используем processedResultsRef чтобы не дублировать результаты на мобильных
-      const startIndex = Math.max(event.resultIndex, processedResultsRef.current);
-      for (let i = startIndex; i < event.results.length; i++) {
-        const result = event.results[i];
-        if (result.isFinal) {
-          transcriptRef.current += result[0].transcript + ' ';
-          processedResultsRef.current = i + 1;
-        }
+      // 1) Собираем финальные результаты заново (без +=)
+      const finals: string[] = [];
+      for (let i = 0; i < event.results.length; i++) {
+        const r = event.results[i];
+        if (r.isFinal) finals.push(r[0].transcript);
       }
+      const finalText = finals.join(" ").replace(/\s+/g, " ").trim();
 
-      // Показываем interim текст пока говорим
-      let interimTranscript = '';
-      const lastResult = event.results[event.results.length - 1];
-      if (lastResult && !lastResult.isFinal) {
-        interimTranscript = lastResult[0].transcript;
-      }
+      // 2) Interim — только для показа
+      const last = event.results[event.results.length - 1];
+      const interimText = last && !last.isFinal ? String(last[0].transcript || "").trim() : "";
 
-      // Показываем текст в описании пока запись идёт
+      // 3) Live preview
       setFormData(prev => ({
         ...prev,
-        description: (transcriptRef.current + interimTranscript).trim() || prev.description
+        description: (finalText + (interimText ? " " + interimText : "")).trim() || prev.description
       }));
+
+      // 4) Храним финальный текст для onend
+      transcriptRef.current = finalText;
     };
 
     recognition.onerror = (event: any) => {
@@ -1608,7 +1600,7 @@ function AddPaymentForm({
           ...prev,
           amount: parsed.amount !== null ? parsed.amount : prev.amount,
           date: parsed.date || prev.date,
-          description: parsed.description || finalText,
+          description: (parsed.description ?? "").trim() || prev.description,
         }));
       }
     };
@@ -1837,7 +1829,6 @@ function AddExpenseForm({
   // Refs для голосового ввода
   const recognitionRef = useRef<any>(null);
   const transcriptRef = useRef<string>('');
-  const processedResultsRef = useRef<number>(0);
 
   // categoryMap (10 категорий, 8 языков)
   const categoryMap: Record<string, string[]> = {
@@ -2007,7 +1998,7 @@ function AddExpenseForm({
       setFormData(prev => ({
         ...prev,
         amount: parsed.amount !== null ? parsed.amount : prev.amount,
-        description: parsed.description || transcript,
+        description: (parsed.description ?? "").trim() || prev.description,
         date: parsed.date || prev.date,
       }));
 
@@ -2148,7 +2139,7 @@ function AddExpenseForm({
     recognition.lang = speechLang;
 
     // Настройки записи
-    recognition.continuous = true;
+    recognition.continuous = false;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
 
@@ -2157,7 +2148,6 @@ function AddExpenseForm({
 
     recognitionRef.current = recognition;
     transcriptRef.current = '';
-    processedResultsRef.current = 0;
 
     // Отладка
     console.log('=== VOICE RECOGNITION (AddExpense) ===');
@@ -2171,30 +2161,26 @@ function AddExpenseForm({
     };
 
     recognition.onresult = (event: any) => {
-      // Используем processedResultsRef чтобы не дублировать результаты на мобильных
-      // (resultIndex может сбрасываться при перезапусках recognition)
-      const startIndex = Math.max(event.resultIndex, processedResultsRef.current);
-      for (let i = startIndex; i < event.results.length; i++) {
-        const result = event.results[i];
-        if (result.isFinal) {
-          // Добавляем только НОВЫЕ финальные результаты
-          transcriptRef.current += result[0].transcript + ' ';
-          processedResultsRef.current = i + 1;
-        }
+      // 1) Собираем финальные результаты заново (без +=)
+      const finals: string[] = [];
+      for (let i = 0; i < event.results.length; i++) {
+        const r = event.results[i];
+        if (r.isFinal) finals.push(r[0].transcript);
       }
+      const finalText = finals.join(" ").replace(/\s+/g, " ").trim();
 
-      // Собираем текущий interim для отображения (только текущий незавершённый)
-      let interimTranscript = '';
-      const lastResult = event.results[event.results.length - 1];
-      if (lastResult && !lastResult.isFinal) {
-        interimTranscript = lastResult[0].transcript;
-      }
+      // 2) Interim — только для показа
+      const last = event.results[event.results.length - 1];
+      const interimText = last && !last.isFinal ? String(last[0].transcript || "").trim() : "";
 
-      // Показываем финальный + промежуточный текст
+      // 3) Live preview
       setFormData(prev => ({
         ...prev,
-        description: (transcriptRef.current + interimTranscript).trim() || prev.description
+        description: (finalText + (interimText ? " " + interimText : "")).trim() || prev.description
       }));
+
+      // 4) Храним финальный текст для onend
+      transcriptRef.current = finalText;
     };
 
     recognition.onerror = (event: Event & { error: string }) => {
