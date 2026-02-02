@@ -2327,7 +2327,7 @@ function AddExpenseForm({
               </button>
             </div>
             {/* Orange hint phrase */}
-            <p className="text-center text-button mt-3" style={{ color: 'var(--orange)', fontSize: '14px' }}>
+            <p className="text-center text-button mt-5" style={{ color: 'var(--orange)', fontSize: '14px' }}>
               {t.clickPlusToCreateCategory}
             </p>
           </>
@@ -2428,7 +2428,7 @@ function AddExpenseForm({
 
       {/* Description */}
       <div>
-        <div className="flex justify-between items-center mb-3">
+        <div className="flex justify-between items-center mb-5">
           <p className="text-button" style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}>
             {t.description}
           </p>
