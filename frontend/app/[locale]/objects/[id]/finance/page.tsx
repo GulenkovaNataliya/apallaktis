@@ -1449,23 +1449,25 @@ function AddWorkForm({
 
       {/* Description with Voice */}
       <div>
-        <div className="flex justify-between items-center mb-3">
+        <div className="flex justify-between items-center mb-5">
           <p className="text-button" style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}>
             {t.description}
           </p>
-          <button
-            type="button"
-            onClick={handleVoiceInput}
-            disabled={isRecording}
-            className="px-4 py-2 rounded-2xl text-button font-semibold flex items-center gap-2"
-            style={{
-              backgroundColor: isRecording ? '#ff6a1a' : 'var(--zanah)',
-              color: isRecording ? 'white' : 'var(--deep-teal)',
-              minHeight: '44px',
-            }}
-          >
-            {isRecording ? '⏹️ STOP' : '🎤 Voice'}
-          </button>
+          {hasVoiceAndPhoto && (
+            <button
+              type="button"
+              onClick={handleVoiceInput}
+              disabled={isRecording}
+              className="px-4 py-2 rounded-2xl text-button font-semibold flex items-center gap-2"
+              style={{
+                backgroundColor: isRecording ? '#ff6a1a' : 'var(--zanah)',
+                color: isRecording ? 'white' : 'var(--deep-teal)',
+                minHeight: '52px',
+              }}
+            >
+              {isRecording ? '⏹️ STOP' : `🎤 ${t.voiceButton || 'Voice'}`}
+            </button>
+          )}
         </div>
         <textarea
           value={formData.description}
@@ -1762,24 +1764,27 @@ function AddPaymentForm({
       </div>
 
       {/* Description with Voice */}
+      {/* Description with Voice */}
       <div>
-        <div className="flex justify-between items-center mb-3">
+        <div className="flex justify-between items-center mb-5">
           <p className="text-button" style={{ color: 'var(--polar)', fontSize: '18px', fontWeight: 600 }}>
             {t.description}
           </p>
-          <button
-            type="button"
-            onClick={handleVoiceInput}
-            disabled={isRecording}
-            className="px-4 py-2 rounded-2xl text-button font-semibold flex items-center gap-2"
-            style={{
-              backgroundColor: isRecording ? '#ff6a1a' : 'var(--zanah)',
-              color: isRecording ? 'white' : 'var(--deep-teal)',
-              minHeight: '44px',
-            }}
-          >
-            {isRecording ? '⏹️ STOP' : '🎤 Voice'}
-          </button>
+          {hasVoiceAndPhoto && (
+            <button
+              type="button"
+              onClick={handleVoiceInput}
+              disabled={isRecording}
+              className="px-4 py-2 rounded-2xl text-button font-semibold flex items-center gap-2"
+              style={{
+                backgroundColor: isRecording ? '#ff6a1a' : 'var(--zanah)',
+                color: isRecording ? 'white' : 'var(--deep-teal)',
+                minHeight: '52px',
+              }}
+            >
+              {isRecording ? '⏹️ STOP' : `🎤 ${t.voiceButton || 'Voice'}`}
+            </button>
+          )}
         </div>
         <textarea
           value={formData.description}
