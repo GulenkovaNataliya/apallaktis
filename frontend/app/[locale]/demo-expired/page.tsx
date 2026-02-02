@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import BackgroundPage from '@/components/BackgroundPage';
 import { useParams, useRouter } from 'next/navigation';
 import { messages, type Locale } from '@/lib/messages';
+import { createClient } from '@/lib/supabase/client';
 
 export default function DemoExpiredPage() {
   const params = useParams();
@@ -14,12 +15,24 @@ export default function DemoExpiredPage() {
   const [accountNumber, setAccountNumber] = useState<number | null>(null);
 
   useEffect(() => {
-    // Load user account number from localStorage (temporary)
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      const user = JSON.parse(userStr);
-      setAccountNumber(user.accountNumber || 1010);
-    }
+    const loadAccountNumber = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('account_number')
+          .eq('id', user.id)
+          .single();
+
+        if (profile?.account_number) {
+          setAccountNumber(profile.account_number);
+        }
+      }
+    };
+
+    loadAccountNumber();
   }, []);
 
   return (
