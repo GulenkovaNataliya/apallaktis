@@ -1174,6 +1174,7 @@ ${t.closeProjectQuestion}
             onSave={handleAddWork}
             onCancel={() => setView('main')}
             locale={locale}
+            hasVoiceAndPhoto={hasVoiceAndPhoto}
           />
         </div>
       </BackgroundPage>
@@ -1206,6 +1207,7 @@ ${t.closeProjectQuestion}
             onSave={handleAddPayment}
             onCancel={() => setView('main')}
             locale={locale}
+            hasVoiceAndPhoto={hasVoiceAndPhoto}
           />
         </div>
       </BackgroundPage>
@@ -1255,11 +1257,13 @@ function AddWorkForm({
   onSave,
   onCancel,
   locale,
+  hasVoiceAndPhoto,
 }: {
   objectId: string;
   onSave: (work: Omit<AdditionalWork, 'id' | 'createdAt'>) => void;
   onCancel: () => void;
   locale: Locale;
+  hasVoiceAndPhoto: boolean;
 }) {
   const t = messages[locale]?.finance || messages.el.finance;
   const [formData, setFormData] = useState({
@@ -1523,12 +1527,14 @@ function AddPaymentForm({
   onSave,
   onCancel,
   locale,
+  hasVoiceAndPhoto,
 }: {
   objectId: string;
   paymentMethods: PaymentMethod[];
   onSave: (payment: Omit<Payment, 'id' | 'createdAt'>) => void;
   onCancel: () => void;
   locale: Locale;
+  hasVoiceAndPhoto: boolean;
 }) {
   const t = messages[locale]?.finance || messages.el.finance;
   const tPayments = messages[locale]?.paymentMethods || messages.el.paymentMethods;
