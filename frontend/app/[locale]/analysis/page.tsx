@@ -1225,26 +1225,30 @@ export default function AnalysisPage() {
 
         {/* 3. Period Selector */}
         <div
-          className="btn-universal w-full flex items-center justify-center gap-3 flex-wrap"
+          className="btn-universal w-full flex flex-col items-center gap-2"
           style={{ minHeight: '52px', backgroundColor: 'var(--zanah)', padding: '12px 16px' }}
         >
-          <span style={{ fontSize: '20px' }}>📅</span>
-          <span style={{ color: 'var(--deep-teal)', fontWeight: 600 }}>{t.period}:</span>
-          <input
-            type="date"
-            value={dateFrom}
-            onChange={(e) => setDateFrom(e.target.value)}
-            className="px-3 py-1 rounded-xl text-center"
-            style={{ backgroundColor: 'var(--polar)', color: 'var(--orange)', fontWeight: 700, border: 'none', minWidth: '130px' }}
-          />
-          <span style={{ color: 'var(--deep-teal)', fontWeight: 600 }}>—</span>
-          <input
-            type="date"
-            value={dateTo}
-            onChange={(e) => setDateTo(e.target.value)}
-            className="px-3 py-1 rounded-xl text-center"
-            style={{ backgroundColor: 'var(--polar)', color: 'var(--orange)', fontWeight: 700, border: 'none', minWidth: '130px' }}
-          />
+          <div className="flex items-center gap-2">
+            <span style={{ fontSize: '20px' }}>📅</span>
+            <span className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>{t.period}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="px-2 py-1 rounded-xl text-center text-sm"
+              style={{ backgroundColor: 'var(--polar)', color: 'var(--orange)', fontWeight: 700, border: 'none', width: '115px' }}
+            />
+            <span style={{ color: 'var(--deep-teal)', fontWeight: 600 }}>—</span>
+            <input
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+              className="px-2 py-1 rounded-xl text-center text-sm"
+              style={{ backgroundColor: 'var(--polar)', color: 'var(--orange)', fontWeight: 700, border: 'none', width: '115px' }}
+            />
+          </div>
         </div>
 
         {analysisData && (
@@ -1258,7 +1262,7 @@ export default function AnalysisPage() {
               >
                 <div className="flex items-center gap-2">
                   <span style={{ fontSize: '20px' }}>📊</span>
-                  <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
+                  <span className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
                     {t.objectsSummary}
                   </span>
                 </div>
@@ -1379,10 +1383,9 @@ export default function AnalysisPage() {
                 <div className="flex items-center gap-2">
                   <span style={{ fontSize: '20px' }}>💰</span>
                   <span
-                    className="font-bold"
+                    className="text-lg font-semibold"
                     style={{
-                      color: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'white',
-                      fontSize: '16px'
+                      color: getBalanceStatus(analysisData.totalBalance) === 'overpaid' ? 'var(--deep-teal)' : 'white'
                     }}
                   >
                     {t.totalBalance}
@@ -1464,7 +1467,7 @@ export default function AnalysisPage() {
               >
                 <div className="flex items-center gap-2">
                   <span style={{ fontSize: '20px' }}>💸</span>
-                  <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
+                  <span className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
                     {t.globalExpensesTotal}
                   </span>
                 </div>
@@ -1514,7 +1517,7 @@ export default function AnalysisPage() {
               >
                 <div className="flex items-center gap-2">
                   <span style={{ fontSize: '20px' }}>💸</span>
-                  <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
+                  <span className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
                     {t.objectExpensesTotal}
                   </span>
                 </div>
@@ -1599,7 +1602,7 @@ export default function AnalysisPage() {
               >
                 <div className="flex items-center gap-2">
                   <span style={{ fontSize: '20px' }}>💰</span>
-                  <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
+                  <span className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
                     {t.totalReceivedPayments}
                   </span>
                 </div>
@@ -1649,7 +1652,7 @@ export default function AnalysisPage() {
               >
                 <div className="flex items-center gap-2">
                   <span style={{ fontSize: '20px' }}>💸</span>
-                  <span className="font-bold" style={{ color: 'var(--deep-teal)', fontSize: '16px' }}>
+                  <span className="text-lg font-semibold" style={{ color: 'var(--deep-teal)' }}>
                     {t.totalExpensePayments}
                   </span>
                 </div>
