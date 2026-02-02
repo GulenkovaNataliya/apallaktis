@@ -16,11 +16,14 @@ export async function POST(request: NextRequest) {
     const { priceId, locale = 'el' } = await request.json();
 
     if (!priceId) {
+      console.error('❌ Missing priceId in request body');
       return NextResponse.json(
         { error: 'Missing priceId' },
         { status: 400 }
       );
     }
+
+    console.log('📦 Subscription checkout with priceId:', priceId);
 
     // Получаем текущего пользователя
     const supabase = await createClient();
@@ -57,13 +60,19 @@ export async function POST(request: NextRequest) {
 
     // Определяем тариф по priceId
     let planName = 'unknown';
-    if (priceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_BASIC) {
+    const basicPriceId = process.env.STRIPE_PRICE_BASIC_MONTHLY || process.env.NEXT_PUBLIC_STRIPE_PRICE_BASIC;
+    const standardPriceId = process.env.STRIPE_PRICE_STANDARD_MONTHLY || process.env.NEXT_PUBLIC_STRIPE_PRICE_STANDARD;
+    const premiumPriceId = process.env.STRIPE_PRICE_PREMIUM_MONTHLY || process.env.NEXT_PUBLIC_STRIPE_PRICE_PREMIUM;
+
+    if (priceId === basicPriceId) {
       planName = 'basic';
-    } else if (priceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_STANDARD) {
+    } else if (priceId === standardPriceId) {
       planName = 'standard';
-    } else if (priceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_PREMIUM) {
+    } else if (priceId === premiumPriceId) {
       planName = 'premium';
     }
+
+    console.log('📊 Plan detection:', { priceId, planName, basicPriceId, standardPriceId, premiumPriceId });
 
     // Создаём Stripe Customer если не существует
     let customerId = profile.stripe_customer_id;

@@ -67,17 +67,25 @@ export async function POST(request: NextRequest) {
     const successUrl = `${appUrl}/${locale}/payment-success?session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${appUrl}/${locale}/purchase-account`;
 
+    // Проверяем наличие Price ID
+    const accountPriceId = process.env.STRIPE_ACCOUNT_PRICE_ID;
+    if (!accountPriceId) {
+      console.error('❌ STRIPE_ACCOUNT_PRICE_ID не установлен в environment variables');
+      return NextResponse.json(
+        { error: 'Stripe Price ID не настроен. Обратитесь к администратору.' },
+        { status: 500 }
+      );
+    }
+
+    console.log('📦 Creating checkout session with price:', accountPriceId);
+
     // Создаем Checkout Session
-    // ВАЖНО: Перед запуском создай продукт в Stripe Dashboard и добавь Price ID в .env.local
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       payment_method_types: ['card'],
       line_items: [
         {
-          // TODO: Замени на реальный Price ID из Stripe Dashboard
-          // Создай продукт "ΑΠΑΛΛΑΚΤΗΣ Account Purchase" - 62€ με ΦΠΑ
-          // Добавь в .env.local: STRIPE_ACCOUNT_PRICE_ID=price_...
-          price: process.env.STRIPE_ACCOUNT_PRICE_ID,
+          price: accountPriceId,
           quantity: 1,
         },
       ],
