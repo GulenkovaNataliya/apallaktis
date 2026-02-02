@@ -352,7 +352,7 @@ const helpContentRu: HelpSection[] = [
           '• Зелёный — полностью оплачено',
           '• Светлый — переплата',
         ],
-        screenshots: ['22.ru.jpg'],
+        screenshots: ['22.1.ru.jpg', '22.2.ru.jpg', '22.3.ru.jpg'],
       },
       {
         title: '5.7 Закрытие объекта',
