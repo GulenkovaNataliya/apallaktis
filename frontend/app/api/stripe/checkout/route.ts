@@ -69,10 +69,21 @@ export async function POST(request: NextRequest) {
 
     // Проверяем наличие Price ID
     const accountPriceId = process.env.STRIPE_ACCOUNT_PRICE_ID;
+    console.log('🔍 STRIPE_ACCOUNT_PRICE_ID from env:', accountPriceId ? `"${accountPriceId}" (length: ${accountPriceId.length})` : 'NOT SET');
+
     if (!accountPriceId) {
       console.error('❌ STRIPE_ACCOUNT_PRICE_ID не установлен в environment variables');
       return NextResponse.json(
         { error: 'Stripe Price ID не настроен. Обратитесь к администратору.' },
+        { status: 500 }
+      );
+    }
+
+    // Валидация формата Price ID
+    if (!accountPriceId.startsWith('price_')) {
+      console.error('❌ Invalid STRIPE_ACCOUNT_PRICE_ID format. Expected "price_..." but got:', accountPriceId);
+      return NextResponse.json(
+        { error: `Неверный формат Stripe Price ID. Ожидается "price_...", получено: "${accountPriceId.substring(0, 10)}..."` },
         { status: 500 }
       );
     }
