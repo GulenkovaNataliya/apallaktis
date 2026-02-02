@@ -14,6 +14,8 @@ import { formatEuro } from '@/lib/formatters';
 import { useAuth } from '@/lib/auth-context';
 import * as XLSX from 'xlsx';
 import { parseVoiceInput } from '@/lib/voiceParser';
+import { getUserTier, canUseFeature, type SubscriptionTier } from '@/lib/subscription';
+import { createClient } from '@/lib/supabase/client';
 import {
   getExpenseCategories,
   createExpenseCategory,
@@ -130,10 +132,8 @@ export default function ObjectFinancePage() {
   const tObjects = messages[locale]?.objects || messages.el.objects;
   const { user } = useAuth();
 
-  // Check if user has access to voice input and photo receipt (Standard/Premium/VIP only)
-  const hasVoiceAndPhoto = user?.subscriptionPlan === 'standard' ||
-                           user?.subscriptionPlan === 'premium' ||
-                           user?.subscriptionPlan === 'vip';
+  // User subscription state
+  const [userTier, setUserTier] = useState<SubscriptionTier>('demo');
 
   const [mounted, setMounted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -141,6 +141,11 @@ export default function ObjectFinancePage() {
   const [finance, setFinance] = useState<ObjectFinance | null>(null);
   const [view, setView] = useState<ViewType>('main');
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+
+  // Check if user has access to voice input and photo receipt
+  const voiceCheck = canUseFeature(userTier, 'voiceInput');
+  const photoCheck = canUseFeature(userTier, 'photoReceipt');
+  const hasVoiceAndPhoto = voiceCheck.allowed && photoCheck.allowed;
 
   // Object expenses state
   const [expenses, setExpenses] = useState<ObjectExpense[]>([]);
@@ -150,6 +155,33 @@ export default function ObjectFinancePage() {
   const [expandedPaymentReceived, setExpandedPaymentReceived] = useState(false);
   const [expandedExpensesPaid, setExpandedExpensesPaid] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+
+  // Check user subscription status
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        const supabase = createClient();
+        const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+
+        if (supabaseUser) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('subscription_status, account_purchased, demo_expires_at, vip_expires_at')
+            .eq('id', supabaseUser.id)
+            .single();
+
+          if (profile) {
+            const tier = getUserTier(profile);
+            setUserTier(tier);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking subscription:', error);
+      }
+    };
+
+    checkSubscription();
+  }, []);
 
   // Load data from Supabase
   useEffect(() => {
