@@ -104,7 +104,7 @@ const langMap: Record<string, string> = {
 };
 
 recognition.lang = langMap[locale] || 'el-GR';
-recognition.continuous = true;      // Don't stop after first result
+recognition.continuous = false;     // Single result, no duplication
 recognition.interimResults = true;  // Show text while speaking
 recognition.maxAlternatives = 1;
 ```
@@ -133,29 +133,46 @@ const handleVoiceInput = () => {
   const recognition = new SpeechRecognition();
 
   recognition.lang = langMap[locale] || 'el-GR';
-  recognition.continuous = true;
+  recognition.continuous = false;  // IMPORTANT: prevents duplication
   recognition.interimResults = true;
 
   recognition.onresult = (event: any) => {
-    // Accumulate transcript
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      if (event.results[i].isFinal) {
-        transcriptRef.current += event.results[i][0].transcript + ' ';
-      }
+    // 1) Collect all final results from scratch (no +=)
+    const finals: string[] = [];
+    for (let i = 0; i < event.results.length; i++) {
+      const r = event.results[i];
+      if (r.isFinal) finals.push(r[0].transcript);
     }
+    const finalText = finals.join(" ").replace(/\s+/g, " ").trim();
+
+    // 2) Interim — for live preview only
+    const last = event.results[event.results.length - 1];
+    const interimText = last && !last.isFinal ? String(last[0].transcript || "").trim() : "";
+
+    // 3) Live preview
+    setFormData(prev => ({
+      ...prev,
+      description: (finalText + (interimText ? " " + interimText : "")).trim() || prev.description
+    }));
+
+    // 4) Store final text for onend
+    transcriptRef.current = finalText;
   };
 
   recognition.onend = () => {
     setIsRecording(false);
 
     // Parse and distribute to fields
-    const parsed = parseVoiceInput(transcriptRef.current, locale);
-    setFormData(prev => ({
-      ...prev,
-      amount: parsed.amount ?? prev.amount,
-      date: parsed.date ?? prev.date,
-      description: parsed.description,
-    }));
+    const finalText = transcriptRef.current.trim();
+    if (finalText) {
+      const parsed = parseVoiceInput(finalText, locale);
+      setFormData(prev => ({
+        ...prev,
+        amount: parsed.amount ?? prev.amount,
+        date: parsed.date ?? prev.date,
+        description: (parsed.description ?? "").trim() || prev.description,
+      }));
+    }
   };
 
   recognition.start();
@@ -352,7 +369,7 @@ const hasVoiceAndPhoto = user?.subscriptionPlan === 'standard' ||
 |---------|----------|
 | "Voice not supported" | Use Chrome, Edge, or Safari |
 | Wrong language recognition | Check `recognition.lang` is set correctly |
-| Recording stops too fast | Set `recognition.continuous = true` |
+| Text duplicating | Set `recognition.continuous = false` and rebuild finals array |
 | Text not updating | Check `interimResults = true` |
 
 ### Photo Recognition Issues

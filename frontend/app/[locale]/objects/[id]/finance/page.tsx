@@ -1238,6 +1238,7 @@ function AddWorkForm({
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef<any>(null);
   const transcriptRef = useRef<string>('');
+  const analyzedRef = useRef(false);
 
   const handleVoiceInput = () => {
     // Если уже записываем - останавливаем
@@ -1280,6 +1281,7 @@ function AddWorkForm({
 
     recognitionRef.current = recognition;
     transcriptRef.current = '';
+    analyzedRef.current = false;
 
     // Отладка
     console.log('=== VOICE RECOGNITION (AddWork) ===');
@@ -1325,8 +1327,12 @@ function AddWorkForm({
       setIsRecording(false);
       recognitionRef.current = null;
 
+      // Защита от двойного вызова
+      if (analyzedRef.current) return;
+      analyzedRef.current = true;
+
       // Парсим голосовой ввод и распределяем по полям
-      const finalText = transcriptRef.current.trim();
+      const finalText = transcriptRef.current?.trim();
       if (finalText) {
         const parsed = parseVoiceInput(finalText, locale);
         console.log('=== VOICE PARSER (AddWork) ===');
@@ -1501,6 +1507,7 @@ function AddPaymentForm({
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef<any>(null);
   const transcriptRef = useRef<string>('');
+  const analyzedRef = useRef(false);
 
   const handleVoiceInput = () => {
     // Если уже записываем - останавливаем
@@ -1543,6 +1550,7 @@ function AddPaymentForm({
 
     recognitionRef.current = recognition;
     transcriptRef.current = '';
+    analyzedRef.current = false;
 
     // Отладка
     console.log('=== VOICE RECOGNITION (AddPayment) ===');
@@ -1588,8 +1596,12 @@ function AddPaymentForm({
       setIsRecording(false);
       recognitionRef.current = null;
 
+      // Защита от двойного вызова
+      if (analyzedRef.current) return;
+      analyzedRef.current = true;
+
       // Парсим голосовой ввод и распределяем по полям
-      const finalText = transcriptRef.current.trim();
+      const finalText = transcriptRef.current?.trim();
       if (finalText) {
         const parsed = parseVoiceInput(finalText, locale);
         console.log('=== VOICE PARSER (AddPayment) ===');
@@ -1829,6 +1841,7 @@ function AddExpenseForm({
   // Refs для голосового ввода
   const recognitionRef = useRef<any>(null);
   const transcriptRef = useRef<string>('');
+  const analyzedRef = useRef(false);
 
   // categoryMap (10 категорий, 8 языков)
   const categoryMap: Record<string, string[]> = {
@@ -2148,6 +2161,7 @@ function AddExpenseForm({
 
     recognitionRef.current = recognition;
     transcriptRef.current = '';
+    analyzedRef.current = false;
 
     // Отладка
     console.log('=== VOICE RECOGNITION (AddExpense) ===');
@@ -2194,8 +2208,12 @@ function AddExpenseForm({
       setIsRecording(false);
       recognitionRef.current = null;
 
+      // Защита от двойного вызова analyzeVoiceText
+      if (analyzedRef.current) return;
+      analyzedRef.current = true;
+
       // Анализируем собранный текст
-      const finalText = transcriptRef.current;
+      const finalText = transcriptRef.current?.trim();
       if (finalText && finalText.length > 0) {
         analyzeVoiceText(finalText);
       }

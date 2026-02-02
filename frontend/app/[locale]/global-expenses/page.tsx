@@ -1533,6 +1533,7 @@ function ExpenseForm({
   // Ref для хранения recognition instance
   const recognitionRef = useRef<any>(null);
   const transcriptRef = useRef<string>('');
+  const analyzedRef = useRef(false);
 
   const handleVoiceInput = () => {
     // Если уже записываем - останавливаем
@@ -1576,6 +1577,7 @@ function ExpenseForm({
 
     recognitionRef.current = recognition;
     transcriptRef.current = '';
+    analyzedRef.current = false;
 
     // Отладка
     console.log('=== VOICE RECOGNITION START ===');
@@ -1622,8 +1624,12 @@ function ExpenseForm({
       setIsRecording(false);
       recognitionRef.current = null;
 
+      // Защита от двойного вызова analyzeVoiceText
+      if (analyzedRef.current) return;
+      analyzedRef.current = true;
+
       // Анализируем собранный текст
-      const finalText = transcriptRef.current;
+      const finalText = transcriptRef.current?.trim();
       if (finalText && finalText.length > 0) {
         analyzeVoiceText(finalText);
       }
