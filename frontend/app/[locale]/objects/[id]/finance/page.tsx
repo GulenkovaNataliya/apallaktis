@@ -1184,7 +1184,7 @@ ${t.closeProjectQuestion}
   if (view === 'add-expense') {
     return (
       <BackgroundPage specialPage="objekt">
-        <div className="min-h-screen flex flex-col gap-12" style={{ paddingLeft: '38px', paddingRight: '38px', paddingTop: '160px', paddingBottom: '120px' }}>
+        <div className="min-h-screen flex flex-col gap-12" style={{ paddingLeft: '40px', paddingRight: '40px', paddingTop: '180px', paddingBottom: '120px' }}>
           {/* Back - phrase, not a button */}
           <p
             onClick={() => setView('main')}
@@ -1372,7 +1372,7 @@ function AddWorkForm({
     <form onSubmit={handleSubmit} className="w-full flex flex-col gap-12">
       {/* Date */}
       <div>
-        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '20px', fontSize: '18px', fontWeight: 600 }}>
           {t.date}
         </p>
         <input
@@ -1393,7 +1393,7 @@ function AddWorkForm({
 
       {/* Amount */}
       <div>
-        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '20px', fontSize: '18px', fontWeight: 600 }}>
           {t.amount}
         </p>
         <input
@@ -1646,7 +1646,7 @@ function AddPaymentForm({
     <form onSubmit={handleSubmit} className="w-full flex flex-col gap-12">
       {/* Date */}
       <div>
-        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '20px', fontSize: '18px', fontWeight: 600 }}>
           {t.date}
         </p>
         <input
@@ -1667,7 +1667,7 @@ function AddPaymentForm({
 
       {/* Payment Method */}
       <div>
-        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '20px', fontSize: '18px', fontWeight: 600 }}>
           {t.paymentMethod}
         </p>
         {paymentMethods.length === 0 ? (
@@ -1707,7 +1707,7 @@ function AddPaymentForm({
 
       {/* Amount */}
       <div>
-        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '20px', fontSize: '18px', fontWeight: 600 }}>
           {t.amount}
         </p>
         <input
@@ -2288,10 +2288,10 @@ function AddExpenseForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-12" style={{ marginTop: '96px' }}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-12" style={{ marginTop: '48px' }}>
       {/* Category Selection */}
       <div>
-        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '20px', fontSize: '18px', fontWeight: 600 }}>
           {t.category}
         </p>
         {!showNewCategory ? (
@@ -2366,7 +2366,7 @@ function AddExpenseForm({
 
       {/* Payment Method Selection */}
       <div>
-        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '20px', fontSize: '18px', fontWeight: 600 }}>
           {t.paymentMethod}
         </p>
         {paymentMethods.length === 0 ? (
@@ -2395,7 +2395,7 @@ function AddExpenseForm({
 
       {/* Date */}
       <div>
-        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '20px', fontSize: '18px', fontWeight: 600 }}>
           {t.date}
         </p>
         <input
@@ -2410,7 +2410,7 @@ function AddExpenseForm({
 
       {/* Amount */}
       <div>
-        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+        <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '20px', fontSize: '18px', fontWeight: 600 }}>
           {t.amount}
         </p>
         <input
@@ -2472,7 +2472,7 @@ function AddExpenseForm({
       {/* Receipt Photo */}
       {hasVoiceAndPhoto && (
         <div>
-          <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '12px', fontSize: '18px', fontWeight: 600 }}>
+          <p className="text-button" style={{ color: 'var(--polar)', marginBottom: '20px', fontSize: '18px', fontWeight: 600 }}>
             {t.receiptPhoto} {isAnalyzing && '🔄'}
           </p>
           {!photoPreview ? (
