@@ -117,6 +117,7 @@ import { parseVoiceInput } from '@/lib/voiceParser';
 // 1. Add refs
 const recognitionRef = useRef<any>(null);
 const transcriptRef = useRef<string>('');
+const analyzedRef = useRef(false);  // Prevent double analysis
 
 // 2. Add state
 const [isRecording, setIsRecording] = useState(false);
@@ -135,6 +136,11 @@ const handleVoiceInput = () => {
   recognition.lang = langMap[locale] || 'el-GR';
   recognition.continuous = false;  // IMPORTANT: prevents duplication
   recognition.interimResults = true;
+
+  // Reset refs before starting
+  recognitionRef.current = recognition;
+  transcriptRef.current = '';
+  analyzedRef.current = false;
 
   recognition.onresult = (event: any) => {
     // 1) Collect all final results from scratch (no +=)
@@ -161,9 +167,14 @@ const handleVoiceInput = () => {
 
   recognition.onend = () => {
     setIsRecording(false);
+    recognitionRef.current = null;
+
+    // Guard: prevent double analysis
+    if (analyzedRef.current) return;
+    analyzedRef.current = true;
 
     // Parse and distribute to fields
-    const finalText = transcriptRef.current.trim();
+    const finalText = transcriptRef.current?.trim();
     if (finalText) {
       const parsed = parseVoiceInput(finalText, locale);
       setFormData(prev => ({
@@ -176,8 +187,6 @@ const handleVoiceInput = () => {
   };
 
   recognition.start();
-  recognitionRef.current = recognition;
-  transcriptRef.current = '';
   setIsRecording(true);
 };
 
@@ -186,6 +195,15 @@ const handleVoiceInput = () => {
   {isRecording ? '⏹️ STOP' : '🎤 Voice'}
 </button>
 ```
+
+### 4-Level Duplication Protection
+
+| Level | Protection | Code |
+|-------|------------|------|
+| 1 | Single result mode | `recognition.continuous = false` |
+| 2 | Rebuild from scratch | `finals.join()` instead of `+=` |
+| 3 | Double-call guard | `analyzedRef.current` check |
+| 4 | Safe fallback | `prev.description` preserves data |
 
 ---
 
