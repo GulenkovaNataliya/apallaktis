@@ -123,11 +123,30 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('Stripe checkout error:', error);
+    console.error('❌ Stripe checkout error:', {
+      message: error.message,
+      type: error.type,
+      code: error.code,
+      param: error.param,
+      statusCode: error.statusCode,
+      raw: error.raw,
+    });
+
+    // Детальная информация для отладки
+    const debugInfo = {
+      stripeKeyPrefix: process.env.STRIPE_SECRET_KEY?.substring(0, 10),
+      priceIdUsed: process.env.STRIPE_ACCOUNT_PRICE_ID,
+      errorType: error.type,
+      errorCode: error.code,
+    };
+    console.error('🔍 Debug info:', debugInfo);
+
     return NextResponse.json(
       {
         error: 'Ошибка создания сессии оплаты',
-        message: error.message
+        message: error.message,
+        code: error.code,
+        type: error.type,
       },
       { status: 500 }
     );
