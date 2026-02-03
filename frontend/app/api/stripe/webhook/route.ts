@@ -19,32 +19,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
 
 /**
- * Check if webhook event was already processed (deduplication)
- * Returns true if this is a duplicate (already processed)
- */
-async function isWebhookDuplicate(eventId: string): Promise<boolean> {
-  const supabase = await createClient();
-
-  // Try to insert - if conflict, it's a duplicate
-  const { error } = await supabase
-    .from('stripe_webhook_events')
-    .insert({ event_id: eventId });
-
-  if (error) {
-    // Unique constraint violation = duplicate
-    if (error.code === '23505') {
-      console.log(`⚠️ WEBHOOK: Duplicate event ${eventId}, skipping Telegram`);
-      return true;
-    }
-    // Other errors - log but continue (don't block webhook)
-    console.error('⚠️ WEBHOOK: Dedup check error:', error.message);
-  }
-
-  return false;
-}
-
-/**
  * Record payment in payments table for admin journal.
+ * Returns true if new record created, false if duplicate (already exists).
+ * This is the single source of truth for payment deduplication + Telegram.
  *
  * NOTE: amount is in EUR (not cents) — Stripe returns cents, we divide by 100 before calling.
  * NOTE: Uses service role client to bypass RLS (webhook has no user auth context).
@@ -59,7 +36,7 @@ async function recordPayment(data: {
   currency?: string;
   type: 'account_purchase' | 'subscription_payment';
   plan?: string;
-}): Promise<void> {
+}): Promise<boolean> {
   // Use service role client for webhook operations (no user auth context)
   const { createClient: createSupabaseClient } = await import('@supabase/supabase-js');
   const supabase = createSupabaseClient(
@@ -83,15 +60,17 @@ async function recordPayment(data: {
     });
 
   if (error) {
-    // Ignore duplicate (unique constraint on stripe_event_id)
+    // Duplicate (unique constraint on stripe_event_id) = already processed
     if (error.code === '23505') {
       console.log(`ℹ️ WEBHOOK: Payment already recorded for event ${data.stripeEventId}`);
-      return;
+      return false;
     }
     console.error('❌ WEBHOOK: Failed to record payment:', error.message);
-  } else {
-    console.log(`✅ WEBHOOK: Payment recorded: ${data.type}, €${data.amount}`);
+    return false;
   }
+
+  console.log(`✅ WEBHOOK: Payment recorded: ${data.type}, €${data.amount}`);
+  return true;
 }
 
 export async function POST(request: NextRequest) {
@@ -283,21 +262,8 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session, 
       }
     }
 
-    // 📱 Telegram уведомление (с дедупликацией)
-    const isDuplicate = await isWebhookDuplicate(eventId);
-    if (!isDuplicate) {
-      await sendTelegramMessage(formatPaymentMessage({
-        type: 'account_purchase',
-        userId,
-        email: userEmail,
-        amount: paymentAmount,
-        eventId,
-      }));
-      console.log('✅ WEBHOOK: Telegram уведомление отправлено');
-    }
-
-    // 📋 Записываем платёж в журнал (для админки)
-    await recordPayment({
+    // 📋 Записываем платёж в журнал (для админки) + 📱 Telegram если новый
+    const isNewPayment = await recordPayment({
       userId,
       stripeEventId: eventId,
       stripeCustomerId: session.customer as string,
@@ -305,6 +271,21 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session, 
       amount: paymentAmount,
       type: 'account_purchase',
     });
+
+    if (isNewPayment) {
+      try {
+        await sendTelegramMessage(formatPaymentMessage({
+          type: 'account_purchase',
+          userId,
+          email: userEmail,
+          amount: paymentAmount,
+          paidAt: purchaseDate.toISOString(),
+        }));
+        console.log('✅ WEBHOOK: Telegram уведомление отправлено');
+      } catch (e) {
+        console.error('⚠️ WEBHOOK: Telegram error (non-fatal):', e);
+      }
+    }
 
   } catch (error) {
     console.error('❌ WEBHOOK: Ошибка при обработке оплаты:', error);
@@ -772,28 +753,14 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice, eventId: s
       }
     }
 
-    // 📱 Telegram уведомление (с дедупликацией)
+    // 📋 Записываем платёж в журнал (для админки) + 📱 Telegram если новый
     const paymentAmount = (invoice.amount_paid || 0) / 100;
-    const isDuplicate = await isWebhookDuplicate(eventId);
-    if (!isDuplicate) {
-      await sendTelegramMessage(formatPaymentMessage({
-        type: 'subscription',
-        userId,
-        email: userEmail,
-        amount: paymentAmount,
-        plan: plan || undefined,
-        eventId,
-      }));
-      console.log('✅ WEBHOOK: Telegram уведомление отправлено (подписка)');
-    }
-
-    // 📋 Записываем платёж в журнал (для админки)
     if (paymentAmount > 0) {
       // Use status_transitions.paid_at (actual payment time) if available,
       // otherwise fallback to invoice.created (invoice creation time).
       // paid_at is more accurate as it reflects when money was actually received.
       const paidTimestamp = (invoice as any).status_transitions?.paid_at || invoice.created || (Date.now() / 1000);
-      await recordPayment({
+      const isNewPayment = await recordPayment({
         userId,
         stripeEventId: eventId,
         stripeCustomerId: invoice.customer as string,
@@ -803,6 +770,22 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice, eventId: s
         type: 'subscription_payment',
         plan: plan || undefined,
       });
+
+      if (isNewPayment) {
+        try {
+          await sendTelegramMessage(formatPaymentMessage({
+            type: 'subscription',
+            userId,
+            email: userEmail,
+            amount: paymentAmount,
+            plan: plan || undefined,
+            paidAt: new Date(paidTimestamp * 1000).toISOString(),
+          }));
+          console.log('✅ WEBHOOK: Telegram уведомление отправлено (подписка)');
+        } catch (e) {
+          console.error('⚠️ WEBHOOK: Telegram error (non-fatal):', e);
+        }
+      }
     }
 
   } catch (error) {

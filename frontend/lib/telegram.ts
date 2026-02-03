@@ -47,31 +47,24 @@ export async function sendTelegramMessage(text: string): Promise<void> {
 }
 
 /**
- * Format a Stripe payment notification message
+ * Format a Stripe payment notification message (Russian)
  */
 export function formatPaymentMessage(data: {
   type: 'account_purchase' | 'subscription';
-  userId: string;
   email?: string;
+  userId: string;
   amount: number;
+  currency?: string;
+  paidAt?: string;
   plan?: string;
-  eventId: string;
 }): string {
-  const lines = [
-    '✅ Stripe payment',
-    `type: ${data.type}`,
-    `user_id: ${data.userId}`,
-    `email: ${data.email || '-'}`,
-    `amount: ${data.amount.toFixed(2)} EUR`,
-  ];
-
-  if (data.plan) {
-    lines.push(`plan: ${data.plan}`);
-  }
-
-  lines.push(`time: ${new Date().toISOString()}`);
-  lines.push(`event: ${data.eventId}`);
-
-  return lines.join('\n');
+  const typeLabel = data.type === 'account_purchase' ? 'Покупка аккаунта' : `Подписка${data.plan ? ` (${data.plan})` : ''}`;
+  return [
+    '✅ Оплата получена',
+    `Тип: ${typeLabel}`,
+    `Сумма: ${data.amount.toFixed(2)} ${(data.currency || 'EUR').toUpperCase()}`,
+    `Клиент: ${data.email || data.userId}`,
+    `Дата: ${data.paidAt || new Date().toISOString()}`,
+  ].join('\n');
 }
 
