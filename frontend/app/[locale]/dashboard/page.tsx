@@ -248,10 +248,13 @@ export default function DashboardPage() {
           bonusMonths: profile.bonus_months || 0,
         });
 
-        // Notify admin about new demo signup (deduped - only sends once)
-        fetch('/api/admin/notify-demo-signup', { method: 'POST' }).catch(() => {
-          // Silently ignore errors - notification is not critical
-        });
+        // Notify admin about new demo signup (only for demo users, once per session)
+        if (profile.subscription_status === 'demo' && !sessionStorage.getItem('demo_notify_sent')) {
+          sessionStorage.setItem('demo_notify_sent', '1');
+          fetch('/api/admin/notify-demo-signup', { method: 'POST' }).catch(() => {
+            // Silently ignore errors - notification is not critical
+          });
+        }
       } catch (error) {
         console.error('Auth error:', error);
         router.push(`/${locale}/login`);
