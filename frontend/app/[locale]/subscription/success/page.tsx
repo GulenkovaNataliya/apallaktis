@@ -97,13 +97,13 @@ export default function SubscriptionSuccessPage() {
            'Payment confirmation receipt has been sent to your email. Τιμολόγιο/Απόδειξη will be sent separately'}
         </p>
 
-        {/* Go to Dashboard - phrase, not a button */}
+        {/* Go to Dashboard - link with arrow */}
         <p
           onClick={() => router.push(`/${locale}/page-pay`)}
           className="text-button cursor-pointer text-center"
           style={{ color: 'var(--polar)' }}
         >
-          {t?.goToDashboard || t?.goToMenu || 'Продолжить →'}
+          {t?.goToDashboard || t?.goToMenu || 'Продолжить'} →
         </p>
 
         {/* Session ID (for debugging) */}

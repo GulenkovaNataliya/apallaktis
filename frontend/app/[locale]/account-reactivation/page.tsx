@@ -17,6 +17,15 @@ export default function AccountReactivationPage() {
         style={{ paddingTop: '180px', paddingBottom: '120px', paddingLeft: '40px', paddingRight: '40px' }}
       >
         <div className="w-full max-w-sm flex flex-col gap-12">
+          {/* Back to Home - top link */}
+          <p
+            onClick={() => router.push(`/${locale}`)}
+            className="text-button cursor-pointer"
+            style={{ color: 'var(--polar)' }}
+          >
+            {t.backToHome}
+          </p>
+
           {/* Welcome Back Icon */}
           <div
             className="mx-auto flex h-24 w-24 items-center justify-center rounded-full"
@@ -50,10 +59,15 @@ export default function AccountReactivationPage() {
             </ul>
           </div>
 
-          {/* Explanation */}
-          <p className="text-body text-center" style={{ color: 'var(--zanah)', opacity: 0.9 }}>
-            {t.explanation}
-          </p>
+          {/* Explanation - split into sentences */}
+          <div className="text-body text-center" style={{ color: 'var(--zanah)', opacity: 0.9 }}>
+            <p style={{ marginBottom: '12px' }}>
+              {t.explanation.split('.')[0]}.
+            </p>
+            <p>
+              {t.explanation.split('.').slice(1).join('.').trim()}
+            </p>
+          </div>
 
           {/* Free Month Notice */}
           <p className="text-body text-center font-semibold" style={{ color: '#25D366' }}>
@@ -72,20 +86,6 @@ export default function AccountReactivationPage() {
             }}
           >
             {t.buyAccount}
-          </button>
-
-          {/* Back to Home */}
-          <button
-            onClick={() => router.push(`/${locale}`)}
-            className="w-full rounded-2xl flex items-center justify-center text-button"
-            style={{
-              minHeight: '52px',
-              backgroundColor: 'transparent',
-              color: 'var(--polar)',
-              border: '2px solid var(--polar)',
-            }}
-          >
-            {t.backToHome}
           </button>
         </div>
       </div>

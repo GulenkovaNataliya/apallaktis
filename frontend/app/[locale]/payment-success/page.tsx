@@ -103,13 +103,13 @@ export default function PaymentSuccessPage() {
           {t.receiptSent}
         </p>
 
-        {/* Go to Dashboard - phrase, not a button */}
+        {/* Go to Dashboard - link with arrow */}
         <p
           onClick={() => router.push(`/${locale}/page-pay`)}
           className="text-button cursor-pointer text-center"
           style={{ color: 'var(--polar)' }}
         >
-          {t.goToDashboard}
+          {t.goToDashboard} →
         </p>
 
         {/* Session ID (for debugging) */}
