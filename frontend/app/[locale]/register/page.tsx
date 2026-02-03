@@ -65,6 +65,7 @@ export default function RegisterPage() {
     afm: "",
   });
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [contactConsent, setContactConsent] = useState(false);
   const [errors, setErrors] = useState({
     email: "",
     phone: "",
@@ -252,6 +253,8 @@ export default function RegisterPage() {
             preferred_language: locale,
             // Referral code - only if validated
             referred_by: validatedReferralCode || null,
+            // Contact consent
+            contact_consent: contactConsent,
           },
         },
       });
@@ -603,7 +606,21 @@ export default function RegisterPage() {
             {/* Spacer to push bottom elements to bottom of screen */}
             <div style={{ flexGrow: 1, minHeight: "40px" }} />
 
-            {/* Consent Checkbox - MOVED ABOVE SUBMIT BUTTON */}
+            {/* Contact Consent Checkbox (optional) */}
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={contactConsent}
+                onChange={(e) => setContactConsent(e.target.checked)}
+                className="mt-1 w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-500"
+                style={{ accentColor: 'var(--skeptic)' }}
+              />
+              <span className="text-body" style={{ color: "var(--skeptic)" }}>
+                Я согласен(на), чтобы со мной связывались по вопросам сервиса (email / телефон)
+              </span>
+            </label>
+
+            {/* Terms Checkbox - REQUIRED */}
             <label className="flex items-start gap-3 cursor-pointer" style={{ marginBottom: "40px" }}>
               <input
                 type="checkbox"

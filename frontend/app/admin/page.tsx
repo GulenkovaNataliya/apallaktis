@@ -214,7 +214,7 @@ export default function AdminPage() {
     const matchPlan = userPlanFilter === "all" || u.subscription_plan === userPlanFilter;
     const matchDoc = userDocFilter === "all" || u.doc_type === userDocFilter;
 
-    // Quick time filter (New 24h / New 7d)
+    // Quick time filter (Новые 24ч / Новые 7 дней)
     let matchTime = true;
     if (quickTimeFilter !== "none" && u.created_at) {
       const createdAt = new Date(u.created_at);
@@ -717,7 +717,7 @@ export default function AdminPage() {
                 transition: "all 0.2s",
               }}
             >
-              🕐 New 24h ({stats.new24h})
+              🕐 Новые 24ч ({stats.new24h})
             </button>
             <button
               onClick={() => setQuickTimeFilter(quickTimeFilter === "7d" ? "none" : "7d")}
@@ -734,7 +734,7 @@ export default function AdminPage() {
                 transition: "all 0.2s",
               }}
             >
-              📅 New 7d ({stats.new7d})
+              📅 Новые 7 дней ({stats.new7d})
             </button>
             <span style={{ width: "1px", height: "20px", background: "#e9ecef", margin: "0 4px" }} />
             <button
@@ -752,7 +752,7 @@ export default function AdminPage() {
                 transition: "all 0.2s",
               }}
             >
-              🎮 Only Demo ({stats.demo})
+              🎮 Только DEMO ({stats.demo})
             </button>
             <button
               onClick={() => setOnlyConsent(!onlyConsent)}
@@ -769,7 +769,7 @@ export default function AdminPage() {
                 transition: "all 0.2s",
               }}
             >
-              ✅ Consent Only ({stats.consent})
+              ✅ Можно связываться ({stats.consent})
             </button>
           </div>
           <div style={{ background: "#f8f9fa", padding: "8px 12px", borderRadius: "8px", marginBottom: "10px", fontWeight: 600, fontSize: "13px" }}>
