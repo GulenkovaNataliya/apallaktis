@@ -75,21 +75,3 @@ export function formatPaymentMessage(data: {
   return lines.join('\n');
 }
 
-/**
- * Format a new demo signup notification message
- */
-export function formatDemoSignupMessage(data: {
-  userId: string;
-  email: string;
-  phone?: string;
-  consent: boolean;
-}): string {
-  return [
-    '🆕 New demo signup',
-    `email: ${data.email}`,
-    `phone: ${data.phone || '-'}`,
-    `consent: ${data.consent}`,
-    `user_id: ${data.userId}`,
-    `time: ${new Date().toISOString()}`,
-  ].join('\n');
-}
