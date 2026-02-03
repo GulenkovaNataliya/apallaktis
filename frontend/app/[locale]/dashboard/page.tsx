@@ -247,6 +247,11 @@ export default function DashboardPage() {
           referredBy: profile.referred_by,
           bonusMonths: profile.bonus_months || 0,
         });
+
+        // Notify admin about new demo signup (deduped - only sends once)
+        fetch('/api/admin/notify-demo-signup', { method: 'POST' }).catch(() => {
+          // Silently ignore errors - notification is not critical
+        });
       } catch (error) {
         console.error('Auth error:', error);
         router.push(`/${locale}/login`);

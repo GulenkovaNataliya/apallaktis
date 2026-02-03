@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@/lib/supabase/server';
+import { addCalendarMonthClamped } from '@/lib/date-utils';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-12-15.clover',
@@ -119,9 +120,10 @@ export async function POST(request: NextRequest) {
           plan: planName,
         },
         // Дата начала подписки = сегодня
-        // Дата следующего платежа = через месяц от даты покупки аккаунта
+        // Trial до = 1 календарный месяц от даты покупки аккаунта (не 30 дней!)
+        // Например: купил 31 Jan → trial до 28/29 Feb
         trial_end: profile.account_purchased_at
-          ? Math.floor(new Date(profile.account_purchased_at).getTime() / 1000) + 30 * 24 * 60 * 60
+          ? Math.floor(addCalendarMonthClamped(new Date(profile.account_purchased_at)).getTime() / 1000)
           : undefined,
       },
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,

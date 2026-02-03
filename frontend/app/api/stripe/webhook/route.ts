@@ -9,12 +9,90 @@ import { createClient } from '@/lib/supabase/server';
 import { sendAccountPurchaseEmail } from '@/lib/email/send';
 import { sendReceiptEmail } from '@/lib/email/send-receipt';
 import { sendReferralPurchaseEmail, sendAdminPaymentNotificationEmail } from '@/lib/email/notifications';
+import { addCalendarMonthClamped } from '@/lib/date-utils';
+import { sendTelegramMessage, formatPaymentMessage } from '@/lib/telegram';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2025-12-15.clover',
 });
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
+
+/**
+ * Check if webhook event was already processed (deduplication)
+ * Returns true if this is a duplicate (already processed)
+ */
+async function isWebhookDuplicate(eventId: string): Promise<boolean> {
+  const supabase = await createClient();
+
+  // Try to insert - if conflict, it's a duplicate
+  const { error } = await supabase
+    .from('stripe_webhook_events')
+    .insert({ event_id: eventId });
+
+  if (error) {
+    // Unique constraint violation = duplicate
+    if (error.code === '23505') {
+      console.log(`⚠️ WEBHOOK: Duplicate event ${eventId}, skipping Telegram`);
+      return true;
+    }
+    // Other errors - log but continue (don't block webhook)
+    console.error('⚠️ WEBHOOK: Dedup check error:', error.message);
+  }
+
+  return false;
+}
+
+/**
+ * Record payment in payments table for admin journal.
+ *
+ * NOTE: amount is in EUR (not cents) — Stripe returns cents, we divide by 100 before calling.
+ * NOTE: Uses service role client to bypass RLS (webhook has no user auth context).
+ */
+async function recordPayment(data: {
+  userId: string;
+  stripeEventId: string;
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
+  paidAt: Date;
+  amount: number;  // EUR, not cents!
+  currency?: string;
+  type: 'account_purchase' | 'subscription_payment';
+  plan?: string;
+}): Promise<void> {
+  // Use service role client for webhook operations (no user auth context)
+  const { createClient: createSupabaseClient } = await import('@supabase/supabase-js');
+  const supabase = createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { persistSession: false } }
+  );
+
+  const { error } = await supabase
+    .from('payments')
+    .insert({
+      user_id: data.userId,
+      stripe_event_id: data.stripeEventId,
+      stripe_customer_id: data.stripeCustomerId || null,
+      stripe_subscription_id: data.stripeSubscriptionId || null,
+      paid_at: data.paidAt.toISOString(),
+      amount: data.amount,
+      currency: data.currency || 'eur',
+      type: data.type,
+      plan: data.plan || null,
+    });
+
+  if (error) {
+    // Ignore duplicate (unique constraint on stripe_event_id)
+    if (error.code === '23505') {
+      console.log(`ℹ️ WEBHOOK: Payment already recorded for event ${data.stripeEventId}`);
+      return;
+    }
+    console.error('❌ WEBHOOK: Failed to record payment:', error.message);
+  } else {
+    console.log(`✅ WEBHOOK: Payment recorded: ${data.type}, €${data.amount}`);
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,7 +130,7 @@ export async function POST(request: NextRequest) {
     // Обрабатываем различные типы событий
     switch (event.type) {
       case 'checkout.session.completed':
-        await handleCheckoutSessionCompleted(event.data.object as Stripe.Checkout.Session);
+        await handleCheckoutSessionCompleted(event.data.object as Stripe.Checkout.Session, event.id);
         break;
 
       case 'customer.subscription.created':
@@ -68,7 +146,7 @@ export async function POST(request: NextRequest) {
         break;
 
       case 'invoice.payment_succeeded':
-        await handleInvoicePaymentSucceeded(event.data.object as Stripe.Invoice);
+        await handleInvoicePaymentSucceeded(event.data.object as Stripe.Invoice, event.id);
         break;
 
       case 'invoice.payment_failed':
@@ -103,7 +181,7 @@ export async function POST(request: NextRequest) {
  * Обработка успешного завершения Checkout Session
  * Активирует аккаунт и отправляет чек/инвойс
  */
-async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
+async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session, eventId: string) {
   console.log('💳 WEBHOOK: Обработка успешной оплаты...', session.id);
 
   const supabase = await createClient();
@@ -132,15 +210,18 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     }
 
     // Активируем аккаунт пользователя
-    const now = new Date().toISOString();
-    const firstMonthFreeExpiresAt = new Date();
-    firstMonthFreeExpiresAt.setDate(firstMonthFreeExpiresAt.getDate() + 30);
+    // Используем время из Stripe события (не new Date()), чтобы не терять время при задержке webhook
+    const purchaseDate = new Date(session.created * 1000); // session.created - Unix timestamp в секундах
+    const purchasedAt = purchaseDate.toISOString();
+    // Бесплатный месяц = 1 календарный месяц от даты покупки (не 30 дней!)
+    // Например: 31 Jan → 28/29 Feb, 15 Mar → 15 Apr
+    const firstMonthFreeExpiresAt = addCalendarMonthClamped(purchaseDate);
 
     const { error: updateError } = await supabase
       .from('profiles')
       .update({
         account_purchased: true,
-        account_purchased_at: now,
+        account_purchased_at: purchasedAt,
         first_month_free_expires_at: firstMonthFreeExpiresAt.toISOString(),
         subscription_status: 'active',
       })
@@ -201,6 +282,31 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
         console.log('✅ WEBHOOK: Уведомление администратору отправлено');
       }
     }
+
+    // 📱 Telegram уведомление (с дедупликацией)
+    const isDuplicate = await isWebhookDuplicate(eventId);
+    if (!isDuplicate) {
+      const paymentAmount = (session.amount_total || 0) / 100;
+      await sendTelegramMessage(formatPaymentMessage({
+        type: 'account_purchase',
+        userId,
+        email: userEmail,
+        amount: paymentAmount,
+        eventId,
+      }));
+      console.log('✅ WEBHOOK: Telegram уведомление отправлено');
+    }
+
+    // 📋 Записываем платёж в журнал (для админки)
+    const paymentAmount = (session.amount_total || 0) / 100;
+    await recordPayment({
+      userId,
+      stripeEventId: eventId,
+      stripeCustomerId: session.customer as string,
+      paidAt: purchaseDate,
+      amount: paymentAmount,
+      type: 'account_purchase',
+    });
 
   } catch (error) {
     console.error('❌ WEBHOOK: Ошибка при обработке оплаты:', error);
@@ -409,13 +515,18 @@ async function rewardReferrer(
         bonusMessage = 'VIP навсегда - бонус не нужен';
         console.log(`ℹ️ WEBHOOK: Реферер ${referrer.id} - VIP навсегда, бонус не начисляется`);
       } else {
-        // VIP до определённой даты — добавляем +1 месяц к vip_expires_at
-        const currentVipExpires = new Date(referrer.vip_expires_at);
-        currentVipExpires.setMonth(currentVipExpires.getMonth() + 1);
-        updateData.vip_expires_at = currentVipExpires.toISOString();
-        bonusMessage = `VIP продлён до ${currentVipExpires.toLocaleDateString()}`;
+        // VIP до определённой даты — добавляем +1 календарный месяц
+        // Если VIP ещё не истёк → добавляем к дате истечения (накопление)
+        // Если VIP уже истёк → добавляем от текущей даты (реактивация)
+        const now = new Date();
+        const vipExpiresDate = new Date(referrer.vip_expires_at);
+        const baseDate = vipExpiresDate > now ? vipExpiresDate : now;
+        const newVipExpires = addCalendarMonthClamped(baseDate);
+        updateData.vip_expires_at = newVipExpires.toISOString();
+        bonusMessage = `VIP продлён до ${newVipExpires.toLocaleDateString()}`;
         console.log(`✅ WEBHOOK: +1 месяц к VIP для реферера ${referrer.id}`);
-        console.log(`   Новая дата VIP: ${currentVipExpires.toISOString()}`);
+        console.log(`   База: ${baseDate.toISOString()} (${vipExpiresDate > now ? 'ещё активен' : 'уже истёк'})`);
+        console.log(`   Новая дата VIP: ${newVipExpires.toISOString()}`);
       }
     } else {
       // Обычный пользователь — добавляем bonus_months
@@ -537,7 +648,7 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 /**
  * Обработка успешной оплаты invoice (recurring payment)
  */
-async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
+async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice, eventId: string) {
   console.log('💰 WEBHOOK: Успешная оплата invoice...', invoice.id);
 
   const supabase = await createClient();
@@ -609,10 +720,12 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
 
     console.log(`✅ WEBHOOK: Подписка продлена до ${subscriptionExpiresAt}`);
 
+    // Получаем email пользователя
+    const { data: { user } } = await supabase.auth.admin.getUserById(userId);
+    const userEmail = user?.email;
+
     // Отправляем чек/инвойс на email (только если были списаны деньги)
     if (bonusMonths === 0) {
-      const { data: { user } } = await supabase.auth.admin.getUserById(userId);
-      const userEmail = user?.email;
       const userLocale = subscription.metadata?.locale || 'el';
 
       if (userEmail && invoice.amount_paid > 0) {
@@ -659,6 +772,40 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
           console.log('✅ WEBHOOK: Уведомление администратору отправлено (подписка)');
         }
       }
+    }
+
+    // 📱 Telegram уведомление (с дедупликацией)
+    const isDuplicate = await isWebhookDuplicate(eventId);
+    if (!isDuplicate) {
+      const paymentAmount = (invoice.amount_paid || 0) / 100;
+      await sendTelegramMessage(formatPaymentMessage({
+        type: 'subscription',
+        userId,
+        email: userEmail,
+        amount: paymentAmount,
+        plan: plan || undefined,
+        eventId,
+      }));
+      console.log('✅ WEBHOOK: Telegram уведомление отправлено (подписка)');
+    }
+
+    // 📋 Записываем платёж в журнал (для админки)
+    const paymentAmount = (invoice.amount_paid || 0) / 100;
+    if (paymentAmount > 0) {
+      // Use status_transitions.paid_at (actual payment time) if available,
+      // otherwise fallback to invoice.created (invoice creation time).
+      // paid_at is more accurate as it reflects when money was actually received.
+      const paidTimestamp = (invoice as any).status_transitions?.paid_at || invoice.created || (Date.now() / 1000);
+      await recordPayment({
+        userId,
+        stripeEventId: eventId,
+        stripeCustomerId: invoice.customer as string,
+        stripeSubscriptionId: subscriptionId,
+        paidAt: new Date(paidTimestamp * 1000),
+        amount: paymentAmount,
+        type: 'subscription_payment',
+        plan: plan || undefined,
+      });
     }
 
   } catch (error) {

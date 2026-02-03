@@ -28,6 +28,7 @@ interface UserProfile {
   referred_by: string | null;
   bonus_months: number | null;
   role: string;
+  contact_consent: boolean;
 }
 
 interface ReferralStat {
@@ -36,23 +37,55 @@ interface ReferralStat {
   purchased: number;
 }
 
+interface Payment {
+  id: string;
+  user_id: string;
+  stripe_event_id: string;
+  paid_at: string;
+  amount: number;
+  currency: string;
+  type: string;
+  plan: string | null;
+  invoice_created: boolean;
+  invoice_sent: boolean;
+  created_at: string;
+  // Joined from profiles
+  profiles: {
+    name: string;
+    email: string | null;
+    doc_type: string | null;
+    afm: string | null;
+  } | null;
+}
+
 export default function AdminPage() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<UserProfile[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
   const [adminId, setAdminId] = useState<string | null>(null);
 
   // Section open states
   const [usersOpen, setUsersOpen] = useState(true);
   const [referralsOpen, setReferralsOpen] = useState(false);
   const [vipOpen, setVipOpen] = useState(false);
+  const [paymentsOpen, setPaymentsOpen] = useState(false);
+
+  // Payments filters
+  const [paymentSearch, setPaymentSearch] = useState("");
+  const [paymentSentFilter, setPaymentSentFilter] = useState("all"); // all | sent | not_sent
 
   // Filters
   const [userSearch, setUserSearch] = useState("");
   const [userStatusFilter, setUserStatusFilter] = useState("all");
   const [userPlanFilter, setUserPlanFilter] = useState("all");
   const [userDocFilter, setUserDocFilter] = useState("all");
+
+  // Quick filters
+  const [quickTimeFilter, setQuickTimeFilter] = useState<"none" | "24h" | "7d">("none");
+  const [onlyDemo, setOnlyDemo] = useState(false);
+  const [onlyConsent, setOnlyConsent] = useState(false);
 
   // Modals
   const [viewModalOpen, setViewModalOpen] = useState(false);
@@ -130,6 +163,19 @@ export default function AdminPage() {
         setUsers(usersData);
       }
 
+      // Load payments with profile info (FK join)
+      const { data: paymentsData } = await supabase
+        .from("payments")
+        .select(`
+          *,
+          profiles!payments_user_id_fkey (name, email, doc_type, afm)
+        `)
+        .order("paid_at", { ascending: false });
+
+      if (paymentsData) {
+        setPayments(paymentsData as Payment[]);
+      }
+
       setIsLoading(false);
     }
 
@@ -137,6 +183,10 @@ export default function AdminPage() {
   }, [router]);
 
   // Stats calculations
+  const now = new Date();
+  const cutoff24h = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const cutoff7d = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
   const stats = {
     total: users.length,
     active: users.filter(u => u.subscription_status === "active").length,
@@ -148,6 +198,10 @@ export default function AdminPage() {
     vip: users.filter(u => u.subscription_status === "vip").length,
     referrals: users.filter(u => u.referred_by).length,
     revenue: 0,
+    // Quick filter counts
+    new24h: users.filter(u => u.created_at && new Date(u.created_at) >= cutoff24h).length,
+    new7d: users.filter(u => u.created_at && new Date(u.created_at) >= cutoff7d).length,
+    consent: users.filter(u => u.contact_consent === true).length,
   };
 
   // Filter users
@@ -159,7 +213,24 @@ export default function AdminPage() {
     const matchStatus = userStatusFilter === "all" || u.subscription_status === userStatusFilter;
     const matchPlan = userPlanFilter === "all" || u.subscription_plan === userPlanFilter;
     const matchDoc = userDocFilter === "all" || u.doc_type === userDocFilter;
-    return matchSearch && matchStatus && matchPlan && matchDoc;
+
+    // Quick time filter (New 24h / New 7d)
+    let matchTime = true;
+    if (quickTimeFilter !== "none" && u.created_at) {
+      const createdAt = new Date(u.created_at);
+      const now = new Date();
+      const hoursAgo = quickTimeFilter === "24h" ? 24 : 7 * 24;
+      const cutoff = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000);
+      matchTime = createdAt >= cutoff;
+    }
+
+    // Only demo filter
+    const matchDemo = !onlyDemo || u.subscription_status === "demo";
+
+    // Only consent filter
+    const matchConsent = !onlyConsent || u.contact_consent === true;
+
+    return matchSearch && matchStatus && matchPlan && matchDoc && matchTime && matchDemo && matchConsent;
   });
 
   // VIP users
@@ -400,6 +471,7 @@ export default function AdminPage() {
       Company: u.company_name,
       subscription_status: u.subscription_status,
       subscription_plan: u.subscription_plan || "DEMO",
+      Consent: u.contact_consent ? "Yes" : "No",
       Created: u.created_at?.split("T")[0],
       vip_expires_at: u.vip_expires_at || "",
       vip_granted_by: u.vip_granted_by || "",
@@ -428,6 +500,62 @@ export default function AdminPage() {
       vip_reason: u.vip_reason || "",
     }));
     exportToExcel(data, "APALLAKTIS_VIP");
+  };
+
+  // Filter payments (null-safe)
+  const filteredPayments = payments.filter(p => {
+    const name = (p.profiles?.name ?? "").toLowerCase();
+    const email = (p.profiles?.email ?? "").toLowerCase();
+    const searchTerm = paymentSearch.toLowerCase();
+    const matchSearch = paymentSearch === "" ||
+      name.includes(searchTerm) ||
+      email.includes(searchTerm);
+    const matchSent = paymentSentFilter === "all" ||
+      (paymentSentFilter === "sent" && p.invoice_sent) ||
+      (paymentSentFilter === "not_sent" && !p.invoice_sent);
+    return matchSearch && matchSent;
+  });
+
+  // Update payment invoice status
+  const handleUpdatePaymentInvoice = async (paymentId: string, field: "invoice_created" | "invoice_sent", value: boolean) => {
+    // Guard: can't set invoice_sent=true if invoice_created=false
+    if (field === "invoice_sent" && value === true) {
+      const payment = payments.find(p => p.id === paymentId);
+      if (payment && !payment.invoice_created) {
+        alert("Сначала создайте τιμολόγιο (invoice_created)");
+        return;
+      }
+    }
+
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("payments")
+      .update({ [field]: value })
+      .eq("id", paymentId);
+
+    if (error) {
+      alert("Ошибка: " + error.message);
+      return;
+    }
+
+    setPayments(payments.map(p => p.id === paymentId ? { ...p, [field]: value } : p));
+  };
+
+  const exportPayments = () => {
+    const data = filteredPayments.map(p => ({
+      "Дата оплаты": p.paid_at?.split("T")[0],
+      "Имя": p.profiles?.name || "",
+      "Email": p.profiles?.email || "",
+      "Сумма": p.amount,
+      "Валюта": p.currency,
+      "Тип": p.type,
+      "План": p.plan || "—",
+      "Создан (myDATA)": p.invoice_created ? "Да" : "Нет",
+      "Отправлен": p.invoice_sent ? "Да" : "Нет",
+      "Документ": p.profiles?.doc_type || "",
+      "ΑΦΜ": p.profiles?.afm || "",
+    }));
+    exportToExcel(data, "APALLAKTIS_Payments");
   };
 
   // Logout
@@ -571,14 +699,87 @@ export default function AdminPage() {
               📥 Excel
             </button>
           </div>
+          {/* Quick Filters Row */}
+          <div style={{ display: "flex", gap: "8px", marginBottom: "15px", flexWrap: "wrap", alignItems: "center" }}>
+            <span style={{ fontSize: "12px", fontWeight: 600, color: "#495057" }}>Быстрые фильтры:</span>
+            <button
+              onClick={() => setQuickTimeFilter(quickTimeFilter === "24h" ? "none" : "24h")}
+              style={{
+                padding: "6px 12px",
+                border: "2px solid",
+                borderColor: quickTimeFilter === "24h" ? "#FF6B35" : "#e9ecef",
+                borderRadius: "20px",
+                fontSize: "12px",
+                fontWeight: 600,
+                cursor: "pointer",
+                background: quickTimeFilter === "24h" ? "#FF6B35" : "#fff",
+                color: quickTimeFilter === "24h" ? "#fff" : "#495057",
+                transition: "all 0.2s",
+              }}
+            >
+              🕐 New 24h ({stats.new24h})
+            </button>
+            <button
+              onClick={() => setQuickTimeFilter(quickTimeFilter === "7d" ? "none" : "7d")}
+              style={{
+                padding: "6px 12px",
+                border: "2px solid",
+                borderColor: quickTimeFilter === "7d" ? "#FF6B35" : "#e9ecef",
+                borderRadius: "20px",
+                fontSize: "12px",
+                fontWeight: 600,
+                cursor: "pointer",
+                background: quickTimeFilter === "7d" ? "#FF6B35" : "#fff",
+                color: quickTimeFilter === "7d" ? "#fff" : "#495057",
+                transition: "all 0.2s",
+              }}
+            >
+              📅 New 7d ({stats.new7d})
+            </button>
+            <span style={{ width: "1px", height: "20px", background: "#e9ecef", margin: "0 4px" }} />
+            <button
+              onClick={() => setOnlyDemo(!onlyDemo)}
+              style={{
+                padding: "6px 12px",
+                border: "2px solid",
+                borderColor: onlyDemo ? "#a18cd1" : "#e9ecef",
+                borderRadius: "20px",
+                fontSize: "12px",
+                fontWeight: 600,
+                cursor: "pointer",
+                background: onlyDemo ? "#a18cd1" : "#fff",
+                color: onlyDemo ? "#fff" : "#495057",
+                transition: "all 0.2s",
+              }}
+            >
+              🎮 Only Demo ({stats.demo})
+            </button>
+            <button
+              onClick={() => setOnlyConsent(!onlyConsent)}
+              style={{
+                padding: "6px 12px",
+                border: "2px solid",
+                borderColor: onlyConsent ? "#28a745" : "#e9ecef",
+                borderRadius: "20px",
+                fontSize: "12px",
+                fontWeight: 600,
+                cursor: "pointer",
+                background: onlyConsent ? "#28a745" : "#fff",
+                color: onlyConsent ? "#fff" : "#495057",
+                transition: "all 0.2s",
+              }}
+            >
+              ✅ Consent Only ({stats.consent})
+            </button>
+          </div>
           <div style={{ background: "#f8f9fa", padding: "8px 12px", borderRadius: "8px", marginBottom: "10px", fontWeight: 600, fontSize: "13px" }}>
             Показано: <span style={{ color: "#FF6B35" }}>{filteredUsers.length}</span>
           </div>
           <div style={{ overflowX: "auto", borderRadius: "8px", border: "1px solid #e9ecef" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1100px" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1200px" }}>
               <thead>
                 <tr>
-                  {["ID", "Имя", "Email", "Телефон", "Документ", "ΑΦΜ", "Status", "Plan", "Дата", "Действия"].map(h => (
+                  {["ID", "Имя", "Email", "Телефон", "Документ", "ΑΦΜ", "Status", "Plan", "Consent", "Дата", "Действия"].map(h => (
                     <th key={h} style={{ padding: "10px 8px", textAlign: "left", borderBottom: "1px solid #e9ecef", background: "#f8f9fa", fontWeight: 700, fontSize: "10px", textTransform: "uppercase", color: "#495057" }}>{h}</th>
                   ))}
                 </tr>
@@ -599,6 +800,9 @@ export default function AdminPage() {
                     </td>
                     <td style={{ padding: "10px 8px", borderBottom: "1px solid #e9ecef", fontSize: "12px" }}>
                       <span style={{ ...getBadgeStyle((user.subscription_plan || "demo").toLowerCase()), display: "inline-block", padding: "2px 6px", borderRadius: "10px", fontSize: "9px", fontWeight: 700, textTransform: "uppercase" }}>{user.subscription_plan || "DEMO"}</span>
+                    </td>
+                    <td style={{ padding: "10px 8px", borderBottom: "1px solid #e9ecef", fontSize: "12px", textAlign: "center" }}>
+                      {user.contact_consent ? <span style={{ color: "#28a745" }}>✅</span> : <span style={{ color: "#dc3545" }}>❌</span>}
                     </td>
                     <td style={{ padding: "10px 8px", borderBottom: "1px solid #e9ecef", fontSize: "12px" }}>{user.created_at?.split("T")[0]}</td>
                     <td style={{ padding: "10px 8px", borderBottom: "1px solid #e9ecef", fontSize: "12px" }}>
@@ -679,6 +883,117 @@ export default function AdminPage() {
                     </tr>
                   );
                 })}
+              </tbody>
+            </table>
+          </div>
+        </Section>
+
+        {/* Payments Section */}
+        <Section title="История платежей" icon="💰" isOpen={paymentsOpen} onToggle={() => setPaymentsOpen(!paymentsOpen)}>
+          <div style={{ display: "flex", gap: "12px", marginBottom: "15px", flexWrap: "wrap", alignItems: "center" }}>
+            <div style={{ flex: 1, minWidth: "200px", position: "relative" }}>
+              <span style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)" }}>🔍</span>
+              <input
+                type="text"
+                placeholder="Поиск по имени/email"
+                value={paymentSearch}
+                onChange={(e) => setPaymentSearch(e.target.value)}
+                style={{ width: "100%", padding: "10px 12px 10px 35px", border: "2px solid #e9ecef", borderRadius: "8px", fontSize: "14px" }}
+              />
+            </div>
+            <select value={paymentSentFilter} onChange={(e) => setPaymentSentFilter(e.target.value)} style={{ padding: "10px", border: "2px solid #e9ecef", borderRadius: "8px", fontSize: "13px" }}>
+              <option value="all">Все</option>
+              <option value="not_sent">Не отправлен</option>
+              <option value="sent">Отправлен</option>
+            </select>
+            <button onClick={exportPayments} style={{ background: "linear-gradient(135deg,#11998e,#38ef7d)", color: "#fff", border: "none", padding: "10px 20px", borderRadius: "8px", fontWeight: 700, cursor: "pointer" }}>📥 Excel</button>
+          </div>
+          <div style={{ background: "#f8f9fa", padding: "8px 12px", borderRadius: "8px", marginBottom: "10px", fontWeight: 600, fontSize: "13px" }}>
+            Платежей: <span style={{ color: "#FF6B35" }}>{filteredPayments.length}</span>
+            {paymentSentFilter === "not_sent" && <span style={{ marginLeft: "15px", color: "#dc3545" }}>⚠️ Требуют обработки</span>}
+          </div>
+          <div style={{ overflowX: "auto", borderRadius: "8px", border: "1px solid #e9ecef" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1000px" }}>
+              <thead>
+                <tr>
+                  {["Дата", "Клиент", "Сумма", "Тип", "План", "Документ", "Workflow", "Действия"].map(h => (
+                    <th key={h} style={{ padding: "10px 8px", textAlign: "left", borderBottom: "1px solid #e9ecef", background: "#f8f9fa", fontWeight: 700, fontSize: "10px", textTransform: "uppercase", color: "#495057" }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filteredPayments.map(payment => (
+                  <tr key={payment.id}>
+                    <td style={{ padding: "10px 8px", borderBottom: "1px solid #e9ecef", fontSize: "12px" }}>
+                      {payment.paid_at?.split("T")[0]}
+                    </td>
+                    <td style={{ padding: "10px 8px", borderBottom: "1px solid #e9ecef", fontSize: "12px" }}>
+                      <b>{payment.profiles?.name || "—"}</b><br/>
+                      <small style={{ color: "#6c757d" }}>{payment.profiles?.email || "—"}</small>
+                    </td>
+                    <td style={{ padding: "10px 8px", borderBottom: "1px solid #e9ecef", fontSize: "12px", fontWeight: 600 }}>
+                      €{payment.amount.toFixed(2)}
+                    </td>
+                    <td style={{ padding: "10px 8px", borderBottom: "1px solid #e9ecef", fontSize: "12px" }}>
+                      <span style={{
+                        ...getBadgeStyle(payment.type === "account_purchase" ? "active" : "standard"),
+                        display: "inline-block", padding: "2px 6px", borderRadius: "10px", fontSize: "9px", fontWeight: 700
+                      }}>
+                        {payment.type === "account_purchase" ? "Аккаунт" : "Подписка"}
+                      </span>
+                    </td>
+                    <td style={{ padding: "10px 8px", borderBottom: "1px solid #e9ecef", fontSize: "12px" }}>
+                      {payment.plan || "—"}
+                    </td>
+                    <td style={{ padding: "10px 8px", borderBottom: "1px solid #e9ecef", fontSize: "12px" }}>
+                      {payment.profiles?.doc_type && (
+                        <>
+                          <span style={{ ...getBadgeStyle(payment.profiles.doc_type), display: "inline-block", padding: "2px 6px", borderRadius: "10px", fontSize: "9px", fontWeight: 700 }}>
+                            {payment.profiles.doc_type}
+                          </span>
+                          {payment.profiles.afm && <small style={{ marginLeft: "4px", color: "#6c757d" }}>{payment.profiles.afm}</small>}
+                        </>
+                      )}
+                    </td>
+                    <td style={{ padding: "10px 8px", borderBottom: "1px solid #e9ecef", fontSize: "12px" }}>
+                      <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+                        <span title="Stripe оплачен" style={{ color: "#28a745" }}>Stripe ✅</span>
+                        <span title="Создан в myDATA" style={{ color: payment.invoice_created ? "#28a745" : "#dc3545" }}>
+                          Создан {payment.invoice_created ? "✅" : "❌"}
+                        </span>
+                        <span title="Отправлен клиенту" style={{ color: payment.invoice_sent ? "#28a745" : "#dc3545" }}>
+                          Отправлен {payment.invoice_sent ? "✅" : "❌"}
+                        </span>
+                      </div>
+                    </td>
+                    <td style={{ padding: "10px 8px", borderBottom: "1px solid #e9ecef", fontSize: "12px" }}>
+                      {!payment.invoice_created && (
+                        <button
+                          onClick={() => handleUpdatePaymentInvoice(payment.id, "invoice_created", true)}
+                          title="Отметить: Τιμολόγιο создан"
+                          style={{ padding: "4px 6px", border: "none", borderRadius: "4px", fontSize: "10px", fontWeight: 600, cursor: "pointer", margin: "1px", background: "#e3f2fd", color: "#1976d2" }}
+                        >📝</button>
+                      )}
+                      {payment.invoice_created && !payment.invoice_sent && (
+                        <button
+                          onClick={() => handleUpdatePaymentInvoice(payment.id, "invoice_sent", true)}
+                          title="Отметить: Τιμολόγιο отправлен"
+                          style={{ padding: "4px 6px", border: "none", borderRadius: "4px", fontSize: "10px", fontWeight: 600, cursor: "pointer", margin: "1px", background: "#d4edda", color: "#155724" }}
+                        >📧</button>
+                      )}
+                      {!payment.invoice_created && (
+                        <button
+                          disabled
+                          title="Сначала создайте τιμολόγιο"
+                          style={{ padding: "4px 6px", border: "none", borderRadius: "4px", fontSize: "10px", fontWeight: 600, cursor: "not-allowed", margin: "1px", background: "#e9ecef", color: "#adb5bd", opacity: 0.5 }}
+                        >📧</button>
+                      )}
+                      {payment.invoice_created && payment.invoice_sent && (
+                        <span style={{ color: "#28a745", fontSize: "11px" }}>✓ Готово</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
