@@ -286,7 +286,6 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session, 
     // 📱 Telegram уведомление (с дедупликацией)
     const isDuplicate = await isWebhookDuplicate(eventId);
     if (!isDuplicate) {
-      const paymentAmount = (session.amount_total || 0) / 100;
       await sendTelegramMessage(formatPaymentMessage({
         type: 'account_purchase',
         userId,
@@ -298,7 +297,6 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session, 
     }
 
     // 📋 Записываем платёж в журнал (для админки)
-    const paymentAmount = (session.amount_total || 0) / 100;
     await recordPayment({
       userId,
       stripeEventId: eventId,
@@ -775,9 +773,9 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice, eventId: s
     }
 
     // 📱 Telegram уведомление (с дедупликацией)
+    const paymentAmount = (invoice.amount_paid || 0) / 100;
     const isDuplicate = await isWebhookDuplicate(eventId);
     if (!isDuplicate) {
-      const paymentAmount = (invoice.amount_paid || 0) / 100;
       await sendTelegramMessage(formatPaymentMessage({
         type: 'subscription',
         userId,
@@ -790,7 +788,6 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice, eventId: s
     }
 
     // 📋 Записываем платёж в журнал (для админки)
-    const paymentAmount = (invoice.amount_paid || 0) / 100;
     if (paymentAmount > 0) {
       // Use status_transitions.paid_at (actual payment time) if available,
       // otherwise fallback to invoice.created (invoice creation time).
