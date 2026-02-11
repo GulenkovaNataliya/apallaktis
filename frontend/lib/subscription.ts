@@ -244,8 +244,8 @@ export function getUserTier(profile: {
     }
   }
 
-  // DEMO режим
-  if (profile.subscription_status === 'demo' || !profile.account_purchased) {
+  // DEMO режим - определяется ТОЛЬКО по subscription_status и demo_expires_at
+  if (profile.subscription_status === 'demo') {
     if (profile.demo_expires_at) {
       const demoExpires = new Date(profile.demo_expires_at);
       if (demoExpires < new Date()) {

@@ -213,7 +213,7 @@ const handleVoiceInput = () => {
 
 1. User takes/uploads a photo of receipt
 2. Image is sent to `/api/analyze-receipt` endpoint
-3. OpenAI Vision API analyzes the image
+3. **Claude Vision API (Anthropic)** analyzes the image
 4. Extracted data is returned and fills form fields
 
 ### Files Structure
@@ -239,7 +239,7 @@ POST /api/analyze-receipt
 Content-Type: application/json
 
 {
-  "image": "data:image/jpeg;base64,/9j/4AAQ...",  // Base64 image
+  "imageBase64": "data:image/jpeg;base64,/9j/4AAQ...",  // Base64 image
   "locale": "ru"  // User's language
 }
 ```
@@ -249,50 +249,67 @@ Content-Type: application/json
 {
   "success": true,
   "data": {
-    "amount": 45.50,
-    "date": "2026-01-15",
-    "description": "Supermarket purchase",
-    "vendor": "LIDL",
-    "suggestedCategory": "groceries"
+    "name": "LIDL",                      // Store/business name
+    "amount": 45.50,                     // Total amount
+    "date": "2026-01-15",                // ISO date
+    "description": "Supermarket purchase", // Brief description
+    "confidence": "high",                // high/medium/low
+    "suggestedCategory": "groceries"     // Category suggestion
   }
 }
 ```
 
-### OpenAI Vision Prompt
+### Claude Vision Prompt
 
 ```typescript
-const prompt = `Analyze this receipt/invoice image and extract:
-1. Total amount (number only)
-2. Date (ISO format YYYY-MM-DD)
-3. Vendor/store name
-4. Brief description of purchase
-5. Suggested category (one of: groceries, transport, utilities,
-   entertainment, healthcare, education, materials, tools, work, other)
+const prompt = `You are analyzing a receipt/invoice image. Extract the following information and return ONLY a valid JSON object (no markdown, no explanation):
 
-Respond in JSON format:
 {
-  "amount": number or null,
-  "date": "YYYY-MM-DD" or null,
-  "vendor": "string" or null,
-  "description": "string",
-  "suggestedCategory": "string"
-}`;
+  "name": "Store/business name or description of purchase",
+  "amount": 0.00,
+  "date": "YYYY-MM-DD",
+  "description": "Brief description of items purchased",
+  "confidence": "high/medium/low",
+  "suggestedCategory": "materials/tools/work/groceries/transport/utilities/entertainment/healthcare/education/other"
+}
+
+Important rules:
+1. The receipt is likely in ${language}, but may be in other languages
+2. For "amount": extract the TOTAL amount (look for "ΣΥΝΟΛΟ", "TOTAL", "ИТОГО", "Σύνολο", etc.)
+3. For "date": convert to YYYY-MM-DD format. If no date visible, use null
+4. For "name": use the store name or merchant name
+5. For "description": briefly list main items if visible
+6. For "suggestedCategory": suggest based on the type of store/items:
+   - Building materials, supplies, paint, cement, wood, tiles, pipes, cables → "materials"
+   - Tools, equipment, drills, hammers, machines → "tools"
+   - Work, services, labor, subcontract, repair, installation → "work"
+   - Supermarkets, food stores → "groceries"
+   - Gas stations, parking, taxis → "transport"
+   - Electric, water, phone bills → "utilities"
+   - Restaurants, cinemas, entertainment → "entertainment"
+   - Pharmacies, doctors → "healthcare"
+   - Schools, courses, books → "education"
+   - Everything else → "other"
+7. If you cannot read something clearly, use null for that field
+8. Return ONLY the JSON object, nothing else`;
 ```
 
 ### Category Mapping
 
-The API returns `suggestedCategory` which is matched to user's categories:
+The API returns `suggestedCategory` based on receipt content analysis:
 
-```typescript
-const categoryMap: Record<string, string[]> = {
-  materials: ['material', 'υλικ', 'материал', 'матеріал', ...],
-  tools: ['tool', 'εργαλεί', 'инструмент', 'інструмент', ...],
-  groceries: ['grocery', 'food', 'τρόφιμ', 'продукт', ...],
-  transport: ['transport', 'fuel', 'μεταφορ', 'бензин', ...],
-  utilities: ['electric', 'water', 'ρεύμα', 'электрич', ...],
-  // ... more categories
-};
-```
+| Category | Matched Items |
+|----------|--------------|
+| `materials` | Building materials, paint, cement, wood, tiles, pipes, cables |
+| `tools` | Tools, equipment, drills, hammers, machines |
+| `work` | Services, labor, subcontract, repair, installation |
+| `groceries` | Supermarkets, food stores |
+| `transport` | Gas stations, parking, taxis |
+| `utilities` | Electric, water, phone bills |
+| `entertainment` | Restaurants, cinemas |
+| `healthcare` | Pharmacies, doctors |
+| `education` | Schools, courses, books |
+| `other` | Everything else |
 
 ### Adding Photo Input to New Form
 
@@ -324,16 +341,19 @@ const analyzeReceipt = async (base64Image: string) => {
     const response = await fetch('/api/analyze-receipt', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: base64Image, locale }),
+      body: JSON.stringify({ imageBase64: base64Image, locale }),
     });
     const result = await response.json();
 
     if (result.success && result.data) {
       setFormData(prev => ({
         ...prev,
+        name: result.data.name ?? prev.name,
         amount: result.data.amount ?? prev.amount,
         date: result.data.date ?? prev.date,
         description: result.data.description ?? prev.description,
+        // result.data.suggestedCategory can be used for category matching
+        // result.data.confidence indicates recognition quality
       }));
     }
   } catch (error) {
@@ -394,17 +414,19 @@ const hasVoiceAndPhoto = user?.subscriptionPlan === 'standard' ||
 
 | Problem | Solution |
 |---------|----------|
-| Analysis fails | Check OpenAI API key in environment |
+| Analysis fails | Check `ANTHROPIC_API_KEY` in environment |
 | Wrong amount extracted | Receipt may be blurry, try clearer photo |
-| No category matched | Add keywords to categoryMap |
+| Low confidence | Check `result.data.confidence` field |
+| No category matched | Use `result.data.suggestedCategory` as hint |
+| Model not found | Ensure `claude-sonnet-4-20250514` is available |
 
 ---
 
 ## 5. Environment Variables
 
 ```env
-# For photo recognition (OpenAI Vision API)
-OPENAI_API_KEY=sk-...
+# For photo recognition (Claude Vision API)
+ANTHROPIC_API_KEY=sk-ant-...
 ```
 
 ---
