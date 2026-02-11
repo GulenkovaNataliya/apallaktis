@@ -544,7 +544,7 @@ export default function AnalysisPage() {
         // Get user profile with subscription info
         const { data: profile } = await supabase
           .from('profiles')
-          .select('subscription_plan, subscription_status, account_purchased, demo_expires_at, subscription_expires_at, vip_expires_at, email')
+          .select('subscription_plan, subscription_status, account_purchased, demo_expires_at, subscription_expires_at, vip_expires_at, first_month_free_expires_at, email')
           .eq('id', user.id)
           .single();
 

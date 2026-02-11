@@ -81,10 +81,20 @@ export interface UsageCriteria {
 
 /**
  * Константы критериев (можно настроить)
+ *
+ * Лимиты тарифов:
+ * - Basic: до 10 объектов
+ * - Standard: до 50 объектов
+ * - Premium: безлимит
+ *
+ * Пороги рекомендации (с запасом для роста):
+ * - До 8 объектов → Basic (запас 2 до лимита 10)
+ * - 8-40 объектов → Standard (запас 10 до лимита 50)
+ * - 40+ объектов → Premium
  */
 export const DEFAULT_USAGE_CRITERIA: UsageCriteria = {
-  projectThreshold: { light: 5, medium: 15, heavy: 15 },
-  entryThreshold: { light: 100, medium: 500, heavy: 500 },
+  projectThreshold: { light: 8, medium: 40, heavy: 40 },
+  entryThreshold: { light: 200, medium: 1000, heavy: 1000 },
   loginThreshold: { light: 10, medium: 30, heavy: 30 },
 };
 

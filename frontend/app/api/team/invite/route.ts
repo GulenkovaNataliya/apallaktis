@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     // Get owner's profile for subscription info
     const { data: ownerProfile } = await supabase
       .from('profiles')
-      .select('subscription_status, vip_expires_at, account_purchased, demo_expires_at, name')
+      .select('subscription_status, vip_expires_at, account_purchased, demo_expires_at, first_month_free_expires_at, name')
       .eq('id', user.id)
       .single();
 

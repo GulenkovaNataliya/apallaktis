@@ -101,7 +101,7 @@ export default function ObjectsPage() {
         if (supabaseUser) {
           const { data: profile } = await supabase
             .from('profiles')
-            .select('subscription_status, account_purchased, demo_expires_at, vip_expires_at')
+            .select('subscription_status, account_purchased, demo_expires_at, vip_expires_at, first_month_free_expires_at')
             .eq('id', supabaseUser.id)
             .single();
 
@@ -123,41 +123,49 @@ export default function ObjectsPage() {
     el: {
       objectLimitBasic: 'Φτάσατε το όριο των 10 αντικειμένων. Αναβαθμίστε σε Standard (έως 50) ή Premium (απεριόριστα).',
       objectLimitStandard: 'Φτάσατε το όριο των 50 αντικειμένων. Αναβαθμίστε σε Premium για απεριόριστα αντικείμενα.',
+      subscriptionExpired: 'Η συνδρομή σας έχει λήξει. Επιλέξτε ένα νέο πρόγραμμα για να συνεχίσετε.',
       upgradePlan: 'Αναβάθμιση τιμολογίου',
     },
     ru: {
       objectLimitBasic: 'Вы достигли лимита 10 объектов. Улучшите до Standard (до 50) или Premium (безлимит).',
       objectLimitStandard: 'Вы достигли лимита 50 объектов. Улучшите до Premium для безлимитных объектов.',
+      subscriptionExpired: 'Ваша подписка истекла. Выберите новый тариф, чтобы продолжить.',
       upgradePlan: 'Улучшить тариф',
     },
     uk: {
       objectLimitBasic: 'Ви досягли ліміту 10 об\'єктів. Покращіть до Standard (до 50) або Premium (безліміт).',
       objectLimitStandard: 'Ви досягли ліміту 50 об\'єктів. Покращіть до Premium для безлімітних об\'єктів.',
+      subscriptionExpired: 'Ваша підписка закінчилась. Оберіть новий тариф, щоб продовжити.',
       upgradePlan: 'Покращити тариф',
     },
     sq: {
       objectLimitBasic: 'Keni arritur limitin e 10 objekteve. Përmirësoni në Standard (deri në 50) ose Premium (pa limit).',
       objectLimitStandard: 'Keni arritur limitin e 50 objekteve. Përmirësoni në Premium për objekte pa limit.',
+      subscriptionExpired: 'Abonimi juaj ka skaduar. Zgjidhni një plan të ri për të vazhduar.',
       upgradePlan: 'Përmirëso planin',
     },
     bg: {
       objectLimitBasic: 'Достигнахте лимита от 10 обекта. Надградете до Standard (до 50) или Premium (неограничено).',
       objectLimitStandard: 'Достигнахте лимита от 50 обекта. Надградете до Premium за неограничени обекти.',
+      subscriptionExpired: 'Абонаментът ви е изтекъл. Изберете нов план, за да продължите.',
       upgradePlan: 'Надгради плана',
     },
     ro: {
       objectLimitBasic: 'Ați atins limita de 10 obiecte. Actualizați la Standard (până la 50) sau Premium (nelimitat).',
       objectLimitStandard: 'Ați atins limita de 50 obiecte. Actualizați la Premium pentru obiecte nelimitate.',
+      subscriptionExpired: 'Abonamentul dvs. a expirat. Alegeți un plan nou pentru a continua.',
       upgradePlan: 'Actualizare plan',
     },
     en: {
       objectLimitBasic: 'You reached the limit of 10 objects. Upgrade to Standard (up to 50) or Premium (unlimited).',
       objectLimitStandard: 'You reached the limit of 50 objects. Upgrade to Premium for unlimited objects.',
+      subscriptionExpired: 'Your subscription has expired. Choose a new plan to continue.',
       upgradePlan: 'Upgrade plan',
     },
     ar: {
       objectLimitBasic: 'لقد وصلت إلى حد 10 كائنات. قم بالترقية إلى Standard (حتى 50) أو Premium (غير محدود).',
       objectLimitStandard: 'لقد وصلت إلى حد 50 كائنًا. قم بالترقية إلى Premium للحصول على كائنات غير محدودة.',
+      subscriptionExpired: 'انتهت صلاحية اشتراكك. اختر خطة جديدة للمتابعة.',
       upgradePlan: 'ترقية الخطة',
     },
   };
@@ -165,6 +173,13 @@ export default function ObjectsPage() {
   const tSub = subscriptionMessages[locale] || subscriptionMessages.en;
 
   const handleAddObjectClick = () => {
+    // Check if subscription expired - redirect to subscription page
+    if (userTier === 'expired' || userTier === 'read-only') {
+      setUpgradeMessage(tSub.subscriptionExpired);
+      setShowUpgradeModal(true);
+      return;
+    }
+
     // Check subscription limits
     const check = canCreateObject(userTier, objects.length);
 
@@ -173,6 +188,8 @@ export default function ObjectsPage() {
         setUpgradeMessage(tSub.objectLimitBasic);
       } else if (check.message === 'objectLimitStandard') {
         setUpgradeMessage(tSub.objectLimitStandard);
+      } else {
+        setUpgradeMessage(tSub.subscriptionExpired);
       }
       setShowUpgradeModal(true);
       return;

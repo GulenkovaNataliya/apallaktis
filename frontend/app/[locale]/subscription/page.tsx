@@ -6,7 +6,7 @@ import BackgroundPage from '@/components/BackgroundPage';
 import SubscriptionPlanCard from '@/components/SubscriptionPlanCard';
 import { messages, type Locale } from '@/lib/messages';
 import { createClient } from '@/lib/supabase/client';
-import { PlanDetails } from '@/types/subscription';
+import { PlanDetails, calculateSmartRecommendation, UserActivity } from '@/types/subscription';
 import { SubscriptionPlan } from '@/types/user';
 
 export default function SubscriptionPage() {
@@ -68,7 +68,7 @@ export default function SubscriptionPage() {
 
         const { data: profile } = await supabase
           .from('profiles')
-          .select('subscription_plan, bonus_months, first_month_free_expires_at')
+          .select('subscription_plan, bonus_months, first_month_free_expires_at, created_at')
           .eq('id', user.id)
           .single();
 
@@ -84,9 +84,41 @@ export default function SubscriptionPage() {
             setDaysRemaining(diff > 0 ? diff : 0);
           }
 
-          // TODO: Fetch user activity stats and calculate smart recommendation
-          // For now, use basic as default
-          setRecommendedPlan('basic');
+          // Fetch user activity stats for smart recommendation
+          // Get objects count
+          const { count: objectsCount } = await supabase
+            .from('objects')
+            .select('id', { count: 'exact', head: true })
+            .eq('user_id', user.id);
+
+          // Get expenses count through objects (object_expenses doesn't have user_id)
+          const { data: userObjects } = await supabase
+            .from('objects')
+            .select('id')
+            .eq('user_id', user.id);
+
+          let expensesCount = 0;
+          if (userObjects && userObjects.length > 0) {
+            const objectIds = userObjects.map(o => o.id);
+            const { count } = await supabase
+              .from('object_expenses')
+              .select('id', { count: 'exact', head: true })
+              .in('object_id', objectIds);
+            expensesCount = count || 0;
+          }
+
+          const activity: UserActivity = {
+            projectCount: objectsCount || 0,
+            entryCount: expensesCount,
+            loginCount: 15, // Approximate, not tracked
+            ocrUsageCount: 0,
+            voiceUsageCount: 0,
+            lastActivityDate: new Date().toISOString(),
+            accountAge: Math.floor((Date.now() - new Date(profile.created_at || Date.now()).getTime()) / (1000 * 60 * 60 * 24)),
+          };
+
+          const recommendation = calculateSmartRecommendation(activity);
+          setRecommendedPlan(recommendation.recommendedPlan);
         }
       } catch (error) {
         console.error('Error fetching user data:', error);

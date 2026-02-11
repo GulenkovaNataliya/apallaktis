@@ -185,6 +185,80 @@ export async function GET(request: Request) {
       }
     }
 
+    // ========================================
+    // 5. Бесплатный месяц истекает через 2 дня
+    // ========================================
+    const { data: expiringFreeMonth, error: expiringFreeMonthError } = await supabase
+      .from('profiles')
+      .select('id, email, account_number, first_month_free_expires_at, preferred_language')
+      .eq('account_purchased', true)
+      .is('subscription_plan', null) // Ещё не выбрал план
+      .not('first_month_free_expires_at', 'is', null)
+      .gte('first_month_free_expires_at', now.toISOString())
+      .lte('first_month_free_expires_at', twoDaysFromNow.toISOString())
+      .is('free_month_expiring_email_sent', false);
+
+    if (expiringFreeMonthError) {
+      console.error('❌ Ошибка получения истекающих бесплатных месяцев:', expiringFreeMonthError);
+    } else if (expiringFreeMonth && expiringFreeMonth.length > 0) {
+      console.log(`📧 Найдено ${expiringFreeMonth.length} бесплатных месяцев, истекающих через 2 дня`);
+
+      for (const profile of expiringFreeMonth) {
+        // Используем ту же функцию для истекающей подписки
+        const emailSuccess = await sendSubscriptionExpiringEmail(
+          profile.email,
+          profile.account_number,
+          'Free Month', // Название периода
+          new Date(profile.first_month_free_expires_at!),
+          profile.preferred_language || 'el'
+        );
+
+        if (emailSuccess) {
+          await supabase
+            .from('profiles')
+            .update({ free_month_expiring_email_sent: true })
+            .eq('id', profile.id);
+
+          console.log(`✅ Email отправлен: ${profile.email} (#${profile.account_number})`);
+        }
+      }
+    }
+
+    // ========================================
+    // 6. Бесплатный месяц истёк - нужно выбрать подписку
+    // ========================================
+    const { data: expiredFreeMonth, error: expiredFreeMonthError } = await supabase
+      .from('profiles')
+      .select('id, email, account_number, first_month_free_expires_at, preferred_language')
+      .eq('account_purchased', true)
+      .is('subscription_plan', null)
+      .not('first_month_free_expires_at', 'is', null)
+      .lte('first_month_free_expires_at', now.toISOString())
+      .is('free_month_expired_email_sent', false);
+
+    if (expiredFreeMonthError) {
+      console.error('❌ Ошибка получения истёкших бесплатных месяцев:', expiredFreeMonthError);
+    } else if (expiredFreeMonth && expiredFreeMonth.length > 0) {
+      console.log(`📧 Найдено ${expiredFreeMonth.length} истёкших бесплатных месяцев`);
+
+      for (const profile of expiredFreeMonth) {
+        const emailSuccess = await sendSubscriptionExpiredEmail(
+          profile.email,
+          profile.account_number,
+          profile.preferred_language || 'el'
+        );
+
+        if (emailSuccess) {
+          await supabase
+            .from('profiles')
+            .update({ free_month_expired_email_sent: true })
+            .eq('id', profile.id);
+
+          console.log(`✅ Email отправлен: ${profile.email} (#${profile.account_number})`);
+        }
+      }
+    }
+
     return NextResponse.json({
       success: true,
       checked_at: now.toISOString(),
@@ -193,6 +267,8 @@ export async function GET(request: Request) {
         expired_demos: expiredDemos?.length || 0,
         expiring_subscriptions: expiringSubscriptions?.length || 0,
         expired_subscriptions: expiredSubscriptions?.length || 0,
+        expiring_free_months: expiringFreeMonth?.length || 0,
+        expired_free_months: expiredFreeMonth?.length || 0,
       },
     });
   } catch (error) {

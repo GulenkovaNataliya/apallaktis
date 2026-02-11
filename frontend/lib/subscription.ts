@@ -207,6 +207,7 @@ export function getUserTier(profile: {
   demo_expires_at?: string;
   subscription_expires_at?: string;
   vip_expires_at?: string;
+  first_month_free_expires_at?: string;
 }): SubscriptionTier {
   // VIP имеет приоритет
   if (profile.subscription_status === 'vip' || profile.vip_expires_at) {
@@ -216,7 +217,7 @@ export function getUserTier(profile: {
     }
   }
 
-  // Проверяем статус подписки
+  // Проверяем статус подписки с выбранным планом
   if (profile.subscription_status === 'active' && profile.subscription_tier) {
     const tier = profile.subscription_tier.toLowerCase() as SubscriptionTier;
     if (['basic', 'standard', 'premium'].includes(tier)) {
@@ -228,6 +229,18 @@ export function getUserTier(profile: {
         }
       }
       return tier;
+    }
+  }
+
+  // Бесплатный месяц после покупки аккаунта (plan ещё не выбран)
+  if (profile.account_purchased && profile.first_month_free_expires_at) {
+    const freeMonthExpires = new Date(profile.first_month_free_expires_at);
+    if (freeMonthExpires > new Date()) {
+      // Бесплатный месяц активен - даём полный доступ как Premium
+      return 'premium';
+    } else {
+      // Бесплатный месяц истёк - нужно выбрать подписку
+      return 'expired';
     }
   }
 

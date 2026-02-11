@@ -418,16 +418,17 @@ export default function AdminPage() {
     alert(`VIP активирован для ${user.name}!`);
   };
 
-  // Remove VIP
+  // Remove VIP - переводим в expired, чтобы показать страницу выбора подписки
   const handleRemoveVip = async (user: UserProfile) => {
-    if (!confirm(`Убрать VIP у ${user.name}?`)) return;
+    if (!confirm(`Убрать VIP у ${user.name}? Пользователь будет перенаправлен на страницу выбора подписки.`)) return;
 
     const supabase = createClient();
     const { error } = await supabase
       .from("profiles")
       .update({
-        subscription_status: "active",
+        subscription_status: "expired",  // expired → показывает страницу выбора подписки
         subscription_plan: null,
+        subscription_tier: null,
         vip_expires_at: null,
         vip_granted_by: null,
         vip_reason: null,
@@ -439,16 +440,31 @@ export default function AdminPage() {
       return;
     }
 
+    // Отправляем email с уведомлением об отмене VIP
+    try {
+      await fetch("/api/email/vip-cancelled", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userEmail: user.email,
+          userName: user.name,
+          locale: "el",
+        }),
+      });
+    } catch (e) {
+      console.error("Failed to send VIP cancelled email:", e);
+    }
+
     setUsers(users.map(u => u.id === user.id ? {
       ...u,
-      subscription_status: "active",
+      subscription_status: "expired",
       subscription_plan: null,
       vip_expires_at: null,
       vip_granted_by: null,
       vip_reason: null,
     } : u));
 
-    alert("VIP убран");
+    alert("VIP убран. Пользователю отправлено уведомление и он увидит страницу выбора подписки.");
   };
 
   // Export to Excel
