@@ -19,7 +19,13 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@core/access": ["../packages/core-access/src"],
+      "@core/access/*": ["../packages/core-access/src/*"],
+      "@core/audit": ["../packages/core-audit/src"],
+      "@core/audit/*": ["../packages/core-audit/src/*"],
+      "@core/rate-limit": ["../packages/core-rate-limit/src"],
+      "@core/rate-limit/*": ["../packages/core-rate-limit/src/*"]
     }
   },
   "include": [

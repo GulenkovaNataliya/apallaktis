@@ -5,14 +5,61 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
+import { createClient } from '@/lib/supabase/server';
+import { rateLimit } from '@/lib/rate-limit';
+import { logRateLimitBlocked } from '@/lib/audit';
+import { getTierFromProfile, requireCanUseFeature, guardErrorBody } from '@/lib/access-guard';
 
 // Инициализация Anthropic клиента
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY || '',
 });
 
+// 5 requests per 60 seconds per user/IP
+const RATE_LIMIT = 5;
+const RATE_WINDOW_MS = 60 * 1000;
+
 export async function POST(request: NextRequest) {
   try {
+    // --- Auth (required — Claude Vision API is a paid resource) ---
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // --- Feature guard: photoReceipt ---
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('subscription_status, vip_expires_at, account_purchased, demo_expires_at, first_month_free_expires_at, subscription_plan, subscription_expires_at')
+      .eq('id', user.id)
+      .single();
+
+    const tier = getTierFromProfile(profile);
+    const guard = await requireCanUseFeature({ tier, feature: 'photoReceipt', userId: user.id });
+    if (!guard.allowed) {
+      return NextResponse.json(guardErrorBody(guard), { status: guard.status });
+    }
+
+    // --- Rate limiting ---
+    const rl = rateLimit(`user:${user.id}`, RATE_LIMIT, RATE_WINDOW_MS);
+
+    if (!rl.allowed) {
+      await logRateLimitBlocked({
+        userId: user.id,
+        metadata: {
+          route: '/api/analyze-receipt',
+          key_type: 'user',
+          limit: RATE_LIMIT,
+          retry_after_sec: rl.retryAfterSec,
+        },
+      });
+      return NextResponse.json(
+        { error: 'Too many requests', retry_after: rl.retryAfterSec },
+        { status: 429, headers: { 'Retry-After': String(rl.retryAfterSec) } },
+      );
+    }
+
     // Проверяем, что API ключ настроен
     if (!process.env.ANTHROPIC_API_KEY) {
       return NextResponse.json(

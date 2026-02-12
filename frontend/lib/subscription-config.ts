@@ -1,2 +1,2 @@
 // Thin re-export — canonical source: packages/core-access
-export * from '@core/access/subscription';
+export * from '@core/access/subscription-config';

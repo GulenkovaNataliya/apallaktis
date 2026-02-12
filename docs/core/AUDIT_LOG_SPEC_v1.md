@@ -11,9 +11,10 @@
 | Параметр | Значение |
 |----------|----------|
 | Срок хранения | **24 месяца** |
-| Очистка | Cron job `cleanup_old_audit_logs()` |
-| Периодичность очистки | Ежемесячно (1-е число) |
-| Что удаляется | Записи старше 24 месяцев |
+| Очистка (API) | `GET /api/cron/cleanup-audit-log` (service_role, `CRON_SECRET`) |
+| Очистка (SQL) | `cleanup_old_audit_logs()` (для pg_cron, опционально) |
+| Периодичность | **Ежедневно** (рекомендуется 03:00 UTC) |
+| Что удаляется | Записи с `created_at < now() - 24 months` |
 
 ```sql
 -- Функция очистки (для pg_cron)
@@ -127,8 +128,11 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 | Категория событий | Cooldown | Логика |
 |-------------------|----------|--------|
-| `limits.*` | **10 минут** | Не логировать повторное событие от того же user_id в течение 10 минут |
-| `rate_limit.blocked` | **10 минут** | Не логировать повторное событие от того же IP в течение 10 минут |
+| `limits.*` | **10 минут** | Не логировать повторное событие от того же `actor_user_id` + `action` в течение 10 минут |
+| `rate_limit.blocked` | **10 минут** | Не логировать повторное событие от того же `actor_user_id` в течение 10 минут. Для анонимных (IP-only) запросов cooldown не применяется (нет стабильного `actor_user_id`) |
+
+> **Правило:** audit cooldown применяется как к userId-ключам, так и к IP-ключам rate limiter'а,
+> чтобы предотвратить спам в логах. Ключ дедупликации — `actor_user_id + action` (через SELECT по `audit_log`).
 
 ### Альтернатива: Агрегирование
 
@@ -302,11 +306,23 @@ CREATE POLICY audit_log_delete_policy ON audit_log FOR DELETE USING (false);
 
 | Приоритет | Категория | Обоснование |
 |-----------|-----------|-------------|
-| 1 | **B4** Rate limiting + logging | Критично для безопасности |
+| 1 | **B4** Rate limiting + logging | Критично для безопасности. **v1: temporary in-memory, NOT distributed** (см. TODO ниже) |
 | 2 | **Stripe events** | Важно для финансового аудита |
 | 3 | **B2** Limits denied | Ценно для бизнес-аналитики |
 | 4 | **B1** Soft delete/restore | Полезно для поддержки |
 | 5 | Demo/VIP/Teams | Полнота картины |
+
+### TODO: Distributed Rate Limiting
+
+> **Текущая реализация (v1):** in-memory `Map` в `frontend/lib/rate-limit.ts`.
+> Состояние живёт внутри одного serverless instance и **не разделяется** между Vercel functions.
+> Обеспечивает базовую защиту, но не является distributed решением.
+>
+> **TODO:** Заменить на `@upstash/ratelimit` + Upstash Redis для production/core.
+> - Установить: `npm i @upstash/ratelimit @upstash/redis`
+> - Добавить env: `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`
+> - Заменить `rateLimit()` в `lib/rate-limit.ts` на `Ratelimit.slidingWindow()`
+> - Cooldown дедупликации audit логов также можно перенести на Redis (`SETEX`)
 
 ---
 

@@ -9,6 +9,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { logLimitDenied } from '@/lib/audit';
 
 export async function POST(request: NextRequest) {
   try {
@@ -55,6 +56,15 @@ export async function POST(request: NextRequest) {
     const isVip = referrer.subscription_status === 'vip';
     if (!referrer.account_purchased && !isVip) {
       console.log('❌ Referral validation: реферер не оплатил аккаунт и не VIP:', referralCode);
+      await logLimitDenied({
+        action: 'limits.referral_denied',
+        userId: referrer.id,
+        metadata: {
+          tier: referrer.subscription_status || 'unknown',
+          reason: 'REFERRER_NOT_ACTIVE',
+          referral_code: referralCode,
+        },
+      });
       return NextResponse.json({
         valid: false,
         error: 'REFERRER_NOT_ACTIVE',

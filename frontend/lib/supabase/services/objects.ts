@@ -111,41 +111,30 @@ export async function getObjectById(
 }
 
 /**
- * Создать новый объект
+ * Создать новый объект.
+ * Routes through /api/objects for server-side subscription limit enforcement.
  */
 export async function createObject(
   userId: string,
   input: CreateObjectInput
 ): Promise<PropertyObject> {
-  const supabase = createClient();
+  console.log('createObject - calling API:', { userId, input });
 
-  const insertData = {
-    user_id: userId,
-    name: input.name,
-    address: input.address || null,
-    client_name: input.client_name || null,
-    client_contact: input.client_contact || null,
-    contract_price: input.contract_price || 0,
-    status: input.status || 'open',
-    color: input.color || null,
-  };
+  const res = await fetch('/api/objects', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
 
-  console.log('createObject - inserting:', insertData);
+  const json = await res.json();
 
-  const { data, error } = await supabase
-    .from('objects')
-    .insert(insertData)
-    .select()
-    .single();
-
-  console.log('createObject - result:', { data, error });
-
-  if (error) {
-    console.error('Error creating object:', error);
-    throw error;
+  if (!res.ok) {
+    console.error('createObject - API error:', json);
+    throw new Error(json.error || 'Failed to create object');
   }
 
-  return data;
+  console.log('createObject - result:', json.data);
+  return json.data;
 }
 
 /**

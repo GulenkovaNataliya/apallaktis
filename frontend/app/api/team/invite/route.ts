@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { canAddTeamMember } from '@/lib/subscription';
 import { sendTeamInvitationEmail } from '@/lib/email/notifications';
+import { getTierFromProfile, requireCanAddTeamMember, guardErrorBody } from '@/lib/access-guard';
 
 /**
  * POST /api/team/invite
@@ -91,16 +91,17 @@ export async function POST(request: NextRequest) {
       .select('*', { count: 'exact', head: true })
       .eq('team_id', team.id);
 
-    // Check subscription limits using getUserTier for proper VIP detection
-    const { getUserTier } = await import('@/lib/subscription');
-    const tier = ownerProfile ? getUserTier(ownerProfile) : 'demo';
-    const canAdd = canAddTeamMember(tier as any, memberCount || 0);
+    // Check subscription limits
+    const tier = getTierFromProfile(ownerProfile);
+    const guard = await requireCanAddTeamMember({
+      tier,
+      currentCount: memberCount || 0,
+      userId: user.id,
+      teamId: team.id,
+    });
 
-    if (!canAdd.allowed) {
-      return NextResponse.json({
-        error: canAdd.message,
-        upgradeToTier: canAdd.upgradeToTier,
-      }, { status: 403 });
+    if (!guard.allowed) {
+      return NextResponse.json(guardErrorBody(guard), { status: guard.status });
     }
 
     // Check if email is already a member

@@ -11,6 +11,7 @@ import { sendReceiptEmail } from '@/lib/email/send-receipt';
 import { sendReferralPurchaseEmail, sendAdminPaymentNotificationEmail } from '@/lib/email/notifications';
 import { addCalendarMonthClamped } from '@/lib/date-utils';
 import { sendTelegramMessage, formatPaymentMessage } from '@/lib/telegram';
+import { logAudit } from '@/lib/audit';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2025-12-15.clover',
@@ -45,7 +46,7 @@ async function recordPayment(data: {
     { auth: { persistSession: false } }
   );
 
-  const { error } = await supabase
+  const { data: paymentRow, error } = await supabase
     .from('payments')
     .insert({
       user_id: data.userId,
@@ -57,12 +58,19 @@ async function recordPayment(data: {
       currency: data.currency || 'eur',
       type: data.type,
       plan: data.plan || null,
-    });
+    })
+    .select('id')
+    .single();
 
   if (error) {
     // Duplicate (unique constraint on stripe_event_id) = already processed
     if (error.code === '23505') {
       console.log(`ℹ️ WEBHOOK: Payment already recorded for event ${data.stripeEventId}`);
+      await logAudit({
+        action: 'payment.deduplicated',
+        actor_type: 'stripe',
+        metadata: { stripe_event_id: data.stripeEventId, type: data.type },
+      });
       return false;
     }
     console.error('❌ WEBHOOK: Failed to record payment:', error.message);
@@ -70,6 +78,17 @@ async function recordPayment(data: {
   }
 
   console.log(`✅ WEBHOOK: Payment recorded: ${data.type}, €${data.amount}`);
+
+  // Audit: payment.recorded
+  await logAudit({
+    action: 'payment.recorded',
+    actor_type: 'stripe',
+    actor_user_id: data.userId,
+    target_type: 'payment',
+    target_id: paymentRow?.id,
+    metadata: { stripe_event_id: data.stripeEventId, amount: data.amount, type: data.type },
+  });
+
   return true;
 }
 
@@ -105,6 +124,13 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('✅ WEBHOOK: Получено событие:', event.type);
+
+    // Audit: log every verified webhook
+    await logAudit({
+      action: 'stripe.webhook_received',
+      actor_type: 'stripe',
+      metadata: { event_id: event.id, event_type: event.type },
+    });
 
     // Обрабатываем различные типы событий
     switch (event.type) {
@@ -387,6 +413,16 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
     console.log(`✅ WEBHOOK: Подписка ${plan} активирована для пользователя ${userId}`);
     console.log(`   Действует до: ${subscriptionExpiresAt}`);
 
+    // Audit: subscription.activated
+    await logAudit({
+      action: 'subscription.activated',
+      actor_type: 'stripe',
+      actor_user_id: userId,
+      target_type: 'profile',
+      target_id: userId,
+      metadata: { plan, stripe_subscription_id: subscription.id },
+    });
+
   } catch (error) {
     console.error('❌ WEBHOOK: Ошибка при создании подписки:', error);
     throw error;
@@ -582,6 +618,19 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     }
 
     console.log(`✅ WEBHOOK: Подписка обновлена для пользователя ${userId}, статус: ${status}`);
+
+    // Audit: subscription.expired when status becomes inactive
+    if (status === 'inactive') {
+      await logAudit({
+        action: 'subscription.expired',
+        actor_type: 'stripe',
+        actor_user_id: userId,
+        target_type: 'profile',
+        target_id: userId,
+        metadata: { stripe_subscription_id: subscription.id },
+      });
+    }
+
   } catch (error) {
     console.error('❌ WEBHOOK: Ошибка при обновлении подписки:', error);
     throw error;
@@ -618,6 +667,17 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
     }
 
     console.log(`✅ WEBHOOK: Подписка отменена для пользователя ${userId}`);
+
+    // Audit: subscription.canceled
+    await logAudit({
+      action: 'subscription.canceled',
+      actor_type: 'stripe',
+      actor_user_id: userId,
+      target_type: 'profile',
+      target_id: userId,
+      metadata: { stripe_subscription_id: subscription.id },
+    });
+
   } catch (error) {
     console.error('❌ WEBHOOK: Ошибка при отмене подписки:', error);
     throw error;
@@ -698,6 +758,16 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice, eventId: s
     }
 
     console.log(`✅ WEBHOOK: Подписка продлена до ${subscriptionExpiresAt}`);
+
+    // Audit: subscription.renewed
+    await logAudit({
+      action: 'subscription.renewed',
+      actor_type: 'stripe',
+      actor_user_id: userId,
+      target_type: 'profile',
+      target_id: userId,
+      metadata: { plan, subscription_expires_at: subscriptionExpiresAt },
+    });
 
     // Получаем email пользователя
     const { data: { user } } = await supabase.auth.admin.getUserById(userId);
