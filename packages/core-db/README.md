@@ -42,10 +42,12 @@ Apply **in order**: `001-003` → `010-011` → `030` → `040-041`.
 | 030 | `030_profiles_core_fields.sql`               | All `profiles` columns required by subscription engine, demo, VIP, referral, email tracking |
 
 **What it does:**
-- `ADD COLUMN IF NOT EXISTS` for every column referenced by `handle_new_user()`, `getUserTier()`, and API routes
-- Grouped by purpose: identity, account numbering, invoice/business, subscription engine, VIP, demo, referral, email tracking, phone verification, timestamps
+- `ADD COLUMN IF NOT EXISTS` for every column referenced by `handle_new_user()`, `getUserTier()`, webhook, cron, and API routes
+- Grouped by purpose: identity, account numbering, invoice/business, subscription engine, Stripe integration, VIP, demo, referral, email tracking (demo + subscription + free-month), phone verification, preferred language, timestamps
 - Creates indexes: `referral_code`, `referred_by`, `demo_expiring` (partial)
 - Safe to re-run (idempotent)
+
+**Columns (40):** identity (5) · account/role (2) · invoice/business (7) · subscription engine (7 incl. legacy `subscription_tier`) · Stripe (2: `stripe_customer_id`, `stripe_subscription_id`) · VIP (3) · demo (3) · referral (4) · email tracking (6 incl. `free_month_*`) · phone (1) · language (1: `preferred_language`) · timestamps (2)
 
 **Prerequisite:** `public.profiles` table must already exist with at least `(id UUID PRIMARY KEY, email TEXT)`.
 

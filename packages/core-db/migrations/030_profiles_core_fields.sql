@@ -36,10 +36,16 @@ ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS is_business BOOLEAN DEFAULT
 
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS subscription_status TEXT DEFAULT 'demo';
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS subscription_plan TEXT;
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS subscription_tier TEXT;   -- legacy; used by getUserTier() fallback & team view (010)
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS subscription_expires_at TIMESTAMPTZ;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS account_purchased BOOLEAN DEFAULT FALSE;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS account_purchased_at TIMESTAMPTZ;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS first_month_free_expires_at TIMESTAMPTZ;
+
+-- ── Stripe integration ────────────────────────────────────────────────
+
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS stripe_customer_id TEXT;
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS stripe_subscription_id TEXT;
 
 -- ── VIP ─────────────────────────────────────────────────────────────────
 
@@ -66,10 +72,16 @@ ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS demo_expiring_email_sent BO
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS demo_expired_email_sent BOOLEAN DEFAULT FALSE;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS subscription_expiring_email_sent BOOLEAN DEFAULT FALSE;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS subscription_expired_email_sent BOOLEAN DEFAULT FALSE;
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS free_month_expiring_email_sent BOOLEAN DEFAULT FALSE;
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS free_month_expired_email_sent BOOLEAN DEFAULT FALSE;
 
 -- ── Phone verification ──────────────────────────────────────────────────
 
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS phone_verified BOOLEAN DEFAULT FALSE;
+
+-- ── Preferred language ────────────────────────────────────────────────
+
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS preferred_language TEXT;
 
 -- ── Timestamps ──────────────────────────────────────────────────────────
 
@@ -92,3 +104,9 @@ COMMENT ON COLUMN public.profiles.demo_expires_at IS '48h after registration; NU
 COMMENT ON COLUMN public.profiles.first_month_free_expires_at IS '30 days after account purchase (before plan selection)';
 COMMENT ON COLUMN public.profiles.vip_expires_at IS 'NULL = VIP forever; date = VIP until that date';
 COMMENT ON COLUMN public.profiles.role IS 'user | admin';
+COMMENT ON COLUMN public.profiles.subscription_tier IS 'Legacy: basic | standard | premium — used by getUserTier() fallback and team view';
+COMMENT ON COLUMN public.profiles.stripe_customer_id IS 'Stripe Customer ID (cus_xxx)';
+COMMENT ON COLUMN public.profiles.stripe_subscription_id IS 'Stripe Subscription ID (sub_xxx); NULL if no active subscription';
+COMMENT ON COLUMN public.profiles.preferred_language IS 'User preferred language code (el, en, etc.)';
+COMMENT ON COLUMN public.profiles.free_month_expiring_email_sent IS 'True if "free month expiring" email was sent (cron)';
+COMMENT ON COLUMN public.profiles.free_month_expired_email_sent IS 'True if "free month expired" email was sent (cron)';
