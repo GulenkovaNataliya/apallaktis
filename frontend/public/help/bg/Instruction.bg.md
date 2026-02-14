@@ -1,16 +1,20 @@
-# Инструкции за потребителя ΑΠΑΛΛΑΚΤΗΣ
+<h1 style="color: #F28C28;">Инструкции за потребителя ΑΠΑΛΛΑΚΤΗΣ</h1>
 
-<img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
+<p align="center">
+  <img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
+</p>
 
-**Мобилно приложение,
-което освобождава майстора
-от рутината на финансовото счетоводство**
+<p><strong>Мобилно приложение,<br>което освобождава майстора<br>от рутината на финансовото счетоводство</strong></p>
 
-**ΑΠΑΛΛΑΚΤΗΣ**
-означава освободител на гръцки
+<p style="font-size: 24px; line-height: 1.4;">
+<span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ</strong></span><br>
+<span style="color: white;">означава освободител на гръцки</span>
+</p>
 
-**"Τέλος στη ρουτίνα!"**
-означава край на рутината
+<p style="font-size: 24px; line-height: 1.4;">
+<span style="color: #F28C28;"><strong>"Τέλος στη ρουτίνα!"</strong></span><br>
+<span style="color: white;">означава край на рутината</span>
+</p>
 
 > ⚠️ Това **НЕ** е счетоводна програма — това е персонален инструмент за финансов контрол.
 

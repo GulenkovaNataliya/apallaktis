@@ -1,16 +1,20 @@
-# Udhëzime përdoruesi ΑΠΑΛΛΑΚΤΗΣ
+<h1 style="color: #F28C28;">Udhëzime përdoruesi ΑΠΑΛΛΑΚΤΗΣ</h1>
 
-<img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
+<p align="center">
+  <img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
+</p>
 
-**Aplikacion celular,
-që liron zejtarin
-nga rutina e kontabilitetit financiar**
+<p><strong>Aplikacion celular,<br>që liron zejtarin<br>nga rutina e kontabilitetit financiar</strong></p>
 
-**ΑΠΑΛΛΑΚΤΗΣ**
-do të thotë çlirues në greqisht
+<p style="font-size: 24px; line-height: 1.4;">
+<span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ</strong></span><br>
+<span style="color: white;">do të thotë çlirues në greqisht</span>
+</p>
 
-**"Τέλος στη ρουτίνα!"**
-do të thotë fund rutinës
+<p style="font-size: 24px; line-height: 1.4;">
+<span style="color: #F28C28;"><strong>"Τέλος στη ρουτίνα!"</strong></span><br>
+<span style="color: white;">do të thotë fund rutinës</span>
+</p>
 
 > ⚠️ Ky **NUK** është program kontabiliteti — është mjet personal i kontrollit financiar.
 
