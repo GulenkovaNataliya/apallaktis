@@ -4,7 +4,7 @@
   <img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
 </p>
 
-<p align="center"><strong>Aplikacion celular,<br>që liron zejtarin<br>nga rutina e kontabilitetit financiar</strong></p>
+<p><strong>Aplikacion celular,<br>që liron zejtarin<br>nga rutina e kontabilitetit financiar</strong></p>
 
 <p style="font-size: 24px; line-height: 1.4;">
 <span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ</strong></span><br>
@@ -310,8 +310,8 @@ Shpenzime për objekt specifik (materiale, nënkontraktorë):
 
 Faqja e financave tregon pamjen e plotë:
 - Çmimi kontratës + punë shtesë = **Çmimi faktik**
-- Çmimi faktik - Paguar = **Bilanci**
-- Çmimi faktik - Shpenzime = **Fitimi**
+- Çmimi faktik − Totali i pagesave = **Bilanci**
+- Çmimi faktik − Shpenzime = **Fitimi**
 
 **Ngjyrat e bilancit:**
 - 🟠 Portokalli — klienti ka borxh
@@ -343,7 +343,7 @@ Kur fshini objekt, ai zhvendoset në Kosh për **30 ditë**.
 
 ### 6.1 Analiza e përgjithshme
 
-Analiza financiare janë raporte për biznesin tuaj:
+Analiza financiare paraqet të dhënat financiare për biznesin tuaj:
 - Shuma totale e çmimeve kontraktuale
 - Shuma totale e punëve shtesë
 - Bilanci total (sa kanë borxh klientët)
@@ -352,9 +352,9 @@ Analiza financiare janë raporte për biznesin tuaj:
 
 <img src="/help/el/24.el.jpg" alt="Analiza 1 (EL)" width="49%"> <img src="/help/en/24.en.jpg" alt="Analiza 1 (EN)" width="49%">
 
-### 6.2 Eksporti i raporteve
+### 6.2 Eksporti i skedarëve
 
-Raportet mund të shkarkohen:
+Skedarët mund të shkarkohen:
 - **PDF** — për printim ose dërgim te klienti
 - **Excel** — për punë të mëtejshme me të dhënat
 

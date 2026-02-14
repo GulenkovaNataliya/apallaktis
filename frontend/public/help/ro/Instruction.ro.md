@@ -4,7 +4,7 @@
   <img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
 </p>
 
-<p align="center"><strong>Aplicație mobilă,<br>care eliberează meșterul<br>de rutina contabilității financiare</strong></p>
+<p><strong>Aplicație mobilă,<br>care eliberează meșterul<br>de rutina contabilității financiare</strong></p>
 
 <p style="font-size: 24px; line-height: 1.4;">
 <span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ</strong></span><br>
@@ -310,7 +310,7 @@ Cheltuieli pentru un obiect specific (materiale, subcontractori):
 
 Pagina de finanțe arată imaginea completă:
 - Prețul contractului + lucrări suplimentare = **Preț efectiv**
-- Preț efectiv - Plătit = **Sold**
+- Preț efectiv − Total plăți = **Sold**
 - Preț efectiv - Cheltuieli = **Profit**
 
 **Culorile soldului:**
@@ -343,7 +343,7 @@ Când ștergeți un obiect, acesta se mută în Coșul de gunoi pentru **30 de z
 
 ### 6.1 Analiză generală
 
-Analiza financiară reprezintă rapoarte despre afacerea dvs.:
+Analiza financiară prezintă datele financiare despre afacerea dvs.:
 - Suma totală a prețurilor contractuale
 - Suma totală a lucrărilor suplimentare
 - Soldul total (cât datorează clienții)
@@ -352,9 +352,9 @@ Analiza financiară reprezintă rapoarte despre afacerea dvs.:
 
 <img src="/help/el/24.el.jpg" alt="Analiză 1 (EL)" width="49%"> <img src="/help/en/24.en.jpg" alt="Analiză 1 (EN)" width="49%">
 
-### 6.2 Exportul rapoartelor
+### 6.2 Exportul fișierelor
 
-Rapoartele pot fi descărcate:
+Fișierele pot fi descărcate:
 - **PDF** — pentru tipărire sau trimitere clientului
 - **Excel** — pentru lucrul ulterior cu datele
 
@@ -385,7 +385,7 @@ După înregistrare primiți **48 de ore de acces demo**.
 
 După expirarea demo:
 - Datele sunt păstrate
-- Accesul devine doar pentru citire
+- Pentru a continua utilizarea aplicației este necesară achiziționarea unui cont
 - Pentru a continua lucrul — achiziționați un cont
 
 ### 8.2 Tarife

@@ -4,7 +4,7 @@
   <img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
 </p>
 
-<p align="center"><strong>A mobile app<br>that frees the craftsman<br>from financial accounting routine</strong></p>
+<p><strong>A mobile app<br>that frees the craftsman<br>from financial accounting routine</strong></p>
 
 <p style="font-size: 24px; line-height: 1.4;">
 <span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ</strong></span><br>
@@ -364,7 +364,7 @@ Object expenses are factored into profit calculation.
 The finances page shows the complete picture:
 
 - Contract price + additional work = **Actual price**
-- Actual price - Paid = **Balance**
+- Actual price − Total payments = **Balance**
 - Actual price - Expenses = **Profit**
 
 **Balance colors:**
@@ -431,7 +431,7 @@ When you delete an object, it doesn't disappear immediately — it moves to Tras
 
 ### 6.1 General Analysis
 
-Financial analysis provides reports on your business.
+Financial analysis provides financial data about your business.
 
 **What the analysis shows:**
 - Total contract prices
@@ -455,9 +455,9 @@ You can select a period for analysis.
 
 ---
 
-### 6.2 Report Export
+### 6.2 File Export
 
-Reports can be downloaded:
+Files can be downloaded:
 
 - **PDF** — for printing or sending to client
 - **Excel** — for further data processing
@@ -559,7 +559,7 @@ After registration, you receive **free demo access for 48 hours**.
 
 **❌ Demo limitations:**
 - Time: only 48 hours
-- After expiration — access is blocked
+- After expiration — purchasing an account is required to continue using the app
 
 **After demo ends:**
 - A page will appear offering to purchase an account
@@ -652,7 +652,7 @@ Invite colleagues to work together on objects.
 |------|---------------|
 | Basic | 1 (only you) |
 | Standard | 2 |
-| Premium | 5 |
+| Premium | Unlimited |
 
 <img src="/help/en/36.en.jpg" alt="My Team" width="100%">
 
