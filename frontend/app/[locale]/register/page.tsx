@@ -616,7 +616,7 @@ export default function RegisterPage() {
                 style={{ accentColor: 'var(--skeptic)' }}
               />
               <span className="text-body" style={{ color: "var(--skeptic)" }}>
-                Я согласен(на), чтобы со мной связывались по вопросам сервиса (email / телефон)
+                {t.contactConsent}
               </span>
             </label>
 
