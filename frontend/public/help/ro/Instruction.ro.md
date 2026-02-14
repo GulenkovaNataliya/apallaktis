@@ -1,20 +1,16 @@
-<h1 style="color: #F28C28;">Instrucțiuni utilizator ΑΠΑΛΛΑΚΤΗΣ</h1>
+# Instrucțiuni utilizator ΑΠΑΛΛΑΚΤΗΣ
 
-<p align="center">
-  <img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
-</p>
+<img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
 
-<p><strong>Aplicație mobilă,<br>care eliberează meșterul<br>de rutina contabilității financiare</strong></p>
+**Aplicație mobilă,
+care eliberează meșterul
+de rutina contabilității financiare**
 
-<p style="font-size: 24px; line-height: 1.4;">
-<span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ</strong></span><br>
-<span style="color: white;">înseamnă eliberator în greacă</span>
-</p>
+**ΑΠΑΛΛΑΚΤΗΣ**
+înseamnă eliberator în greacă
 
-<p style="font-size: 24px; line-height: 1.4;">
-<span style="color: #F28C28;"><strong>"Τέλος στη ρουτίνα!"</strong></span><br>
-<span style="color: white;">înseamnă sfârșit rutinei</span>
-</p>
+**"Τέλος στη ρουτίνα!"**
+înseamnă sfârșit rutinei
 
 > ⚠️ Aceasta **NU** este un program de contabilitate — este un instrument personal de control financiar.
 

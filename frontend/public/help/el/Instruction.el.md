@@ -1,19 +1,15 @@
-<h1 style="color: #F28C28;">Οδηγίες χρήστη ΑΠΑΛΛΑΚΤΗΣ</h1>
+# Οδηγίες χρήστη ΑΠΑΛΛΑΚΤΗΣ
 
-<p align="center">
-  <img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
-</p>
+<img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
 
-<p><strong>Εφαρμογή για κινητά,<br>που απαλλάσσει τον τεχνίτη<br>από τη ρουτίνα της λογιστικής</strong></p>
+**Εφαρμογή για κινητά,
+που απαλλάσσει τον τεχνίτη
+από τη ρουτίνα της λογιστικής**
 
-<p style="font-size: 24px; line-height: 1.4;">
-<span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ</strong></span><br>
-<span style="color: white;">σημαίνει απελευθερωτής</span>
-</p>
+**ΑΠΑΛΛΑΚΤΗΣ**
+σημαίνει απελευθερωτής
 
-<p style="font-size: 24px; line-height: 1.4;">
-<span style="color: #F28C28;"><strong>"Τέλος στη ρουτίνα!"</strong></span>
-</p>
+**"Τέλος στη ρουτίνα!"**
 
 > ⚠️ Αυτό **ΔΕΝ** είναι λογιστικό πρόγραμμα — είναι προσωπικό εργαλείο οικονομικού ελέγχου.
 

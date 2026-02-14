@@ -1,20 +1,16 @@
-<h1 style="color: #F28C28;">تعليمات المستخدم ΑΠΑΛΛΑΚΤΗΣ</h1>
+# تعليمات المستخدم ΑΠΑΛΛΑΚΤΗΣ
 
-<p align="center">
-  <img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
-</p>
+<img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
 
-<p><strong>تطبيق جوال<br>يحرر الحرفي<br>من روتين المحاسبة المالية</strong></p>
+**تطبيق جوال
+يحرر الحرفي
+من روتين المحاسبة المالية**
 
-<p style="font-size: 24px; line-height: 1.4;">
-<span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ</strong></span><br>
-<span style="color: white;">تعني المحرر باليونانية</span>
-</p>
+**ΑΠΑΛΛΑΚΤΗΣ**
+تعني المحرر باليونانية
 
-<p style="font-size: 24px; line-height: 1.4;">
-<span style="color: #F28C28;"><strong>"Τέλος στη ρουτίνα!"</strong></span><br>
-<span style="color: white;">تعني نهاية الروتين</span>
-</p>
+**"Τέλος στη ρουτίνα!"**
+تعني نهاية الروتين
 
 > ⚠️ هذا **ليس** برنامج محاسبة — إنه أداة شخصية للتحكم المالي.
 

@@ -1,20 +1,16 @@
-<h1 style="color: #F28C28;">ΑΠΑΛΛΑΚΤΗΣ User Guide</h1>
+# ΑΠΑΛΛΑΚΤΗΣ User Guide
 
-<p align="center">
-  <img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
-</p>
+<img src="/Apallaktis.photos/apallaktis-logo-orange@2x.png" alt="ΑΠΑΛΛΑΚΤΗΣ Logo" width="450">
 
-<p><strong>A mobile app<br>that frees the craftsman<br>from financial accounting routine</strong></p>
+**A mobile app,
+that frees the craftsman
+from financial accounting routine**
 
-<p style="font-size: 24px; line-height: 1.4;">
-<span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ</strong></span><br>
-<span style="color: white;">means liberator in Greek</span>
-</p>
+**ΑΠΑΛΛΑΚΤΗΣ**
+means liberator in Greek
 
-<p style="font-size: 24px; line-height: 1.4;">
-<span style="color: #F28C28;"><strong>"Τέλος στη ρουτίνα!"</strong></span><br>
-<span style="color: white;">means end to routine</span>
-</p>
+**"Τέλος στη ρουτίνα!"**
+means end to routine
 
 > ⚠️ This is **NOT** an accounting program — it's a personal financial control tool.
 
