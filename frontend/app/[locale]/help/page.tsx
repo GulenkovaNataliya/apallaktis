@@ -68,29 +68,41 @@ export default function HelpPage() {
       const cleaned = content.replace(/\s*ΑΠΑΛΛΑΚΤΗΣ\s*/g, ' ').replace(/\s+/g, ' ').trim();
       return open + cleaned + close;
     });
-    // Remove ΑΠΑΛΛΑΚΤΗΣ word + <br> from translation block, keep the translation line
-    text = text.replace(/<span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ<\/strong><\/span><br>\s*/, '');
+    // Keep full translation "ΑΠΑΛΛΑΚΤΗΣ σημαίνει...", reduce font from 24px to 14px
+    text = text.replace(/(<p style="font-size:) 24px(;[^"]*">\s*<span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ)/, '$1 14px$2');
     // Increase description font (the <p><strong> block)
     text = text.replace(/<p><strong>/, '<p style="font-size: 20px;"><strong>');
     return text;
   }, [intro]);
 
-  const toggleH2 = (id: number) => {
+  const getWrapper = () => document.querySelector('.mobile-preview-wrapper') as HTMLElement | null;
+
+  const toggleH2 = (e: React.MouseEvent, id: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const w = getWrapper();
+    const top = w?.scrollTop ?? 0;
     setExpandedH2(prev => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
       return next;
     });
+    requestAnimationFrame(() => { if (w) w.scrollTop = top; });
   };
 
-  const toggleH3 = (key: string) => {
+  const toggleH3 = (e: React.MouseEvent, key: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const w = getWrapper();
+    const top = w?.scrollTop ?? 0;
     setExpandedH3(prev => {
       const next = new Set(prev);
       if (next.has(key)) next.delete(key);
       else next.add(key);
       return next;
     });
+    requestAnimationFrame(() => { if (w) w.scrollTop = top; });
   };
 
   const mdComponents: any = {
@@ -213,7 +225,7 @@ export default function HelpPage() {
               <div key={section.id}>
                 <button
                   type="button"
-                  onClick={() => toggleH2(section.id)}
+                  onClick={(e) => toggleH2(e, section.id)}
                   style={{
                     width: '100%',
                     display: 'flex',
@@ -250,7 +262,7 @@ export default function HelpPage() {
                         <div key={sub.id} style={{ marginTop: '4px' }}>
                           <button
                             type="button"
-                            onClick={() => toggleH3(key)}
+                            onClick={(e) => toggleH3(e, key)}
                             style={{
                               width: '100%',
                               display: 'flex',
