@@ -30,18 +30,18 @@ export default function BackgroundPage({
     : getBackgroundPage(pageIndex);
 
   return (
-    <div className={`relative min-h-screen w-full overflow-hidden ${className}`}>
-      {/* Background Image - same structure as VideoBackground */}
-      <div className="absolute inset-0 z-0">
+    <div className={`relative w-full ${className}`}>
+      {/* Sticky background - stays visible while scrolling inside wrapper */}
+      <div className="sticky top-0 h-screen w-full z-0">
         <img
           src={backgroundSrc}
           alt=""
-          className="h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover"
         />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 min-h-screen w-full">
+      {/* Content - positioned over the background */}
+      <div className="relative z-10 w-full" style={{ marginTop: '-100vh' }}>
         {children}
       </div>
     </div>
