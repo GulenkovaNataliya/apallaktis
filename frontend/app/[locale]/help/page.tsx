@@ -15,7 +15,8 @@ export default function HelpPage() {
 
   const [markdown, setMarkdown] = useState('');
   const [loading, setLoading] = useState(true);
-  const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
+  const [expandedH2, setExpandedH2] = useState<Set<number>>(new Set());
+  const [expandedH3, setExpandedH3] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     setLoading(true);
@@ -26,7 +27,7 @@ export default function HelpPage() {
       .finally(() => setLoading(false));
   }, [locale]);
 
-  // §14.4 — Split markdown by "## " into intro + accordion sections
+  // Split markdown by ## into intro + sections, each section split by ###
   const { intro, sections } = useMemo(() => {
     if (!markdown) return { intro: '', sections: [] };
     const parts = markdown.split(/\n(?=## )/);
@@ -36,15 +37,38 @@ export default function HelpPage() {
     const parsed = sectionParts.map((part, i) => {
       const lines = part.split('\n');
       const title = lines[0].replace(/^## /, '');
-      const body = lines.slice(1).join('\n');
-      return { id: i, title, body };
+      const bodyText = lines.slice(1).join('\n');
+      const subParts = bodyText.split(/\n(?=### )/);
+      const hasPreamble = subParts.length > 0 && !subParts[0].startsWith('### ');
+      const preamble = hasPreamble ? subParts[0] : '';
+      const subSectionParts = hasPreamble ? subParts.slice(1) : subParts;
+      const subsections = subSectionParts.map((sub, j) => {
+        const subLines = sub.split('\n');
+        const subTitle = subLines[0].replace(/^### /, '');
+        const subBody = subLines.slice(1).join('\n');
+        return { id: j, title: subTitle, body: subBody };
+      });
+      return { id: i, title, preamble, subsections };
     });
     return { intro: introText, sections: parsed };
   }, [markdown]);
 
-  // §12 TYPE B — Multi (Set-based): each section toggles independently
-  const toggleSection = (id: number) => {
-    setExpandedIds(prev => {
+  // Process intro: logo above title, remove "ΑΠΑΛΛΑΚΤΗΣ means..." line
+  const processedIntro = useMemo(() => {
+    if (!intro) return '';
+    let text = intro;
+    const logoRegex = /<p align="center">[\s\S]*?<\/p>/;
+    const logoMatch = text.match(logoRegex);
+    if (logoMatch) {
+      text = text.replace(logoRegex, '');
+      text = logoMatch[0] + '\n\n' + text;
+    }
+    text = text.replace(/<p style="font-size: 24px[^"]*">[\s\S]*?ΑΠΑΛΛΑΚΤΗΣ<\/strong>[\s\S]*?<\/p>/, '');
+    return text;
+  }, [intro]);
+
+  const toggleH2 = (id: number) => {
+    setExpandedH2(prev => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -52,19 +76,27 @@ export default function HelpPage() {
     });
   };
 
-  // Markdown component overrides (exact same as before, extracted for reuse)
+  const toggleH3 = (key: string) => {
+    setExpandedH3(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
   const mdComponents: any = {
     h1({ children, style, ...rest }: any) {
-      return <h1 {...rest} style={{ color: '#F28C28', textAlign: 'center', fontSize: '28px', fontWeight: 'bold', marginBottom: '24px', ...style }}>{children}</h1>;
+      return <h1 {...rest} style={{ color: '#F28C28', textAlign: 'center', fontSize: '28px', fontWeight: 'bold', marginBottom: '24px', textTransform: 'uppercase' as const, ...style }}>{children}</h1>;
     },
     h2({ children, style, ...rest }: any) {
       return <h2 {...rest} style={{ color: 'var(--polar)', fontSize: '22px', fontWeight: 'bold', marginTop: '40px', marginBottom: '16px', borderBottom: '1px solid var(--skeptic)', paddingBottom: '8px', ...style }}>{children}</h2>;
     },
     h3({ children, style, ...rest }: any) {
-      return <h3 {...rest} style={{ color: 'var(--zanah)', fontSize: '18px', fontWeight: 600, marginTop: '28px', marginBottom: '12px', ...style }}>{children}</h3>;
+      return <h3 {...rest} style={{ color: 'var(--zanah)', fontSize: '20px', fontWeight: 600, marginTop: '28px', marginBottom: '12px', ...style }}>{children}</h3>;
     },
     p({ children, style, ...rest }: any) {
-      return <p {...rest} style={{ color: 'var(--polar)', fontSize: '14px', lineHeight: 1.6, marginBottom: '8px', ...style }}>{children}</p>;
+      return <p {...rest} style={{ color: 'var(--polar)', fontSize: '16px', lineHeight: 1.6, marginBottom: '8px', ...style }}>{children}</p>;
     },
     ul({ children, style, ...rest }: any) {
       return <ul {...rest} style={{ color: 'var(--polar)', paddingLeft: '20px', marginBottom: '12px', ...style }}>{children}</ul>;
@@ -73,16 +105,18 @@ export default function HelpPage() {
       return <ol {...rest} style={{ color: 'var(--polar)', paddingLeft: '20px', marginBottom: '12px', ...style }}>{children}</ol>;
     },
     li({ children, style, ...rest }: any) {
-      return <li {...rest} style={{ color: 'var(--polar)', fontSize: '14px', lineHeight: 1.8, ...style }}>{children}</li>;
+      return <li {...rest} style={{ color: 'var(--polar)', fontSize: '16px', lineHeight: 1.8, ...style }}>{children}</li>;
     },
-    img({ style, ...rest }: any) {
+    img({ src, style, ...rest }: any) {
+      const isLogo = src && src.includes('apallaktis-logo');
       return (
         <img
+          src={src}
           {...rest}
           style={{
             maxWidth: '100%',
-            borderRadius: '12px',
-            border: '2px solid var(--skeptic)',
+            borderRadius: isLogo ? 0 : '12px',
+            border: isLogo ? 'none' : '2px solid var(--skeptic)',
             marginTop: '12px',
             marginBottom: '12px',
             ...style
@@ -157,19 +191,19 @@ export default function HelpPage() {
           </div>
         ) : (
           <div className="flex flex-col" style={{ gap: '16px' }}>
-            {/* §14.4 — Intro: content before first ## */}
-            {intro && (
+            {/* Intro: logo, title, slogan */}
+            {processedIntro && (
               <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={mdComponents}>
-                {intro}
+                {processedIntro}
               </ReactMarkdown>
             )}
 
-            {/* §14.4/§12 — Each ## section as accordion */}
+            {/* H2 accordion sections */}
             {sections.map(section => (
               <div key={section.id}>
-                {/* §12.2 — Header: <button>, w-full, arrow ▲/▼ */}
                 <button
-                  onClick={() => toggleSection(section.id)}
+                  type="button"
+                  onClick={() => toggleH2(section.id)}
                   style={{
                     width: '100%',
                     display: 'flex',
@@ -186,16 +220,56 @@ export default function HelpPage() {
                     {section.title}
                   </span>
                   <span style={{ color: 'var(--polar)', fontSize: '18px', flexShrink: 0, marginLeft: '12px' }}>
-                    {expandedIds.has(section.id) ? '▲' : '▼'}
+                    {expandedH2.has(section.id) ? '▲' : '▼'}
                   </span>
                 </button>
 
-                {/* §12.2 — Expanded body */}
-                {expandedIds.has(section.id) && (
+                {expandedH2.has(section.id) && (
                   <div style={{ marginTop: '16px' }}>
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={mdComponents}>
-                      {section.body}
-                    </ReactMarkdown>
+                    {/* Preamble: text between ## and first ### */}
+                    {section.preamble.trim() && (
+                      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={mdComponents}>
+                        {section.preamble}
+                      </ReactMarkdown>
+                    )}
+
+                    {/* H3 sub-accordions */}
+                    {section.subsections.map(sub => {
+                      const key = `${section.id}-${sub.id}`;
+                      return (
+                        <div key={sub.id} style={{ marginTop: '4px' }}>
+                          <button
+                            type="button"
+                            onClick={() => toggleH3(key)}
+                            style={{
+                              width: '100%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              background: 'none',
+                              border: 'none',
+                              borderBottom: '1px solid rgba(218,243,246,0.2)',
+                              cursor: 'pointer',
+                              padding: '10px 0',
+                            }}
+                          >
+                            <span style={{ color: 'var(--zanah)', fontSize: '20px', fontWeight: 600, textAlign: 'left' }}>
+                              {sub.title}
+                            </span>
+                            <span style={{ color: 'var(--zanah)', fontSize: '16px', flexShrink: 0, marginLeft: '12px' }}>
+                              {expandedH3.has(key) ? '▲' : '▼'}
+                            </span>
+                          </button>
+                          {expandedH3.has(key) && (
+                            <div style={{ marginTop: '12px', paddingLeft: '8px' }}>
+                              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={mdComponents}>
+                                {sub.body}
+                              </ReactMarkdown>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
