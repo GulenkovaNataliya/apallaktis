@@ -53,7 +53,7 @@ export default function HelpPage() {
     return { intro: introText, sections: parsed };
   }, [markdown]);
 
-  // Process intro: logo above title, remove "ΑΠΑΛΛΑΚΤΗΣ means..." line
+  // Process intro: logo above title, remove ΑΠΑΛΛΑΚΤΗΣ from h1, keep translation, enlarge description
   const processedIntro = useMemo(() => {
     if (!intro) return '';
     let text = intro;
@@ -63,7 +63,15 @@ export default function HelpPage() {
       text = text.replace(logoRegex, '');
       text = logoMatch[0] + '\n\n' + text;
     }
-    text = text.replace(/<p style="font-size: 24px[^"]*">[\s\S]*?ΑΠΑΛΛΑΚΤΗΣ<\/strong>[\s\S]*?<\/p>/, '');
+    // Remove ΑΠΑΛΛΑΚΤΗΣ from h1 tag (appears at start or end depending on locale)
+    text = text.replace(/(<h1[^>]*>)([\s\S]*?)(<\/h1>)/, (_, open, content, close) => {
+      const cleaned = content.replace(/\s*ΑΠΑΛΛΑΚΤΗΣ\s*/g, ' ').replace(/\s+/g, ' ').trim();
+      return open + cleaned + close;
+    });
+    // Remove ΑΠΑΛΛΑΚΤΗΣ word + <br> from translation block, keep the translation line
+    text = text.replace(/<span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ<\/strong><\/span><br>\s*/, '');
+    // Increase description font (the <p><strong> block)
+    text = text.replace(/<p><strong>/, '<p style="font-size: 20px;"><strong>');
     return text;
   }, [intro]);
 
@@ -191,11 +199,13 @@ export default function HelpPage() {
           </div>
         ) : (
           <div className="flex flex-col" style={{ gap: '16px' }}>
-            {/* Intro: logo, title, slogan */}
+            {/* Intro: logo, title, slogan — centered */}
             {processedIntro && (
-              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={mdComponents}>
-                {processedIntro}
-              </ReactMarkdown>
+              <div style={{ textAlign: 'center' }}>
+                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={mdComponents}>
+                  {processedIntro}
+                </ReactMarkdown>
+              </div>
             )}
 
             {/* H2 accordion sections */}
