@@ -168,7 +168,7 @@ export default function AdminPage() {
         .from("payments")
         .select(`
           *,
-          profiles!payments_user_id_fkey (name, email, doc_type, afm)
+          profiles!payments_user_id_fkey (name, email, invoice_type, afm)
         `)
         .order("paid_at", { ascending: false });
 
