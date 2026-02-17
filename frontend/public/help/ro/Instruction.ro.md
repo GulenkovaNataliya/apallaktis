@@ -6,9 +6,9 @@
 
 <p><strong>Aplicație mobilă,<br>care eliberează meșterul<br>de rutina contabilității financiare</strong></p>
 
-<p style="font-size: 24px; line-height: 1.4;">
+<p style="font-size: 24px; line-height: 1.4; margin-bottom: 24px;">
 <span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ</strong></span><br>
-<span style="color: white;">înseamnă eliberator în greacă</span>
+<span style="color: #F28C28;">înseamnă eliberator în greacă</span>
 </p>
 
 <p style="font-size: 24px; line-height: 1.4;">

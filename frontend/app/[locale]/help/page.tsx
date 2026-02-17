@@ -68,8 +68,6 @@ export default function HelpPage() {
       const cleaned = content.replace(/\s*ΑΠΑΛΛΑΚΤΗΣ\s*/g, ' ').replace(/\s+/g, ' ').trim();
       return open + cleaned + close;
     });
-    // Keep full translation "ΑΠΑΛΛΑΚΤΗΣ σημαίνει...", reduce font from 24px to 14px
-    text = text.replace(/(<p style="font-size:) 24px(;[^"]*">\s*<span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ)/, '$1 14px$2');
     // Increase description font (the <p><strong> block)
     text = text.replace(/<p><strong>/, '<p style="font-size: 20px;"><strong>');
     return text;

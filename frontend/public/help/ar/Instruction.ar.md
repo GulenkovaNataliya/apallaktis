@@ -6,9 +6,9 @@
 
 <p><strong>تطبيق جوال<br>يحرر الحرفي<br>من روتين المحاسبة المالية</strong></p>
 
-<p style="font-size: 24px; line-height: 1.4;">
+<p style="font-size: 24px; line-height: 1.4; margin-bottom: 24px;">
 <span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ</strong></span><br>
-<span style="color: white;">تعني المحرر باليونانية</span>
+<span style="color: #F28C28;">تعني المحرر باليونانية</span>
 </p>
 
 <p style="font-size: 24px; line-height: 1.4;">

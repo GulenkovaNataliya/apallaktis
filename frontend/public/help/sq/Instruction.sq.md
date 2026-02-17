@@ -6,9 +6,9 @@
 
 <p><strong>Aplikacion celular,<br>që liron zejtarin<br>nga rutina e kontabilitetit financiar</strong></p>
 
-<p style="font-size: 24px; line-height: 1.4;">
+<p style="font-size: 24px; line-height: 1.4; margin-bottom: 24px;">
 <span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ</strong></span><br>
-<span style="color: white;">do të thotë çlirues në greqisht</span>
+<span style="color: #F28C28;">do të thotë çlirues në greqisht</span>
 </p>
 
 <p style="font-size: 24px; line-height: 1.4;">

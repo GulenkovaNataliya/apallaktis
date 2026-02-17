@@ -6,9 +6,9 @@
 
 <p><strong>Мобільний додаток,<br>що звільняє майстра<br>від рутини фінансового обліку</strong></p>
 
-<p style="font-size: 24px; line-height: 1.4;">
+<p style="font-size: 24px; line-height: 1.4; margin-bottom: 24px;">
 <span style="color: #F28C28;"><strong>ΑΠΑΛΛΑΚΤΗΣ</strong></span><br>
-<span style="color: white;">перекладається як визволитель</span>
+<span style="color: #F28C28;">перекладається як визволитель</span>
 </p>
 
 <p style="font-size: 24px; line-height: 1.4;">
